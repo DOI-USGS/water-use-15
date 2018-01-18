@@ -1,0 +1,44 @@
+vizlab: "0.2.2.9010"
+info:
+  id: water-use-15
+  name: U.S. Water Use from 1950 to 2015.
+  date: 2018-01-18
+  publish-date:
+  path: /water-use-15
+  analytics-id:
+  description: >-
+    Data visualization of water use from 1950 - 2015.
+  keywords:
+  audience:
+  url:
+  thumbnail:
+  required-packages:
+    vizlab:
+      repo: github
+      version: 0.2.2.9010
+      name: USGS-VIZLAB/vizlab
+      ref: NA
+  contributors:
+    -
+      name: Lindsay Carr
+      email: lcarr@usgs.gov
+      affiliation: U.S. Geological Survey
+parameter:
+
+fetch:
+
+process:
+
+visualize:
+
+publish:
+  -
+    id: wateruse_page
+    name: index
+    template: fullpage
+    publisher: page
+    depends:
+      lib_d3_js: "lib-d3-js"
+    context:
+      resources: ["lib_d3_js"]
+      sections: []
