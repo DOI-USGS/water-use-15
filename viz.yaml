@@ -51,6 +51,15 @@ fetch:
       viewbox: viewbox
 
 process:
+  -
+    id: conus_map_geojson
+    location: cache/conus_map.geojson
+    reader: json
+    processor: sf_to_geojson
+    scripts: [scripts/process/sf_to_geojson.R]
+    depends: 
+      map_data: conus_map_data
+    mimetype: application/geo+json
 
 visualize:
 
