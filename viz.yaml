@@ -71,14 +71,18 @@ publish:
     publisher: page
     depends:
       lib_d3_js: "lib-d3-js"
+      header_css: "lib-header-css"
+      footer_css: "lib-footer-css"
       map_css: "map_css"
+      header: "header-section"
+      footer: "footer-section"
       map: "build_map"
       map_utils: "map_utils"
       conus_map_geojson: "conus_map_geojson"
     context:
-      resources: ["lib_d3_js", 
-      sections: ["map"] 
+      resources: ["lib_d3_js", "header_css", "footer_css", 
                   "map_css", "map_utils"]
+      sections: ["map"] # adding header and footer here, doubled each on the page
   -
     id: build_map
     location: "js/build_map.js"
@@ -91,3 +95,20 @@ publish:
     id: map_css
     location: "layout/css/map.css"
     mimetype: text/css
+  -
+    id: header-section
+    template: header-template
+    publisher: header
+    depends: "lib-header-css"
+    context:
+      title: "Water use in the U.S. from 1950 to 2015"
+  -
+    id: footer-section
+    template: footer-template
+    publisher: footer
+    depends: "lib-footer-css"
+    blogsInFooter: FALSE
+    vizzies:
+      - name: Visualizing water use by region and time
+        org: USGS-VIZLAB
+        repo: water-use
