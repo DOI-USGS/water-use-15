@@ -9,3 +9,5 @@ target/
 user/
 figures/
 vizlab/
+.remake/
+remake.yaml
