@@ -71,13 +71,14 @@ publish:
     publisher: page
     depends:
       lib_d3_js: "lib-d3-js"
+      map_css: "map_css"
       map: "build_map"
       map_utils: "map_utils"
       conus_map_geojson: "conus_map_geojson"
     context:
       resources: ["lib_d3_js", 
-                  "map_utils"]
       sections: ["map"] 
+                  "map_css", "map_utils"]
   -
     id: build_map
     location: "js/build_map.js"
@@ -86,3 +87,7 @@ publish:
     id: map_utils
     location: "js/map_utils.js"
     mimetype: application/javascript
+  -
+    id: map_css
+    location: "layout/css/map.css"
+    mimetype: text/css
