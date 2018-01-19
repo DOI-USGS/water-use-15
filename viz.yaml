@@ -24,8 +24,31 @@ info:
       email: lcarr@usgs.gov
       affiliation: U.S. Geological Survey
 parameter:
-
+  -
+    id: spatial_metadata
+    crs: '+init=epsg:4326' # works with d3.geoAlbers
+    bbox: [-125, 26, -68, 50] # conus bbox
+    
 fetch:
+  -
+    id: viewbox
+    location: cache/viewbox.rds
+    reader: rds
+    fetcher: viewbox_limits
+    scripts: [scripts/fetch/viewbox_limits.R , scripts/fetch/utils.R]
+    depends: 
+      spatial_metadata: spatial_metadata
+    comment: sets up the basic view window and projection
+  -
+    id: conus_map_data
+    location: cache/conus_map_data.rds
+    reader: rds
+    fetcher: map_data
+    fetch_args:
+      database: state
+    scripts: [scripts/fetch/map_data.R , scripts/fetch/utils.R]
+    depends: 
+      viewbox: viewbox
 
 process:
 
