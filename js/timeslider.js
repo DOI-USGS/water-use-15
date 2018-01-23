@@ -35,7 +35,7 @@ function add_timeslider(map, years, chart_width, chart_height) {
     .call(d3.drag()
             .on("drag", function() { 
               var dragging_circle = d3.select(this);
-              dragged(dragging_circle, xscale(min_year), xscale(max_year));
+              dragged(dragging_circle, xscale, min_year, max_year);
               dragging_circle.classed("dragging", true); 
             })
             .on("end", function() { return d3.select(this).classed("dragging", false); })
@@ -43,10 +43,22 @@ function add_timeslider(map, years, chart_width, chart_height) {
   
 }
 
-function dragged(obj, min_x, max_x) {
-  var new_loc = d3.event.x;
-  if(new_loc >= min_x && new_loc <= max_x){
-    obj.attr("cx", new_loc);
+function dragged(obj, xscale, min_yr, max_yr) {
+  
+  // rounding in order to only allow the slider on every 5th yr
+  // aka snap to every 5th year
+  
+  var new_loc = d3.event.x,
+      new_yr = xscale.invert(new_loc),
+      round_yr = nearestFive(new_yr),
+      round_loc = xscale(round_yr);
+  
+  if(round_loc >= xscale(min_yr) && round_loc <= xscale(max_yr)){
+    obj.attr("cx", round_loc);
   }
+}
+
+function nearestFive(number) {
+  return Math.round(number / 5) * 5;
 }
       
