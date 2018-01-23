@@ -3,16 +3,16 @@
 function add_timeslider(map, years, chart_width, chart_height) {
   
   // ref: http://thematicmapping.org/playground/d3/d3.slider/
-
-  var min_time = d3.min(years),
-      max_time = d3.max(years);
-  var timescale = d3.scaleLinear()
-        .domain([min_time, max_time])
+  
+  var min_year = d3.min(years),
+      max_year = d3.max(years);
+  var xscale = d3.scaleLinear()
+        .domain([min_year, max_year])
         .range([(0 + chart_width/4), (chart_width - chart_width/4)]);
   
-  var timeaxis = d3.axisBottom()
-        .ticks(years)
-        .scale(timescale);
+  var xaxis = d3.axisBottom()
+        .ticks(years.length)
+        .scale(xscale)
   
   var slider = map.append("g")
     .attr("id", "slider")
@@ -20,17 +20,17 @@ function add_timeslider(map, years, chart_width, chart_height) {
     
   slider.append("line")
     .attr("class", "track")
-    .attr("x1", timescale(min_time))
-    .attr("x2", timescale(max_time));
+    .attr("x1", xscale(min_year))
+    .attr("x2", xscale(max_year));
   
   slider.append("circle")
     .classed("track-circle", true)
-    .attr("cx", timescale(max_time))
+    .attr("cx", xscale(max_year))
     .attr("r", 9)
     .call(d3.drag()
             .on("drag", function() { 
               var dragging_circle = d3.select(this);
-              dragged(dragging_circle, timescale(min_time), timescale(max_time));
+              dragged(dragging_circle, xscale(min_year), xscale(max_year));
               dragging_circle.classed("dragging", true); 
             })
             .on("end", function() { return d3.select(this).classed("dragging", false); })
