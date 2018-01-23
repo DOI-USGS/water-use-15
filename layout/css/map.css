@@ -9,13 +9,17 @@ body {
   stroke-width: 2;
 }
 
+#slideraxis path,
+#slideraxis line {
+  stroke: #fff;
+}
+
 .track {
   stroke: #000;
   stroke-opacity: 0.3;
   stroke-width: 10px;
   stroke-linecap: round;
 }
-
 
 .track-circle {
   fill: #fff;

@@ -13,6 +13,7 @@ function add_timeslider(map, years, chart_width, chart_height) {
   var xaxis = d3.axisBottom()
         .ticks(years.length)
         .scale(xscale)
+        .tickFormat(d3.format("")); // treat as character so that 2015 is not 2,015
   
   var slider = map.append("g")
     .attr("id", "slider")
@@ -22,6 +23,10 @@ function add_timeslider(map, years, chart_width, chart_height) {
     .attr("class", "track")
     .attr("x1", xscale(min_year))
     .attr("x2", xscale(max_year));
+  
+  slider.append("g")
+    .attr("id", "slideraxis")
+    .call(xaxis);
   
   slider.append("circle")
     .classed("track-circle", true)
