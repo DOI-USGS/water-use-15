@@ -39,9 +39,8 @@ function add_timeslider(map, years, chart_width, chart_height) {
 }
 
 function dragged(obj, min_x, max_x) {
-  console.log(min_x, max_x);
   var new_loc = d3.event.x;
-  if(new_loc >= min_x | new_loc <= max_x){
+  if(new_loc >= min_x && new_loc <= max_x){
     obj.attr("cx", new_loc);
   }
 }
