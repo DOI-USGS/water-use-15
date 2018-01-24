@@ -36,6 +36,6 @@ function create_map() {
 	var state_data = arguments[1];
   
   add_states(map, state_data);
-  add_timeslider(map, years, chart_width, chart_width);
+  add_timeslider(map, years, chart_width, chart_height);
   
 }
