@@ -13,7 +13,8 @@ function add_timeslider(map, years, chart_width, chart_height) {
   var xaxis = d3.axisBottom()
         .ticks(years.length)
         .scale(xscale)
-        .tickFormat(d3.format("")); // treat as character so that 2015 is not 2,015
+        .tickFormat(d3.format("")) // treat as character so that 2015 is not 2,015
+        .tickPadding(10);
   
   var slider = map.append("g")
     .attr("id", "slider")
