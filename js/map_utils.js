@@ -8,5 +8,12 @@ function add_states(map, state_data) {
     .data(state_data.features)
     .enter()
     .append('path')
+    .classed('state', true)
     .attr('d', buildPath);
+}
+
+function zoom_to_state() {
+  
+  
+  
 }

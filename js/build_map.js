@@ -27,9 +27,10 @@ function create_map() {
   
   // arguments[0] is the error
 	var error = arguments[0];
-	
-	// the rest of the indices of arguments are all the other arguments passed in
-	// so in this case, all of the results from q.defers
+	if (error) throw error;
+
+	// the rest of the indices of arguments are all the other arguments passed in -
+	// so in this case, all of the results from q.await
 	var state_data = arguments[1];
   
   add_states(map, state_data);
