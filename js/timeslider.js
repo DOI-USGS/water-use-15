@@ -18,7 +18,7 @@ function add_timeslider(map, years, chart_width, chart_height) {
   
   var slider = map.append("g")
     .attr("id", "slider")
-    .attr("transform", "translate(0," + chart_height/2 + ")");
+    .attr("transform", "translate(0," + 575 + ")");
     
   slider.append("line")
     .attr("class", "track")
