@@ -1,6 +1,6 @@
 // Width and height
 var chart_width     =   1000;
-var chart_height    =   600;
+var chart_height    =   800;
 
 // Projection
 var projection = d3.geoAlbers()
@@ -22,6 +22,9 @@ var map = svg.append("g")
 d3.queue()
   .defer(d3.json, "data/conus_map.geojson")
   .await(create_map);
+  
+// dummy var for now
+var years = [1950, 1960, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
 
 function create_map() {
   
@@ -34,5 +37,6 @@ function create_map() {
 	var state_data = arguments[1];
   
   add_states(map, state_data);
+  add_timeslider(map, years, chart_width, chart_height);
   
 }
