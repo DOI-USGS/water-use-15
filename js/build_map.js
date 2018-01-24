@@ -1,6 +1,6 @@
 // Width and height
 var chart_width     =   1000;
-var chart_height    =   600;
+var chart_height    =   800;
 
 // Projection
 var projection = d3.geoAlbers()
