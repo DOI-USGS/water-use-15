@@ -28,7 +28,7 @@ parameter:
     id: spatial_metadata
     crs: '+init=epsg:4326' # works with d3.geoAlbers
     bbox: [-125, 26, -68, 50] # conus bbox
-    
+
 fetch:
   -
     id: viewbox
@@ -36,7 +36,7 @@ fetch:
     reader: rds
     fetcher: viewbox_limits
     scripts: [scripts/fetch/viewbox_limits.R , scripts/fetch/utils.R]
-    depends: 
+    depends:
       spatial_metadata: spatial_metadata
     comment: sets up the basic view window and projection
   -
@@ -47,7 +47,7 @@ fetch:
     fetch_args:
       database: state
     scripts: [scripts/fetch/map_data.R , scripts/fetch/utils.R]
-    depends: 
+    depends:
       viewbox: viewbox
 
 process:
@@ -57,7 +57,7 @@ process:
     reader: json
     processor: sf_to_geojson
     scripts: [scripts/process/sf_to_geojson.R]
-    depends: 
+    depends:
       map_data: conus_map_data
     mimetype: application/geo+json
 
@@ -76,14 +76,19 @@ publish:
       map_css: "map_css"
       header: "header_section"
       footer: "footer_section"
+      hashes: "url_hashes"
+      map_utils: "map_utils"
       map: "build_map"
       timeslider: "timeslider"
-      map_utils: "map_utils"
       conus_map_geojson: "conus_map_geojson"
     context:
-      resources: ["lib_d3_js", "header_css", "footer_css", 
-                  "map_css", "map_utils", "timeslider"]
+      resources: ["lib_d3_js", "header_css", "footer_css",
+                  "map_css", "hashes", "map_utils", "timeslider"]
       sections: ["map"] # adding header and footer here, doubled each on the page
+  -
+    id: url_hashes
+    location: "js/url_hashes.js"
+    mimetype: application/javascript
   -
     id: build_map
     location: "js/build_map.js"
