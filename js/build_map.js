@@ -19,6 +19,12 @@ var svg = d3.select("body")
 var map = svg.append("g")
   .attr("id", "map");
   
+var mapBackground = map.
+  append("rect")
+  .attr("id", "map-background")
+  .attr("width", chart_width)
+  .attr("height", chart_height)
+  .on('click', zoomTofromState);
 d3.queue()
   .defer(d3.json, "data/conus_map.geojson")
   .await(create_map);
