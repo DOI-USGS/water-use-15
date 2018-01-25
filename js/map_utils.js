@@ -138,12 +138,26 @@ function updateView(newView) {
     y = chart_height / 2;
     k = 1;
   } else {
-    // if they clicked on a different state, prepare to zoom in
-    activeView = clickedView;
-    var centroid = buildPath.centroid(domElement);
+    var stateGeom, centroid, x0, y0, x1, y1, stateDims;
+    // find the state data we want to zoom to
+    stateGeom = stateData.features.filter(function(d) {
+      return d.properties.ID === activeView;
+    })[0];
+    console.log(stateGeom);
+    // find the center point to zoom to
+    centroid = buildPath.centroid(stateGeom);
     x = centroid[0];
     y = centroid[1];
-    k = 4;
+    // find the maximum zoom (up to nation bounding box size) that keeps the
+    // whole state in view
+    [[x0,y0],[x1,y1]] = buildPath.bounds(stateGeom);
+    stateDims = {
+      width: 2 * d3.max([ x1 - x, x - x0]),
+      height: 2 * d3.max([ y1 - y, y - y0])
+    };
+    k = d3.min([
+      nationDims.height/stateDims.height,
+      nationDims.width/stateDims.width]);
   }
 
   // set the styling: all states inactive for view=nation, just one state active
