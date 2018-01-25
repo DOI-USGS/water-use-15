@@ -74,8 +74,8 @@ publish:
       header_css: "lib-header-css"
       footer_css: "lib-footer-css"
       map_css: "map_css"
-      header: "header-section"
-      footer: "footer-section"
+      header: "header_section"
+      footer: "footer_section"
       map: "build_map"
       timeslider: "timeslider"
       map_utils: "map_utils"
@@ -101,14 +101,14 @@ publish:
     location: "layout/css/map.css"
     mimetype: text/css
   -
-    id: header-section
+    id: header_section
     template: header-template
     publisher: header
     depends: "lib-header-css"
     context:
       title: "Water use in the U.S. from 1950 to 2015"
   -
-    id: footer-section
+    id: footer_section
     template: footer-template
     publisher: footer
     depends: "lib-footer-css"
