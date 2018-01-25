@@ -1,22 +1,7 @@
-// map functions
+/* Map Functions and Variables */
 
-function add_states(map, state_data) {
-
-  // add states
-  map.append("g").attr('id', 'statepolygons')
-    .selectAll( 'path' )
-    .data(state_data.features)
-    .enter()
-    .append('path')
-    .classed('state', true)
-    .attr('id', function(d) {
-      return d.properties.ID;
-    })
-    .attr('d', buildPath)
-    .on('mouseover', highlightState)
-    .on('mouseout', unhighlightState)
-    .on('click', zoomTofromState);
-}
+// Bounding box coordinates for the nation, for scaling states
+var nationDims;
 
 // Zoom status: start at nation-wide
 var activeView = 'nation';
@@ -48,6 +33,38 @@ var stateStyle = {
     }
   }
 };
+
+// Create the state polygons
+function add_states(map, stateData) {
+
+  // add states
+  map.append("g").attr('id', 'statepolygons')
+    .selectAll( 'path' )
+    .data(stateData.features)
+    .enter()
+    .append('path')
+    .classed('state', true)
+    .attr('id', function(d) {
+      return d.properties.ID;
+    })
+    .attr('d', buildPath)
+    .on('mouseover', highlightState)
+    .on('mouseout', unhighlightState)
+    .on('click', zoomToFromState);
+
+  var nationBounds = buildPath.bounds(stateData);
+  nationDims = {
+    width: nationBounds[1][0] - nationBounds[0][0],
+    height: nationBounds[1][1] - nationBounds[0][1]
+  };
+
+  // if URL specifies a state view, zoom to that now
+  var newView = getHash('v');
+  if(newView == null) { newView = 'nation'; }
+  if(newView != 'nation') {
+    updateView(newView);
+  }
+}
 
 // Function to look up a style
 formatState = function(attr, d, active) {
@@ -82,18 +99,38 @@ function unhighlightState() {
 }
 
 // on click
-function zoomTofromState(domElement) {
+function zoomToFromState(data) {
+
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  clickedView = d3.select(this).attr('id');
+  clickedView = d3.select(this).attr('id'); // should be same as data.properties.ID;
 
-  // determine the new view and corresponding parameters
+  // determine the new view
   if(clickedView === 'map-background' || activeView != 'nation') {
     // could have made it so we go national only if they click on the background
     // or the same state: if(clickedView === 'map-background' || activeView ===
     // clickedView) {}. but instead let's always zoom out if they're in state
     // view, in if they're in nation view (and click on a state)
-    activeView = 'nation';
+    var newView = 'nation';
+  } else {
+    // if they clicked on a different state, prepare to zoom in
+    var newView = clickedView;
+  }
+
+  // zoom to the new view
+  updateView(newView);
+}
+
+function updateView(newView) {
+  // update the global variable that stores the current view
+  activeView = newView;
+
+  // update the URL with a #v=xxx so users can return to this view
+  setHash('v', activeView);
+
+  // determine the center point and scaling for the new view
+  var x, y, k;
+  if(activeView === 'nation') {
     x = chart_width / 2;
     y = chart_height / 2;
     k = 1;
