@@ -48,6 +48,9 @@ function add_states(map, stateData) {
       return d.properties.ID;
     })
     .attr('d', buildPath)
+    .style("fill", function(d) { return formatState('fill', d, false); })
+    .style("stroke", function(d) { return formatState('stroke', d, false); })
+    .style("stroke-width", function(d) { return formatState('stroke-width', d, false); })
     .on('mouseover', highlightState)
     .on('mouseout', unhighlightState)
     .on('click', zoomToFromState);

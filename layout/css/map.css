@@ -7,9 +7,6 @@ body {
 }
 
 .state {
-  fill: #DCDCDC;
-  stroke: transparent;
-  stroke-width: 0;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
