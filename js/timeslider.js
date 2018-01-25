@@ -16,7 +16,7 @@ function add_timeslider(map, years, chart_width, chart_height) {
         .tickFormat(d3.format("")) // treat as character so that 2015 is not 2,015
         .tickPadding(10);
   
-  var slider = map.append("g")
+  var slider = svg.append("g")
     .attr("id", "slider")
     .attr("transform", "translate(0," + (chart_height - (chart_height * 0.05)) + ")");
     
