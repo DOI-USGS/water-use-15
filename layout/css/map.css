@@ -2,11 +2,13 @@ body {
   font-family: sans-serif;
 }
 
-#statepolygons path,
-#statepolygons line {
-  fill: #9a9a9a;
-  stroke: none;
-  stroke-width: 2;
+#map-background {
+  fill: transparent;
+}
+
+.state {
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 #slideraxis path,
