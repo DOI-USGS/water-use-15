@@ -1,6 +1,6 @@
 # Adapted from vizstorm.
 
-fetchTimestamp.map_data <- vizlab::alwaysCurrent
+fetchTimestamp.state_boundaries <- vizlab::alwaysCurrent
 
 #' Gets data for state polygons.
 #' @description Builds and executes a call to the get_map_data utility function.
@@ -13,7 +13,7 @@ fetchTimestamp.map_data <- vizlab::alwaysCurrent
 #' 
 #'  Coordinate reference systems are matched to the viewbox_limits for subsetting.
 #'   
-fetch.map_data <- function(viz){
+fetch.state_boundaries <- function(viz){
   deps <- readDepends(viz)
   checkRequired(deps, "viewbox")
   viewbox <- deps[["viewbox"]]

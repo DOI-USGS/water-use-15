@@ -25,7 +25,7 @@ var mapBackground = map.append("rect")
   .attr("height", chart_height)
   .on('click', zoomToFromState);
 
-var stateData;
+var stateData, countyData;
 
 d3.queue()
   .defer(d3.json, "data/conus_map.geojson")

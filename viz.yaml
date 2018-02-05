@@ -40,25 +40,31 @@ fetch:
       spatial_metadata: spatial_metadata
     comment: sets up the basic view window and projection
   -
-    id: conus_map_data
-    location: cache/conus_map_data.rds
+    id: state_boundaries
+    location: cache/state_boundaries.rds
     reader: rds
-    fetcher: map_data
+    fetcher: state_boundaries
     fetch_args:
       database: state
-    scripts: [scripts/fetch/map_data.R , scripts/fetch/utils.R]
+    scripts: [scripts/fetch/state_boundaries.R , scripts/fetch/utils.R]
     depends:
       viewbox: viewbox
+  -
+    id: county_boundaries
+    location: cache/county_boundaries.rds
+    reader: rds
+    fetcher: county_boundaries
+    scripts: [scripts/fetch/county_boundaries.R , scripts/fetch/utils.R]
 
 process:
   -
-    id: conus_map_geojson
-    location: cache/conus_map.geojson
+    id: state_boundaries_geojson
+    location: cache/state_boundaries.geojson
     reader: json
     processor: sf_to_geojson
     scripts: [scripts/process/sf_to_geojson.R]
     depends:
-      map_data: conus_map_data
+      map_data: state_boundaries
     mimetype: application/geo+json
 
 visualize:
@@ -80,7 +86,7 @@ publish:
       map_utils: "map_utils"
       map: "build_map"
       timeslider: "timeslider"
-      conus_map_geojson: "conus_map_geojson"
+      state_boundaries_geojson: "state_boundaries_geojson"
     context:
       resources: ["lib_d3_js", "header_css", "footer_css",
                   "map_css", "hashes", "map_utils", "timeslider"]
