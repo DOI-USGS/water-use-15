@@ -18,10 +18,20 @@ info:
       version: 0.2.2.9010
       name: USGS-VIZLAB/vizlab
       ref: NA
+    USAboundaries:
+      repo: CRAN
+      version: 0.3.0
+    USAboundariesData:
+      repo: CRAN
+      version: 0.3.0
   contributors:
     -
       name: Lindsay Carr
       email: lcarr@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: Alison Appling
+      email: aappling@usgs.gov
       affiliation: U.S. Geological Survey
 parameter:
   -
@@ -49,12 +59,17 @@ fetch:
     scripts: [scripts/fetch/state_boundaries.R , scripts/fetch/utils.R]
     depends:
       viewbox: viewbox
+#  -
+#    id: county_boundaries_USAb
+#    location: cache/county_boundaries_USAb.rds
+#    reader: rds
+#    fetcher: county_boundaries_USAb
+#    scripts: [scripts/fetch/county_boundaries.R , scripts/fetch/utils.R]
   -
-    id: county_boundaries
-    location: cache/county_boundaries.rds
-    reader: rds
-    fetcher: county_boundaries
-    scripts: [scripts/fetch/county_boundaries.R , scripts/fetch/utils.R]
+    id: county_boundaries_IPUMS
+    location: data/nhgis0002_shape.zip
+    reader: zip
+    fetcher: file
 
 process:
   -
@@ -66,6 +81,14 @@ process:
     depends:
       map_data: state_boundaries
     mimetype: application/geo+json
+  -
+    id: county_boundaries
+    location: cache/county_boundaries_IPUMS.rds
+    depends:
+      county_boundaries_zip: county_boundaries_IPUMS
+    reader: rds
+    processor: county_boundaries
+    scripts: [scripts/process/clean_county_boundaries.R]
 
 visualize:
 
