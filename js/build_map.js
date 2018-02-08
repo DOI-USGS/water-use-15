@@ -24,7 +24,7 @@ d3.queue()
   .await(create_map);
   
 // dummy var for now
-var years = [1950, 1960, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
+var years = [1950, 1960, 1965, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
 
 function create_map() {
   
