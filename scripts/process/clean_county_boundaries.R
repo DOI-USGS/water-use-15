@@ -37,11 +37,17 @@ process.county_boundaries <- function(viz){
   # available, otherwise use the county FIPS
   counties <- consolidate_county_info(all_shps_simple)
   
+
+  
   # split the country-wide shapefiles into state-wide shapefiles
-  split_shps <- lapply(setNames(nm=states$state_FIPS), function(state_fips) {
-    all_shps_simple %>%
+  split_shps <- lapply(setNames(nm=states$state_FIPS[1:2]), function(state_fips) {
+    # subset to just one state
+    state_shp <- all_shps_simple %>%
       filter(state_FIPS == state_fips) %>%
       select(year, state_FIPS, county_FIPS, geometry)
+    # consolidate into a minimal number of non-duplicated county boundaries
+    distinct_shps <- consolidate_county_polygons(state_shp)
+    return(distinct_shps)
   })
   
     
@@ -111,7 +117,7 @@ consolidate_state_info <- function(all_shps_simple) {
   dr_states <- dataRetrieval::stateCd %>%
     transmute(state_FIPS=STATE, state_abbv=STUSAB, state_name=STATE_NAME)
   states <- all_shps_simple %>%
-    st_set_geometry(NULL) %>%
+    sf::st_set_geometry(NULL) %>%
     select(state_FIPS, state_name)  %>%
     full_join(dr_states, by = c("state_FIPS", "state_name")) %>%
     distinct() %>%
@@ -132,7 +138,7 @@ consolidate_county_info <- function(all_shps_simple) {
       county_FIPS=COUNTY,
       county_long=COUNTY_NAME)
   counties <- all_shps_simple %>%
-    st_set_geometry(NULL) %>%
+    sf::st_set_geometry(NULL) %>%
     select(FIPS_U, state_FIPS, county_FIPS, county_short, county_long) %>%
     full_join(dr_counties, by=c("FIPS_U", "state_FIPS", "county_FIPS", "county_long")) %>%
     distinct() %>%
@@ -158,4 +164,66 @@ consolidate_county_info <- function(all_shps_simple) {
                                   paste('County', county_FIPS)))) %>%
     select(-FIPS_U)
   return(counties)
+}
+
+consolidate_county_polygons <- function(state_shp) {
+  # check shape validity and fix if needed/possible
+  county_shps <- state_shp %>% mutate(validity=st_is_valid(geometry, reason=TRUE))
+  bad_shps <- county_shps %>% filter(validity != 'Valid Geometry')
+  if(nrow(bad_shps) > 0) {
+    # try once to fix them all
+    fixed_shps <- st_buffer(bad_shps, 0) %>% mutate(validity=st_is_valid(geometry, reason=TRUE))
+    still_bad_shps <- fixed_shps %>% filter(validity != 'Valid Geometry')
+    if(nrow(still_bad_shps) > 0) {
+      # give up if that didn't work
+      print(still_bad_shps %>% st_set_geometry(NULL) %>% arrange(county_FIPS, year))
+      stop('Invalid and unfixable geometries')
+    } else {
+      # otherwise replace the invalid ones with the fixed ones
+      county_shps <- rbind(
+        county_shps %>% filter(validity == 'Valid Geometry'),
+        fixed_shps
+      )
+    }
+  }
+  county_shps <- select(county_shps, -validity)
+  
+  # filter to just those counties whose polygons are unique, and add info on
+  # which years use each polygon
+  sparse_shp <- lapply(setNames(nm=state_shp$county_FIPS[1:3]), function(county_fips) {
+    county_shps <- state_shp %>%
+      filter(county_FIPS == county_fips) %>%
+      arrange(desc(year)) %>%
+      mutate(users = '')
+    message(sprintf('### %s %s ###', county_shps[[1,'state_FIPS']], county_fips))
+    unique_years <- county_shps[[1,'year']]
+    for(i in seq_len(nrow(county_shps)-1)+1) {
+      iyear <- county_shps[[i,'year']]
+      source_year <- NA
+      for(jyear in rev(unique_years)) {
+        j <- which(county_shps$year==jyear)
+        need <- as(county_shps[i,], 'Spatial')
+        got <- as(county_shps[j,], 'Spatial')
+        if(rgeos::gEquals(need, got)) {
+          source_year <- jyear
+          break
+        }
+      }
+      if(is.na(source_year)) {
+        message(sprintf('new year: %d', iyear))
+        unique_years <- c(unique_years, iyear)
+        county_shps[i,'users'] <- as.character(iyear)
+      } else {
+        message(sprintf('old year: %d will use shp from %d', iyear, source_year))
+        county_shps[j,'users'] <- paste(county_shps[[j,'users']], as.character(iyear), sep=',')
+      }
+    }
+    sparse_counties <- county_shps %>%
+      filter(users != '')
+    return(sparse_counties)
+  })
+  
+  # recombine into one sf object per state and return
+  bound_shp <- do.call(rbind, sparse_shp)
+  return(bound_shp)
 }
