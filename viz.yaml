@@ -24,6 +24,16 @@ info:
     USAboundariesData:
       repo: CRAN
       version: 0.3.0
+    dataRetrieval:
+      repo: CRAN
+      version: 2.7.4
+    sf:
+      repo: CRAN
+      version: 0.6.0
+    dplyr:
+      repo: CRAN
+      version: 0.7.4
+      
   contributors:
     -
       name: Lindsay Carr

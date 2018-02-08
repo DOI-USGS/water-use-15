@@ -1,5 +1,5 @@
 #' Cleans data for historical county polygons.
-process.county_boundaries <- function(viz=as.viz('county_boundaries')){
+process.county_boundaries <- function(viz){
   deps <- readDepends(viz)
   
   # unzip the shapefiles, which are zip files within a zip file
@@ -13,12 +13,149 @@ process.county_boundaries <- function(viz=as.viz('county_boundaries')){
     year <- substring(base_no_ext, nchar(base_no_ext)-3)
     list(files=files, year=year)
   })
+  names(map_shps) <- sapply(map_shps, function(map_shp) map_shp$year)
   
-  map_data <- lapply(map_shps, function(shapefile_files) {
+  # load into R
+  decade_shps <- lapply(map_shps, function(shapefile_files) {
     message("reading county data for year ", shapefile_files$year)
     shp_file <- grep("\\.shp$", shapefile_files$files, value=TRUE)
-    one_year_sf <- sf::st_read(shp_file)
+    layer <- sf::st_layers(shp_file)$name
+    one_year_sf <- sf::st_read(shp_file, layer=layer, stringsAsFactors=FALSE, quiet=TRUE, check_ring_dir=TRUE)
+    list(sf=one_year_sf, year=shapefile_files$year)
   })
+  
+  # harmonize each decadal dataset and combine them into 1
+  all_shps_simple <- simplify_combine_shps(decade_shps)
+  
+  # supplement state info with names and abbreviations from dataRetrieval and
+  # our made-up abbreviations for the territories of AK and HI
+  states <- consolidate_state_info(all_shps_simple)
+  
+  # supplement county info with long names from dataRetrieval. 214 counties are
+  # missing either a long or short name even after this merge, and 16 of those
+  # have neither. fill these in as best we can - reuse long or short name if
+  # available, otherwise use the county FIPS
+  counties <- consolidate_county_info(all_shps_simple)
+  
+  # split the country-wide shapefiles into state-wide shapefiles
+  split_shps <- lapply(setNames(nm=states$state_FIPS), function(state_fips) {
+    all_shps_simple %>%
+      filter(state_FIPS == state_fips) %>%
+      select(year, state_FIPS, county_FIPS, geometry)
+  })
+  
     
-  saveRDS(map_data, viz[['location']])
+  # saveRDS(map_data, viz[['location']])
+}
+
+simplify_combine_shps <- function(decade_shps) {
+  # attach IDs we can use to join across decades
+  decade_shps_simple <- lapply(decade_shps, function(decade_shp) {
+    year <- as.numeric(decade_shp$year)
+    sf_simple <- mutate(decade_shp$sf, year=year)
+    if(year < 1999) {
+      # message(decade_shp$year,' is like 1990')
+      sf_simple <- sf_simple %>%
+        mutate(
+          state_FIPS=ifelse(substr(NHGISST, 3, 3)=='0', substr(NHGISST, 1, 2), NHGISST),
+          county_FIPS=ifelse(substr(NHGISCTY, 4, 4)=='0', substr(NHGISCTY, 1, 3), NHGISCTY),
+          state_name=STATENAM,
+          county_short=NHGISNAM,
+          county_long=NA)
+    } else if(year < 2001) {
+      # message(decade_shp$year,' is like 2000')
+      sf_simple <- sf_simple %>%
+        mutate(
+          state_FIPS=STATEFP00,
+          county_FIPS=COUNTYFP00,
+          state_name=NA,
+          county_short=NAME00,
+          county_long=NAMELSAD00)
+    } else if(year < 2011) {
+      # message(decade_shp$year,' is like 2010')
+      sf_simple <- sf_simple %>%
+        mutate(
+          state_FIPS=STATEFP10,
+          county_FIPS=COUNTYFP10,
+          state_name=NA,
+          county_short=NAME10,
+          county_long=NAMELSAD10)
+    } else if(year < 2016) {
+      # message(decade_shp$year,' is like 2015')
+      sf_simple <- sf_simple %>%
+        mutate(
+          state_FIPS=STATEFP,
+          county_FIPS=COUNTYFP,
+          state_name=NA,
+          county_short=NAME,
+          county_long=NAMELSAD)
+    } else {
+      stop('unexpected year: ', year)
+    }
+    # print(head(decade_shp$sf %>% st_set_geometry(NULL)))
+    sf_simple %>% select(year, state_FIPS, county_FIPS, state_name, county_short, county_long, geometry)
+  })
+  
+  # combine all years using rbind.sf
+  all_shps_simple <- do.call(rbind, decade_shps_simple)
+  
+  # tidy up and return. use underscore_sep in FIPS because some state and county
+  # codes are longer than the standard, so the _ is needed to disambigute
+  rownames(all_shps_simple) <- NULL
+  all_shps_simple <- all_shps_simple %>%
+    mutate(FIPS_U = paste(state_FIPS, county_FIPS, sep='_'))
+  return(all_shps_simple)
+}
+
+consolidate_state_info <- function(all_shps_simple) {
+  dr_states <- dataRetrieval::stateCd %>%
+    transmute(state_FIPS=STATE, state_abbv=STUSAB, state_name=STATE_NAME)
+  states <- all_shps_simple %>%
+    st_set_geometry(NULL) %>%
+    select(state_FIPS, state_name)  %>%
+    full_join(dr_states, by = c("state_FIPS", "state_name")) %>%
+    distinct() %>%
+    group_by(state_FIPS) %>%
+    summarize(
+      state_name = ifelse(length(na.omit(state_name)) == 1, na.omit(state_name), as.character(NA)),
+      state_abbv = ifelse(length(na.omit(state_abbv)) == 1, na.omit(state_abbv), as.character(NA))) %>%
+    filter(state_FIPS %in% unique(all_shps_simple$state_FIPS)) %>%
+    mutate(state_abbv = ifelse(is.na(state_abbv), c('025'='AKT','155'='HIT')[state_FIPS], state_abbv))
+  return(states)
+}
+
+consolidate_county_info <- function(all_shps_simple) {
+  dr_counties <- dataRetrieval::countyCd %>%
+    transmute(
+      FIPS_U=paste(STATE, COUNTY, sep='_'),
+      state_FIPS=STATE,
+      county_FIPS=COUNTY,
+      county_long=COUNTY_NAME)
+  counties <- all_shps_simple %>%
+    st_set_geometry(NULL) %>%
+    select(FIPS_U, state_FIPS, county_FIPS, county_short, county_long) %>%
+    full_join(dr_counties, by=c("FIPS_U", "state_FIPS", "county_FIPS", "county_long")) %>%
+    distinct() %>%
+    group_by(FIPS_U) %>%
+    summarize(
+      state_FIPS = unique(na.omit(state_FIPS)),
+      county_FIPS = unique(county_FIPS),
+      county_short = {
+        cs <- unique(na.omit(county_short))
+        ifelse(length(cs) == 1, cs, as.character(NA))
+      },
+      county_long  = {
+        cl <- unique(na.omit(county_long))
+        ifelse(length(cl) == 1, na.omit(cl), as.character(NA))
+      }) %>%
+    filter(FIPS_U %in% unique(all_shps_simple$FIPS_U)) %>%
+    mutate(
+      county_short = ifelse(!is.na(county_short), county_short,
+                            ifelse(!is.na(county_long), county_long,
+                                   paste('County', county_FIPS))),
+      county_long = ifelse(!is.na(county_long), county_long,
+                           ifelse(!is.na(county_short), county_short,
+                                  paste('County', county_FIPS)))) %>%
+    select(-FIPS_U)
+  return(counties)
 }
