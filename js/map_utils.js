@@ -189,3 +189,12 @@ function updateView(newView) {
       "scale(" + k + ")" +
       "translate(" + -x + "," + -y + ")");
 }
+
+function updateTitle(year) {
+  d3.select(".maptitle")
+    .text(formatTitle(year));
+}
+
+function formatTitle(year) {
+  return "Water Use Data for " + year;
+}

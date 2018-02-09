@@ -2,6 +2,12 @@ body {
   font-family: sans-serif;
 }
 
+.maptitle {
+  text-anchor: middle;
+  font-size: 20px;
+  font-weight: bold;
+}
+
 #map-background {
   fill: transparent;
 }
