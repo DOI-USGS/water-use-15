@@ -37,22 +37,39 @@ process.county_boundaries <- function(viz){
   # available, otherwise use the county FIPS
   counties <- consolidate_county_info(all_shps_simple)
   
-
-  
   # split the country-wide shapefiles into state-wide shapefiles
-  split_shps <- lapply(setNames(nm=states$state_FIPS[1:2]), function(state_fips) {
+  split_shps <- lapply(setNames(nm=states$state_FIPS), function(state_fips) {
     # subset to just one state
     state_shp <- all_shps_simple %>%
       filter(state_FIPS == state_fips) %>%
       select(year, state_FIPS, county_FIPS, geometry)
-    # consolidate into a minimal number of non-duplicated county boundaries
-    distinct_shps <- consolidate_county_polygons(state_shp)
-    return(distinct_shps)
+    
+    # # consolidate into a minimal number of non-duplicated county boundaries
+    # message('consolidating ', states %>% filter(state_FIPS==state_fips) %>% pull(state_name))
+    # distinct_shps <- consolidate_county_polygons(state_shp)
+    # return(distinct_shps)
+    
+    return(state_shp)
+  })
+  
+  geojsondir <- file.path(tempdir(), 'geojson')
+  dir.create(geojsondir)
+  lapply(setNames(nm=names(split_shps)), function(split_shp_nm) {
+    split_shp <- split_shps[[split_shp_nm]]
+    geojsonio::geojson_write(
+      input=split_shp,
+      file=file.path(geojsondir, sprintf('%s.geojson', split_shp_nm)),
+      geometry='multipolygon',
+      convert_wgs84=TRUE)
   })
   
     
   # saveRDS(map_data, viz[['location']])
 }
+
+bash <- paste(c(
+  
+  ), collapse='\n')
 
 simplify_combine_shps <- function(decade_shps) {
   # attach IDs we can use to join across decades
@@ -190,14 +207,14 @@ consolidate_county_polygons <- function(state_shp) {
   
   # filter to just those counties whose polygons are unique, and add info on
   # which years use each polygon
-  sparse_shp <- lapply(setNames(nm=state_shp$county_FIPS[1:3]), function(county_fips) {
-    county_shps <- state_shp %>%
+  sparse_shp <- lapply(setNames(nm=county_shps$county_FIPS), function(county_fips) {
+    county_shps <- county_shps %>%
       filter(county_FIPS == county_fips) %>%
       arrange(desc(year)) %>%
       mutate(users = '')
     message(sprintf('### %s %s ###', county_shps[[1,'state_FIPS']], county_fips))
-    unique_years <- county_shps[[1,'year']]
-    for(i in seq_len(nrow(county_shps)-1)+1) {
+    unique_years <- c()#county_shps[[1,'year']]
+    for(i in seq_len(nrow(county_shps))) {
       iyear <- county_shps[[i,'year']]
       source_year <- NA
       for(jyear in rev(unique_years)) {
