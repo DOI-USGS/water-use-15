@@ -10,3 +10,7 @@ function add_states(map, state_data) {
     .append('path')
     .attr('d', buildPath);
 }
+
+function formatTitle(year) {
+  return "Water Use Data for " + year;
+}
