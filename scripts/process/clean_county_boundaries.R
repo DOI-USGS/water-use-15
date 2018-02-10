@@ -38,7 +38,9 @@ process.county_boundaries <- function(viz){
   counties <- consolidate_county_info(all_shps_simple)
   
   # split the country-wide shapefiles into state-wide shapefiles
-  split_shps <- lapply(setNames(nm=states$state_FIPS), function(state_fips) {
+  split_shps <- lapply(setNames(nm=states$state_FIPS[1:2]), function(state_fips) {
+    message('splitting out shapefiles for state ', state_fips)
+    
     # subset to just one state
     state_shp <- all_shps_simple %>%
       filter(state_FIPS == state_fips) %>%
@@ -53,23 +55,29 @@ process.county_boundaries <- function(viz){
   })
   
   geojsondir <- file.path(tempdir(), 'geojson')
-  dir.create(geojsondir)
-  lapply(setNames(nm=names(split_shps)), function(split_shp_nm) {
+  if(!dir.exists(geojsondir)) dir.create(geojsondir)
+  lapply(setNames(nm=names(split_shps)[1]), function(split_shp_nm) {
+    outfile <- file.path(geojsondir, sprintf('%s.geojson', split_shp_nm))
+    message('writing ', outfile)
     split_shp <- split_shps[[split_shp_nm]]
     geojsonio::geojson_write(
       input=split_shp,
-      file=file.path(geojsondir, sprintf('%s.geojson', split_shp_nm)),
-      geometry='multipolygon',
+      file=outfile,
+      geometry='polygon',
       convert_wgs84=TRUE)
   })
+  # also write the states and counties tables
+  jsonlite::write_json(states, file.path(geojsondir, 'states.json'))
+  jsonlite::write_json(counties, file.path(geojsondir, 'counties.json'))
   
-    
-  # saveRDS(map_data, viz[['location']])
+  # save to one big zip file
+  oldwd <- setwd(geojsondir)
+  on.exit(setwd(oldwd))
+  zipfile <- file.path(oldwd, viz[['location']])
+  if(file.exists(zipfile)) file.remove(zipfile)
+  filestozip <- dir()
+  zip(zipfile, files=filestozip)
 }
-
-bash <- paste(c(
-  
-  ), collapse='\n')
 
 simplify_combine_shps <- function(decade_shps) {
   # attach IDs we can use to join across decades

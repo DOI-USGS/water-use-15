@@ -92,11 +92,11 @@ process:
       map_data: state_boundaries
     mimetype: application/geo+json
   -
-    id: county_boundaries
-    location: cache/county_boundaries_IPUMS.rds
+    id: county_boundaries_geojson
+    location: cache/county_boundaries_geojson.zip
     depends:
       county_boundaries_zip: county_boundaries_IPUMS
-    reader: rds
+    reader: zip
     processor: county_boundaries
     scripts: [scripts/process/clean_county_boundaries.R]
 
