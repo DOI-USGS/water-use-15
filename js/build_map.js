@@ -25,10 +25,13 @@ var mapBackground = map.append("rect")
   .attr("height", chart_height)
   .on('click', zoomToFromState);
 
-var stateData, countyData;
+var stateData, stateDict, countyDict;
+var countyData = new Map();
 
 d3.queue()
-  .defer(d3.json, "data/conus_map.geojson")
+  .defer(d3.json, "data/state_boundaries.geojson")
+  .defer(d3.json, "data/states.json")
+  .defer(d3.json, "data/counties.json") // could load this later
   .await(create_map);
 
 // dummy var for now
@@ -49,8 +52,17 @@ function create_map() {
 	// the rest of the indices of arguments are all the other arguments passed in -
 	// so in this case, all of the results from q.await
 	stateData = arguments[1];
-
-  add_states(map, stateData);
+	stateDict = arguments[2];
+	countyDict = arguments[3];
+	
+  add_states(map, stateData, stateDict);
   add_timeslider(map, years, chart_width, chart_height);
+  
+  // get started downloading county data right away.
+  // for now, pretend that we know that state '01' is the most likely state
+  // for the user to click on; we could make this dynamic in the future.
+  loadCountyData("AL", function(error, data) {
+    if (error) throw error;
+  });
 
 }

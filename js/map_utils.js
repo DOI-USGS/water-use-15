@@ -166,6 +166,7 @@ function updateView(newView) {
   // d.properties.ID === activeView), but that didn't work with transitions.
   var states = map.selectAll('.state');
   if(activeView === 'nation') {
+    hideCounties();
     states
       .transition()
       .duration(750)
@@ -173,6 +174,7 @@ function updateView(newView) {
       .style("stroke", function(d) { return formatState('stroke', d, false); })
       .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
   } else {
+    showCounties(activeView);
     states
       .transition()
       .duration(750)

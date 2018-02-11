@@ -7,7 +7,7 @@ TMP=$(mktemp -d)
 unzip cache/county_boundaries_geojson.zip -d $TMP
 
 # pick out the geojson files (exclude counties.js and states.js)
-$GJ=$(dir $TMP/*.geojson)
+GJ=$(dir $TMP/*.geojson)
 
 # convert to topojson
 geo2topo \
@@ -26,7 +26,7 @@ topoquantize 1e5 \
 
 # zip back up for storage in cache/
 WD=$(pwd)
-cd $TMP
-zip "$WD/cache/county_boundaries_topojson.zip" ./*quantized.json
-cd $WD
+cd "$TMP"
+zip "$WD/cache/county_boundaries_topojson.zip" ./*quantized.json states.json counties.json
+cd "$WD"
 

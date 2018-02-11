@@ -151,7 +151,8 @@ consolidate_state_info <- function(all_shps_simple) {
       state_name = ifelse(length(na.omit(state_name)) == 1, na.omit(state_name), as.character(NA)),
       state_abbv = ifelse(length(na.omit(state_abbv)) == 1, na.omit(state_abbv), as.character(NA))) %>%
     filter(state_FIPS %in% unique(all_shps_simple$state_FIPS)) %>%
-    mutate(state_abbv = ifelse(is.na(state_abbv), c('025'='AKT','155'='HIT')[state_FIPS], state_abbv))
+    # use same abbreviation for Alaska and Hawaii both before and after they became states
+    mutate(state_abbv = ifelse(is.na(state_abbv), c('025'='AK','155'='HI')[state_FIPS], state_abbv))
   return(states)
 }
 

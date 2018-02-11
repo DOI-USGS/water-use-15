@@ -15,7 +15,7 @@ info:
   required-packages:
     vizlab:
       repo: github
-      version: 0.2.2.9010
+      version: 0.3.0
       name: USGS-VIZLAB/vizlab
       ref: NA
     USAboundaries:
@@ -69,6 +69,7 @@ fetch:
     scripts: [scripts/fetch/state_boundaries.R , scripts/fetch/utils.R]
     depends:
       viewbox: viewbox
+      states_dict: states_dictionary
 #  -
 #    id: county_boundaries_USAb
 #    location: cache/county_boundaries_USAb.rds
@@ -99,6 +100,26 @@ process:
     reader: zip
     processor: county_boundaries
     scripts: [scripts/process/clean_county_boundaries.R]
+  -
+    id: states_dictionary
+    location: cache/states.json
+    reader: json
+    depends:
+      zipfile: county_boundaries_geojson
+    process_args:
+      dict: states.json
+    processor: extract_dict
+    scripts: [scripts/process/extract_dict.R]
+  -
+    id: counties_dictionary
+    location: cache/counties.json
+    reader: json
+    depends:
+      zipfile: county_boundaries_geojson
+    process_args:
+      dict: counties.json
+    processor: extract_dict
+    scripts: [scripts/process/extract_dict.R]
 
 visualize:
 
@@ -110,6 +131,7 @@ publish:
     publisher: page
     depends:
       lib_d3_js: "lib-d3-js"
+      topojson: "topojson"
       header_css: "lib-header-css"
       footer_css: "lib-footer-css"
       map_css: "map_css"
@@ -117,13 +139,18 @@ publish:
       footer: "footer_section"
       hashes: "url_hashes"
       map_utils: "map_utils"
+      map_counties: "map_counties"
       map: "build_map"
       timeslider: "timeslider"
       state_boundaries_geojson: "state_boundaries_geojson"
     context:
-      resources: ["lib_d3_js", "header_css", "footer_css",
-                  "map_css", "hashes", "map_utils", "timeslider"]
+      resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
+                  "map_css", "hashes", "map_utils", "map_counties", "timeslider"]
       sections: ["map"] # adding header and footer here, doubled each on the page
+  -
+    id: topojson
+    location: "js/topojson.v1.min.js"
+    mimetype: application/javascript
   -
     id: url_hashes
     location: "js/url_hashes.js"
@@ -139,6 +166,10 @@ publish:
   -
     id: map_utils
     location: "js/map_utils.js"
+    mimetype: application/javascript
+  -
+    id: map_counties
+    location: "js/counties.js"
     mimetype: application/javascript
   -
     id: map_css
