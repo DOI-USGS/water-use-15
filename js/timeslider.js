@@ -39,7 +39,16 @@ function add_timeslider(map, years, chart_width, chart_height) {
               dragged(dragging_circle, xscale, min_year, max_year);
               dragging_circle.classed("dragging", true); 
             })
-            .on("end", function() { return d3.select(this).classed("dragging", false); })
+            .on("end", function() { 
+              var dragged_circle = d3.select(this);
+              var new_year = xscale.invert(dragged_circle.attr("cx"));
+              
+              // this is where functions to update data would go
+              // just pass in `new_year` which is the year the 
+              // timeslider has been changed to
+              updateTitle(new_year);
+              
+              return dragged_circle.classed("dragging", false); })
           );
   
 }
