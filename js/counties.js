@@ -44,14 +44,14 @@ function displayCountyData(error, activeCountyData) {
       .data(yeargeo, function(d) {
         return d.properties.county_FIPS;
       });
-      
+    
     // exit
     countyBounds
       .exit()
       .remove();
       
     // enter
-    countyBounds = countyBounds
+    countyBounds
       .enter()
       .append("path")
       .classed('county', true)
@@ -64,7 +64,7 @@ function displayCountyData(error, activeCountyData) {
       .style("fill", 'none')
       .style("stroke", 'darkgrey')
       .style("stroke-width", 0.2)
-      .merge(countyBounds);
+      .attr('d', buildPath);
     
     // update
     countyBounds
