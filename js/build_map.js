@@ -25,6 +25,7 @@ var mapBackground = map.append("rect")
   .attr("height", chart_height)
   .on('click', zoomToFromState);
 
+// Datasets
 var stateData, stateDict, countyDict;
 var countyData = new Map();
 
@@ -37,11 +38,15 @@ d3.queue()
 // dummy var for now
 var years = [1950, 1960, 1965, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
 
+// Zoom status: start at nation-wide, 2015
+var activeView = 'USA';
+var activeYear = d3.max(years);
+
 svg.append("text")
-  .attr("class", "maptitle")
+  .attr("id", "maptitle")
   .attr("x", chart_width/2)
-  .attr("y", chart_height*0.10) // bring in 10% of chart height
-  .text(formatTitle(d3.max(years)));
+  .attr("y", chart_height*0.10); // bring in 10% of chart height
+updateTitle();
 
 function create_map() {
 

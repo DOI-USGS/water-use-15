@@ -1,9 +1,11 @@
 function hideCounties() {
-  console.log("hiding counties");
+  map.selectAll('.county')
+    .data([])
+    .exit()
+    .remove();
 }
 
 function showCounties(state) {
-  console.log("showing counties for state " + state);
   loadCountyData(state, displayCountyData);
 }
 
@@ -15,8 +17,6 @@ function loadCountyData(state, callback) {
     var stateFIPS = stateDict.filter(function(d) {
       return(d.state_abbv === state);
     })[0].state_FIPS;
-    
-    console.log('downloading ' + "data/" + stateFIPS + "-quantized.json");
     
     // download the data and run the processing function
     oneStateCounties = d3.json("data/" + stateFIPS + "-quantized.json", function(error, oneStateCounties) {
@@ -34,19 +34,40 @@ function displayCountyData(error, activeCountyData) {
     if(error) throw error;
     
     // extract the topojson to geojson
-    var geojson = topojson.feature(activeCountyData, activeCountyData.objects.state_01);
+    var geojson = topojson.feature(activeCountyData, activeCountyData.objects.state);
+    var yeargeo = geojson.features.filter(function(d) {
+      return d.properties.year == activeYear;
+    });
   
     // create paths
-    svg.selectAll(".county")
-      .data(geojson.features)
+    var countyBounds = map.selectAll(".county")
+      .data(yeargeo, function(d) {
+        return d.properties.county_FIPS;
+      });
+      
+    // exit
+    countyBounds
+      .exit()
+      .remove();
+      
+    // enter
+    countyBounds = countyBounds
       .enter()
       .append("path")
       .classed('county', true)
       .attr('id', function(d) {
         return d.properties.county_FIPS;
       })
-      .attr('d', buildPath)
+      .text(function(d) {
+        return d.properties.county_FIPS;
+      })
       .style("fill", 'none')
-      .style("stroke", 'green')
-      .style("stroke-width", 0.5);
+      .style("stroke", 'darkgrey')
+      .style("stroke-width", 0.2)
+      .merge(countyBounds);
+    
+    // update
+    countyBounds
+      .transition()
+      .attr('d', buildPath);
 }

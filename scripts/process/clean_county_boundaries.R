@@ -38,7 +38,7 @@ process.county_boundaries <- function(viz){
   counties <- consolidate_county_info(all_shps_simple)
   
   # split the country-wide shapefiles into state-wide shapefiles
-  split_shps <- lapply(setNames(nm=states$state_FIPS[1:2]), function(state_fips) {
+  split_shps <- lapply(setNames(nm=states$state_FIPS[c(1,4)]), function(state_fips) {
     message('splitting out shapefiles for state ', state_fips)
     
     # subset to just one state
@@ -56,7 +56,7 @@ process.county_boundaries <- function(viz){
   
   geojsondir <- file.path(tempdir(), 'geojson')
   if(!dir.exists(geojsondir)) dir.create(geojsondir)
-  lapply(setNames(nm=names(split_shps)[1]), function(split_shp_nm) {
+  lapply(setNames(nm=names(split_shps)), function(split_shp_nm) {
     outfile <- file.path(geojsondir, sprintf('%s.geojson', split_shp_nm))
     message('writing ', outfile)
     split_shp <- split_shps[[split_shp_nm]]
