@@ -1,7 +1,7 @@
 function hideCounties() {
   map.selectAll('.county')
-    .data([])
-    .exit()
+    //.data([])
+    //.exit()
     .remove();
 }
 
