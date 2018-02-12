@@ -23,7 +23,6 @@ fetch.state_boundaries <- function(viz){
   map_data <- do.call(get_map_data, args = map_args)
   
   # revise the ID column to be compatible with county data and concise hashes
-  browser()
   states <- deps[["states_dict"]]
   state_matches <- match(map_data$ID, tolower(states$state_name))
   if(any(is.na(state_matches))) stop("couldn't match a state from maps::map to county-derived states list")
