@@ -68,6 +68,5 @@ function displayCountyData(error, activeCountyData) {
     
     // update
     countyBounds
-      .transition()
       .attr('d', buildPath);
 }
