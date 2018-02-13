@@ -27,12 +27,6 @@ info:
     dataRetrieval:
       repo: CRAN
       version: 2.7.4
-    sf:
-      repo: CRAN
-      version: 0.6.0
-    dplyr:
-      repo: CRAN
-      version: 0.7.4
       
   contributors:
     -
@@ -76,11 +70,6 @@ fetch:
 #    reader: rds
 #    fetcher: county_boundaries_USAb
 #    scripts: [scripts/fetch/county_boundaries.R , scripts/fetch/utils.R]
-  -
-    id: county_boundaries_IPUMS
-    location: data/nhgis0002_shape.zip
-    reader: zip
-    fetcher: file
 
 process:
   -
