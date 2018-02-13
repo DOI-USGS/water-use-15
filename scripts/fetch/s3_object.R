@@ -1,6 +1,8 @@
 fetch.s3_object <- function(viz){
   deps <- readDepends(viz)
   
+  aws.signature::use_credentials(profile='dev', file=aws.signature::default_credentials_file())
+  
   # download object from an s3 bucket
   object_fn <- aws.s3::get_object(object = deps[["object_name"]], 
                                   bucket = deps[["bucket_name"]],

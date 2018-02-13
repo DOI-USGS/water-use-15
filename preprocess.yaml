@@ -3,7 +3,9 @@ info:
   description: >- this is the yaml that orchestrates the steps required for 
         preprocessing the county boundary and state/county fips data. This should
         not need to be executed by every contributor because the results are stored
-        in the S3 bucket. Most should just worry about the viz.yaml.
+        in the S3 bucket. Most should just worry about the viz.yaml. 
+        * Assumes that you have appropriate credentials stored in 
+        aws.signature::default_credentials_file()
   required-packages:
     vizlab:
       repo: github
@@ -13,6 +15,9 @@ info:
     aws.s3:
       repo: CRAN
       version: 0.3.3
+    aws.signature:
+      repo: CRAN
+      version: 0.3.5
     dplyr:
       repo: CRAN
       version: 0.7.4
