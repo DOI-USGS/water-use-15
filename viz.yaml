@@ -90,6 +90,7 @@ publish:
     id: url_hashes
     location: "js/url_hashes.js"
     mimetype: application/javascript
+  # custom_projection.js must be before build_map.js for it to find the projection function.
   -
     id: custom_projection
     location: "js/custom_projection.js"

@@ -15,8 +15,7 @@ function albersUsaPr() {
       .rotate([157, 0])
       .center([-3, 19.9])
       .parallels([8, 18]);
-
-  // XXX? You should check that this is a standard PR projection!
+      
   var puertoRico = d3.geoConicEqualArea()
       .rotate([66, 0])
       .center([0, 18])
