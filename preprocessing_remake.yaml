@@ -1,4 +1,4 @@
-target_default: Viz
+target_default: preprocess
 
 packages:
   - vizlab
@@ -36,3 +36,6 @@ targets:
     - arguments_conus_map_geojson
   - vizlab/remake/scripts/conus_map_geojson.R
   - cache/conus_map_data.rds
+  
+  preprocess:
+  
