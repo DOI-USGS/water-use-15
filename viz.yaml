@@ -18,8 +18,14 @@ info:
       version: 0.3.0
       name: USGS-VIZLAB/vizlab
       ref: NA
-    USAboundaries:
+    aws.s3:
       repo: CRAN
+      version: 0.3.3
+    aws.signature:
+      repo: CRAN
+      version: 0.3.5
+    USAboundaries:
+      repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
       version: 0.3.0
     USAboundariesData:
       repo: CRAN
@@ -37,6 +43,7 @@ info:
       name: Alison Appling
       email: aappling@usgs.gov
       affiliation: U.S. Geological Survey
+
 parameter:
   -
     id: spatial_metadata
@@ -64,12 +71,15 @@ fetch:
     depends:
       viewbox: viewbox
       states_dict: states_dictionary
-#  -
-#    id: county_boundaries_USAb
-#    location: cache/county_boundaries_USAb.rds
-#    reader: rds
-#    fetcher: county_boundaries_USAb
-#    scripts: [scripts/fetch/county_boundaries.R , scripts/fetch/utils.R]
+  -
+    id: county_boundaries_topojson
+    location: cache/county_boundaries_topojson.zip
+    fetch_args:
+      object_name: "county_boundaries_topojson.zip"
+      bucket_name: "viz-water-use-15"
+    reader: zip
+    fetcher: s3_object
+    scripts: [scripts/fetch/s3_object.R]
 
 process:
   -
@@ -82,19 +92,11 @@ process:
       map_data: state_boundaries
     mimetype: application/geo+json
   -
-    id: county_boundaries_geojson
-    location: cache/county_boundaries_geojson.zip
-    depends:
-      county_boundaries_zip: county_boundaries_IPUMS
-    reader: zip
-    processor: county_boundaries
-    scripts: [scripts/process/clean_county_boundaries.R]
-  -
     id: states_dictionary
     location: cache/states.json
     reader: json
     depends:
-      zipfile: county_boundaries_geojson
+      zipfile: county_boundaries_topojson
     process_args:
       dict: states.json
     processor: extract_dict
@@ -104,7 +106,7 @@ process:
     location: cache/counties.json
     reader: json
     depends:
-      zipfile: county_boundaries_geojson
+      zipfile: county_boundaries_topojson
     process_args:
       dict: counties.json
     processor: extract_dict
