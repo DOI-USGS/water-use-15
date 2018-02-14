@@ -1,0 +1,52 @@
+target_default: Viz
+
+packages:
+  - vizlab
+
+sources:
+  - scripts/fetch/s3_object.R
+  - scripts/process/clean_county_boundaries.R
+  - scripts/process/execute_shell_script.R
+  - scripts/publish/s3_object.R
+
+targets:
+  
+  # --- parameter --- #
+  
+  s3bucket:
+  command: parameter(I('s3bucket'))
+  depends: arguments_s3bucket
+  
+  # --- fetch --- #
+  
+  county_boundaries_IPUMS:
+    command: readData(I('county_boundaries_IPUMS'))
+  depends: cache/viewbox.rds
+  cache/viewbox.rds:
+    command: fetch(I('viewbox'))
+  depends: 
+    - arguments_viewbox
+  - vizlab/remake/scripts/viewbox.R
+  - spatial_metadata
+  
+  conus_map_data:
+    command: readData(I('conus_map_data'))
+  depends: cache/conus_map_data.rds
+  cache/conus_map_data.rds:
+    command: fetch(I('conus_map_data'))
+  depends: 
+    - arguments_conus_map_data
+  - vizlab/remake/scripts/conus_map_data.R
+  - cache/viewbox.rds
+  
+  # --- process --- #
+  
+  conus_map_geojson:
+    command: readData(I('conus_map_geojson'))
+  depends: cache/conus_map.geojson
+  cache/conus_map.geojson:
+    command: process(I('conus_map_geojson'))
+  depends: 
+    - arguments_conus_map_geojson
+  - vizlab/remake/scripts/conus_map_geojson.R
+  - cache/conus_map_data.rds
