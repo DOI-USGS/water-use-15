@@ -1,6 +1,7 @@
 info:
   name: preprocessing framework
-  description: >- this is the yaml that orchestrates the steps required for 
+  description: >- 
+        This is the yaml that orchestrates the steps required for 
         preprocessing the county boundary and state/county fips data. This should
         not need to be executed by every contributor because the results are stored
         in the S3 bucket. Most should just worry about the viz.yaml. 
