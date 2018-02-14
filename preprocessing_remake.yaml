@@ -4,7 +4,7 @@ packages:
   - vizlab
 
 sources:
-  - scripts/fetch/s3_object.R
+  - scripts/preprocess/fetch_s3_object.R
   - scripts/process/clean_county_boundaries.R
   - scripts/process/execute_shell_script.R
   - scripts/publish/s3_object.R
@@ -14,8 +14,7 @@ targets:
   # --- parameter --- #
   
   s3bucket:
-    command: parameter(I('s3bucket'))
-    depends: arguments_s3bucket
+    command: c("viz-water-use-15")
   
   # --- fetch --- #
   
