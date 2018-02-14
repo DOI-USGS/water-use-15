@@ -1,4 +1,4 @@
-fetch_s3_object <- function(obj_name, bucket_name, location){
+fetch_s3_object <- function(location, obj_name, bucket_name){
   
   aws.signature::use_credentials(profile='default', file=aws.signature::default_credentials_file())
   

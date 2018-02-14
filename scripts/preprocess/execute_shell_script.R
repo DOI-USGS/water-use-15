@@ -1,7 +1,6 @@
-process.execute_shell_script <- function(viz){
-  deps <- readDepends(viz)
+execute_shell_script <- function(location, shell_script_fn){
   
-  cmd <- paste("bash", deps[["shell_script"]])
+  cmd <- paste("bash", shell_script_fn)
   system(cmd)
   
 }
