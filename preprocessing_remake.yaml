@@ -14,24 +14,14 @@ targets:
   # --- parameter --- #
   
   s3bucket:
-  command: parameter(I('s3bucket'))
-  depends: arguments_s3bucket
+    command: parameter(I('s3bucket'))
+    depends: arguments_s3bucket
   
   # --- fetch --- #
   
-  county_boundaries_IPUMS:
-    command: readData(I('county_boundaries_IPUMS'))
-  depends: cache/viewbox.rds
-  cache/viewbox.rds:
-    command: fetch(I('viewbox'))
-  depends: 
-    - arguments_viewbox
-  - vizlab/remake/scripts/viewbox.R
-  - spatial_metadata
+  cache/IPUMS_NHGIS_counties.zip:
+    command: fetch_s3_object(I("IPUMS_NHGIS_counties.zip"), "s3bucket", target_name)
   
-  conus_map_data:
-    command: readData(I('conus_map_data'))
-  depends: cache/conus_map_data.rds
   cache/conus_map_data.rds:
     command: fetch(I('conus_map_data'))
   depends: 
@@ -41,9 +31,6 @@ targets:
   
   # --- process --- #
   
-  conus_map_geojson:
-    command: readData(I('conus_map_geojson'))
-  depends: cache/conus_map.geojson
   cache/conus_map.geojson:
     command: process(I('conus_map_geojson'))
   depends: 
