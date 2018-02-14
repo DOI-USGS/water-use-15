@@ -1,74 +1,43 @@
-info:
-  name: preprocessing framework
-  description: >- 
-        This is the yaml that orchestrates the steps required for 
-        preprocessing the county boundary and state/county fips data. This should
-        not need to be executed by every contributor because the results are stored
-        in the S3 bucket. Most should just worry about the viz.yaml. 
-        * Assumes that you have appropriate credentials stored in 
-        aws.signature::default_credentials_file()
-  required-packages:
-    vizlab:
-      repo: github
-      version: 0.3.0
-      name: USGS-VIZLAB/vizlab
-      ref: NA
-    aws.s3:
-      repo: CRAN
-      version: 0.3.3
-    aws.signature:
-      repo: CRAN
-      version: 0.3.5
-    dplyr:
-      repo: CRAN
-      version: 0.7.4
-    jsonlite:
-      repo: CRAN
-      version: 1.5
-    sf:
-      repo: CRAN
-      version: 0.6.0
-parameters:
-  - 
-    id: s3bucket
-    name: 'viz-water-use-15'
-fetch:
-  -
-    id: county_boundaries_IPUMS
-    location: cache/IPUMS_NHGIS_counties.zip
-    reader: zip
-    fetcher: s3_object
-    scripts: [scripts/fetch/s3_object.R]
+target_default: preprocess
+
+packages:
+  - vizlab
+
+sources:
+  - scripts/preprocess/fetch_s3_object.R
+  - scripts/preprocess/clean_county_boundaries.R
+  - scripts/preprocess/execute_shell_script.R
+  - scripts/preprocess/push_s3_object.R
+
+targets:
+  
+  # --- parameter --- #
+  
+  s3bucket:
+    command: c(I("viz-water-use-15"))
+  
+  # --- fetch --- #
+  
+  cache/IPUMS_NHGIS_counties.zip:
+    command: fetch_s3_object(target_name, I("IPUMS_NHGIS_counties.zip"), s3bucket)
+  
+  # --- process --- #
+  
+  cache/county_boundaries_geojson.zip:
+    command: clean_county_boundaries(target_name, "cache/IPUMS_NHGIS_counties.zip")
+  
+  cache/county_boundaries_topojson.zip:
+    command: execute_shell_script(target_name, I("scripts/preprocess/topo_county_boundaries.sh"))
     depends:
-      object_name: IPUMS_NHGIS_counties.zip
-      bucket_name: s3bucket
-process:
-  -
-    id: county_boundaries_geojson
-    location: cache/county_boundaries_geojson.zip
+      - cache/county_boundaries_geojson.zip # had to include because it is not explicitly called out
+  
+  # --- publish --- #
+  
+  s3boundariesfile:
+    command: push_s3_object(I("county_boundaries_topojson.zip"), "cache/county_boundaries_topojson.zip", s3bucket)
+  
+  # --- final --- #
+  
+  preprocess:
     depends:
-      county_boundaries_zip: county_boundaries_IPUMS
-    reader: zip
-    processor: county_boundaries
-    scripts: [scripts/process/clean_county_boundaries.R]
-  -
-    # convert geojson to topojson and simplify
-    id: county_boundaries_topojson
-    location: cache/county_boundaries_topojson.zip
-    depends:
-      county_boundaries_zip: county_boundaries_geojson
-      shell_script: scripts/process/topo_county_boundaries.sh
-    reader: zip
-    processor: execute_shell_script
-    scripts: [scripts/process/execute_shell_script.R]
-publish:
-  -
-    # push the processed topojson up to the s3 bucket to be used by viz.yaml
-    id: county_boundaries_topojson_s3
-    publisher: s3_object.R
-    scripts: [scripts/publish/s3_object.R]
-    depends:
-      file_location: cache/county_boundaries_topojson.zip
-      object_name: county_boundaries_topojson.zip
-      bucket_name: s3bucket
-    mimetype: application/zip
+      - s3boundariesfile

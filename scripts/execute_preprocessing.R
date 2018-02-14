@@ -31,8 +31,8 @@ aws.signature::default_credentials_file()
 # run the full preprocesing workflow
 # this will take ~ 30 minutes, the longest step is fetching the data from s3
 remake::make(target_names = "preprocess", 
-             remake_file = "preprocessing_remake.yaml")
+             remake_file = "preprocess.yaml")
 
 # run an individual target:
 remake::make(target_names = "cache/county_boundaries_topojson.zip", 
-             remake_file = "preprocessing_remake.yaml")
+             remake_file = "preprocess.yaml")
