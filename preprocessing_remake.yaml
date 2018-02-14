@@ -21,21 +21,8 @@ targets:
   cache/IPUMS_NHGIS_counties.zip:
     command: fetch_s3_object(I("IPUMS_NHGIS_counties.zip"), "s3bucket", target_name)
   
-  cache/conus_map_data.rds:
-    command: fetch(I('conus_map_data'))
-  depends: 
-    - arguments_conus_map_data
-  - vizlab/remake/scripts/conus_map_data.R
-  - cache/viewbox.rds
-  
   # --- process --- #
   
-  cache/conus_map.geojson:
-    command: process(I('conus_map_geojson'))
-  depends: 
-    - arguments_conus_map_geojson
-  - vizlab/remake/scripts/conus_map_geojson.R
-  - cache/conus_map_data.rds
   
   preprocess:
   
