@@ -12,6 +12,3 @@ put_bucket(new_bucket_name, region='us-west-2', acl='private') # gives error if 
 
 # this command posted the data (took 1.5 hrs)
 put_object(file='data/nhgis0002_shape.zip', object='IPUMS_NHGIS_counties.zip', bucket='viz-water-use-15')
-
-?aws.s3::get_object
-
