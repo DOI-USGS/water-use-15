@@ -42,7 +42,7 @@ clean_county_boundaries <- function(location, shp_zip_fn){
   counties <- consolidate_county_info(all_shps_simple)
   
   # split the country-wide shapefiles into state-wide shapefiles
-  split_shps <- lapply(setNames(nm=states$state_FIPS[c(1,4)]), function(state_fips) {
+  split_shps <- lapply(setNames(nm=states$state_FIPS), function(state_fips) {
     message('splitting out shapefiles for state ', state_fips)
     
     # subset to just one state
