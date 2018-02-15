@@ -1,7 +1,8 @@
-# This is the yaml that orchestrates the steps required for preprocessing the 
-# county boundary and state/county fips data. This should not need to be executed 
-# by every contributor because the results are stored in the S3 bucket. Most 
-# should just worry about the viz.yaml. 
+# This file describes how to run `preprocess.yaml`, which is the yaml that 
+# orchestrates the steps required for preprocessing the county boundary and 
+# state/county fips data. This should not need to be executed by every 
+# contributor because the results are stored in the S3 bucket. Most should 
+# just worry about the viz.yaml. 
 
 # This workflow assumes that you have the required R packages and appropriate 
 # credentials (with the profile as "default") stored in:
