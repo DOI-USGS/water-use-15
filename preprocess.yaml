@@ -27,10 +27,8 @@ targets:
     command: clean_county_boundaries(target_name, "cache/IPUMS_NHGIS_counties.zip")
   
   cache/county_boundaries_topojson.zip:
-    command: execute_shell_script(target_name, I("scripts/preprocess/topo_county_boundaries.sh"))
-    depends:
-      - cache/county_boundaries_geojson.zip # had to include because it is not explicitly called out
-  
+    command: execute_shell_script(target_name, "cache/county_boundaries_geojson.zip", I("scripts/preprocess/topo_county_boundaries.sh"))
+    
   # --- publish --- #
   
   s3boundariesfile:
