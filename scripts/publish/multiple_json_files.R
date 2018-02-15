@@ -26,7 +26,7 @@ publish.multiple_json_files <- function(viz) {
   
 }
 
-#' Extract a JSON dictionary file from a zipfile
+#' Extract files from a zipfile
 #'
 #' @filepath the name of the .zip file
 #' @pattern argument that represents the pattern in filenames to 
