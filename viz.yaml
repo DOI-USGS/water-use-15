@@ -25,10 +25,10 @@ info:
       repo: CRAN
       version: 0.3.5
     USAboundaries:
-      repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
+      repo: CRAN 
       version: 0.3.0
     USAboundariesData:
-      repo: CRAN
+      repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
       version: 0.3.0
     dataRetrieval:
       repo: CRAN
