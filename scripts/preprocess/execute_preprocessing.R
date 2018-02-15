@@ -28,6 +28,10 @@ aws.signature::default_credentials_file()
 # jsonlite:
 #   repo: CRAN
 #   version: 1.5
+# remake:
+#   repo: github
+#   version: 0.3.0
+#   name: richfitz/remake
 # sf:
 #   repo: CRAN
 #   version: 0.6.0
