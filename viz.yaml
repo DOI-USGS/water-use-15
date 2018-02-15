@@ -113,16 +113,6 @@ process:
     processor: extract_dict
     scripts: [scripts/process/extract_dict.R]
     mimetype: application/json
-  -
-    id: county_boundaries
-    location: cache/county_boundaries
-    depends:
-      zipfile: county_boundaries_topojson
-    process_args:
-      pattern: "*-quantized.json"
-    processor: extract_boundary_files
-    scripts: [scripts/process/extract_boundary_files.R]
-    mimetype: application/json
 
 visualize:
 
