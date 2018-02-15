@@ -7,6 +7,10 @@
 # credentials (with the profile as "default") stored in:
 aws.signature::default_credentials_file()
 
+# required for topo_county_boundaries.sh
+# install node.js https://nodejs.org/en/, then run
+# npm install -g topojson
+
 # required R packages:
 #
 # aws.s3:
