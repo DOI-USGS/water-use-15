@@ -154,6 +154,15 @@ publish:
                   "map_css", "hashes", "map_utils", "map_counties", "timeslider"]
       sections: ["map"] # adding header and footer here, doubled each on the page
   -
+    id: county_boundaries
+    location: cache/county_boundaries
+    depends: 
+      files_location: "county_boundaries_topojson"
+    publish_args:
+      pattern: "*-quantized.json"
+    publisher: multiple_json_files
+    scripts: scripts/publish/multiple_json_files.R
+  -
     id: topojson
     location: "js/topojson.v1.min.js"
     mimetype: application/javascript
