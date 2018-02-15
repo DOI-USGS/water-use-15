@@ -17,8 +17,7 @@ publish.multiple_json_files <- function(viz) {
   for(fp in paths_to_use) {
     
     # create viz-like item to use in publish
-    viz_json <- list(location = fp,
-                     mimetype = "application/json")
+    viz_json <- vizlab::as.viz(list(location = fp, mimetype = "application/json"))
     
     # use publisher to follow typical json publishing steps to get file to target
     vizlab::publish(viz_json)
