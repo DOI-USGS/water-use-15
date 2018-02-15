@@ -10,30 +10,28 @@ unzip $1 -d $TMP
 GJ=$(dir $TMP/*.geojson)
 
 # list state fips for now
-statefips=$2
-
-for fip in $statefips
-
+while read fip
 do
 
-echo $fip
-
-# convert to topojson
-geo2topo \
-  state=$TMP/$fip.geojson \
-  -o $TMP/$fip.json
-
-# simplify
-toposimplify -s 1e-4 -f \
-  $TMP/$fip.json \
-  -o $TMP/$fip-simple.json
-
-# quantize (store as integers, scale later)
-topoquantize 1e5 \
-  $TMP/$fip-simple.json \
-  -o $TMP/$fip-quantized.json
+  fipfixed=$(echo "$fip" | tr -d '\r')
+  path="$TMP"/"$fipfixed"
   
-done
+  # convert to topojson
+  geo2topo \
+    state=$path.geojson \
+    -o $path.json
+  
+  # simplify
+  toposimplify -s 1e-4 -f \
+    $path.json \
+    -o $path-simple.json
+  
+  # quantize (store as integers, scale later)
+  topoquantize 1e5 \
+    $path-simple.json \
+    -o $path-quantized.json
+  
+done < $2
 
 echo All done
 

@@ -6,6 +6,7 @@ packages:
 sources:
   - scripts/preprocess/fetch_s3_object.R
   - scripts/preprocess/clean_county_boundaries.R
+  - scripts/preprocess/save_state_fips.R
   - scripts/preprocess/execute_shell_script.R
   - scripts/preprocess/push_s3_object.R
 
@@ -26,13 +27,19 @@ targets:
   cache/county_boundaries_geojson.zip:
     command: clean_county_boundaries(target_name, "cache/IPUMS_NHGIS_counties.zip")
   
+  cache/state_fips.csv:
+    command: save_state_fips(target_name, "cache/county_boundaries_geojson.zip", I("states.json"))
+  
   cache/county_boundaries_topojson.zip:
-    command: execute_shell_script(target_name, "cache/county_boundaries_geojson.zip", I("scripts/preprocess/topo_county_boundaries.sh"))
+    command: execute_shell_script(target_name, "cache/county_boundaries_geojson.zip", 
+                                  I("scripts/preprocess/topo_county_boundaries.sh"),
+                                  "cache/state_fips.csv")
     
   # --- publish --- #
   
   s3boundariesfile:
-    command: push_s3_object(I("county_boundaries_topojson.zip"), "cache/county_boundaries_topojson.zip", s3bucket)
+    command: push_s3_object(I("county_boundaries_topojson.zip"), 
+                            "cache/county_boundaries_topojson.zip", s3bucket)
   
   # --- final --- #
   
