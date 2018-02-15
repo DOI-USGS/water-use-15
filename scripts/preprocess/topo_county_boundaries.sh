@@ -31,6 +31,8 @@ do
     $path-simple.json \
     -o $path-quantized.json
   
+  echo "Finished $fipfixed"
+  
 done < $2
 
 echo All done
