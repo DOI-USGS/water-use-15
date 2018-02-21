@@ -122,6 +122,15 @@ process:
     processor: extract_dict
     scripts: [scripts/process/extract_dict.R]
     mimetype: application/json
+  -
+    id: county_centroids
+    location: cache/county_centroids.json
+    reader: json
+    depends:
+      zipfile: county_boundaries_census
+    processor: compute_centroids
+    scripts: scripts/process/compute_centroids.R
+    mimetype: application/json
 
 visualize:
 
