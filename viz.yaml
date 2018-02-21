@@ -131,6 +131,7 @@ publish:
       header: "header_section"
       footer: "footer_section"
       hashes: "url_hashes"
+      projection: "custom_projection"
       map_utils: "map_utils"
       map_counties: "map_counties"
       map: "build_map"
@@ -140,8 +141,8 @@ publish:
       counties_dictionary: "counties_dictionary"
       county_boundaries: "county_boundaries"
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
-                  "map_css", "hashes", "map_utils", "map_counties", "timeslider"]
+      resources: ["lib_d3_js", "header_css", "footer_css",
+                  "map_css", "hashes", "projection", "map_utils", "map_counties", "timeslider"]
       sections: ["map"] # adding header and footer here, doubled each on the page
   -
     id: county_boundaries
@@ -159,6 +160,11 @@ publish:
   -
     id: url_hashes
     location: "js/url_hashes.js"
+    mimetype: application/javascript
+  # custom_projection.js must be before build_map.js for it to find the projection function.
+  -
+    id: custom_projection
+    location: "js/custom_projection.js"
     mimetype: application/javascript
   -
     id: build_map
