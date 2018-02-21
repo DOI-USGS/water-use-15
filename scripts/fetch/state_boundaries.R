@@ -1,6 +1,6 @@
 # Adapted from vizstorm.
 
-fetchTimestamp.map_data <- vizlab::alwaysCurrent
+fetchTimestamp.state_boundaries <- vizlab::alwaysCurrent
 
 #' Gets data for state polygons.
 #' @description Builds and executes a call to the get_map_data utility function.
@@ -13,7 +13,7 @@ fetchTimestamp.map_data <- vizlab::alwaysCurrent
 #' 
 #'  Coordinate reference systems are matched to the viewbox_limits for subsetting.
 #'   
-fetch.map_data <- function(viz){
+fetch.state_boundaries <- function(viz){
   deps <- readDepends(viz)
   checkRequired(deps, "viewbox")
   viewbox <- deps[["viewbox"]]
@@ -21,6 +21,14 @@ fetch.map_data <- function(viz){
   viewbox_args <- list(crs=sf::st_crs(viewbox), within = viewbox)
   map_args <- append(viz$fetch_args, viewbox_args)
   map_data <- do.call(get_map_data, args = map_args)
+  
+  # revise the ID column to be compatible with county data and concise hashes
+  states <- deps[["states_dict"]]
+  state_matches <- match(map_data$ID, tolower(states$state_name))
+  if(any(is.na(state_matches))) stop("couldn't match a state from maps::map to county-derived states list")
+  map_data$ID <- states[state_matches, 'state_abbv']
+  map_data$name <- states[state_matches, 'state_name']
+  map_data$FIPS <- states[state_matches, 'state_FIPS']
   
   saveRDS(map_data, viz[['location']])
 }

@@ -3,9 +3,6 @@
 // Bounding box coordinates for the nation, for scaling states
 var nationDims;
 
-// Zoom status: start at nation-wide
-var activeView = 'nation';
-
 // Style definitions (need them here instead of css to do transitions)
 var stateStyle = {
   nationView: {
@@ -63,15 +60,15 @@ function add_states(map, stateData) {
 
   // if URL specifies a state view, zoom to that now
   var newView = getHash('v');
-  if(newView == null) { newView = 'nation'; }
-  if(newView != 'nation') {
+  if(newView == null) { newView = 'USA'; }
+  if(newView != 'USA') {
     updateView(newView);
   }
 }
 
 // Function to look up a style
 formatState = function(attr, d, active) {
-  if(activeView == 'nation') {
+  if(activeView == 'USA') {
     var view = 'nationView';
   } else {
     active = (d.properties.ID === activeView);
@@ -109,12 +106,12 @@ function zoomToFromState(data) {
   clickedView = d3.select(this).attr('id'); // should be same as data.properties.ID;
 
   // determine the new view
-  if(clickedView === 'map-background' || activeView != 'nation') {
+  if(clickedView === 'map-background' || activeView != 'USA') {
     // could have made it so we go national only if they click on the background
     // or the same state: if(clickedView === 'map-background' || activeView ===
     // clickedView) {}. but instead let's always zoom out if they're in state
     // view, in if they're in nation view (and click on a state)
-    var newView = 'nation';
+    var newView = 'USA';
   } else {
     // if they clicked on a different state, prepare to zoom in
     var newView = clickedView;
@@ -127,13 +124,15 @@ function zoomToFromState(data) {
 function updateView(newView) {
   // update the global variable that stores the current view
   activeView = newView;
+  
+  updateTitle();
 
   // update the URL with a #v=xxx so users can return to this view
   setHash('v', activeView);
 
   // determine the center point and scaling for the new view
   var x, y, k;
-  if(activeView === 'nation') {
+  if(activeView === 'USA') {
     x = chart_width / 2;
     y = chart_height / 2;
     k = 1;
@@ -160,12 +159,13 @@ function updateView(newView) {
       nationDims.width/stateDims.width]);
   }
 
-  // set the styling: all states inactive for view=nation, just one state active
+  // set the styling: all states inactive for view=USA, just one state active
   // otherwise. i tried doing this with .classed('active') and
-  // .classed('hidden') and css (conditional on activeView=='nation' and
+  // .classed('hidden') and css (conditional on activeView=='USA' and
   // d.properties.ID === activeView), but that didn't work with transitions.
   var states = map.selectAll('.state');
-  if(activeView === 'nation') {
+  if(activeView === 'USA') {
+    hideCounties();
     states
       .transition()
       .duration(750)
@@ -173,6 +173,7 @@ function updateView(newView) {
       .style("stroke", function(d) { return formatState('stroke', d, false); })
       .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
   } else {
+    showCounties(activeView);
     states
       .transition()
       .duration(750)
@@ -190,11 +191,17 @@ function updateView(newView) {
       "translate(" + -x + "," + -y + ")");
 }
 
-function updateTitle(year) {
-  d3.select(".maptitle")
-    .text(formatTitle(year));
+function updateYear(year) {
+  activeYear = year;
+  
+  // this is where functions to update data for a new year should go
+  updateTitle();
+  if(activeView !== 'USA') {
+    showCounties(activeView);
+  }
 }
 
-function formatTitle(year) {
-  return "Water Use Data for " + year;
+function updateTitle() {
+  d3.select("#maptitle")
+    .text("Water Use Data for " + activeView + ", " + activeYear);
 }
