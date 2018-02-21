@@ -72,6 +72,15 @@ fetch:
       viewbox: viewbox
       states_dict: states_dictionary
   -
+    id: county_boundaries_census
+    location: cache/county_boundaries_census.zip
+    reader: zip
+    fetcher: url
+    remoteURL: 'http://www2.census.gov/geo/tiger/GENZ2015/shp/cb_2015_us_county_500k.zip'
+    scripts: []
+    # this file includes counties for Northern Mariana Island (STATEFP=='69'), Guam (STATEFP=='66'), and American Samoa (STATEFP=='60')"
+    # and also the territories we do want: Virgin Islands and Puerto Rico"
+  -
     id: county_boundaries_topojson
     location: cache/county_boundaries_topojson.zip
     fetch_args:
