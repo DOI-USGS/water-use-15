@@ -80,6 +80,15 @@ fetch:
     reader: zip
     fetcher: s3_object
     scripts: [scripts/fetch/s3_object.R]
+  -
+    id: wu_data_15
+    location: cache/wu_data_15.xlsx
+    fetch_args:
+      object_name: "usco2015-MockData-dataviz.xlsx"
+      bucket_name: "viz-water-use-15"
+    reader: excel
+    fetcher: s3_object
+    scripts: [scripts/fetch/s3_object.R]
 
 process:
   -
@@ -113,6 +122,14 @@ process:
     processor: extract_dict
     scripts: [scripts/process/extract_dict.R]
     mimetype: application/json
+  -
+    id: wu_data_15_simple
+    location: cache/wu_data_15_simple.rds
+    reader: rds
+    depends:
+      rawdata: wu_data_15
+    processor: simplify_wu_data
+    scripts: [scripts/process/simplify_wu_data.R]
 
 visualize:
 
