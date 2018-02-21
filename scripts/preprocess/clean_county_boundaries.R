@@ -1,9 +1,13 @@
 #' Cleans data for historical county polygons.
-process.county_boundaries <- function(viz){
-  deps <- readDepends(viz)
+clean_county_boundaries <- function(location, shp_zip_fn){
+  
+  library(sf)
+  library(dplyr)
+  library(geojsonio)
+  library(jsonlite)
   
   # unzip the shapefiles, which are zip files within a zip file
-  map_zip <- deps$county_boundaries_zip
+  map_zip <- shp_zip_fn
   map_dir <- file.path(tempdir(), 'county_boundaries')
   unzip(map_zip, exdir=map_dir)
   map_shp_zips <- dir(dir(map_dir, full.names=TRUE), full.names=TRUE)
@@ -38,7 +42,7 @@ process.county_boundaries <- function(viz){
   counties <- consolidate_county_info(all_shps_simple)
   
   # split the country-wide shapefiles into state-wide shapefiles
-  split_shps <- lapply(setNames(nm=states$state_FIPS[c(1,4)]), function(state_fips) {
+  split_shps <- lapply(setNames(nm=states$state_FIPS), function(state_fips) {
     message('splitting out shapefiles for state ', state_fips)
     
     # subset to just one state
@@ -73,7 +77,7 @@ process.county_boundaries <- function(viz){
   # save to one big zip file
   oldwd <- setwd(geojsondir)
   on.exit(setwd(oldwd))
-  zipfile <- file.path(oldwd, viz[['location']])
+  zipfile <- file.path(oldwd, location)
   if(file.exists(zipfile)) file.remove(zipfile)
   filestozip <- dir()
   zip(zipfile, files=filestozip)
