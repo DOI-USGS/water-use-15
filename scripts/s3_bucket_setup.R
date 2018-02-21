@@ -3,7 +3,7 @@
 
 library(aws.signature)
 message('check that credentials for dev profile at ', aws.signature::default_credentials_file(), " match those in get_dssecret('dev-owi-s3-access')")
-aws.signature::use_credentials(profile='dev', file=aws.signature::default_credentials_file())
+aws.signature::use_credentials(profile='default', file=aws.signature::default_credentials_file())
 
 library(aws.s3)
 bucketlist() # to see which buckets are already there
@@ -12,3 +12,8 @@ put_bucket(new_bucket_name, region='us-west-2', acl='private') # gives error if 
 
 # this command posted the data (took 1.5 hrs)
 put_object(file='data/nhgis0002_shape.zip', object='IPUMS_NHGIS_counties.zip', bucket='viz-water-use-15')
+
+# this command posts the USGS WU mock up data from Google Drive (see pinned items in water-use-fy18-viz Slack channel)
+# had to delete the first row of info before uploading (version num + authors)
+put_object(file='data/usco2015-MockData-dataviz.xlsx', object='usco2015-MockData-dataviz.xlsx', bucket='viz-water-use-15')
+
