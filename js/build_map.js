@@ -33,6 +33,7 @@ d3.queue()
   .defer(d3.json, "data/state_boundaries.geojson")
   .defer(d3.json, "data/states.json")
   .defer(d3.json, "data/counties.json") // could load this later
+  .defer(d3.json, "data/county_centroids.json")
   .await(create_map);
 
 // dummy var for now
@@ -59,8 +60,10 @@ function create_map() {
 	stateData = arguments[1];
 	stateDict = arguments[2];
 	countyDict = arguments[3];
+	countyCentroids = arguments[4];
 	
   add_states(map, stateData, stateDict);
+  addCentroids(map, countyCentroids);
   add_timeslider(map, years, chart_width, chart_height);
   
   // get started downloading county data right away.

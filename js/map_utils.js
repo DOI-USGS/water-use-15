@@ -31,6 +31,33 @@ var stateStyle = {
   }
 };
 
+function addCentroids(map, countyCentroids) {
+  
+  var tempProjection = d3.geoAlbersUsa();
+  
+  var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
+  
+  map.selectAll('county-point')
+    .data(geojson.features)
+    .enter()
+    .append('circle')
+    .classed('county-point', true)
+    .attr('fips', function(d) {
+      return d.properties.GEOID;
+    })
+    .text(function(d) {
+      return d.properties.GEOID;
+    })
+    .attr("cx", function(d) {
+       console.log(tempProjection(d.geometry.coordinates));
+       return tempProjection(d.geometry.coordinates)[0]; 
+     })
+    .attr("cy", function(d) { return tempProjection(d.geometry.coordinates)[1]; })
+    .attr("r", 10)
+    .style("fill", 'purple')
+    .style("stroke", 'none');
+}
+
 // Create the state polygons
 function add_states(map, stateData) {
 
