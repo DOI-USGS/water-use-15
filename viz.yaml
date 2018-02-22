@@ -181,8 +181,9 @@ publish:
       states_dictionary: "states_dictionary"
       counties_dictionary: "counties_dictionary"
       county_boundaries: "county_boundaries"
+      county_centroids: "county_centroids"
     context:
-      resources: ["lib_d3_js", "header_css", "footer_css",
+      resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
                   "map_css", "hashes", "projection", "map_utils", "map_counties", "timeslider"]
       sections: ["map"] # adding header and footer here, doubled each on the page
   -
