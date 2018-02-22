@@ -4,23 +4,15 @@ process.simplify_wu_data <- function(viz) {
   
   deps <- readDepends(viz)
   wu_df <- deps[["rawdata"]]
-  # wu_df <- read.csv("data/usco2015-MockData-dataviz.csv", stringsAsFactors = FALSE, skip = 1)
+  orig_wu_type_col <- deps[["col_names"]][["orig_names"]]
+  new_wu_type_col <- deps[["col_names"]][["new_names"]]
   
-  # identify appropriate categories
-  # county population in thousands: TP-TotPop
-  # total: TO-WTotl
-  # thermoelectric: PT-Wtotl
-  # public supply: PS-Wtotl
-  # irrigation: IR-WFrTo
-  # industrial: IN-Wtotl
-  wu_df_sel <- dplyr::select(wu_df,
-                             STATE, STATEFIPS, COUNTY, COUNTYFIPS, FIPS, YEAR, 
-                             countypop = `TP-TotPop`,
-                             total = `TO-Wtotl`,
-                             thermoelectric = `PT-Wtotl`,
-                             publicsupply = `PS-Wtotl`,
-                             irrigation = `IR-WFrTo`,
-                             industrial = `IN-Wtotl`)
+  columns_to_keep <- c("STATE", "STATEFIPS", "COUNTY", "COUNTYFIPS", "FIPS", "YEAR")
+  columns_to_rename <- c("TP-TotPop", orig_wu_type_col)
+  new_names <- c("countypop", new_wu_type_col)
   
-  saveRDS(wu_df, viz[["location"]])
+  wu_df_sel <- wu_df[, c(columns_to_keep, columns_to_rename)]
+  names(wu_df_sel) <- c(columns_to_keep, new_names)
+  
+  saveRDS(wu_df_sel, viz[["location"]])
 }
