@@ -33,6 +33,12 @@ info:
     dataRetrieval:
       repo: CRAN
       version: 2.7.4
+    sp:
+      repo: CRAN
+      version: 1.2.6
+    sf:
+      repo: CRAN
+      version: 0.6.0
       
   contributors:
     -
