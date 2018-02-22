@@ -7,7 +7,9 @@ visualize.make_circle_map <- function(viz){
   radius_col_name <- paste0("radius_", wu_type)
   
   # reorder to plot biggest circles in the back
-  ordered_i <- sort(circle_sp@data[[radius_col_name]], decreasing = TRUE, index.return = TRUE)$ix
+  # need na.last as either T or F or they are dropped!!!
+  ordered_i <- sort(circle_sp@data[[radius_col_name]], decreasing = TRUE, 
+                    index.return = TRUE, na.last=FALSE)$ix
   circle_sp <- circle_sp[ordered_i,]
   
   # transform map data
