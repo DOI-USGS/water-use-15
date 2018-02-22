@@ -33,21 +33,7 @@ visualize.make_circle_map <- function(viz){
   dev.off()
 }
 
-# irrigation
-# outline_col <- rgb(124/255, 157/255, 48/255)
-# fill_col <- rgb(155/255, 197/255, 61/255, 0.8)
-# industrial
-# outline_col <- rgb(110/255, 90/255, 84/255)
-# fill_col <- rgb(138/255, 113/255, 106/255, 0.8)
-# total
-# outline_col <- rgb(36/255, 107/255, 136/255)
-# fill_col <- rgb(46/255, 134/255, 171/255, 0.8)
-# thermoelectric
-# outline_col <- rgb(201/255, 148/255, 3/255)
-# fill_col <- rgb(252/255, 186/255, 4/255, 0.8)
-# public supply
-# outline_col <- rgb(148/255, 40/255, 32/255)
-# fill_col <- rgb(186/255, 50/255, 40/255, 0.8)
+# this will probably end up in CSS somehow?
 color_by_wu_type <- function(wu_type) {
   switch(wu_type,
          "total" = list(outline = rgb(36/255, 107/255, 136/255),
