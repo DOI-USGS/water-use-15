@@ -13,8 +13,6 @@ process.scale_values <- function(viz) {
     max_val <- max(centroid_df[[wu_type]], na.rm = TRUE)
     min_val <- min(centroid_df[[wu_type]], na.rm = TRUE)
     
-    # centroid_df2 <- dplyr::rowwise(centroid_df) %>% 
-    #   dplyr::mutate(circle_radius = newscale(publicsupply, max_val, min_val))
     new_col_name <- paste0("radius_", wu_type)
     centroid_df[[new_col_name]] <- newscale(centroid_df[[wu_type]], max_val, min_val)
   }
