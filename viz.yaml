@@ -33,6 +33,12 @@ info:
     dataRetrieval:
       repo: CRAN
       version: 2.7.4
+    sp:
+      repo: CRAN
+      version: 1.2.6
+    sf:
+      repo: CRAN
+      version: 0.6.0
       
   contributors:
     -
@@ -71,6 +77,15 @@ fetch:
     depends:
       viewbox: viewbox
       states_dict: states_dictionary
+  -
+    id: county_boundaries_census
+    location: cache/county_boundaries_census.zip
+    reader: zip
+    fetcher: url
+    remoteURL: 'http://www2.census.gov/geo/tiger/GENZ2015/shp/cb_2015_us_county_500k.zip'
+    scripts: []
+    # this file includes counties for Northern Mariana Island (STATEFP=='69'), Guam (STATEFP=='66'), and American Samoa (STATEFP=='60')"
+    # and also the territories we do want: Virgin Islands and Puerto Rico"
   -
     id: county_boundaries_topojson
     location: cache/county_boundaries_topojson.zip
@@ -123,6 +138,15 @@ process:
     scripts: [scripts/process/extract_dict.R]
     mimetype: application/json
   -
+    id: county_centroids
+    location: cache/county_centroids.json
+    reader: json
+    depends:
+      zipfile: county_boundaries_census
+    processor: compute_centroids
+    scripts: scripts/process/compute_centroids.R
+    mimetype: application/json
+  -
     id: wu_data_15_simple
     location: cache/wu_data_15_simple.rds
     reader: rds
@@ -157,8 +181,9 @@ publish:
       states_dictionary: "states_dictionary"
       counties_dictionary: "counties_dictionary"
       county_boundaries: "county_boundaries"
+      county_centroids: "county_centroids"
     context:
-      resources: ["lib_d3_js", "header_css", "footer_css",
+      resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
                   "map_css", "hashes", "projection", "map_utils", "map_counties", "timeslider"]
       sections: ["map"] # adding header and footer here, doubled each on the page
   -
