@@ -54,6 +54,10 @@ parameter:
     id: spatial_metadata
     crs: '+init=epsg:4326' # works with d3.geoAlbers
     bbox: [-125, 26, -68, 50] # conus bbox
+  -
+    id: wu_type_column_names
+    orig_names: ["TO-Wtotl", "PT-Wtotl", "PS-Wtotl", "IR-WFrTo", "IN-Wtotl"]
+    new_names: ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"]
 
 fetch:
   -
@@ -138,12 +142,20 @@ process:
     mimetype: application/json
   -
     id: county_centroids
-    location: cache/county_centroids.json
-    reader: json
+    location: cache/county_centroids.rds
+    reader: rds
     depends:
       zipfile: county_boundaries_census
     processor: compute_centroids
     scripts: scripts/process/compute_centroids.R
+  -
+    id: county_centroids_topojson
+    location: cache/county_centroids.json
+    reader: json
+    depends:
+      sp_object: county_centroids
+    processor: sp_to_topojson
+    scripts: scripts/process/sp_to_topojson.R
     mimetype: application/json
   -
     id: wu_data_15_simple
@@ -151,10 +163,71 @@ process:
     reader: rds
     depends:
       rawdata: wu_data_15
+      col_names: wu_type_column_names
     processor: simplify_wu_data
     scripts: [scripts/process/simplify_wu_data.R]
+  -
+    id: centroid_sizes
+    location: cache/centroid_sizes.rds
+    reader: rds
+    depends:
+      sp_data: county_centroids
+      wu_data: wu_data_15_simple
+      wu_type_names: wu_type_column_names
+    processor: scale_values
+    scripts: [scripts/process/scale_values.R]
 
 visualize:
+  -
+    id: circle_map_total
+    location: cache/circle_map_total.png
+    depends:
+      sp_circles: centroid_sizes
+    visualize_args:
+      wu_type: "total"
+      crs: "+init=epsg:2163"
+    visualizer: make_circle_map
+    scripts: [scripts/visualize/make_circle_map.R]
+  -
+    id: circle_map_thermoelectric
+    location: cache/circle_map_thermoelectric.png
+    depends:
+      sp_circles: centroid_sizes
+    visualize_args:
+      wu_type: "thermoelectric"
+      crs: "+init=epsg:2163"
+    visualizer: make_circle_map
+    scripts: [scripts/visualize/make_circle_map.R]
+  -
+    id: circle_map_publicsupply
+    location: cache/circle_map_publicsupply.png
+    depends:
+      sp_circles: centroid_sizes
+    visualize_args:
+      wu_type: "publicsupply"
+      crs: "+init=epsg:2163"
+    visualizer: make_circle_map
+    scripts: [scripts/visualize/make_circle_map.R]
+  -
+    id: circle_map_irrigation
+    location: cache/circle_map_irrigation.png
+    depends:
+      sp_circles: centroid_sizes
+    visualize_args:
+      wu_type: "irrigation"
+      crs: "+init=epsg:2163"
+    visualizer: make_circle_map
+    scripts: [scripts/visualize/make_circle_map.R]
+  -
+    id: circle_map_industrial
+    location: cache/circle_map_industrial.png
+    depends:
+      sp_circles: centroid_sizes
+    visualize_args:
+      wu_type: "industrial"
+      crs: "+init=epsg:2163"
+    visualizer: make_circle_map
+    scripts: [scripts/visualize/make_circle_map.R]
 
 publish:
   -
@@ -180,7 +253,7 @@ publish:
       states_dictionary: "states_dictionary"
       counties_dictionary: "counties_dictionary"
       county_boundaries: "county_boundaries"
-      county_centroids: "county_centroids"
+      county_centroids: "county_centroids_topojson"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
                   "map_css", "hashes", "projection", "map_utils", "map_counties", "timeslider"]

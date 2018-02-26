@@ -23,13 +23,14 @@ process.compute_centroids <- function(viz) {
   centroid_spdf <- sp::SpatialPointsDataFrame(centroids, spdat@data, match.ID=FALSE)
   
   # limit even more because centroids are a problem for our d3 projection?
-  centroid_spdf <- centroid_spdf[centroid_spdf$STATEFP %in% '04',]
+  # centroid_spdf <- centroid_spdf[centroid_spdf$STATEFP %in% '04',]
 
   # filter out Northern Mariana Island (STATEFP=='69'), Guam (STATEFP=='66'), and American Samoa (STATEFP=='60')
   centroid_spdf2 <- centroid_spdf[!(centroid_spdf$STATEFP %in% c('69','66','60')),]
   # limit to the necessary columns
   centroid_spdf3 <- centroid_spdf2[, c('GEOID')]
   
-  # write to file
-  geojsonio::topojson_write(centroid_spdf3, file=viz$location)
+  # keep as RDS for now
+  saveRDS(centroid_spdf3, viz[["location"]])
+
 }
