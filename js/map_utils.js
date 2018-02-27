@@ -217,16 +217,6 @@ function updateView(newView) {
       "translate(" + -x + "," + -y + ")");
 }
 
-function updateYear(year) {
-  activeYear = year;
-  
-  // this is where functions to update data for a new year should go
-  updateTitle();
-  if(activeView !== 'USA') {
-    showCounties(activeView);
-  }
-}
-
 function updateCategory(category) {
   activeCategory = category;
   

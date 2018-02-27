@@ -43,9 +43,6 @@ var years = [1950, 1960, 1965, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
 var activeView = getHash('v');
 if(!activeView) activeView = 'USA';
 
-// Zoom year: start at 2015
-var activeYear = d3.max(years);
-
 // Water use category: default is total. To make these readable in the URLs,
 // let's use full-length space-removed lower-case labels, e.g. publicsupply and thermoelectric
 var activeCategory = getHash('c');
@@ -76,7 +73,6 @@ function create_map() {
 	
   add_states(map, stateData, stateDict);
   addCentroids(map, countyCentroids);
-  add_timeslider(map, years, chart_width, chart_height);
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
