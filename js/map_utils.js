@@ -86,7 +86,7 @@ function addStates(map, stateData) {
   };
 
   // if URL specifies a state view, zoom to that now
-  var newView = getHash('v');
+  var newView = getHash('view');
   if(newView == null) { newView = 'USA'; }
   if(newView != 'USA') {
     updateView(newView);
@@ -154,7 +154,7 @@ function updateView(newView) {
   
   // update page info
   updateTitle();
-  setHash('v', activeView);
+  setHash('view', activeView);
 
   // determine the center point and scaling for the new view
   var x, y, k;
@@ -222,7 +222,7 @@ function updateCategory(category) {
   
   // update page info
   updateTitle();
-  setHash('c', activeCategory);
+  setHash('category', activeCategory);
 }
 
 function updateTitle() {
