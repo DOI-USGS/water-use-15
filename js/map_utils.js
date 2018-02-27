@@ -237,5 +237,5 @@ function updateCategory(category) {
 
 function updateTitle() {
   d3.select("#maptitle")
-    .text("Water Use Data for " + activeView + ", " + activeYear);
+    .text("Water Use Data for " + activeView + ", 2015, " + activeCategory);
 }
