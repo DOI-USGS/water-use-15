@@ -15,5 +15,5 @@ put_object(file='data/nhgis0002_shape.zip', object='IPUMS_NHGIS_counties.zip', b
 
 # this command posts the USGS WU mock up data from Google Drive (see pinned items in water-use-fy18-viz Slack channel)
 # had to delete the first row of info before uploading (version num + authors)
-put_object(file='data/usco2015-MockData-dataviz.xlsx', object='usco2015-MockData-dataviz.xlsx', bucket='viz-water-use-15')
+put_object(file='data/usco2015v2.0-dataviz.xlsx', object='usco2015v2.0-dataviz.xlsx', bucket='viz-water-use-15')
 
