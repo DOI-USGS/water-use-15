@@ -59,7 +59,7 @@ function addCentroids(map, countyCentroids) {
 }
 
 // Create the state polygons
-function add_states(map, stateData) {
+function addStates(map, stateData) {
 
   // add states
   map.append("g").attr('id', 'statepolygons')

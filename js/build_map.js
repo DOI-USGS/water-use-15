@@ -71,7 +71,7 @@ function create_map() {
 	countyDict = arguments[3];
 	countyCentroids = arguments[4];
 	
-  add_states(map, stateData, stateDict);
+  addStates(map, stateData, stateDict);
   addCentroids(map, countyCentroids);
   
   // get started downloading county data right away.
