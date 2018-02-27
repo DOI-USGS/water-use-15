@@ -40,7 +40,7 @@ d3.queue()
 var years = [1950, 1960, 1965, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
 
 // Zoom status: default is nation-wide
-var activeView = getHash('v');
+var activeView = getHash('view');
 if(!activeView) activeView = 'USA';
 
 // Zoom year: start at 2015
@@ -48,7 +48,7 @@ var activeYear = d3.max(years);
 
 // Water use category: default is total. To make these readable in the URLs,
 // let's use full-length space-removed lower-case labels, e.g. publicsupply and thermoelectric
-var activeCategory = getHash('c');
+var activeCategory = getHash('category');
 if(!activeCategory) activeCategory = 'total';
 
 svg.append("text")
@@ -58,8 +58,8 @@ svg.append("text")
 
 // Initialize page info
 updateTitle();
-setHash('v', activeView);
-setHash('c', activeCategory);
+setHash('view', activeView);
+setHash('category', activeCategory);
 
 function create_map() {
 
