@@ -102,7 +102,7 @@ fetch:
     id: wu_data_15
     location: cache/wu_data_15.xlsx
     fetch_args:
-      object_name: "usco2015-MockData-dataviz.xlsx"
+      object_name: "usco2015v2.0-dataviz.xlsx"
       bucket_name: "viz-water-use-15"
     reader: excel
     fetcher: s3_object
