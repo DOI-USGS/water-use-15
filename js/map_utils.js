@@ -238,6 +238,9 @@ function updateYear(year) {
 function updateCategory(category) {
   activeCategory = category;
   
+  // update circles
+  updateCircles(activeCategory);
+  
   // update page info
   updateTitle();
   setHash('category', activeCategory);
@@ -246,4 +249,16 @@ function updateCategory(category) {
 function updateTitle() {
   d3.select("#maptitle")
     .text("Water Use Data for " + activeView + ", 2015, " + activeCategory);
+}
+
+function updateCircles(activeCategory) {
+  scaleCircles
+    .domain([
+              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
+              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+    ]);
+  
+  d3.selectAll("county-point")
+      .transition().duration(1500)
+      .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
 }
