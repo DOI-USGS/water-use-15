@@ -54,6 +54,9 @@ function addCentroids(map, countyCentroids) {
     .filter(function(d) { return d.properties.STATE !== "PR"; })
     .filter(function(d) { return d.properties.STATE !== "VI"; })
     ///////////////////
+    .sort(function(a,b) { 
+      return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
+    })
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
     .attr("cx", function(d) { return tempProjection(d.geometry.coordinates)[0]; })
@@ -259,5 +262,8 @@ function updateCircles(activeCategory) {
   
   d3.selectAll("county-point")
       .transition().duration(1500)
+      .sort(function(a,b) { 
+        return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
+      })
       .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
 }
