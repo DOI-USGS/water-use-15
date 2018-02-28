@@ -23,24 +23,43 @@ info:
     aws.signature:
       repo: CRAN
       version: 0.3.5
-    USAboundaries:
-      repo: CRAN 
-      version: 0.3.0
-    USAboundariesData:
-      repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
-      version: 0.3.0
     dataRetrieval:
       repo: CRAN
       version: 2.7.4
+    geojsonio:
+      repo: CRAN
+      version: 0.5.0
+    jsonlite:
+      repo: CRAN
+      version: 1.5
+    maps:
+      repo: CRAN
+      version: 3.2.0
+    maptools:
+      repo: CRAN
+      version: 0.9-2
+    readxl:
+      repo: CRAN
+      version: 1.0.0
+    rgdal:
+      repo: CRAN
+      version: 1.2-16
+    rgeos:
+      repo: CRAN
+      version: 0.3-26
     sp:
       repo: CRAN
       version: 1.2.6
     sf:
       repo: CRAN
       version: 0.5.4
-    jsonlite:
-      repo: CRAN
-      version: 1.5
+    USAboundaries:
+      repo: CRAN 
+      version: 0.3.0
+    USAboundariesData:
+      repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
+      version: 0.3.0
+      
   contributors:
     -
       name: Lindsay Carr
