@@ -48,16 +48,9 @@ function addCentroids(map, countyCentroids) {
     .enter()
     .append('circle')
     .classed('county-point', true)
-    .attr('fips', function(d) {
-      return d.properties.GEOID;
-    })
-    .text(function(d) {
-      return d.properties.GEOID;
-    })
-    .attr("cx", function(d) {
-       console.log(tempProjection(d.geometry.coordinates));
-       return tempProjection(d.geometry.coordinates)[0]; 
-     })
+    .attr('fips', function(d) { return d.properties.GEOID; })
+    .text(function(d) { return d.properties.GEOID; })
+    .attr("cx", function(d) { return tempProjection(d.geometry.coordinates)[0]; })
     .attr("cy", function(d) { return tempProjection(d.geometry.coordinates)[1]; })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
