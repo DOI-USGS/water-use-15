@@ -186,7 +186,7 @@ visualize:
     visualize_args:
       wu_type: "total"
       crs: "+init=epsg:2163"
-    visualizer: make_circle_map
+    visualizer: make_pie_map
     scripts: [scripts/visualize/make_circle_map.R]
   -
     id: circle_map_thermoelectric
