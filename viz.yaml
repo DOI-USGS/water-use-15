@@ -23,21 +23,42 @@ info:
     aws.signature:
       repo: CRAN
       version: 0.3.5
+    dataRetrieval:
+      repo: CRAN
+      version: 2.7.4
+    geojsonio:
+      repo: CRAN
+      version: 0.5.0
+    jsonlite:
+      repo: CRAN
+      version: 1.5
+    maps:
+      repo: CRAN
+      version: 3.2.0
+    maptools:
+      repo: CRAN
+      version: 0.9-2
+    readxl:
+      repo: CRAN
+      version: 1.0.0
+    rgdal:
+      repo: CRAN
+      version: 1.2-16
+    rgeos:
+      repo: CRAN
+      version: 0.3-26
+    sp:
+      repo: CRAN
+      version: 1.2.6
+    sf:
+      repo: CRAN
+      version: 0.5.4
     USAboundaries:
       repo: CRAN 
       version: 0.3.0
     USAboundariesData:
       repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
       version: 0.3.0
-    dataRetrieval:
-      repo: CRAN
-      version: 2.7.4
-    sp:
-      repo: CRAN
-      version: 1.2.6
-    sf:
-      repo: CRAN
-      version: 0.6.0
       
   contributors:
     -
@@ -167,6 +188,14 @@ process:
     processor: simplify_wu_data
     scripts: [scripts/process/simplify_wu_data.R]
   -
+    id: wu_data_15_json
+    location: cache/wu_data_15.json
+    mimetype: application/json
+    depends:
+      wu_data_15_simple: wu_data_15_simple
+    processor: json_wu_data
+    scripts: [scripts/process/json_wu_data.R]
+  -
     id: centroid_sizes
     location: cache/centroid_sizes.rds
     reader: rds
@@ -186,7 +215,7 @@ visualize:
     visualize_args:
       wu_type: "total"
       crs: "+init=epsg:2163"
-    visualizer: make_circle_map
+    visualizer: make_pie_map
     scripts: [scripts/visualize/make_circle_map.R]
   -
     id: circle_map_thermoelectric
@@ -253,6 +282,7 @@ publish:
       counties_dictionary: "counties_dictionary"
       county_boundaries: "county_boundaries"
       county_centroids: "county_centroids_topojson"
+      wu_data_15_json: "wu_data_15_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
                   "map_css", "hashes", "projection", "map_utils", "map_counties"]
