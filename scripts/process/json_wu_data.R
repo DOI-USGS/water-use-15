@@ -1,7 +1,7 @@
 process.json_wu_data <- function(viz) {
   deps <- readDepends(viz)
   wu_data_15_simple <- deps[["wu_data_15_simple"]]
-  browser()
+
   # write to file
   state_names <- unique(wu_data_15_simple$STATE)
   wu_list_for_json <- lapply(state_names, function(s) {
