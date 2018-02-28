@@ -37,6 +37,12 @@ function addCentroids(map, countyCentroids) {
   
   var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
   
+  scaleCircles
+    .domain([
+              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
+              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+    ]);
+  
   map.selectAll('county-point')
     .data(geojson.features)
     .enter()
@@ -53,7 +59,9 @@ function addCentroids(map, countyCentroids) {
        return tempProjection(d.geometry.coordinates)[0]; 
      })
     .attr("cy", function(d) { return tempProjection(d.geometry.coordinates)[1]; })
-    .attr("r", 10)
+    .attr("r", function(d) { 
+      return scaleCircles(d.properties[[activeCategory]]);
+    })
     .style("fill", 'purple')
     .style("stroke", 'none');
 }
