@@ -48,6 +48,12 @@ function addCentroids(map, countyCentroids) {
     .enter()
     .append('circle')
     .classed('county-point', true)
+    ///////////////////
+    // Alaska, Puerto Rico, and Virgin Islands don't exist in topo yet
+    .filter(function(d) { return d.properties.STATE !== "AK"; })
+    .filter(function(d) { return d.properties.STATE !== "PR"; })
+    .filter(function(d) { return d.properties.STATE !== "VI"; })
+    ///////////////////
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
     .attr("cx", function(d) { return tempProjection(d.geometry.coordinates)[0]; })
