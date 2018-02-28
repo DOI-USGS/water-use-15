@@ -155,7 +155,7 @@ process:
     location: cache/county_centroids.json
     reader: json
     depends:
-      sp_object: county_centroids
+      sp_object: centroid_sizes
     processor: sp_to_topojson
     scripts: scripts/process/sp_to_topojson.R
     mimetype: application/json
