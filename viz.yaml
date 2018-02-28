@@ -53,12 +53,6 @@ info:
     sf:
       repo: CRAN
       version: 0.5.4
-    USAboundaries:
-      repo: CRAN 
-      version: 0.3.0
-    USAboundariesData:
-      repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
-      version: 0.3.0
       
   contributors:
     -
@@ -108,8 +102,11 @@ fetch:
     fetcher: url
     remoteURL: 'http://www2.census.gov/geo/tiger/GENZ2015/shp/cb_2015_us_county_500k.zip'
     scripts: []
-    # this file includes counties for Northern Mariana Island (STATEFP=='69'), Guam (STATEFP=='66'), and American Samoa (STATEFP=='60')"
-    # and also the territories we do want: Virgin Islands and Puerto Rico"
+    # see https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html for details.
+    # this file includes counties for places we don't need:
+    #   Northern Mariana Island (STATEFP=='69'), Guam (STATEFP=='66'), and American Samoa (STATEFP=='60')
+    # and also the places we do want:
+    #   Virgin Islands, Puerto Rico, and all 50 states
   -
     id: county_boundaries_topojson
     location: cache/county_boundaries_topojson.zip
