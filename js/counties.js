@@ -36,7 +36,7 @@ function displayCountyData(error, activeCountyData) {
     // extract the topojson to geojson
     var geojson = topojson.feature(activeCountyData, activeCountyData.objects.state);
     var yeargeo = geojson.features.filter(function(d) {
-      return d.properties.year == activeYear;
+      return d.properties.year == 2015;
     });
   
     // create paths

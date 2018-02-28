@@ -59,7 +59,7 @@ function addCentroids(map, countyCentroids) {
 }
 
 // Create the state polygons
-function add_states(map, stateData) {
+function addStates(map, stateData) {
 
   // add states
   map.append("g").attr('id', 'statepolygons')
@@ -215,16 +215,6 @@ function updateView(newView) {
       "translate(" + chart_width / 2 + "," + chart_height / 2 + ")"+
       "scale(" + k + ")" +
       "translate(" + -x + "," + -y + ")");
-}
-
-function updateYear(year) {
-  activeYear = year;
-  
-  // this is where functions to update data for a new year should go
-  updateTitle();
-  if(activeView !== 'USA') {
-    showCounties(activeView);
-  }
 }
 
 function updateCategory(category) {
