@@ -10,6 +10,10 @@ var projection = albersUsaPr()
 var buildPath = d3.geoPath()
     .projection(projection);
 
+// circle scale
+var scaleCircles = d3.scaleSqrt()
+  .range([0, 20])
+
 // Create SVG
 var svg = d3.select("body")
     .append("svg")
