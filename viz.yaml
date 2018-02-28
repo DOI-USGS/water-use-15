@@ -37,7 +37,7 @@ info:
       version: 1.2.6
     sf:
       repo: CRAN
-      version: 0.6.0
+      version: 0.5.4
       
   contributors:
     -
