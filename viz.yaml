@@ -37,10 +37,10 @@ info:
       version: 1.2.6
     sf:
       repo: CRAN
-      version: 0.6.0
-    rjson:
+      version: 0.5.4
+    jsonlite:
       repo: CRAN
-      version: 0.2.15
+      version: 1.5
   contributors:
     -
       name: Lindsay Carr
@@ -104,7 +104,7 @@ fetch:
     id: wu_data_15
     location: cache/wu_data_15.xlsx
     fetch_args:
-      object_name: "usco2015-MockData-dataviz.xlsx"
+      object_name: "usco2015v2.0-dataviz.xlsx"
       bucket_name: "viz-water-use-15"
     reader: excel
     fetcher: s3_object

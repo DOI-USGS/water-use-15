@@ -86,7 +86,7 @@ function add_states(map, stateData) {
   };
 
   // if URL specifies a state view, zoom to that now
-  var newView = getHash('v');
+  var newView = getHash('view');
   if(newView == null) { newView = 'USA'; }
   if(newView != 'USA') {
     updateView(newView);
@@ -152,10 +152,9 @@ function updateView(newView) {
   // update the global variable that stores the current view
   activeView = newView;
   
+  // update page info
   updateTitle();
-
-  // update the URL with a #v=xxx so users can return to this view
-  setHash('v', activeView);
+  setHash('view', activeView);
 
   // determine the center point and scaling for the new view
   var x, y, k;
@@ -228,7 +227,15 @@ function updateYear(year) {
   }
 }
 
+function updateCategory(category) {
+  activeCategory = category;
+  
+  // update page info
+  updateTitle();
+  setHash('category', activeCategory);
+}
+
 function updateTitle() {
   d3.select("#maptitle")
-    .text("Water Use Data for " + activeView + ", " + activeYear);
+    .text("Water Use Data for " + activeView + ", 2015, " + activeCategory);
 }
