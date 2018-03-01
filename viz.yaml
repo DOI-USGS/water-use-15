@@ -98,7 +98,7 @@ fetch:
   -
     id: county_boundaries_census
     location: cache/county_boundaries_census.zip
-    reader: zip
+    reader: shp
     fetcher: url
     remoteURL: 'http://www2.census.gov/geo/tiger/GENZ2015/shp/cb_2015_us_county_500k.zip'
     scripts: []
@@ -163,7 +163,7 @@ process:
     location: cache/county_centroids.rds
     reader: rds
     depends:
-      zipfile: county_boundaries_census
+      sp_data: county_boundaries_census
     processor: compute_centroids
     scripts: scripts/process/compute_centroids.R
   -
