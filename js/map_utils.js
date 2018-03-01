@@ -257,3 +257,4 @@ function updateCircles(activeCategory) {
       })
       .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
 }
+
