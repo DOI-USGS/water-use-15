@@ -30,11 +30,9 @@ var stateStyle = {
     }
   }
 };
-
+  
 function addCentroids(map, countyCentroids) {
-  
-  var tempProjection = d3.geoAlbersUsa();
-  
+    
   var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
   
   scaleCircles
@@ -59,8 +57,12 @@ function addCentroids(map, countyCentroids) {
     })
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
-    .attr("cx", function(d) { return tempProjection(d.geometry.coordinates)[0]; })
-    .attr("cy", function(d) { return tempProjection(d.geometry.coordinates)[1]; })
+    .attr("cx", function(d) { 
+      return projection(d.geometry.coordinates)[0]; 
+    })
+    .attr("cy", function(d) { 
+      return projection(d.geometry.coordinates)[1]; 
+    })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
     })
