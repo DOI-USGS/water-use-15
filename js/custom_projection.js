@@ -47,7 +47,35 @@ function albersUsaTerritories() {
         t = lower48.translate(),
         x = (coordinates[0] - t[0]) / k,
         y = (coordinates[1] - t[1]) / k;
-        
+        /*
+        //How are the return values calculated:
+        console.info("******");
+        var c0 = puertoRico(puertoRicoBbox[0]);
+        var x0 = (c0[0] - t[0]) / k;
+        var y0 = (c0[1] - t[1]) / k;
+        console.info("p0 puertoRico", x0 + ' - ' + y0);
+        var c1 = puertoRico(puertoRicoBbox[1]);
+        var x1 = (c1[0] - t[0]) / k;
+        var y1 = (c1[1] - t[1]) / k;
+        console.info("p1 puertoRico", x1 + ' - ' + y1);
+        c0 = samoa(samoaBbox[0]);
+        x0 = (c0[0] - t[0]) / k;
+        y0 = (c0[1] - t[1]) / k;
+        console.info("p0 samoa", x0 + ' - ' + y0);
+        c1 = samoa(samoaBbox[1]);
+        x1 = (c1[0] - t[0]) / k;
+        y1 = (c1[1] - t[1]) / k;
+        console.info("p1 samoa", x1 + ' - ' + y1);
+        c0 = guam(guamBbox[0]);
+        x0 = (c0[0] - t[0]) / k;
+        y0 = (c0[1] - t[1]) / k;
+        console.info("p0 guam", x0 + ' - ' + y0);
+        c1 = guam(guamBbox[1]);
+        x1 = (c1[0] - t[0]) / k;
+        y1 = (c1[1] - t[1]) / k;
+        console.info("p1 guam", x1 + ' - ' + y1);
+        */
+
     return (y >= 0.120 && y < 0.234 && x >= -0.425 && x < -0.214 ? alaska
         : y >= 0.166 && y < 0.234 && x >= -0.214 && x < -0.115 ? hawaii
         : y >= 0.2064 && y < 0.2413 && x >= 0.312 && x < 0.385 ? puertoRico
@@ -80,6 +108,57 @@ function albersUsaTerritories() {
   albersUsa.translate = function(_) {
     if (!arguments.length) {return lower48.translate();}
     var k = lower48.scale(), x = +_[0], y = +_[1];
+
+    /*
+    var c0 = puertoRico.translate([x + 0.350 * k, y + 0.224 * k])(puertoRicoBbox[0]);
+    var x0 = (x - c0[0]) / k;
+    var y0 = (y - c0[1]) / k;
+    var c1 = puertoRico.translate([x + 0.350 * k, y + 0.224 * k])(puertoRicoBbox[1]);
+    var x1 = (x - c1[0]) / k;
+    var y1 = (y - c1[1]) / k;
+    console.info('puertoRico: p0: ' + x0 + ', ' + y0 + ' , p1: ' + x1 + ' - ' + y1);
+    console.info('.clipExtent([[x '+
+     (x0<0?'+ ':'- ') + Math.abs(x0.toFixed(4))+
+     ' * k + epsilon, y '+
+     (y0<0?'+ ':'- ') + Math.abs(y0.toFixed(4))+
+     ' * k + epsilon],[x '+
+     (x1<0?'+ ':'- ') + Math.abs(x1.toFixed(4))+
+     ' * k - epsilon, y '+
+     (y1<0?'+ ':'- ') + Math.abs(y1.toFixed(4))+
+     ' * k - epsilon]])');
+      c0 = samoa.translate([x - 0.492 * k, y + 0.09 * k])(samoaBbox[0]);
+      x0 = (x - c0[0]) / k;
+      y0 = (y - c0[1]) / k;
+      c1 = samoa.translate([x - 0.492 * k, y + 0.09 * k])(samoaBbox[1]);
+      x1 = (x - c1[0]) / k;
+      y1 = (y - c1[1]) / k;
+     console.info('samoa: p0: ' + x0 + ', ' + y0 + ' , p1: ' + x1 + ' - ' + y1);
+     console.info('.clipExtent([[x '+
+      (x0<0?'+ ':'- ') + Math.abs(x0.toFixed(4))+
+      ' * k + epsilon, y '+
+      (y0<0?'+ ':'- ') + Math.abs(y0.toFixed(4))+
+      ' * k + epsilon],[x '+
+      (x1<0?'+ ':'- ') + Math.abs(x1.toFixed(4))+
+      ' * k - epsilon, y '+
+      (y1<0?'+ ':'- ') + Math.abs(y1.toFixed(4))+
+      ' * k - epsilon]])');
+      c0 = guam.translate([x - 0.408 * k, y + 0.018 * k])(guamBbox[0]);
+      x0 = (x - c0[0]) / k;
+      y0 = (y - c0[1]) / k;
+      c1 = guam.translate([x - 0.408 * k, y + 0.018 * k])(guamBbox[1]);
+      x1 = (x - c1[0]) / k;
+      y1 = (y - c1[1]) / k;
+     console.info('guam: p0: ' + x0 + ', ' + y0 + ' , p1: ' + x1 + ' - ' + y1);
+     console.info('.clipExtent([[x '+
+      (x0<0?'+ ':'- ') + Math.abs(x0.toFixed(4))+
+      ' * k + epsilon, y '+
+      (y0<0?'+ ':'- ') + Math.abs(y0.toFixed(4))+
+      ' * k + epsilon],[x '+
+      (x1<0?'+ ':'- ') + Math.abs(x1.toFixed(4))+
+      ' * k - epsilon, y '+
+      (y1<0?'+ ':'- ') + Math.abs(y1.toFixed(4))+
+      ' * k - epsilon]])');
+      */
 
     lower48Point = lower48
         .translate(_)
@@ -119,6 +198,34 @@ function albersUsaTerritories() {
   }
 
   albersUsa.drawCompositionBorders = function(context) {
+
+    /*
+    console.info("CLIP EXTENT hawaii: ", hawaii.clipExtent());
+    console.info("UL BBOX:", lower48.invert([hawaii.clipExtent()[0][0], hawaii.clipExtent()[0][1]]));
+    console.info("UR BBOX:", lower48.invert([hawaii.clipExtent()[1][0], hawaii.clipExtent()[0][1]]));
+    console.info("LD BBOX:", lower48.invert([hawaii.clipExtent()[1][0], hawaii.clipExtent()[1][1]]));
+    console.info("LL BBOX:", lower48.invert([hawaii.clipExtent()[0][0], hawaii.clipExtent()[1][1]]));
+    console.info("CLIP EXTENT alaska: ", alaska.clipExtent());
+    console.info("UL BBOX:", lower48.invert([alaska.clipExtent()[0][0], alaska.clipExtent()[0][1]]));
+    console.info("UR BBOX:", lower48.invert([alaska.clipExtent()[1][0], alaska.clipExtent()[0][1]]));
+    console.info("LD BBOX:", lower48.invert([alaska.clipExtent()[1][0], alaska.clipExtent()[1][1]]));
+    console.info("LL BBOX:", lower48.invert([alaska.clipExtent()[0][0], alaska.clipExtent()[1][1]]));
+    console.info("CLIP EXTENT puertoRico: ", puertoRico.clipExtent());
+    console.info("UL BBOX:", lower48.invert([puertoRico.clipExtent()[0][0], puertoRico.clipExtent()[0][1]]));
+    console.info("UR BBOX:", lower48.invert([puertoRico.clipExtent()[1][0], puertoRico.clipExtent()[0][1]]));
+    console.info("LD BBOX:", lower48.invert([puertoRico.clipExtent()[1][0], puertoRico.clipExtent()[1][1]]));
+    console.info("LL BBOX:", lower48.invert([puertoRico.clipExtent()[0][0], puertoRico.clipExtent()[1][1]]));
+    console.info("CLIP EXTENT samoa: ", samoa.clipExtent());
+    console.info("UL BBOX:", lower48.invert([samoa.clipExtent()[0][0], samoa.clipExtent()[0][1]]));
+    console.info("UR BBOX:", lower48.invert([samoa.clipExtent()[1][0], samoa.clipExtent()[0][1]]));
+    console.info("LD BBOX:", lower48.invert([samoa.clipExtent()[1][0], samoa.clipExtent()[1][1]]));
+    console.info("LL BBOX:", lower48.invert([samoa.clipExtent()[0][0], samoa.clipExtent()[1][1]]));
+    console.info("CLIP EXTENT guam: ", guam.clipExtent());
+    console.info("UL BBOX:", lower48.invert([guam.clipExtent()[0][0], guam.clipExtent()[0][1]]));
+    console.info("UR BBOX:", lower48.invert([guam.clipExtent()[1][0], guam.clipExtent()[0][1]]));
+    console.info("LD BBOX:", lower48.invert([guam.clipExtent()[1][0], guam.clipExtent()[1][1]]));
+    console.info("LL BBOX:", lower48.invert([guam.clipExtent()[0][0], guam.clipExtent()[1][1]]));
+    */
 
     var ulhawaii = lower48([-110.4641, 28.2805]);
     var urhawaii = lower48([-104.0597, 28.9528]);
@@ -163,6 +270,7 @@ function albersUsaTerritories() {
     return context.toString();
 
   };
+
 
   return albersUsa.scale(1070);
 }
