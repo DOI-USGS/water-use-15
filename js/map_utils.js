@@ -306,16 +306,6 @@ d3.selection.prototype.moveToFront = function() {
         this.parentNode.appendChild(this);
       });
     };
-    
-d3.selection.prototype.moveToBack = function() {  
-    return this.each(function() { 
-      console.log(this.parentNode);
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    });
-};
 
 function categoryToClass(category) {
   if (category == "total") { return "Total"; }
