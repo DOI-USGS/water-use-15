@@ -127,6 +127,17 @@ fetch:
     scripts: [scripts/fetch/s3_object.R]
 
 process:
+  - 
+    id: county_boundaries_topojson3
+    location: cache/county_boundaries_USA.json
+    depends:
+      sp_object: county_boundaries_census
+    process_args:
+      script_file: scripts/process/simplify_topojson.sh
+    processor: simplify_topojson
+    scripts: scripts/process/simplify_topojson.R
+    reader: json
+    mimetype: application/json
   -
     id: state_boundaries_geojson
     location: cache/state_boundaries.geojson
