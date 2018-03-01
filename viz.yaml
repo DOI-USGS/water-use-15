@@ -271,7 +271,6 @@ publish:
     template: fullpage
     publisher: page
     depends:
-      sourcesansprofont: sourcesansprofont
       lib_d3_js: "lib-d3-js"
       topojson: "topojson"
       header_css: "lib-header-css"
@@ -293,7 +292,7 @@ publish:
       county_centroids: "county_centroids_topojson"
       wu_data_15_json: "wu_data_15_json"
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "footer_css","socialCSS","sourcesansprofont",
+      resources: ["lib_d3_js", "topojson", "header_css", "footer_css","socialCSS",
                   "map_css", "hashes", "projection", "map_utils", "map_counties"]
       sections: ["social","map"] # adding header and footer here, doubled each on the page
   -
@@ -334,11 +333,6 @@ publish:
     id: map_css
     location: "layout/css/map.css"
     mimetype: text/css
-  -
-    id: sourcesansprofont
-    publisher: googlefont
-    family: "Source Sans Pro"
-    weight: [300, 400, 600]
   -
     id: header_section
     template: header-template
