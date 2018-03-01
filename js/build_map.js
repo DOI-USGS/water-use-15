@@ -1,6 +1,6 @@
 // Width and height
 var chart_width     =   1000;
-var chart_height    =   800;
+var chart_height    =   700;
 
 // Projection
 var projection = albersUsaPr()
@@ -9,12 +9,21 @@ var projection = albersUsaPr()
     .translate([chart_width / 2, chart_height / 2]);
 var buildPath = d3.geoPath()
     .projection(projection);
+    
+//Create container
+var container = d3.select('body')
+  .append('div')
+  .attr('id', 'content-container');
+
+// circle scale
+var scaleCircles = d3.scaleSqrt()
+  .range([0, 20])
 
 // Create SVG
-var svg = d3.select("body")
+var svg = d3.select("#content-container")
     .append("svg")
-    .attr("width", chart_width)
-    .attr("height", chart_height);
+    .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
+	  .attr('preserveAspectRatio', 'xMidYMid');
 
 var map = svg.append("g")
   .attr("id", "map");
@@ -42,9 +51,6 @@ var years = [1950, 1960, 1965, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
 // Zoom status: default is nation-wide
 var activeView = getHash('view');
 if(!activeView) activeView = 'USA';
-
-// Zoom year: start at 2015
-var activeYear = d3.max(years);
 
 // Water use category: default is total. To make these readable in the URLs,
 // let's use full-length space-removed lower-case labels, e.g. publicsupply and thermoelectric
@@ -74,9 +80,8 @@ function create_map() {
 	countyDict = arguments[3];
 	countyCentroids = arguments[4];
 	
-  add_states(map, stateData, stateDict);
+  addStates(map, stateData, stateDict);
   addCentroids(map, countyCentroids);
-  add_timeslider(map, years, chart_width, chart_height);
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
@@ -86,3 +91,43 @@ function create_map() {
   });
 
 }
+
+var tempCategories = ["Total", "Thermoelectric", "Public Supply", "Irrigation", "Industrial"];
+
+var buttonContainer = d3.select('#content-container')
+  .append('div')
+  .attr('id', 'button-container');
+  
+buttonContainer.append('div').classed('select-arrowbox', true);
+
+var categorySelect = d3.select('#button-container')
+  .append('select')
+  .classed('category-select', true);
+  
+var categorySelectOptions = d3.select('.category-select')
+  .selectAll('option')
+  .data(tempCategories)
+  .enter()
+  .append('option')
+  .attr('value', function(d){
+    return d;
+  })
+  .text(function(d){
+    return d;
+  });
+  
+var categoryButtons = d3.select('#button-container')
+  .selectAll('button')
+  .data(tempCategories)
+  .enter()
+  .append('button')
+  .text(function(d){
+    return d;
+  })
+  .attr('class', function(d){
+    var name = d.split(' ');
+    return name[0];
+  })
+  .on('click', function(d){
+    updateCategory(d.toLowerCase());
+  });
