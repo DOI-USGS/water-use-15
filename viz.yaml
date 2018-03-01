@@ -73,6 +73,11 @@ parameter:
     id: wu_type_column_names
     orig_names: ["TO-Wtotl", "PT-Wtotl", "PS-Wtotl", "IR-WFrTo", "IN-Wtotl"]
     new_names: ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"]
+  - 
+    id: social-links
+    github: https://github.com/USGS-VIZLAB/water-use-15
+    twitter: https://twitter.com/share?url=TODO!!!
+    facebookLink: http://www.facebook.com/sharer.php?u=TODO!!!
 
 fetch:
   -
@@ -183,7 +188,7 @@ process:
     location: cache/county_centroids.json
     reader: json
     depends:
-      sp_object: county_centroids
+      sp_object: centroid_sizes
     processor: sp_to_topojson
     scripts: scripts/process/sp_to_topojson.R
     mimetype: application/json
@@ -279,6 +284,9 @@ publish:
       header_css: "lib-header-css"
       footer_css: "lib-footer-css"
       map_css: "map_css"
+      main_css: "main_css"
+      social: "social-section"
+      socialCSS: "lib-social-media-css"
       header: "header_section"
       footer: "footer_section"
       hashes: "url_hashes"
@@ -293,9 +301,9 @@ publish:
       county_centroids: "county_centroids_topojson"
       wu_data_15_json: "wu_data_15_json"
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
-                  "map_css", "hashes", "projection", "map_utils", "map_counties"]
-      sections: ["map"] # adding header and footer here, doubled each on the page
+      resources: ["lib_d3_js", "topojson", "header_css", "footer_css", "socialCSS",
+                  "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties"]
+      sections: ["social","map"] # adding header and footer here, doubled each on the page
   -
     id: county_boundaries
     location: cache/county_boundaries
@@ -337,6 +345,10 @@ publish:
     location: "layout/css/map.css"
     mimetype: text/css
   -
+    id: main_css
+    location: "layout/css/main.css"
+    mimetype: text/css
+  -
     id: header_section
     template: header-template
     publisher: header
@@ -353,3 +365,37 @@ publish:
       - name: Visualizing water use by region and time
         org: USGS-VIZLAB
         repo: water-use
+  -
+    id: social-section
+    template: vertical-social-media-template
+    publisher: social
+    depends: social-links
+    context:
+      embedLink: embed-water-use-15.html
+  -
+    id: national-water-use
+    name: embed-water-use-15
+    publisher: page
+    template: embed
+    mimetype: text/html
+    depends:
+      lib_d3_js: lib-d3-js
+      topojson: topojson
+      map_css: map_css
+      main_css: main_css
+      hashes: url_hashes
+      projection: custom_projection
+      map_utils: map_utils
+      map_counties: map_counties
+      map: build_map
+      state_boundaries_geojson: state_boundaries_geojson
+      states_dictionary: states_dictionary
+      counties_dictionary: counties_dictionary
+      county_boundaries: county_boundaries
+      county_centroids: county_centroids_topojson
+      wu_data_15_json: wu_data_15_json
+    context:
+      resources: ["lib_d3_js", "topojson", 
+                  "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties"]
+      embed: ["map"]
+
