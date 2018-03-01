@@ -1,0 +1,102 @@
+*{
+  padding:0;
+  margin:0;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+#buttonContainer{
+  text-align: center;
+  position: relative;
+  padding:0 10px;
+}
+
+.categorySelect{
+  padding: 0 2%;
+  width:100%;
+  height:40px;
+  background:rgb(240,240,240);
+  border:1px solid rgb(190,190,190);
+  outline: none;
+  font-size:1em;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.selectArrowBox{
+  position:absolute;
+  right: 10px;
+  width:40px;
+  height:40px;
+  background:rgb(150,150,150);
+  pointer-events:none;
+  border-radius:0 3px 3px 0;
+}
+
+#buttonContainer button{
+  display:none;
+}
+
+@media screen and (min-width:580px){
+  
+  .categorySelect,
+  .selectArrowBox{
+    display:none;
+  }
+  
+  #buttonContainer button{
+    display:inline-block;
+    width:19%;
+    padding: 10px 0;
+    font-size:.9em;
+    border:1px solid rgb(100,100,100);
+    outline:none;
+    cursor:pointer;
+    opacity:.5;
+    margin-right:1%;
+    border-radius:3px;
+  }
+  
+  #buttonContainer button:last-child{
+    border-right:1px solid rgb(100,100,100);
+    margin-right:0;
+  }
+  
+  #buttonContainer button:hover{
+    opacity:1;
+  }
+  
+  .Total{
+    background:rgb(46, 134, 171);
+  }
+  
+  .Thermoelectric{
+    background:rgb(252,186,4);
+  }
+  
+  .Public{
+    background:rgb(186,50,40);
+  }
+  
+  .Irrigation{
+    background:rgb(155,197,61);
+  }
+  
+  .Industrial{
+    background:rgb(138,113,106);
+  }
+}
+
+
+@media screen and (min-width: 1024px){
+  #container{
+    width:960px;
+    margin:0 auto;
+  }
+  
+}

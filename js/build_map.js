@@ -1,6 +1,6 @@
 // Width and height
 var chart_width     =   1000;
-var chart_height    =   800;
+var chart_height    =   700;
 
 // Projection
 var projection = albersUsaPr()
@@ -9,12 +9,17 @@ var projection = albersUsaPr()
     .translate([chart_width / 2, chart_height / 2]);
 var buildPath = d3.geoPath()
     .projection(projection);
+    
+//Create container
+var container = d3.select('body')
+  .append('div')
+  .attr('id', 'container');
 
 // Create SVG
-var svg = d3.select("body")
+var svg = d3.select("#container")
     .append("svg")
-    .attr("width", chart_width)
-    .attr("height", chart_height);
+    .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
+	  .attr('preserveAspectRatio', 'xMidYMid');
 
 var map = svg.append("g")
   .attr("id", "map");
@@ -86,3 +91,43 @@ function create_map() {
   });
 
 }
+
+var tempCategories = ["Total", "Thermoelectric", "Public Supply", "Irrigation", "Industrial"];
+
+var buttonContainer = d3.select('#container')
+  .append('div')
+  .attr('id', 'buttonContainer');
+  
+buttonContainer.append('div').classed('selectArrowBox', true);
+
+var categorySelect = d3.select('#buttonContainer')
+  .append('select')
+  .classed('categorySelect', true);
+  
+var categorySelectOptions = d3.select('.categorySelect')
+  .selectAll('option')
+  .data(tempCategories)
+  .enter()
+  .append('option')
+  .attr('value', function(d){
+    return d;
+  })
+  .text(function(d){
+    return d;
+  });
+  
+var categoryButtons = d3.select('#buttonContainer')
+  .selectAll('button')
+  .data(tempCategories)
+  .enter()
+  .append('button')
+  .text(function(d){
+    return d;
+  })
+  .attr('class', function(d){
+    var name = d.split(' ');
+    return name[0];
+  })
+  .on('click', function(d){
+    updateCategory(d.toLowerCase());
+  });

@@ -241,6 +241,7 @@ publish:
       header_css: "lib-header-css"
       footer_css: "lib-footer-css"
       map_css: "map_css"
+      main_css: "main_css"
       header: "header_section"
       footer: "footer_section"
       hashes: "url_hashes"
@@ -256,7 +257,7 @@ publish:
       county_centroids: "county_centroids_topojson"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
-                  "map_css", "hashes", "projection", "map_utils", "map_counties", "timeslider"]
+                  "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties", "timeslider"]
       sections: ["map"] # adding header and footer here, doubled each on the page
   -
     id: county_boundaries
@@ -299,6 +300,10 @@ publish:
   -
     id: map_css
     location: "layout/css/map.css"
+    mimetype: text/css
+  -
+    id: main_css
+    location: "layout/css/main.css"
     mimetype: text/css
   -
     id: header_section
