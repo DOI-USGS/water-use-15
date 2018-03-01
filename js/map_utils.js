@@ -44,8 +44,6 @@ function addCentroids(map, countyCentroids) {
               d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
               d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
     ]);
-    
-  console.log(map);
   
   map.selectAll('county-point')
     .data(geojson.features)
