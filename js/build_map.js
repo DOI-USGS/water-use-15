@@ -17,7 +17,11 @@ var container = d3.select('body')
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
-  .range([0, 20])
+  .range([0, 20]);
+
+// Setup tooltips
+var tooltipDiv = d3.select("body").append("div")
+      .classed("tooltip hidden", true);
 
 // Create SVG
 var svg = d3.select("#content-container")
