@@ -38,8 +38,6 @@ function loadCountyData(state, callback) {
 // make sure we have the state stored in countyData and then
 // call the next function (visualization)
 function cacheCountyData(state, callback) {
-  console.log("after d3.json", countyData);
-  
   // if the county boundaries for this state are already loaded, do nothing.
   // otherwise load them now. (loading currently just means subsetting them from
   // the complete set of counties). keeping this code in here because this
