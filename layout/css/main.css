@@ -7,13 +7,13 @@ body {
   font-family: sans-serif;
 }
 
-#buttonContainer{
+#button-container{
   text-align: center;
   position: relative;
   padding:0 10px;
 }
 
-.categorySelect{
+.category-select{
   padding: 0 2%;
   width:100%;
   height:40px;
@@ -28,7 +28,7 @@ body {
   font-size: 1.1em;
 }
 
-.selectArrowBox{
+.select-arrowbox{
   position:absolute;
   right: 10px;
   width:40px;
@@ -38,18 +38,18 @@ body {
   border-radius:0 3px 3px 0;
 }
 
-#buttonContainer button{
+#button-container button{
   display:none;
 }
 
 @media screen and (min-width:580px){
   
-  .categorySelect,
-  .selectArrowBox{
+  .category-select,
+  .select-arrowbox{
     display:none;
   }
   
-  #buttonContainer button{
+  #button-container button{
     display:inline-block;
     width:19%;
     padding: 10px 0;
@@ -62,12 +62,12 @@ body {
     border-radius:3px;
   }
   
-  #buttonContainer button:last-child{
+  #button-container button:last-child{
     border-right:1px solid rgb(100,100,100);
     margin-right:0;
   }
   
-  #buttonContainer button:hover{
+  #button-container button:hover{
     opacity:1;
   }
   
@@ -94,7 +94,7 @@ body {
 
 
 @media screen and (min-width: 1024px){
-  #container{
+  #content-container{
     width:960px;
     margin:0 auto;
   }

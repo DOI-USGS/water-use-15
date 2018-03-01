@@ -13,14 +13,14 @@ var buildPath = d3.geoPath()
 //Create container
 var container = d3.select('body')
   .append('div')
-  .attr('id', 'container');
+  .attr('id', 'content-container');
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
   .range([0, 20])
 
 // Create SVG
-var svg = d3.select("#container")
+var svg = d3.select("#content-container")
     .append("svg")
     .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
 	  .attr('preserveAspectRatio', 'xMidYMid');
@@ -94,17 +94,17 @@ function create_map() {
 
 var tempCategories = ["Total", "Thermoelectric", "Public Supply", "Irrigation", "Industrial"];
 
-var buttonContainer = d3.select('#container')
+var buttonContainer = d3.select('#content-container')
   .append('div')
-  .attr('id', 'buttonContainer');
+  .attr('id', 'button-container');
   
-buttonContainer.append('div').classed('selectArrowBox', true);
+buttonContainer.append('div').classed('select-arrowbox', true);
 
-var categorySelect = d3.select('#buttonContainer')
+var categorySelect = d3.select('#button-container')
   .append('select')
-  .classed('categorySelect', true);
+  .classed('category-select', true);
   
-var categorySelectOptions = d3.select('.categorySelect')
+var categorySelectOptions = d3.select('.category-select')
   .selectAll('option')
   .data(tempCategories)
   .enter()
@@ -116,7 +116,7 @@ var categorySelectOptions = d3.select('.categorySelect')
     return d;
   });
   
-var categoryButtons = d3.select('#buttonContainer')
+var categoryButtons = d3.select('#button-container')
   .selectAll('button')
   .data(tempCategories)
   .enter()
