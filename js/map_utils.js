@@ -33,7 +33,9 @@ var stateStyle = {
 
 function addCentroids(map, countyCentroids) {
   
-  var tempProjection = d3.geoAlbersUsa();
+  var tempProjection = albersUsaTerritories()
+    .scale([1200])
+    .translate([chart_width / 2, chart_height / 2]);
   
   var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
   
@@ -42,6 +44,8 @@ function addCentroids(map, countyCentroids) {
               d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
               d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
     ]);
+    
+  console.log(map);
   
   map.selectAll('county-point')
     .data(geojson.features)
@@ -59,8 +63,12 @@ function addCentroids(map, countyCentroids) {
     })
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
-    .attr("cx", function(d) { return tempProjection(d.geometry.coordinates)[0]; })
-    .attr("cy", function(d) { return tempProjection(d.geometry.coordinates)[1]; })
+    .attr("cx", function(d) { 
+      return tempProjection(d.geometry.coordinates)[0]; 
+    })
+    .attr("cy", function(d) { 
+      return tempProjection(d.geometry.coordinates)[1]; 
+    })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
     })

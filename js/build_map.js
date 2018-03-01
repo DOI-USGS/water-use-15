@@ -3,7 +3,7 @@ var chart_width     =   1000;
 var chart_height    =   700;
 
 // Projection
-var projection = albersUsaPr()
+var projection = albersUsaTerritories()
     .scale([1200])
     // default is .rotate([96,0]) to center on US (we want this)
     .translate([chart_width / 2, chart_height / 2]);
