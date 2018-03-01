@@ -286,7 +286,8 @@ function seeTooltip(currentCircle, d) {
   d3.select(".tooltip")
     .html(d.properties.COUNTY + "<br/>" + 
             "Population: " + d.properties.countypop + "<br/>" +
-            activeCategory + ": " + d.properties[[activeCategory]] + " " + "MGD");
+            categoryToName(activeCategory) + ": " + 
+              d.properties[[activeCategory]] + " " + "MGD");
 }
 
 function hideTooltip(currentCircle, d) {
@@ -315,3 +316,21 @@ d3.selection.prototype.moveToBack = function() {
         } 
     });
 };
+
+function categoryToClass(category) {
+  if (category == "total") { return "Total"; }
+  else if (category == "thermoelectric") { return "Thermoelectric"; }
+  else if (category == "publicsupply") { return "Public"; }
+  else if (category == "irrigation") { return "Irrigation"; }
+  else if (category == "industrial") { return "Industrial"; }
+  else { return "none"; }
+}
+
+function categoryToName(category) {
+  if (category == "total") { return "Total"; }
+  else if (category == "thermoelectric") { return "Thermoelectric"; }
+  else if (category == "publicsupply") { return "Public Supply"; }
+  else if (category == "irrigation") { return "Irrigation"; }
+  else if (category == "industrial") { return "Industrial"; }
+  else { return "none"; }
+}
