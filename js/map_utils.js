@@ -30,14 +30,9 @@ var stateStyle = {
     }
   }
 };
-
-var projection = albersUsaTerritories();
-
+  
 function addCentroids(map, countyCentroids) {
-  
-  projection.scale([1200])
-    .translate([chart_width / 2, chart_height / 2]);
-  
+    
   var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
   
   scaleCircles
