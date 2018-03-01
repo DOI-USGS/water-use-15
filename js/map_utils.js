@@ -37,29 +37,39 @@ function addCentroids(map, countyCentroids) {
   
   var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
   
+  scaleCircles
+    .domain([
+              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
+              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+    ]);
+  
   map.selectAll('county-point')
     .data(geojson.features)
     .enter()
     .append('circle')
     .classed('county-point', true)
-    .attr('fips', function(d) {
-      return d.properties.GEOID;
+    ///////////////////
+    // Alaska, Puerto Rico, and Virgin Islands don't exist in topo yet
+    .filter(function(d) { return d.properties.STATE !== "AK"; })
+    .filter(function(d) { return d.properties.STATE !== "PR"; })
+    .filter(function(d) { return d.properties.STATE !== "VI"; })
+    ///////////////////
+    .sort(function(a,b) { 
+      return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
     })
-    .text(function(d) {
-      return d.properties.GEOID;
-    })
-    .attr("cx", function(d) {
-       console.log(tempProjection(d.geometry.coordinates));
-       return tempProjection(d.geometry.coordinates)[0]; 
-     })
+    .attr('fips', function(d) { return d.properties.GEOID; })
+    .text(function(d) { return d.properties.GEOID; })
+    .attr("cx", function(d) { return tempProjection(d.geometry.coordinates)[0]; })
     .attr("cy", function(d) { return tempProjection(d.geometry.coordinates)[1]; })
-    .attr("r", 10)
+    .attr("r", function(d) { 
+      return scaleCircles(d.properties[[activeCategory]]);
+    })
     .style("fill", 'purple')
     .style("stroke", 'none');
 }
 
 // Create the state polygons
-function add_states(map, stateData) {
+function addStates(map, stateData) {
 
   // add states
   map.append("g").attr('id', 'statepolygons')
@@ -217,18 +227,11 @@ function updateView(newView) {
       "translate(" + -x + "," + -y + ")");
 }
 
-function updateYear(year) {
-  activeYear = year;
-  
-  // this is where functions to update data for a new year should go
-  updateTitle();
-  if(activeView !== 'USA') {
-    showCounties(activeView);
-  }
-}
-
 function updateCategory(category) {
   activeCategory = category;
+  
+  // update circles
+  updateCircles(activeCategory);
   
   // update page info
   updateTitle();
@@ -239,3 +242,19 @@ function updateTitle() {
   d3.select("#maptitle")
     .text("Water Use Data for " + activeView + ", 2015, " + activeCategory);
 }
+
+function updateCircles(activeCategory) {
+  scaleCircles
+    .domain([
+              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
+              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+    ]);
+  
+  d3.selectAll("county-point")
+      .transition().duration(1500)
+      .sort(function(a,b) { 
+        return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
+      })
+      .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
+}
+

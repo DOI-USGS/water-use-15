@@ -23,21 +23,42 @@ info:
     aws.signature:
       repo: CRAN
       version: 0.3.5
+    dataRetrieval:
+      repo: CRAN
+      version: 2.7.4
+    geojsonio:
+      repo: CRAN
+      version: 0.5.0
+    jsonlite:
+      repo: CRAN
+      version: 1.5
+    maps:
+      repo: CRAN
+      version: 3.2.0
+    maptools:
+      repo: CRAN
+      version: 0.9-2
+    readxl:
+      repo: CRAN
+      version: 1.0.0
+    rgdal:
+      repo: CRAN
+      version: 1.2-16
+    rgeos:
+      repo: CRAN
+      version: 0.3-26
+    sp:
+      repo: CRAN
+      version: 1.2.6
+    sf:
+      repo: CRAN
+      version: 0.5.4
     USAboundaries:
       repo: CRAN 
       version: 0.3.0
     USAboundariesData:
       repo: CRAN #lcarr had to manually install using devtools::install_github("ropensci/USAboundariesData")
       version: 0.3.0
-    dataRetrieval:
-      repo: CRAN
-      version: 2.7.4
-    sp:
-      repo: CRAN
-      version: 1.2.6
-    sf:
-      repo: CRAN
-      version: 0.6.0
       
   contributors:
     -
@@ -58,6 +79,12 @@ parameter:
     id: wu_type_column_names
     orig_names: ["TO-Wtotl", "PT-Wtotl", "PS-Wtotl", "IR-WFrTo", "IN-Wtotl"]
     new_names: ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"]
+  - 
+    id: social-links
+    github: https://github.com/USGS-VIZLAB/water-use-15
+    twitter: https://twitter.com/share?url=TODO!!!
+    facebookLink: http://www.facebook.com/sharer.php?u=TODO!!!
+  
 
 fetch:
   -
@@ -153,7 +180,7 @@ process:
     location: cache/county_centroids.json
     reader: json
     depends:
-      sp_object: county_centroids
+      sp_object: centroid_sizes
     processor: sp_to_topojson
     scripts: scripts/process/sp_to_topojson.R
     mimetype: application/json
@@ -166,6 +193,14 @@ process:
       col_names: wu_type_column_names
     processor: simplify_wu_data
     scripts: [scripts/process/simplify_wu_data.R]
+  -
+    id: wu_data_15_json
+    location: cache/wu_data_15.json
+    mimetype: application/json
+    depends:
+      wu_data_15_simple: wu_data_15_simple
+    processor: json_wu_data
+    scripts: [scripts/process/json_wu_data.R]
   -
     id: centroid_sizes
     location: cache/centroid_sizes.rds
@@ -186,7 +221,7 @@ visualize:
     visualize_args:
       wu_type: "total"
       crs: "+init=epsg:2163"
-    visualizer: make_circle_map
+    visualizer: make_pie_map
     scripts: [scripts/visualize/make_circle_map.R]
   -
     id: circle_map_thermoelectric
@@ -242,6 +277,8 @@ publish:
       footer_css: "lib-footer-css"
       map_css: "map_css"
       main_css: "main_css"
+      social: "social-section"
+      socialCSS: "lib-social-media-css"
       header: "header_section"
       footer: "footer_section"
       hashes: "url_hashes"
@@ -249,16 +286,16 @@ publish:
       map_utils: "map_utils"
       map_counties: "map_counties"
       map: "build_map"
-      timeslider: "timeslider"
       state_boundaries_geojson: "state_boundaries_geojson"
       states_dictionary: "states_dictionary"
       counties_dictionary: "counties_dictionary"
       county_boundaries: "county_boundaries"
       county_centroids: "county_centroids_topojson"
+      wu_data_15_json: "wu_data_15_json"
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "footer_css",
-                  "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties", "timeslider"]
-      sections: ["map"] # adding header and footer here, doubled each on the page
+      resources: ["lib_d3_js", "topojson", "header_css", "footer_css", "socialCSS",
+                  "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties"]
+      sections: ["social","map"] # adding header and footer here, doubled each on the page
   -
     id: county_boundaries
     location: cache/county_boundaries
@@ -284,10 +321,6 @@ publish:
   -
     id: build_map
     location: "js/build_map.js"
-    mimetype: application/javascript
-  -
-    id: timeslider
-    location: "js/timeslider.js"
     mimetype: application/javascript
   -
     id: map_utils
@@ -322,3 +355,10 @@ publish:
       - name: Visualizing water use by region and time
         org: USGS-VIZLAB
         repo: water-use
+  -
+    id: social-section
+    template: vertical-social-media-template
+    publisher: social
+    depends: social-links
+
+
