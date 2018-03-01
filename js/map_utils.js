@@ -307,15 +307,6 @@ d3.selection.prototype.moveToFront = function() {
       });
     };
 
-function categoryToClass(category) {
-  if (category == "total") { return "Total"; }
-  else if (category == "thermoelectric") { return "Thermoelectric"; }
-  else if (category == "publicsupply") { return "Public"; }
-  else if (category == "irrigation") { return "Irrigation"; }
-  else if (category == "industrial") { return "Industrial"; }
-  else { return "none"; }
-}
-
 function categoryToName(category) {
   if (category == "total") { return "Total"; }
   else if (category == "thermoelectric") { return "Thermoelectric"; }
