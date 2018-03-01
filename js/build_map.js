@@ -2,11 +2,15 @@
 var chart_width     =   1000;
 var chart_height    =   700;
 
+// define categories
+var tempCategories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
+
 // Projection
-var projection = albersUsaPr()
-    .scale([1200])
-    // default is .rotate([96,0]) to center on US (we want this)
+// Projection
+var projection = albersUsaTerritories().scale([1200])
     .translate([chart_width / 2, chart_height / 2]);
+    // default is .rotate([96,0]) to center on US (we want this)
+    
 var buildPath = d3.geoPath()
     .projection(projection);
     
@@ -17,7 +21,11 @@ var container = d3.select('body')
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
-  .range([0, 20])
+  .range([0, 20]);
+
+// Setup tooltips
+var tooltipDiv = d3.select("body").append("div")
+      .classed("tooltip hidden", true);
 
 // Create SVG
 var svg = d3.select("#content-container")
@@ -44,9 +52,6 @@ d3.queue()
   .defer(d3.json, "data/counties.json") // could load this later
   .defer(d3.json, "data/county_centroids.json")
   .await(create_map);
-
-// dummy var for now
-var years = [1950, 1960, 1965, 1970, 1980, 1990, 1995, 2000, 2005, 2010, 2015];
 
 // Zoom status: default is nation-wide
 var activeView = getHash('view');
@@ -92,8 +97,6 @@ function create_map() {
 
 }
 
-var tempCategories = ["Total", "Thermoelectric", "Public Supply", "Irrigation", "Industrial"];
-
 var buttonContainer = d3.select('#content-container')
   .append('div')
   .attr('id', 'button-container');
@@ -122,15 +125,10 @@ var categoryButtons = d3.select('#button-container')
   .enter()
   .append('button')
   .text(function(d){
-    return d;
+    return categoryToName(d);
   })
   .attr('class', function(d){
-    var name = d.split(' ');
-    if(name[1]){
-      return (name[0]+name[1]).toLowerCase();
-    }else{
-      return name[0].toLowerCase();
-    }
+    return d;
   })
   .on('click', function(d){
     updateCategory(d.toLowerCase());
