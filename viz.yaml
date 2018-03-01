@@ -287,6 +287,8 @@ publish:
   -
     id: county_boundaries
     location: cache/county_boundaries
+    reader: folder
+    mimetype: filepath
     depends: 
       files_location: "county_boundaries_topojson"
     publish_args:
