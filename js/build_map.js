@@ -126,7 +126,11 @@ var categoryButtons = d3.select('#button-container')
   })
   .attr('class', function(d){
     var name = d.split(' ');
-    return name[0];
+    if(name[1]){
+      return (name[0]+name[1]).toLowerCase();
+    }else{
+      return name[0].toLowerCase();
+    }
   })
   .on('click', function(d){
     updateCategory(d.toLowerCase());
