@@ -72,8 +72,10 @@ function addCentroids(map, countyCentroids) {
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
     })
+    .on("mouseover", function(d) { showToolTip(this, d); })
+    .on("mouseout", function(d) { hideTooltip(this, d); })
     .style("fill", 'purple')
-    .style("stroke", 'none');
+    .style("opacity", 0.8); // adding this line made it super slow
 }
 
 // Create the state polygons
@@ -266,3 +268,58 @@ function updateCircles(activeCategory) {
       .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
 }
 
+function showToolTip(currentCircle, d) {
+  var orig = d3.select(currentCircle),
+      origNode = orig.node();
+  var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
+                                                            origNode.nextSibling));
+  
+  // style circles
+  orig
+    .style("opacity", 0); // makes original circle invisible in the background
+  duplicate
+    .classed('county-point-duplicate', true)
+    .style("pointer-events", "none")
+    .style("opacity", 1); // makes the duplicate circle on the top
+  
+  // change tooltip
+  d3.select(".tooltip")
+    .classed("shown", true)
+    .classed("hidden", false)
+    .transition()
+    .duration(50)
+    .style("left", (d3.event.pageX + 35) + "px")
+    .style("top", (d3.event.pageY - 50) + "px");
+  d3.select(".tooltip")
+    .html(d.properties.COUNTY + "<br/>" + 
+            "Population: " + d.properties.countypop + "<br/>" +
+            categoryToName(activeCategory) + ": " + 
+              d.properties[[activeCategory]] + " " + "MGD");
+}
+
+function hideTooltip(currentCircle, d) {
+  d3.select(currentCircle)
+    .style("opacity", 0.8);
+  d3.select('.county-point-duplicate')
+    .remove(); // delete duplicate
+  d3.select(".tooltip")
+    .classed("shown", false)
+    .classed("hidden", true)
+    .transition()
+    .duration(100);
+}
+
+d3.selection.prototype.moveToFront = function() {  
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
+
+function categoryToName(category) {
+  if (category == "total") { return "Total"; }
+  else if (category == "thermoelectric") { return "Thermoelectric"; }
+  else if (category == "publicsupply") { return "Public Supply"; }
+  else if (category == "irrigation") { return "Irrigation"; }
+  else if (category == "industrial") { return "Industrial"; }
+  else { return "none"; }
+}
