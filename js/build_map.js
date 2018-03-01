@@ -14,6 +14,11 @@ var buildPath = d3.geoPath()
 var scaleCircles = d3.scaleSqrt()
   .range([0, 20])
 
+// Setup tooltips
+var tooltipDiv = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
 // Create SVG
 var svg = d3.select("body")
     .append("svg")

@@ -64,6 +64,8 @@ function addCentroids(map, countyCentroids) {
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
     })
+    .on("mouseover", function(d) { seeTooltip(this, d); })
+    .on("mouseout", function(d) { hideTooltip(this, d); })
     .style("fill", 'purple')
     .style("stroke", 'none');
 }
@@ -256,4 +258,30 @@ function updateCircles(activeCategory) {
         return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
       })
       .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
+}
+
+function seeTooltip(currentCircle, d) {
+  d3.select(currentCircle)
+    .style("opacity", 0.7);
+  d3.select(".tooltip")
+    .transition()
+    .duration(50)
+    .style("display", "block")
+		.style("position", "absolute")
+    .style("opacity", 0.9)
+    .style("left", (d3.event.pageX + 35) + "px")
+    .style("top", (d3.event.pageY - 50) + "px");
+  d3.select(".tooltip")
+    .html(d.properties.COUNTY + "<br/>" + 
+            "Population" + d.properties.countypop + "<br/>" +
+            activeCategory + d.properties[[activeCategory]] + "million gallons/day");
+}
+
+function hideTooltip(currentCircle, d) {
+  d3.select(currentCircle)
+    .style("opacity", 1);
+  d3.select(".tooltip")
+    .transition()
+    .duration(100)
+    .style("opacity", 0);
 }
