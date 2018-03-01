@@ -360,10 +360,10 @@ publish:
     publisher: social
     depends: social-links
     context:
-      embedLink: national-water-use.html
+      embedLink: embed-water-use-15.html
   -
     id: national-water-use
-    name: national-water-use
+    name: embed-water-use-15
     publisher: page
     template: embed
     mimetype: text/html
