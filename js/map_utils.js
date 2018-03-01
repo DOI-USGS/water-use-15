@@ -67,7 +67,7 @@ function addCentroids(map, countyCentroids) {
     .on("mouseover", function(d) { seeTooltip(this, d); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
     .style("fill", 'purple')
-    .style("stroke", 'none');
+    .style("stroke", 'black');
 }
 
 // Create the state polygons
@@ -262,6 +262,7 @@ function updateCircles(activeCategory) {
 
 function seeTooltip(currentCircle, d) {
   d3.select(currentCircle)
+    .moveToFront()
     .style("opacity", 0.7);
   d3.select(".tooltip")
     .transition()
@@ -279,9 +280,26 @@ function seeTooltip(currentCircle, d) {
 
 function hideTooltip(currentCircle, d) {
   d3.select(currentCircle)
+    .moveToBack()
     .style("opacity", 1);
   d3.select(".tooltip")
     .transition()
     .duration(100)
     .style("opacity", 0);
 }
+
+d3.selection.prototype.moveToFront = function() {  
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
+    
+d3.selection.prototype.moveToBack = function() {  
+    return this.each(function() { 
+      console.log(this.parentNode);
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    });
+};
