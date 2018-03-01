@@ -67,7 +67,7 @@ function addCentroids(map, countyCentroids) {
     .on("mouseover", function(d) { seeTooltip(this, d); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
     .style("fill", 'purple')
-    .style("stroke", 'black');
+    .style("opacity", 0.8); // adding this line made it super slow
 }
 
 // Create the state polygons
@@ -261,9 +261,20 @@ function updateCircles(activeCategory) {
 }
 
 function seeTooltip(currentCircle, d) {
-  d3.select(currentCircle)
-    .moveToFront()
-    .style("opacity", 0.7);
+  var orig = d3.select(currentCircle),
+      origNode = orig.node();
+  var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
+                                                            origNode.nextSibling));
+  
+  // style circles
+  orig
+    .style("opacity", 0); // makes original circle invisible in the background
+  duplicate
+    .classed('county-point-duplicate', true)
+    .style("pointer-events", "none")
+    .style("opacity", 1); // makes the duplicate circle on the top
+  
+  // change tooltip
   d3.select(".tooltip")
     .transition()
     .duration(50)
@@ -274,14 +285,15 @@ function seeTooltip(currentCircle, d) {
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
     .html(d.properties.COUNTY + "<br/>" + 
-            "Population" + d.properties.countypop + "<br/>" +
-            activeCategory + d.properties[[activeCategory]] + "million gallons/day");
+            "Population: " + d.properties.countypop + "<br/>" +
+            activeCategory + ": " + d.properties[[activeCategory]] + " " + "MGD");
 }
 
 function hideTooltip(currentCircle, d) {
   d3.select(currentCircle)
-    .moveToBack()
-    .style("opacity", 1);
+    .style("opacity", 0.8);
+  d3.select('.county-point-duplicate')
+    .remove(); // delete duplicate
   d3.select(".tooltip")
     .transition()
     .duration(100)
