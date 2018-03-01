@@ -64,7 +64,7 @@ function addCentroids(map, countyCentroids) {
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
     })
-    .on("mouseover", function(d) { seeTooltip(this, d); })
+    .on("mouseover", function(d) { showToolTip(this, d); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
     .style("fill", 'purple')
     .style("opacity", 0.8); // adding this line made it super slow
@@ -260,7 +260,7 @@ function updateCircles(activeCategory) {
       .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
 }
 
-function seeTooltip(currentCircle, d) {
+function showToolTip(currentCircle, d) {
   var orig = d3.select(currentCircle),
       origNode = orig.node();
   var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
