@@ -6,7 +6,7 @@ var chart_height    =   700;
 var tempCategories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
 
 // Projection
-var projection = albersUsaPr()
+var projection = albersUsaTerritories()
     .scale([1200])
     // default is .rotate([96,0]) to center on US (we want this)
     .translate([chart_width / 2, chart_height / 2]);
