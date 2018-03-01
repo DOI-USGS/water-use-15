@@ -6,10 +6,11 @@ var chart_height    =   700;
 var tempCategories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
 
 // Projection
-var projection = albersUsaPr()
-    .scale([1200])
-    // default is .rotate([96,0]) to center on US (we want this)
+// Projection
+var projection = albersUsaTerritories().scale([1200])
     .translate([chart_width / 2, chart_height / 2]);
+    // default is .rotate([96,0]) to center on US (we want this)
+    
 var buildPath = d3.geoPath()
     .projection(projection);
     
