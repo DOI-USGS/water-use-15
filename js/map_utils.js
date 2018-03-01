@@ -276,11 +276,10 @@ function seeTooltip(currentCircle, d) {
   
   // change tooltip
   d3.select(".tooltip")
+    .classed("shown", true)
+    .classed("hidden", false)
     .transition()
     .duration(50)
-    .style("display", "block")
-		.style("position", "absolute")
-    .style("opacity", 0.9)
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
@@ -296,9 +295,10 @@ function hideTooltip(currentCircle, d) {
   d3.select('.county-point-duplicate')
     .remove(); // delete duplicate
   d3.select(".tooltip")
+    .classed("shown", false)
+    .classed("hidden", true)
     .transition()
-    .duration(100)
-    .style("opacity", 0);
+    .duration(100);
 }
 
 d3.selection.prototype.moveToFront = function() {  
