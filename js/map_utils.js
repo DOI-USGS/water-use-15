@@ -64,7 +64,9 @@ function addCentroids(map, countyCentroids) {
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
     })
-    .on("mouseover", function(d) { showToolTip(this, d); })
+    // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
+    // because people won't be able to see tooltips at the same time anyways
+    .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
     .style("fill", categoryToColor(activeCategory));
 }
@@ -164,7 +166,7 @@ function updateView(newView) {
   activeView = newView;
   
   // update page info
-  updateTitle();
+  updateTitle(activeCategory); // also OK not to worry about compatibility with hover
   setHash('view', activeView);
 
   // determine the center point and scaling for the new view
@@ -234,35 +236,35 @@ function updateCategory(category) {
   updateCircles(category);
   
   // update page info
-  updateTitle();
+  updateTitle(category);
   setHash('category', category);
 }
 
-function updateTitle() {
+function updateTitle(category) {
   d3.select("#maptitle")
-    .text("Water Use Data for " + activeView + ", 2015, " + activeCategory);
+    .text("Water Use Data for " + activeView + ", 2015, " + category);
 }
 
-function updateCircles(activeCategory) {
+function updateCircles(category) {
   
   var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
   
   scaleCircles
     .domain([
-        d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
-        d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+        d3.min(geojson.features, function(d) { return d.properties[[category]]; }),
+        d3.max(geojson.features, function(d) { return d.properties[[category]]; })
     ]);
   
   d3.selectAll(".county-point")
       .sort(function(a,b) { 
-        return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
+        return d3.descending(a.properties[[category]], b.properties[[category]]);
       })
       .transition().duration(600)
-      .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); })
-      .style("fill", categoryToColor(activeCategory));
+      .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
+      .style("fill", categoryToColor(category));
 }
 
-function showToolTip(currentCircle, d) {
+function showToolTip(currentCircle, d, category) {
   var orig = d3.select(currentCircle),
       origNode = orig.node();
   var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
@@ -283,8 +285,8 @@ function showToolTip(currentCircle, d) {
   d3.select(".tooltip")
     .html(d.properties.COUNTY + "<br/>" + 
             "Population: " + d.properties.countypop + "<br/>" +
-            categoryToName(activeCategory) + ": " + 
-              d.properties[[activeCategory]] + " " + "MGD");
+            categoryToName(category) + ": " + 
+              d.properties[[category]] + " " + "MGD");
 }
 
 function hideTooltip(currentCircle, d) {
