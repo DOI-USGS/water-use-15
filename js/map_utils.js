@@ -176,15 +176,17 @@ function updateView(newView) {
     k = 1;
   } else {
     var stateGeom, centroid, x0, y0, x1, y1, stateDims;
+    
     // find the state data we want to zoom to
     stateGeom = stateData.features.filter(function(d) {
       return d.properties.ID === activeView;
     })[0];
-    console.log(stateGeom);
+    
     // find the center point to zoom to
     centroid = buildPath.centroid(stateGeom);
     x = centroid[0];
     y = centroid[1];
+    
     // find the maximum zoom (up to nation bounding box size) that keeps the
     // whole state in view
     [[x0,y0],[x1,y1]] = buildPath.bounds(stateGeom);

@@ -296,7 +296,6 @@ publish:
       map: "build_map"
       state_boundaries_geojson: "state_boundaries_geojson"
       states_dictionary: "states_dictionary"
-      counties_dictionary: "counties_dictionary"
       county_boundaries: "county_boundaries_topojson3"
       county_centroids: "county_centroids_topojson"
       wu_data_15_json: "wu_data_15_json"

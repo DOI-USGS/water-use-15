@@ -49,7 +49,6 @@ var countyData = new Map();
 d3.queue()
   .defer(d3.json, "data/state_boundaries.geojson")
   .defer(d3.json, "data/states.json")
-  .defer(d3.json, "data/counties.json") // could load this later
   .defer(d3.json, "data/county_centroids.json")
   .await(create_map);
 
@@ -82,8 +81,7 @@ function create_map() {
 	// so in this case, all of the results from q.await
 	stateData = arguments[1];
 	stateDict = arguments[2];
-	countyDict = arguments[3];
-	countyCentroids = arguments[4];
+	countyCentroids = arguments[3];
 	
   addStates(map, stateData, stateDict);
   addCentroids(map, countyCentroids);
