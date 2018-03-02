@@ -229,14 +229,13 @@ function updateView(newView) {
 }
 
 function updateCategory(category) {
-  activeCategory = category;
   
   // update circles
-  updateCircles(activeCategory);
+  updateCircles(category);
   
   // update page info
   updateTitle();
-  setHash('category', activeCategory);
+  setHash('category', category);
 }
 
 function updateTitle() {
