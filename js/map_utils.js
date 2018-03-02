@@ -46,6 +46,7 @@ function addCentroids(map, countyCentroids) {
     .enter()
     .append('circle')
     .classed('county-point', true)
+    .classed(activeCategory, true)
     ///////////////////
     // Alaska still gives errors
     .filter(function(d) { return d.properties.STATE !== "AK"; })
@@ -66,7 +67,6 @@ function addCentroids(map, countyCentroids) {
     })
     .on("mouseover", function(d) { showToolTip(this, d); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
-    .style("fill", 'purple')
     .style("opacity", 0.8); // adding this line made it super slow
 }
 
@@ -257,7 +257,8 @@ function updateCircles(activeCategory) {
       .sort(function(a,b) { 
         return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
       })
-      .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
+      .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); })
+      .classed(activeCategory, true);
 }
 
 function showToolTip(currentCircle, d) {
