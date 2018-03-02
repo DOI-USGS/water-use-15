@@ -61,26 +61,6 @@ body {
   button.industrial{
     background:rgb(138,113,106);
   }
-  
-  circle.total{
-    fill:rgb(46, 134, 171);
-  }
-  
-  circle.thermoelectric{
-    fill:rgb(252,186,4);
-  }
-  
-  circle.publicsupply{
-    fill:rgb(186,50,40);
-  }
-  
-  circle.irrigation{
-    fill:rgb(155,197,61);
-  }
-  
-  circle.industrial{
-    fill:rgb(138,113,106);
-  }
 
 @media screen and (min-width:580px){
   #button-container button{

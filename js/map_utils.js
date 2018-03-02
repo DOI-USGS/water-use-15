@@ -46,7 +46,6 @@ function addCentroids(map, countyCentroids) {
     .enter()
     .append('circle')
     .classed('county-point', true)
-    .classed(activeCategory, true)
     ///////////////////
     // Alaska still gives errors
     .filter(function(d) { return d.properties.STATE !== "AK"; })
@@ -67,7 +66,7 @@ function addCentroids(map, countyCentroids) {
     })
     .on("mouseover", function(d) { showToolTip(this, d); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
-    .style("opacity", 0.8); // adding this line made it super slow
+    .style("fill", categoryToColor(activeCategory));
 }
 
 // Create the state polygons
@@ -246,19 +245,22 @@ function updateTitle() {
 }
 
 function updateCircles(activeCategory) {
+  
+  var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
+  
   scaleCircles
     .domain([
-              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
-              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+        d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
+        d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
     ]);
   
-  d3.selectAll("county-point")
-      .transition().duration(1500)
+  d3.selectAll(".county-point")
       .sort(function(a,b) { 
         return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
       })
+      .transition().duration(600)
       .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); })
-      .classed(activeCategory, true);
+      .style("fill", categoryToColor(activeCategory));
 }
 
 function showToolTip(currentCircle, d) {
@@ -267,9 +269,7 @@ function showToolTip(currentCircle, d) {
   var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
                                                             origNode.nextSibling));
   
-  // style circles
-  orig
-    .style("opacity", 0); // makes original circle invisible in the background
+  // style duplicated circles sitting on top
   duplicate
     .classed('county-point-duplicate', true)
     .style("pointer-events", "none")
@@ -279,8 +279,6 @@ function showToolTip(currentCircle, d) {
   d3.select(".tooltip")
     .classed("shown", true)
     .classed("hidden", false)
-    .transition()
-    .duration(50)
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
@@ -291,15 +289,11 @@ function showToolTip(currentCircle, d) {
 }
 
 function hideTooltip(currentCircle, d) {
-  d3.select(currentCircle)
-    .style("opacity", 0.8);
   d3.select('.county-point-duplicate')
     .remove(); // delete duplicate
   d3.select(".tooltip")
     .classed("shown", false)
-    .classed("hidden", true)
-    .transition()
-    .duration(100);
+    .classed("hidden", true);
 }
 
 d3.selection.prototype.moveToFront = function() {  
@@ -314,5 +308,14 @@ function categoryToName(category) {
   else if (category == "publicsupply") { return "Public Supply"; }
   else if (category == "irrigation") { return "Irrigation"; }
   else if (category == "industrial") { return "Industrial"; }
+  else { return "none"; }
+}
+
+function categoryToColor(category) {
+  if (category == "total") { return "rgba(46, 134, 171, 0.8)"; }
+  else if (category == "thermoelectric") { return "rgba(252,186,4, 0.8)"; }
+  else if (category == "publicsupply") { return "rgba(186,50,40, 0.8)"; }
+  else if (category == "irrigation") { return "rgba(155,197,61, 0.8)"; }
+  else if (category == "industrial") { return "rgba(138,113,106, 0.8)"; }
   else { return "none"; }
 }
