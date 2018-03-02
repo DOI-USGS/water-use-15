@@ -3,6 +3,14 @@
   margin:0;
 }
 
+/*IE SVG Width Fix*/
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){
+    #content-container svg{
+      width:100%;
+      height:608px;
+    }
+}
+
 body {
   font-family: sans-serif;
 }
@@ -13,46 +21,10 @@ body {
   padding:0 10px;
 }
 
-.category-select{
-  padding: 0 2%;
-  width:100%;
-  height:40px;
-  background:rgb(240,240,240);
-  border:1px solid rgb(190,190,190);
-  outline: none;
-  font-size:1em;
-  border-radius: 3px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  font-size: 1.1em;
-}
-
-.select-arrowbox{
-  position:absolute;
-  right: 10px;
-  width:40px;
-  height:40px;
-  background:rgb(150,150,150);
-  pointer-events:none;
-  border-radius:0 3px 3px 0;
-}
-
 #button-container button{
-  display:none;
-}
-
-@media screen and (min-width:580px){
-  
-  .category-select,
-  .select-arrowbox{
-    display:none;
-  }
-  
-  #button-container button{
-    display:inline-block;
     width:19%;
     padding: 10px 0;
-    font-size:.9em;
+    font-size:.5em;
     border:1px solid rgb(100,100,100);
     outline:none;
     cursor:pointer;
@@ -89,8 +61,12 @@ body {
   .industrial{
     background:rgb(138,113,106);
   }
+  
+@media screen and (min-width:580px){
+  #button-container button{
+    font-size:.9em;
+  }
 }
-
 
 @media screen and (min-width: 1024px){
   #content-container{
