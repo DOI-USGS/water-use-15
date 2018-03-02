@@ -2,8 +2,12 @@ target_default: preprocess
 
 packages:
   - vizlab
+  - rgdal
 
 sources:
+  - scripts/preprocess/fetch_url.R
+  - scripts/preprocess/read_shp_zip.R
+  - scripts/preprocess/process_simple_topojson.R
   - scripts/preprocess/fetch_s3_object.R
   - scripts/preprocess/clean_county_boundaries.R
   - scripts/preprocess/save_state_fips.R
@@ -14,11 +18,34 @@ targets:
   
   # --- fetch --- #
   
+  # See https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html for details on this file.
+  # this file includes counties for places we don't need:
+  #   Northern Mariana Island (STATEFP=='69'), Guam (STATEFP=='66'), and American Samoa (STATEFP=='60')
+  # and also the places we do want:
+  #   Virgin Islands, Puerto Rico, and all 50 states
+  # Note that because we're fetching here rather than vizlab, and with a simple function,
+  #   there will be no automatic updates if the contents of the Census Bureau's file change.
+  #   If they do (unlikely), you should delete your local copy of the file and build again.
+  cache/pre_county_boundaries_census.zip:
+    command: fetch_url(target_name, I('http://www2.census.gov/geo/tiger/GENZ2015/shp/cb_2015_us_county_500k.zip'))
+  # ^ very similar command is still in viz.yaml. we can take it out of there once we're computing
+  # county and state dictionaries in this preprocessing phase, but for now we need the same file both places.
+  
+  # --- fetch - old --- #
+  
   # takes about 12 minutes
   cache/IPUMS_NHGIS_counties.zip:
     command: fetch_s3_object(target_name, I("IPUMS_NHGIS_counties.zip"), I("viz-water-use-15"))
   
   # --- process --- #
+  
+  county_boundaries_census_sp:
+    command: read_shp_zip('cache/pre_county_boundaries_census.zip')
+  
+  cache/pre_county_boundaries_USA.json:
+    command: process_simple_topojson(target_name, county_boundaries_census_sp, 'scripts/preprocess/process_simple_topojson.sh')
+  
+  # --- process - old --- #    
   
   # takes about 45 minutes & about 5.5 GB of disk space for all FIPS
   cache/county_boundaries_geojson.zip:
@@ -36,6 +63,13 @@ targets:
     
   # --- publish --- #
   
+  s3_county_boundaries_json:
+    command: push_s3_object(I("county_boundaries_USA.json"), 
+                            "cache/pre_county_boundaries_USA.json", 
+                            I("viz-water-use-15"))
+  
+  # --- publish - old --- #
+  
   # takes about 12 minutes
   s3boundariesfile:
     command: push_s3_object(I("county_boundaries_topojson.zip"), 
@@ -45,5 +79,11 @@ targets:
   # --- final --- #
   
   preprocess:
+    depends:
+      - s3_county_boundaries_json
+  
+  # --- final - old --- #
+  
+  oldpreprocess:
     depends:
       - s3boundariesfile

@@ -100,22 +100,6 @@ var buttonContainer = d3.select('#content-container')
   .attr('id', 'button-container');
   
 buttonContainer.append('div').classed('select-arrowbox', true);
-
-var categorySelect = d3.select('#button-container')
-  .append('select')
-  .classed('category-select', true);
-  
-var categorySelectOptions = d3.select('.category-select')
-  .selectAll('option')
-  .data(tempCategories)
-  .enter()
-  .append('option')
-  .attr('value', function(d){
-    return d;
-  })
-  .text(function(d){
-    return d;
-  });
   
 var categoryButtons = d3.select('#button-container')
   .selectAll('button')
