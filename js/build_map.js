@@ -8,8 +8,9 @@ var tempCategories = ["total", "thermoelectric", "publicsupply", "irrigation", "
 // Projection
 var projection = albersUsaTerritories()
     .scale([1200])
-    // default is .rotate([96,0]) to center on US (we want this)
     .translate([chart_width / 2, chart_height / 2]);
+    // default is .rotate([96,0]) to center on US (we want this)
+    
 var buildPath = d3.geoPath()
     .projection(projection);
     

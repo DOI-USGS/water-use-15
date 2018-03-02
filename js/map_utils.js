@@ -30,13 +30,9 @@ var stateStyle = {
     }
   }
 };
-
+  
 function addCentroids(map, countyCentroids) {
-  
-  var tempProjection = albersUsaTerritories()
-    .scale([1200])
-    .translate([chart_width / 2, chart_height / 2]);
-  
+    
   var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
   
   scaleCircles
@@ -51,10 +47,8 @@ function addCentroids(map, countyCentroids) {
     .append('circle')
     .classed('county-point', true)
     ///////////////////
-    // Alaska, Puerto Rico, and Virgin Islands don't exist in topo yet
+    // Alaska still gives errors
     .filter(function(d) { return d.properties.STATE !== "AK"; })
-    .filter(function(d) { return d.properties.STATE !== "PR"; })
-    .filter(function(d) { return d.properties.STATE !== "VI"; })
     ///////////////////
     .sort(function(a,b) { 
       return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
@@ -62,10 +56,10 @@ function addCentroids(map, countyCentroids) {
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
     .attr("cx", function(d) { 
-      return tempProjection(d.geometry.coordinates)[0]; 
+      return projection(d.geometry.coordinates)[0]; 
     })
     .attr("cy", function(d) { 
-      return tempProjection(d.geometry.coordinates)[1]; 
+      return projection(d.geometry.coordinates)[1]; 
     })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
