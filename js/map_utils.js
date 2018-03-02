@@ -47,10 +47,8 @@ function addCentroids(map, countyCentroids) {
     .append('circle')
     .classed('county-point', true)
     ///////////////////
-    // Alaska, Puerto Rico, and Virgin Islands don't exist in topo yet
+    // Alaska still gives errors
     .filter(function(d) { return d.properties.STATE !== "AK"; })
-    .filter(function(d) { return d.properties.STATE !== "PR"; })
-    .filter(function(d) { return d.properties.STATE !== "VI"; })
     ///////////////////
     .sort(function(a,b) { 
       return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
