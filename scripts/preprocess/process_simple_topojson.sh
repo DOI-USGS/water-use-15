@@ -1,8 +1,5 @@
 #!/bin/bash  
 
-# add bash-relevant commands to the PATH (on some computers they aren't available until this fix)
-PATH=$R_SHELL_PATH_PREFIX:$PATH
-
 # read in the arguments describing how the files should be named
 geo=$1
 raw=$2

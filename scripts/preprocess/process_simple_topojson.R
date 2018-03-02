@@ -1,21 +1,17 @@
-process.simplify_topojson <- function(viz) {
+process_simple_topojson <- function(outfile, sp_object, script_file) {
   
-  deps <- readDepends(viz)
-  sp_object <- deps[["sp_object"]]
-  
-  # define some variable names
+  # define some file names
   tmp <- tempdir()
   geo_raw <- file.path(tmp, 'county_boundaries_raw.geojson')
   topo_raw <- file.path(tmp, 'county_boundaries_raw.json')
   topo_simple <- file.path(tmp, 'county_boundaries_simple.json')
-  topo_quantized <- viz[['location']]
+  topo_quantized <- outfile
   
   # write to file
   # geojsonio::topojson_write(sp_object, file=topo_raw)
   writeOGR(sp_object, geo_raw, layer = "geojson", driver = "GeoJSON", check_exists=FALSE)
   
-  # locate adn set execute permissions on the script file
-  script_file <- viz$process_args$script_file
+  # locate and set execute permissions on the script file
   Sys.chmod(script_file, '754')
   
   # execute the shell script
