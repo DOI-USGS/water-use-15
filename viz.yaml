@@ -354,12 +354,16 @@ publish:
     id: footer_section
     template: footer-template
     publisher: footer
-    depends: "lib-footer-css"
+    depends: lib-footer-css
+    github-url: https://github.com/USGS-VIZLAB/water-use-15
     blogsInFooter: FALSE
     vizzies:
       - name: Visualizing water use by region and time
         org: USGS-VIZLAB
         repo: water-use
+      - name: Visualizing Hurricane Maria
+        org: USGS-VIZLAB
+        repo: hurricane-maria
   -
     id: social-section
     template: vertical-social-media-template
