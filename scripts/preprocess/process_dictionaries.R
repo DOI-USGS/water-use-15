@@ -32,9 +32,9 @@ process_county_dictionary <- function(outfile, county_boundaries_census_sp) {
       COUNTY_LONG=COUNTY_NAME) %>%
     bind_rows( # add counties added very recently; see https://www.cdc.gov/nchs/nvss/bridged_race/county_geography-_changes2015.pdf
       tribble(
-        ~GEOID, ~STATE_FIPS, ~COUNTY_FIPS,           ~COUNTY_LONG,
-        '46102',        '46',        '102', 'Oglala Lakota County',
-        '02158',        '02',        '158', 'Kusilvak Census Area'
+        ~GEOID, ~STATE_FIPS, ~STATE_ABBV, ~COUNTY_FIPS,           ~COUNTY_LONG,
+        '46102',        '46',        'SD',        '102', 'Oglala Lakota County',
+        '02158',        '02',        'AK',        '158', 'Kusilvak Census Area'
       )
     )
   
