@@ -9,9 +9,9 @@ packages:
 sources:
   - scripts/preprocess/fetch_url.R
   - scripts/preprocess/read_shp_zip.R
-  - scripts/preprocess/process_simple_topojson.R
-  - scripts/preprocess/process_counties_to_states.R
   - scripts/preprocess/process_dictionaries.R
+  - scripts/preprocess/process_counties.R
+  - scripts/preprocess/process_counties_to_states.R
   - scripts/preprocess/fetch_s3_object.R
   - scripts/preprocess/clean_county_boundaries.R
   - scripts/preprocess/save_state_fips.R
@@ -53,12 +53,14 @@ targets:
     command: process_state_dictionary(target_name, county_boundaries_census_sp)
   
   cache/pre_county_boundaries_USA.json:
-    command: process_simple_topojson(target_name, county_boundaries_census_sp, 'scripts/preprocess/process_simple_topojson.sh')
+    command: process_counties(
+      outfile=target_name, county_sp=county_boundaries_census_sp,
+      county_dict_file='cache/pre_county_dictionary.json', script_file='scripts/preprocess/process_counties.sh')
     
   cache/pre_state_boundaries_USA.json:
     command: process_counties_to_states(
       outfile=target_name, county_topojson='cache/pre_county_boundaries_USA.json',
-      script_file = 'scripts/preprocess/process_counties_to_states.js') 
+      state_dict_file='cache/pre_state_dictionary.json', script_file = 'scripts/preprocess/process_counties_to_states.js') 
   
   # --- process - old --- #    
   
@@ -104,6 +106,8 @@ targets:
     depends:
       - s3_county_boundaries_json
       - s3_state_boundaries_json
+      - s3_county_dictionary_json
+      - s3_state_dictionary_json
   
   # --- final - old --- #
   
