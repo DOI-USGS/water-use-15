@@ -90,7 +90,7 @@ fetch:
       spatial_metadata: spatial_metadata
     comment: sets up the basic view window and projection
   - 
-    id: county_boundaries_topojson3
+    id: county_boundaries_topojson
     location: cache/county_boundaries_USA.json
     fetch_args:
       object_name: "county_boundaries_USA.json"
@@ -110,25 +110,13 @@ fetch:
     fetcher: s3_object
     scripts: [scripts/fetch/s3_object.R]
   -
-    id: county_boundaries_census
-    location: cache/county_boundaries_census.zip
-    reader: shp
-    fetcher: url
-    remoteURL: 'http://www2.census.gov/geo/tiger/GENZ2015/shp/cb_2015_us_county_500k.zip'
-    scripts: []
-    # see https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html for details.
-    # this file includes counties for places we don't need:
-    #   Northern Mariana Island (STATEFP=='69'), Guam (STATEFP=='66'), and American Samoa (STATEFP=='60')
-    # and also the places we do want:
-    #   Virgin Islands, Puerto Rico, and all 50 states
-  -
-    id: county_boundaries_topojson
-    location: cache/county_boundaries_topojson.zip
+    id: county_centroids_topojson
+    location: cache/county_centroids_USA.json
     fetch_args:
-      object_name: "county_boundaries_topojson.zip"
+      object_name: "county_centroids_USA.json"
       bucket_name: "viz-water-use-15"
-    reader: zip
-    mimetype: filepath
+    reader: json
+    mimetype: application/json
     fetcher: s3_object
     scripts: [scripts/fetch/s3_object.R]
   -
@@ -142,23 +130,6 @@ fetch:
     scripts: [scripts/fetch/s3_object.R]
 
 process:
-  -
-    id: county_centroids
-    location: cache/county_centroids.rds
-    reader: rds
-    depends:
-      sp_data: county_boundaries_census
-    processor: compute_centroids
-    scripts: scripts/process/compute_centroids.R
-  -
-    id: county_centroids_topojson
-    location: cache/county_centroids.json
-    reader: json
-    depends:
-      sp_object: centroid_sizes
-    processor: sp_to_topojson
-    scripts: scripts/process/sp_to_topojson.R
-    mimetype: application/json
   -
     id: wu_data_15_simple
     location: cache/wu_data_15_simple.rds
@@ -176,68 +147,8 @@ process:
       wu_data_15_simple: wu_data_15_simple
     processor: json_wu_data
     scripts: [scripts/process/json_wu_data.R]
-  -
-    id: centroid_sizes
-    location: cache/centroid_sizes.rds
-    reader: rds
-    depends:
-      sp_data: county_centroids
-      wu_data: wu_data_15_simple
-      wu_type_names: wu_type_column_names
-    processor: scale_values
-    scripts: [scripts/process/scale_values.R]
 
 visualize:
-  -
-    id: circle_map_total
-    location: cache/circle_map_total.png
-    depends:
-      sp_circles: centroid_sizes
-    visualize_args:
-      wu_type: "total"
-      crs: "+init=epsg:2163"
-    visualizer: make_pie_map
-    scripts: [scripts/visualize/make_circle_map.R]
-  -
-    id: circle_map_thermoelectric
-    location: cache/circle_map_thermoelectric.png
-    depends:
-      sp_circles: centroid_sizes
-    visualize_args:
-      wu_type: "thermoelectric"
-      crs: "+init=epsg:2163"
-    visualizer: make_circle_map
-    scripts: [scripts/visualize/make_circle_map.R]
-  -
-    id: circle_map_publicsupply
-    location: cache/circle_map_publicsupply.png
-    depends:
-      sp_circles: centroid_sizes
-    visualize_args:
-      wu_type: "publicsupply"
-      crs: "+init=epsg:2163"
-    visualizer: make_circle_map
-    scripts: [scripts/visualize/make_circle_map.R]
-  -
-    id: circle_map_irrigation
-    location: cache/circle_map_irrigation.png
-    depends:
-      sp_circles: centroid_sizes
-    visualize_args:
-      wu_type: "irrigation"
-      crs: "+init=epsg:2163"
-    visualizer: make_circle_map
-    scripts: [scripts/visualize/make_circle_map.R]
-  -
-    id: circle_map_industrial
-    location: cache/circle_map_industrial.png
-    depends:
-      sp_circles: centroid_sizes
-    visualize_args:
-      wu_type: "industrial"
-      crs: "+init=epsg:2163"
-    visualizer: make_circle_map
-    scripts: [scripts/visualize/make_circle_map.R]
 
 publish:
   -
@@ -262,7 +173,7 @@ publish:
       map_counties: "map_counties"
       map: "build_map"
       state_boundaries: "state_boundaries_topojson"
-      county_boundaries: "county_boundaries_topojson3"
+      county_boundaries: "county_boundaries_topojson"
       county_centroids: "county_centroids_topojson"
       wu_data_15_json: "wu_data_15_json"
     context:
@@ -343,7 +254,7 @@ publish:
       map_counties: map_counties
       map: build_map
       state_boundaries: state_boundaries_topojson
-      county_boundaries: county_boundaries_topojson3
+      county_boundaries: county_boundaries_topojson
       county_centroids: county_centroids_topojson
       wu_data_15_json: wu_data_15_json
     context:
