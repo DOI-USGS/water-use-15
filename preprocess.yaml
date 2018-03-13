@@ -3,12 +3,15 @@ target_default: preprocess
 packages:
   - vizlab
   - rgdal
+  - dplyr
+  - tibble
 
 sources:
   - scripts/preprocess/fetch_url.R
   - scripts/preprocess/read_shp_zip.R
   - scripts/preprocess/process_simple_topojson.R
   - scripts/preprocess/process_counties_to_states.R
+  - scripts/preprocess/process_dictionaries.R
   - scripts/preprocess/fetch_s3_object.R
   - scripts/preprocess/clean_county_boundaries.R
   - scripts/preprocess/save_state_fips.R
@@ -42,6 +45,12 @@ targets:
   
   county_boundaries_census_sp:
     command: read_shp_zip('cache/pre_county_boundaries_census.zip')
+    
+  cache/pre_county_dictionary.json:
+    command: process_county_dictionary(target_name, county_boundaries_census_sp)
+    
+  cache/pre_state_dictionary.json:
+    command: process_state_dictionary(target_name, county_boundaries_census_sp)
   
   cache/pre_county_boundaries_USA.json:
     command: process_simple_topojson(target_name, county_boundaries_census_sp, 'scripts/preprocess/process_simple_topojson.sh')
@@ -70,14 +79,16 @@ targets:
   # --- publish --- #
   
   s3_county_boundaries_json:
-    command: push_s3_object(I("county_boundaries_USA.json"), 
-                            "cache/pre_county_boundaries_USA.json", 
-                            I("viz-water-use-15"))
+    command: push_s3_object(I("county_boundaries_USA.json"), "cache/pre_county_boundaries_USA.json", I("viz-water-use-15"))
                             
   s3_state_boundaries_json:
-    command: push_s3_object(I("state_boundaries_USA.json"), 
-                            "cache/pre_state_boundaries_USA.json", 
-                            I("viz-water-use-15"))
+    command: push_s3_object(I("state_boundaries_USA.json"), "cache/pre_state_boundaries_USA.json", I("viz-water-use-15"))
+  
+  s3_county_dictionary_json:
+    command: push_s3_object(I("county_dictionary.json"), "cache/pre_county_dictionary.json", I("viz-water-use-15"))
+  
+  s3_state_dictionary_json:
+    command: push_s3_object(I("state_dictionary.json"), "cache/pre_state_dictionary.json", I("viz-water-use-15"))
   
   # --- publish - old --- #
   
