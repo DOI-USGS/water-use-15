@@ -26,6 +26,9 @@ info:
     dataRetrieval:
       repo: CRAN
       version: 2.7.4
+    dplyr:
+      repo: CRAN
+      version: 0.7.0
     geojsonio:
       repo: CRAN
       version: 0.5.0

@@ -35,8 +35,8 @@ function addCentroids(map, countyCentroids) {
     
   scaleCircles
     .domain([
-              d3.min(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; }),
-              d3.max(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; })
+      d3.min(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; }),
+      d3.max(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; })
     ]);
   
   map.selectAll('county-point')
@@ -44,10 +44,6 @@ function addCentroids(map, countyCentroids) {
     .enter()
     .append('circle')
     .classed('county-point', true)
-    ///////////////////
-    // Alaska COUNTYFIPS '016' coordinates currently in Canada
-    //.filter(function(d) { return d.properties.COUNTYFIPS !== "016"; })
-    ///////////////////
     .sort(function(a,b) { 
       return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
     })
