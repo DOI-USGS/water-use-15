@@ -48,7 +48,7 @@ function addCentroids(map, countyCentroids) {
     .classed('county-point', true)
     ///////////////////
     // Alaska still gives errors
-    .filter(function(d) { return d.properties.STATE !== "AK"; })
+    .filter(function(d) { return d.properties.STATE_ABBV !== "AK"; })
     ///////////////////
     .sort(function(a,b) { 
       return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
@@ -56,10 +56,23 @@ function addCentroids(map, countyCentroids) {
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
     .attr("cx", function(d) { 
-      return projection(d.geometry.coordinates)[0]; 
+      var proj = projection(d.geometry.coordinates);
+      if(!proj) {
+        console.log('bad projection:')
+        console.log(d);
+        console.log(projection(d.geometry.coordinates));
+        return 0;
+      } else {
+        return projection(d.geometry.coordinates)[0]; 
+      }
     })
     .attr("cy", function(d) { 
-      return projection(d.geometry.coordinates)[1]; 
+      var proj = projection(d.geometry.coordinates);
+      if(!proj) {
+        return 0;
+      } else {
+        return projection(d.geometry.coordinates)[1]; 
+      }
     })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
