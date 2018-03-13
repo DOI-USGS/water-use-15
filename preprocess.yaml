@@ -8,7 +8,7 @@ packages:
 
 sources:
   - scripts/preprocess/fetch_url.R
-  - scripts/preprocess/read_shp_zip.R
+  - scripts/preprocess/process_zip_to_shp.R
   - scripts/preprocess/process_dictionaries.R
   - scripts/preprocess/process_counties.R
   - scripts/preprocess/process_counties_to_states.R
