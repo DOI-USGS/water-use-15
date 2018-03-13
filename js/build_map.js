@@ -48,7 +48,7 @@ var countyData = new Map();
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
-  .defer(d3.json, "data/county_centroids.json")
+  .defer(d3.json, "data/county_centroids_wu.json")
   .await(create_map);
 
 // Zoom status: default is nation-wide

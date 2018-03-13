@@ -140,13 +140,14 @@ process:
     processor: simplify_wu_data
     scripts: [scripts/process/simplify_wu_data.R]
   -
-    id: wu_data_15_json
-    location: cache/wu_data_15.json
+    id: county_centroids_wu_topojson
+    location: cache/county_centroids_wu.json
     mimetype: application/json
     depends:
+      centroids_topo: county_centroids_topojson
       wu_data_15_simple: wu_data_15_simple
-    processor: json_wu_data
-    scripts: [scripts/process/json_wu_data.R]
+    processor: merge_centroids_wu
+    scripts: [scripts/process/merge_centroids_wu.R]
 
 visualize:
 
@@ -174,8 +175,7 @@ publish:
       map: "build_map"
       state_boundaries: "state_boundaries_topojson"
       county_boundaries: "county_boundaries_topojson"
-      county_centroids: "county_centroids_topojson"
-      wu_data_15_json: "wu_data_15_json"
+      county_centroids_wu: "county_centroids_wu_topojson"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "footer_css", "socialCSS",
                   "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties"]
@@ -255,8 +255,7 @@ publish:
       map: build_map
       state_boundaries: state_boundaries_topojson
       county_boundaries: county_boundaries_topojson
-      county_centroids: county_centroids_topojson
-      wu_data_15_json: wu_data_15_json
+      county_centroids_wu: county_centroids_wu_topojson
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties"]
