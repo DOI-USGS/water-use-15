@@ -33,22 +33,20 @@ var stateStyle = {
   
 function addCentroids(map, countyCentroids) {
     
-  var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
-  
   scaleCircles
     .domain([
-              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
-              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+              d3.min(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; }),
+              d3.max(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; })
     ]);
   
   map.selectAll('county-point')
-    .data(geojson.features)
+    .data(countyCentroids.features)
     .enter()
     .append('circle')
     .classed('county-point', true)
     ///////////////////
     // Alaska still gives errors
-    .filter(function(d) { return d.properties.STATE_ABBV !== "AK"; })
+    //.filter(function(d) { return d.properties.STATE_ABBV !== "AK"; })
     ///////////////////
     .sort(function(a,b) { 
       return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);

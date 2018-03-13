@@ -77,9 +77,10 @@ function create_map() {
 	if (error) throw error;
 
 	// the rest of the indices of arguments are all the other arguments passed in -
-	// so in this case, all of the results from q.await
+	// so in this case, all of the results from q.await. Immediately convert to
+	// geojson so we have that converted data available globally.
 	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
-	countyCentroids = arguments[2];
+	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
   addStates(map, stateData);
   addCentroids(map, countyCentroids);
