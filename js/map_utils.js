@@ -260,12 +260,10 @@ function updateTitle(category) {
 
 function updateCircles(category) {
   
-  var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
-  
   scaleCircles
     .domain([
-        d3.min(geojson.features, function(d) { return d.properties[[category]]; }),
-        d3.max(geojson.features, function(d) { return d.properties[[category]]; })
+        d3.min(countyCentroids.features, function(d) { return d.properties[[category]]; }),
+        d3.max(countyCentroids.features, function(d) { return d.properties[[category]]; })
     ]);
   
   d3.selectAll(".county-point")
