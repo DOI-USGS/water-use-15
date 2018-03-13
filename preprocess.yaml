@@ -12,6 +12,7 @@ sources:
   - scripts/preprocess/process_dictionaries.R
   - scripts/preprocess/process_counties.R
   - scripts/preprocess/process_counties_to_states.R
+  - scripts/preprocess/process_compute_centroids.R
   - scripts/preprocess/fetch_s3_object.R
   - scripts/preprocess/clean_county_boundaries.R
   - scripts/preprocess/save_state_fips.R
@@ -61,6 +62,11 @@ targets:
     command: process_counties_to_states(
       outfile=target_name, county_topojson='cache/pre_county_boundaries_USA.json',
       state_dict_file='cache/pre_state_dictionary.json', script_file = 'scripts/preprocess/process_counties_to_states.js') 
+      
+  cache/pre_county_centroids_USA.json:
+    command: process_compute_centroids(
+      outfile=target_name, spdat=county_boundaries_census_sp,
+      county_dict_file='cache/pre_county_dictionary.json')
   
   # --- process - old --- #    
   
@@ -91,6 +97,9 @@ targets:
   
   s3_state_dictionary_json:
     command: push_s3_object(I("state_dictionary.json"), "cache/pre_state_dictionary.json", I("viz-water-use-15"))
+    
+  s3_county_centroids_json:
+    command: push_s3_object(I("county_centroids_USA.json"), "cache/pre_county_centroids_USA.json", I("viz-water-use-15"))
   
   # --- publish - old --- #
   
@@ -108,6 +117,7 @@ targets:
       - s3_state_boundaries_json
       - s3_county_dictionary_json
       - s3_state_dictionary_json
+      - s3_county_centroids_json
   
   # --- final - old --- #
   
