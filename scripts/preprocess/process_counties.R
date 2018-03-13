@@ -6,7 +6,7 @@ process_counties <- function(outfile, county_sp, county_dict_file, script_file) 
   county_sp@data <- county_sp@data %>%
     mutate(GEOID=as.character(GEOID)) %>%
     left_join(county_dict, by='GEOID') %>%
-    select(GEOID, STATE_FIPS, COUNTY_FIPS, COUNTY_LONG)
+    select(GEOID, STATE_ABBV, COUNTY_LONG)
   
   # define some file names
   tmp <- tempdir()

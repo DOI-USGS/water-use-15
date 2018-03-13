@@ -27,6 +27,7 @@ process_county_dictionary <- function(outfile, county_boundaries_census_sp) {
     transmute(
       GEOID=paste0(STATE, COUNTY),
       STATE_FIPS=STATE,
+      STATE_ABBV=STUSAB,
       COUNTY_FIPS=COUNTY,
       COUNTY_LONG=COUNTY_NAME) %>%
     bind_rows( # add counties added very recently; see https://www.cdc.gov/nchs/nvss/bridged_race/county_geography-_changes2015.pdf

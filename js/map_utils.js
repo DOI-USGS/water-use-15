@@ -81,7 +81,7 @@ function addStates(map, stateData) {
     .append('path')
     .classed('state', true)
     .attr('id', function(d) {
-      return d.properties.ID;
+      return d.properties.STATE_ABBV;
     })
     .attr('d', buildPath)
     .style("fill", function(d) { return formatState('fill', d, false); })
@@ -110,7 +110,7 @@ formatState = function(attr, d, active) {
   if(activeView == 'USA') {
     var view = 'nationView';
   } else {
-    active = (d.properties.ID === activeView);
+    active = (d.properties.STATE_ABBV === activeView);
     var view = 'stateView';
   }
   if(active) {
@@ -142,7 +142,7 @@ function zoomToFromState(data) {
 
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  clickedView = d3.select(this).attr('id'); // should be same as data.properties.ID;
+  clickedView = d3.select(this).attr('id'); // should be same as data.properties.STATE_ABBV;
 
   // determine the new view
   if(clickedView === 'map-background' || activeView != 'USA') {
@@ -179,7 +179,7 @@ function updateView(newView) {
     
     // find the state data we want to zoom to
     stateGeom = stateData.features.filter(function(d) {
-      return d.properties.ID === activeView;
+      return d.properties.STATE_ABBV === activeView;
     })[0];
     
     // find the center point to zoom to
@@ -202,7 +202,7 @@ function updateView(newView) {
   // set the styling: all states inactive for view=USA, just one state active
   // otherwise. i tried doing this with .classed('active') and
   // .classed('hidden') and css (conditional on activeView=='USA' and
-  // d.properties.ID === activeView), but that didn't work with transitions.
+  // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
   var states = map.selectAll('.state');
   if(activeView === 'USA') {
     hideCounties();

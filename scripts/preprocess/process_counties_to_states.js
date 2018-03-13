@@ -17,22 +17,21 @@ var stateDict = JSON.parse(fs.readFileSync(argv.statedict, 'utf8'));
 
 function mergeCounties(countyTopo, stateDict) {
   // get an array of state FIPS codes
-  var stateFips = [];
+  var stateAbbvs = [];
   stateDict.forEach(function(d) {
-    stateFips.push(d.STATE_FIPS);
+    stateAbbvs.push(d.STATE_ABBV);
   });
   
   // for each state FIPS, find and merge all relevant counties
   var states = [];
-  stateFips.forEach(function(fip) {
+  stateAbbvs.forEach(function(abbv) {
     var counties = countyTopo.objects.counties.geometries.filter(function(d) {
-      return d.properties.STATE_FIPS === fip;
+      return d.properties.STATE_ABBV === abbv;
     });
     var state = topojson.merge(countyTopo, counties);
     var stateInfo = stateDict.filter(function(d) {
-      return d.STATE_FIPS === fip;
+      return d.STATE_ABBV === abbv;
     })[0];
-    state.STATE_FIPS = stateInfo.STATE_FIPS;
     state.STATE_NAME = stateInfo.STATE_NAME;
     state.STATE_ABBV = stateInfo.STATE_ABBV;
     states.push(state);
@@ -45,7 +44,7 @@ function mergeCounties(countyTopo, stateDict) {
   counties later. going with the second option for now. */
   statesGeojson = geojson.parse(
     states,
-    { MultiPolygon: 'coordinates', include: ['STATE_FIPS','STATE_NAME','STATE_ABBV'] },
+    { MultiPolygon: 'coordinates', include: ['STATE_NAME','STATE_ABBV'] },
     crs = { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } });
   return statesGeojson;
 }
