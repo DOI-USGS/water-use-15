@@ -143,28 +143,6 @@ fetch:
 
 process:
   -
-    id: states_dictionary
-    location: cache/states.json
-    reader: json
-    depends:
-      zipfile: county_boundaries_topojson
-    process_args:
-      dict: states.json
-    processor: extract_dict
-    scripts: [scripts/process/extract_dict.R]
-    mimetype: application/json
-  -
-    id: counties_dictionary
-    location: cache/counties.json
-    reader: json
-    depends:
-      zipfile: county_boundaries_topojson
-    process_args:
-      dict: counties.json
-    processor: extract_dict
-    scripts: [scripts/process/extract_dict.R]
-    mimetype: application/json
-  -
     id: county_centroids
     location: cache/county_centroids.rds
     reader: rds
@@ -284,7 +262,6 @@ publish:
       map_counties: "map_counties"
       map: "build_map"
       state_boundaries: "state_boundaries_topojson"
-      states_dictionary: "states_dictionary"
       county_boundaries: "county_boundaries_topojson3"
       county_centroids: "county_centroids_topojson"
       wu_data_15_json: "wu_data_15_json"
@@ -366,8 +343,6 @@ publish:
       map_counties: map_counties
       map: build_map
       state_boundaries: state_boundaries_topojson
-      states_dictionary: states_dictionary
-      counties_dictionary: counties_dictionary
       county_boundaries: county_boundaries_topojson3
       county_centroids: county_centroids_topojson
       wu_data_15_json: wu_data_15_json

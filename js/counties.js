@@ -87,7 +87,7 @@ function displayCountyData(error, activeCountyData) {
         return d.properties.GEOID;
       })
       .text(function(d) {
-        return d.properties.NAME;
+        return d.properties.COUNTY_LONG;
       })
       .style("fill", 'none')
       .style("stroke", 'darkgrey')

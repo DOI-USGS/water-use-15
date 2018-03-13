@@ -48,7 +48,6 @@ var countyData = new Map();
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
-  .defer(d3.json, "data/states.json")
   .defer(d3.json, "data/county_centroids.json")
   .await(create_map);
 
@@ -80,10 +79,9 @@ function create_map() {
 	// the rest of the indices of arguments are all the other arguments passed in -
 	// so in this case, all of the results from q.await
 	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
-	stateDict = arguments[2];
-	countyCentroids = arguments[3];
+	countyCentroids = arguments[2];
 	
-  addStates(map, stateData, stateDict);
+  addStates(map, stateData);
   addCentroids(map, countyCentroids);
   
   // get started downloading county data right away.
