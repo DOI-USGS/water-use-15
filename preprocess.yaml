@@ -8,6 +8,7 @@ sources:
   - scripts/preprocess/fetch_url.R
   - scripts/preprocess/read_shp_zip.R
   - scripts/preprocess/process_simple_topojson.R
+  - scripts/preprocess/process_counties_to_states.R
   - scripts/preprocess/fetch_s3_object.R
   - scripts/preprocess/clean_county_boundaries.R
   - scripts/preprocess/save_state_fips.R
@@ -44,6 +45,11 @@ targets:
   
   cache/pre_county_boundaries_USA.json:
     command: process_simple_topojson(target_name, county_boundaries_census_sp, 'scripts/preprocess/process_simple_topojson.sh')
+    
+  cache/pre_state_boundaries_USA.json:
+    command: process_counties_to_states(
+      outfile=target_name, county_topojson='cache/pre_county_boundaries_USA.json',
+      script_file = 'scripts/preprocess/process_counties_to_states.js') 
   
   # --- process - old --- #    
   
@@ -67,6 +73,11 @@ targets:
     command: push_s3_object(I("county_boundaries_USA.json"), 
                             "cache/pre_county_boundaries_USA.json", 
                             I("viz-water-use-15"))
+                            
+  s3_state_boundaries_json:
+    command: push_s3_object(I("state_boundaries_USA.json"), 
+                            "cache/pre_state_boundaries_USA.json", 
+                            I("viz-water-use-15"))
   
   # --- publish - old --- #
   
@@ -81,6 +92,7 @@ targets:
   preprocess:
     depends:
       - s3_county_boundaries_json
+      - s3_state_boundaries_json
   
   # --- final - old --- #
   
