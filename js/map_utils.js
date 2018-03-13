@@ -45,8 +45,8 @@ function addCentroids(map, countyCentroids) {
     .append('circle')
     .classed('county-point', true)
     ///////////////////
-    // Alaska still gives errors
-    //.filter(function(d) { return d.properties.STATE_ABBV !== "AK"; })
+    // Alaska COUNTYFIPS '016' coordinates currently in Canada
+    //.filter(function(d) { return d.properties.COUNTYFIPS !== "016"; })
     ///////////////////
     .sort(function(a,b) { 
       return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
@@ -56,7 +56,7 @@ function addCentroids(map, countyCentroids) {
     .attr("cx", function(d) { 
       var proj = projection(d.geometry.coordinates);
       if(!proj) {
-        console.log('bad projection:')
+        console.log('bad projection:');
         console.log(d);
         console.log(projection(d.geometry.coordinates));
         return 0;
@@ -75,10 +75,11 @@ function addCentroids(map, countyCentroids) {
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
     })
-    .on("mouseover", function(d) { showToolTip(this, d); })
+    // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
+    // because people won't be able to see tooltips at the same time anyways
+    .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
-    .style("fill", 'purple')
-    .style("opacity", 0.8); // adding this line made it super slow
+    .style("fill", categoryToColor(activeCategory));
 }
 
 // Create the state polygons
@@ -176,7 +177,7 @@ function updateView(newView) {
   activeView = newView;
   
   // update page info
-  updateTitle();
+  updateTitle(activeCategory); // also OK not to worry about compatibility with hover
   setHash('view', activeView);
 
   // determine the center point and scaling for the new view
@@ -243,45 +244,46 @@ function updateView(newView) {
 }
 
 function updateCategory(category) {
-  activeCategory = category;
   
   // update circles
-  updateCircles(activeCategory);
+  updateCircles(category);
   
   // update page info
-  updateTitle();
-  setHash('category', activeCategory);
+  updateTitle(category);
+  setHash('category', category);
 }
 
-function updateTitle() {
+function updateTitle(category) {
   d3.select("#maptitle")
-    .text("Water Use Data for " + activeView + ", 2015, " + activeCategory);
+    .text("Water Use Data for " + activeView + ", 2015, " + category);
 }
 
-function updateCircles(activeCategory) {
+function updateCircles(category) {
+  
+  var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
+  
   scaleCircles
     .domain([
-              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
-              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
+        d3.min(geojson.features, function(d) { return d.properties[[category]]; }),
+        d3.max(geojson.features, function(d) { return d.properties[[category]]; })
     ]);
   
-  d3.selectAll("county-point")
-      .transition().duration(1500)
+  d3.selectAll(".county-point")
       .sort(function(a,b) { 
-        return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
+        return d3.descending(a.properties[[category]], b.properties[[category]]);
       })
-      .attr("r", function(d) { return scaleCircles(d.properties[[activeCategory]]); });
+      .transition().duration(600)
+      .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
+      .style("fill", categoryToColor(category));
 }
 
-function showToolTip(currentCircle, d) {
+function showToolTip(currentCircle, d, category) {
   var orig = d3.select(currentCircle),
       origNode = orig.node();
   var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
                                                             origNode.nextSibling));
   
-  // style circles
-  orig
-    .style("opacity", 0); // makes original circle invisible in the background
+  // style duplicated circles sitting on top
   duplicate
     .classed('county-point-duplicate', true)
     .style("pointer-events", "none")
@@ -291,27 +293,21 @@ function showToolTip(currentCircle, d) {
   d3.select(".tooltip")
     .classed("shown", true)
     .classed("hidden", false)
-    .transition()
-    .duration(50)
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
     .html(d.properties.COUNTY + "<br/>" + 
             "Population: " + d.properties.countypop + "<br/>" +
-            categoryToName(activeCategory) + ": " + 
-              d.properties[[activeCategory]] + " " + "MGD");
+            categoryToName(category) + ": " + 
+              d.properties[[category]] + " " + "MGD");
 }
 
 function hideTooltip(currentCircle, d) {
-  d3.select(currentCircle)
-    .style("opacity", 0.8);
   d3.select('.county-point-duplicate')
     .remove(); // delete duplicate
   d3.select(".tooltip")
     .classed("shown", false)
-    .classed("hidden", true)
-    .transition()
-    .duration(100);
+    .classed("hidden", true);
 }
 
 d3.selection.prototype.moveToFront = function() {  
@@ -326,5 +322,14 @@ function categoryToName(category) {
   else if (category == "publicsupply") { return "Public Supply"; }
   else if (category == "irrigation") { return "Irrigation"; }
   else if (category == "industrial") { return "Industrial"; }
+  else { return "none"; }
+}
+
+function categoryToColor(category) {
+  if (category == "total") { return "rgba(46, 134, 171, 0.8)"; }
+  else if (category == "thermoelectric") { return "rgba(252,186,4, 0.8)"; }
+  else if (category == "publicsupply") { return "rgba(186,50,40, 0.8)"; }
+  else if (category == "irrigation") { return "rgba(155,197,61, 0.8)"; }
+  else if (category == "industrial") { return "rgba(138,113,106, 0.8)"; }
   else { return "none"; }
 }

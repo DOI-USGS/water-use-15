@@ -128,7 +128,12 @@ fetch:
     reader: excel
     fetcher: s3_object
     scripts: [scripts/fetch/s3_object.R]
-
+  -
+    id: description_text_md
+    location: data/description_text.yaml
+    reader: md
+    mimetype: text/yaml
+    
 process:
   -
     id: wu_data_15_simple
@@ -166,6 +171,8 @@ publish:
       main_css: "main_css"
       social: "social-section"
       socialCSS: "lib-social-media-css"
+      description_text: "description_text"
+      directions_text: "directions_text"
       header: "header_section"
       footer: "footer_section"
       hashes: "url_hashes"
@@ -179,7 +186,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "footer_css", "socialCSS",
                   "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties"]
-      sections: ["social","map"] # adding header and footer here, doubled each on the page
+      sections: ["social","map","description_text", "directions_text"] # adding header and footer here, doubled each on the page
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -224,12 +231,16 @@ publish:
     id: footer_section
     template: footer-template
     publisher: footer
-    depends: "lib-footer-css"
+    depends: lib-footer-css
+    github-url: https://github.com/USGS-VIZLAB/water-use-15
     blogsInFooter: FALSE
     vizzies:
       - name: Visualizing water use by region and time
         org: USGS-VIZLAB
         repo: water-use
+      - name: Visualizing Hurricane Maria
+        org: USGS-VIZLAB
+        repo: hurricane-maria
   -
     id: social-section
     template: vertical-social-media-template
@@ -253,11 +264,26 @@ publish:
       map_utils: map_utils
       map_counties: map_counties
       map: build_map
+      directions_text: directions_text
       state_boundaries: state_boundaries_topojson
       county_boundaries: county_boundaries_topojson
       county_centroids_wu: county_centroids_wu_topojson
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties"]
-      embed: ["map"]
+      embed: ["map","directions_text"]
+  -
+    id: description_text
+    template: printall
+    publisher: section
+    depends: description_text_md
+    context:
+      text: description_text_md.description_text-markdown
+  -
+    id: directions_text
+    template: printall
+    publisher: section
+    depends: description_text_md
+    context:
+      text: description_text_md.directions_text-markdown
 

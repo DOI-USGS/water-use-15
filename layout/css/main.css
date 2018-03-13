@@ -42,26 +42,26 @@ body {
     opacity:1;
   }
   
-  .total{
+  button.total{
     background:rgb(46, 134, 171);
   }
   
-  .thermoelectric{
+  button.thermoelectric{
     background:rgb(252,186,4);
   }
   
-  .publicsupply{
+  button.publicsupply{
     background:rgb(186,50,40);
   }
   
-  .irrigation{
+  button.irrigation{
     background:rgb(155,197,61);
   }
   
-  .industrial{
+  button.industrial{
     background:rgb(138,113,106);
   }
-  
+
 @media screen and (min-width:580px){
   #button-container button{
     font-size:.9em;
