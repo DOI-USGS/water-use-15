@@ -1,6 +1,15 @@
 
 function addLegend(minWateruse, maxWateruse) {
   
+  // increase minimum so that you can actually see it
+  function precisionRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+  }
+  
+  var roundMaxWateruse = precisionRound(maxWateruse, -1),
+      roundMinWaterUse = precisionRound(minWateruse, -1),
+      newMinWateruse = roundMinWaterUse + 50;
   
   var legendHeight = 100,
       legendWidth = 200;
@@ -31,21 +40,22 @@ function addLegend(minWateruse, maxWateruse) {
   // add appropriately sized circles side by side
   legend
     .selectAll('circle')
-    .data([minWateruse + 10, maxWateruse])
+    .data([newMinWateruse, roundMaxWateruse])
     .enter()
     .append('circle')
+      .classed('legend-point', true)
       .attr('r', function(d) { return scaleCircles(d); })
       .attr('transform', function(d, i) {
         var xpos = xPosMinMax[i],
             ypos = (legendHeight/2);
         return 'translate('+xpos+','+ypos+')'; 
       })
-      .style("fill", categoryToColor('total'));
+      .style("fill", categoryToColor(activeCategory));
 
   // add label to circles
   legend
     .selectAll('text')
-    .data([minWateruse + 10, maxWateruse])
+    .data([newMinWateruse, roundMaxWateruse])
     .enter()
     .append('text')
       .classed('legendText', true)

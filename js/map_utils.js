@@ -257,6 +257,11 @@ function updateCircles(category) {
       .transition().duration(600)
       .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
       .style("fill", categoryToColor(category));
+      
+  d3.selectAll(".legend-point")
+    .transition().duration(600)
+    .style("fill", categoryToColor(category));
+    
 }
 
 function showToolTip(currentCircle, d, category) {
