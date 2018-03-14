@@ -181,7 +181,7 @@ publish:
       footer_css: "lib-footer-css"
       map_css: "map_css"
       main_css: "main_css"
-      social: "social-section"
+      social: "social_section"
       socialCSS: "lib-social-media-css"
       description_text: "description_text"
       directions_text: "directions_text"
@@ -261,14 +261,14 @@ publish:
         org: USGS-VIZLAB
         repo: hurricane-maria
   -
-    id: social-section
+    id: social_section
     template: vertical-social-media-template
     publisher: social
     depends: social-links
     context:
       embedLink: embed-water-use-15.html
   -
-    id: national-water-use
+    id: national_water_use
     name: embed-water-use-15
     publisher: page
     template: embed
