@@ -17,7 +17,7 @@ var buildPath = d3.geoPath()
 //Create container
 var container = d3.select('body')
   .append('div')
-  .attr('id', 'content-container');
+  .classed('svg-container', true);
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
@@ -28,7 +28,7 @@ var tooltipDiv = d3.select("body").append("div")
       .classed("tooltip hidden", true);
 
 // Create SVG
-var svg = d3.select("#content-container")
+var svg = d3.select(".svg-container")
     .append("svg")
     .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
 	  .attr('preserveAspectRatio', 'xMidYMid');
@@ -97,7 +97,7 @@ function create_map() {
 
 }
 
-var buttonContainer = d3.select('#content-container')
+var buttonContainer = d3.select('.svg-container')
   .append('div')
   .attr('id', 'button-container');
   
@@ -117,6 +117,7 @@ var categoryButtons = d3.select('#button-container')
   .on('click', function(d){
     activeCategory = d.toLowerCase(); // put this here so it only changes on click
     updateCategory(activeCategory);
+    updateButtonSelected(activeCategory);
   })
   .on('mouseover', function(d){
     updateCategory(d.toLowerCase());
