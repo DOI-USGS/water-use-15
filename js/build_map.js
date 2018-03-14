@@ -13,15 +13,15 @@ var projection = albersUsaTerritories()
     
 var buildPath = d3.geoPath()
     .projection(projection);
+
+// circle scale
+var scaleCircles = d3.scaleSqrt()
+  .range([0, 20])
     
 //Create container
 var container = d3.select('body')
   .append('div')
   .attr('id', 'content-container');
-
-// circle scale
-var scaleCircles = d3.scaleSqrt()
-  .range([0, 20]);
 
 // Setup tooltips
 var tooltipDiv = d3.select("body").append("div")
@@ -49,6 +49,7 @@ var countyData = new Map();
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
   .defer(d3.json, "data/county_centroids_wu.json")
+  .defer(d3.json, "data/wu_data_15_range.json")
   .await(create_map);
 
 // Zoom status: default is nation-wide
@@ -82,8 +83,23 @@ function create_map() {
 	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
 	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
+  // set up scaling for circles
+  
+    var rangeWateruse = arguments[3],
+        minWateruse = rangeWateruse[0],
+        maxWateruse = rangeWateruse[1];
+    
+    // update circle scale with data
+    scaleCircles
+      .domain(rangeWateruse);
+  
+    // add legend
+    addLegend(minWateruse, maxWateruse);
+  
+  ////
+  
   addStates(map, stateData);
-  addCentroids(map, countyCentroids);
+  addCentroids(map, countyCentroids, scaleCircles);
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
