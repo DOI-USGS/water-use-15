@@ -7,12 +7,8 @@ process.find_range <- function(viz) {
   col_names <- deps[["col_names"]][["new_names"]]
   
   water_use_df <- dplyr::select(wu_data_15_simple, col_names)
-  # wu_data_15_range <- data.frame(
-  #   min = min(water_use_df, na.rm = TRUE),
-  #   max = max(water_use_df, na.rm = TRUE),
-  #   stringsAsFactors = FALSE
-  # )
   wu_data_15_range <- range(water_use_df, na.rm = TRUE)
+  
   jsonlite::write_json(wu_data_15_range, viz[["location"]])
   
 }
