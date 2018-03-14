@@ -1,8 +1,6 @@
 
 function addLegend(minWateruse, maxWateruse) {
   
-  // should go away once we have shared min/max across all categories
-  scaleCircles.domain([minWateruse, maxWateruse]);
   
   var legendHeight = 100,
       legendWidth = 200;

@@ -32,12 +32,6 @@ var stateStyle = {
 };
   
 function addCentroids(map, countyCentroids) {
-    
-  scaleCircles
-    .domain([
-      d3.min(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; }),
-      d3.max(countyCentroids.features, function(d) { return d.properties[[activeCategory]]; })
-    ]);
   
   map.selectAll('county-point')
     .data(countyCentroids.features)
@@ -255,13 +249,7 @@ function updateTitle(category) {
 }
 
 function updateCircles(category) {
-  
-  scaleCircles
-    .domain([
-        d3.min(countyCentroids.features, function(d) { return d.properties[[category]]; }),
-        d3.max(countyCentroids.features, function(d) { return d.properties[[category]]; })
-    ]);
-  
+
   d3.selectAll(".county-point")
       .sort(function(a,b) { 
         return d3.descending(a.properties[[category]], b.properties[[category]]);

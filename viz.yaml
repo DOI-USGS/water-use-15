@@ -148,6 +148,15 @@ process:
     processor: simplify_wu_data
     scripts: [scripts/process/simplify_wu_data.R]
   -
+    id: wu_data_15_range_json
+    location: cache/wu_data_15_range.json
+    mimetype: application/json
+    depends:
+      wu_data_15_simple: wu_data_15_simple
+      col_names: wu_type_column_names
+    processor: find_range
+    scripts: [scripts/process/find_range.R]
+  -
     id: county_centroids_wu_topojson
     location: cache/county_centroids_wu.json
     mimetype: application/json
@@ -187,6 +196,7 @@ publish:
       state_boundaries: "state_boundaries_topojson"
       county_boundaries: "county_boundaries_topojson"
       county_centroids_wu: "county_centroids_wu_topojson"
+      wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "footer_css", "socialCSS",
                   "map_css", "main_css", "hashes", "projection", "map_utils", "map_counties",
@@ -278,6 +288,7 @@ publish:
       state_boundaries: state_boundaries_topojson
       county_boundaries: county_boundaries_topojson
       county_centroids_wu: county_centroids_wu_topojson
+      wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "main_css", "hashes", "projection", "map_utils", 
