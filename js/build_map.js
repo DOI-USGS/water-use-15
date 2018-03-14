@@ -114,7 +114,6 @@ var categoryButtons = d3.select('#button-container')
   .on('click', function(d){
     activeCategory = d.toLowerCase(); // put this here so it only changes on click
     updateCategory(activeCategory);
-    updateButtonSelected(activeCategory);
   })
   .on('mouseover', function(d){
     updateCategory(d.toLowerCase());
