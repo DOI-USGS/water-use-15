@@ -62,20 +62,20 @@ body {
     background:rgb(138,113,106);
   }
 
-@media screen and (min-width:580px){
-  #button-container button{
-    font-size:.9em;
-  }
-}
-
 .legend {
   fill: none;
-  stroke: #000;
+  stroke: none;
 }
 
 .legendText {
   text-anchor: middle;
   font-size: 0.7em;
+}
+
+@media screen and (min-width:580px){
+  #button-container button{
+    font-size:.9em;
+  }
 }
 
 
