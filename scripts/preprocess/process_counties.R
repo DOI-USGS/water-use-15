@@ -1,7 +1,8 @@
 process_counties <- function(outfile, county_sp, county_dict_file, script_file) {
   
   # edit the properties in the county_sp, removing unnecessary ones and adding
-  # others from county_dict
+  # others from county_dict. this code should match similar lines in
+  # process_compute_centroids.R
   county_dict <- jsonlite::fromJSON(county_dict_file)
   county_sp@data <- county_sp@data %>%
     mutate(GEOID=as.character(GEOID)) %>%

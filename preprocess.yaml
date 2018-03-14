@@ -66,12 +66,6 @@ targets:
   s3_state_boundaries_json:
     command: push_s3_object(I("state_boundaries_USA.json"), "cache/pre_state_boundaries_USA.json", I("viz-water-use-15"))
   
-  s3_county_dictionary_json:
-    command: push_s3_object(I("county_dictionary.json"), "cache/pre_county_dictionary.json", I("viz-water-use-15"))
-  
-  s3_state_dictionary_json:
-    command: push_s3_object(I("state_dictionary.json"), "cache/pre_state_dictionary.json", I("viz-water-use-15"))
-    
   s3_county_centroids_json:
     command: push_s3_object(I("county_centroids_USA.json"), "cache/pre_county_centroids_USA.json", I("viz-water-use-15"))
   
@@ -81,6 +75,4 @@ targets:
     depends:
       - s3_county_boundaries_json
       - s3_state_boundaries_json
-      - s3_county_dictionary_json
-      - s3_state_dictionary_json
       - s3_county_centroids_json
