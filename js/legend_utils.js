@@ -13,16 +13,16 @@ function addLegend(minWateruse, maxWateruse) {
   
   var legendHeight = 100,
       legendWidth = 200;
-  var bufferFromEdge = 50;
+  var bufferFromEdge = 25;
   
   // put legend in the Gulf
-  var xPosGulf = chart_width*0.53,
-      yPosGulf = 0.83*chart_height;
+  var xPosGulf = chart_width*0.65,
+      yPosGulf = 0.80*chart_height;
       
   // center min, center max within legend rect
-  var xPosMin = bufferFromEdge,
-      xPosMax = legendWidth-bufferFromEdge;
-  var xPosMinMax = [xPosMin, xPosMax];
+  var yPosMin = bufferFromEdge,
+      yPosMax = legendHeight-(bufferFromEdge-10);
+  var yPosMinMax = [yPosMin, yPosMax];
   
   // add group for legend elements & move into the Gulf of Mexico
   var legend = svg
@@ -46,8 +46,8 @@ function addLegend(minWateruse, maxWateruse) {
       .classed('legend-point', true)
       .attr('r', function(d) { return scaleCircles(d); })
       .attr('transform', function(d, i) {
-        var xpos = xPosMinMax[i],
-            ypos = (legendHeight/2);
+        var xpos = 0,
+            ypos = yPosMinMax[i];
         return 'translate('+xpos+','+ypos+')'; 
       })
       .style("fill", categoryToColor(activeCategory));
@@ -59,9 +59,10 @@ function addLegend(minWateruse, maxWateruse) {
     .enter()
     .append('text')
       .classed('legendText', true)
-      .attr('x', function(d, i) {
-        return xPosMinMax[i];
+      .attr('x', 0)
+      .attr('y', function(d,i) {
+        return yPosMinMax[i]+(bufferFromEdge+(i*10)); // increase text placement for bigger circle
       })
-      .attr('y', legendHeight*0.85)
       .text(function(d) { return d+' Mgal/day'; });
+  
 }
