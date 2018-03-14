@@ -68,6 +68,17 @@ body {
   }
 }
 
+.legend {
+  fill: none;
+  stroke: #000;
+}
+
+.legendText {
+  text-anchor: middle;
+  font-size: 0.7em;
+}
+
+
 @media screen and (min-width: 1024px){
   #content-container{
     width:960px;

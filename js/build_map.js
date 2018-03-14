@@ -23,6 +23,10 @@ var container = d3.select('body')
 var scaleCircles = d3.scaleSqrt()
   .range([0, 20]);
 
+// hard-coded for now. Need to get scaling to be shared still.
+var minWateruse = 0,
+    maxWateruse = 3331;
+
 // Setup tooltips
 var tooltipDiv = d3.select("body").append("div")
       .classed("tooltip hidden", true);
@@ -41,6 +45,9 @@ var mapBackground = map.append("rect")
   .attr("width", chart_width)
   .attr("height", chart_height)
   .on('click', zoomToFromState);
+
+// add legend
+addLegend(minWateruse, maxWateruse);
 
 // Datasets
 var stateData, stateDict, countyDict;
