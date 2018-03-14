@@ -1,4 +1,13 @@
-process_simple_topojson <- function(outfile, sp_object, script_file) {
+process_counties <- function(outfile, county_sp, county_dict_file, script_file) {
+  
+  # edit the properties in the county_sp, removing unnecessary ones and adding
+  # others from county_dict. this code should match similar lines in
+  # process_compute_centroids.R
+  county_dict <- jsonlite::fromJSON(county_dict_file)
+  county_sp@data <- county_sp@data %>%
+    mutate(GEOID=as.character(GEOID)) %>%
+    left_join(county_dict, by='GEOID') %>%
+    select(GEOID, STATE_ABBV, COUNTY_LONG)
   
   # define some file names
   tmp <- tempdir()
@@ -8,8 +17,8 @@ process_simple_topojson <- function(outfile, sp_object, script_file) {
   topo_quantized <- outfile
   
   # write to file
-  # geojsonio::topojson_write(sp_object, file=topo_raw)
-  writeOGR(sp_object, geo_raw, layer = "geojson", driver = "GeoJSON", check_exists=FALSE)
+  # geojsonio::topojson_write(county_sp, file=topo_raw)
+  writeOGR(county_sp, geo_raw, layer = "geojson", driver = "GeoJSON", check_exists=FALSE)
   
   # locate and set execute permissions on the script file
   Sys.chmod(script_file, '754')

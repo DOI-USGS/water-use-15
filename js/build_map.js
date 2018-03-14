@@ -47,10 +47,8 @@ var stateData, stateDict, countyDict;
 var countyData = new Map();
 
 d3.queue()
-  .defer(d3.json, "data/state_boundaries.geojson")
-  .defer(d3.json, "data/states.json")
-  .defer(d3.json, "data/counties.json") // could load this later
-  .defer(d3.json, "data/county_centroids.json")
+  .defer(d3.json, "data/state_boundaries_USA.json")
+  .defer(d3.json, "data/county_centroids_wu.json")
   .await(create_map);
 
 // Zoom status: default is nation-wide
@@ -79,13 +77,12 @@ function create_map() {
 	if (error) throw error;
 
 	// the rest of the indices of arguments are all the other arguments passed in -
-	// so in this case, all of the results from q.await
-	stateData = arguments[1];
-	stateDict = arguments[2];
-	countyDict = arguments[3];
-	countyCentroids = arguments[4];
+	// so in this case, all of the results from q.await. Immediately convert to
+	// geojson so we have that converted data available globally.
+	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
+	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
-  addStates(map, stateData, stateDict);
+  addStates(map, stateData);
   addCentroids(map, countyCentroids);
   
   // get started downloading county data right away.
