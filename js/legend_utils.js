@@ -15,20 +15,20 @@ function addLegend(minWateruse, maxWateruse) {
       legendWidth = 200;
   var bufferFromEdge = 25;
   
-  // put legend in the Gulf
-  var xPosGulf = chart_width*0.65,
-      yPosGulf = 0.80*chart_height;
+  // put legend in the Atlantic
+  var xPosLegend = chart_width*0.95,
+      yPosLegend = 0.50*chart_height;
       
   // center min, center max within legend rect
   var yPosMin = bufferFromEdge,
-      yPosMax = legendHeight-(bufferFromEdge-10);
+      yPosMax = legendHeight-(bufferFromEdge-20); // more space between min words & max circle
   var yPosMinMax = [yPosMin, yPosMax];
   
-  // add group for legend elements & move into the Gulf of Mexico
+  // add group for legend elements & move into the Atlantic Ocean
   var legend = svg
     .append('g')
       .attr('transform', 
-            'translate('+xPosGulf+','+yPosGulf+')');
+            'translate('+xPosLegend+','+yPosLegend+')');
   
   // add box around legend items
   legend
