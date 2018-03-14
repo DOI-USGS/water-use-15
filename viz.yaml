@@ -14,9 +14,9 @@ info:
   required-packages:
     vizlab:
       repo: github
-      version: 0.3.0
+      version: 0.3.2
       name: USGS-VIZLAB/vizlab
-      ref: NA
+      ref: 6bcdf08319d00f73b0b54ecfb73d1de00837a2de
     aws.s3:
       repo: CRAN
       version: 0.3.3
@@ -182,7 +182,7 @@ publish:
       content_css: "lib-content-css"
       map_css: "map_css"
       custom_css: "custom_css"
-      social: "social-section"
+      social: "social_section"
       socialCSS: "lib-social-media-css"
       description_text: "description_text"
       directions_text: "directions_text"
