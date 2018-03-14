@@ -43,5 +43,5 @@ remake::make(target_names = "preprocess",
              remake_file = "preprocess.yaml")
 
 # run an individual target:
-remake::make(target_names = "cache/county_boundaries_topojson.zip", 
+remake::make(target_names = "cache/pre_county_boundaries_USA.json", 
              remake_file = "preprocess.yaml")
