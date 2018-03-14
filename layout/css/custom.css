@@ -52,10 +52,6 @@
   button.industrial{
     background:rgb(138,113,106);
   }
-  
-  .selected{
-    opacity:1;
-  }
 
 @media screen and (min-width:580px){
   #button-container button{
