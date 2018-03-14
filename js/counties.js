@@ -43,14 +43,9 @@ function cacheCountyData(state, callback) {
   // the complete set of counties). keeping this code in here because this
   // state-caching approach could be useful in near future
   if(!countyData.has(state)) {
-    // convert state (an ID) into a file name (FIPS-based, at least for now)
-    var stateFIPS = stateDict.filter(function(d) {
-      return(d.state_abbv === state);
-    })[0].state_FIPS;
-    
     // subset the data and run the processing function
     oneStateCounties = countyData.get('USA').features.filter(function(d) {
-      return(d.properties.STATEFP === stateFIPS)
+      return(d.properties.STATE_ABBV === state);
     });
     countyData.set(state, oneStateCounties);
     callback(null, countyData.get(state));
@@ -90,9 +85,6 @@ function displayCountyData(error, activeCountyData) {
       .classed('county', true)
       .attr('id', function(d) {
         return d.properties.GEOID;
-      })
-      .text(function(d) {
-        return d.properties.NAME;
       })
       .style("fill", 'none')
       .style("stroke", 'darkgrey')
