@@ -148,6 +148,15 @@ process:
     processor: simplify_wu_data
     scripts: [scripts/process/simplify_wu_data.R]
   -
+    id: wu_data_15_range_json
+    location: cache/wu_data_15_range.json
+    mimetype: application/json
+    depends:
+      wu_data_15_simple: wu_data_15_simple
+      col_names: wu_type_column_names
+    processor: find_range
+    scripts: [scripts/process/find_range.R]
+  -
     id: county_centroids_wu_topojson
     location: cache/county_centroids_wu.json
     mimetype: application/json
@@ -182,14 +191,16 @@ publish:
       hashes: "url_hashes"
       projection: "custom_projection"
       map_utils: "map_utils"
+      legend_utils: "legend_utils"
       map_counties: "map_counties"
       map: "build_map"
       state_boundaries: "state_boundaries_topojson"
       county_boundaries: "county_boundaries_topojson"
       county_centroids_wu: "county_centroids_wu_topojson"
+      wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
-                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties"]
+                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties", "legend_utils"]
       sections: ["social","map","description_text", "directions_text"] # adding header and footer here, doubled each on the page
   -
     id: topojson
@@ -211,6 +222,10 @@ publish:
   -
     id: map_utils
     location: "js/map_utils.js"
+    mimetype: application/javascript
+  -
+    id: legend_utils
+    location: "js/legend_utils.js"
     mimetype: application/javascript
   -
     id: map_counties
@@ -246,14 +261,14 @@ publish:
         org: USGS-VIZLAB
         repo: hurricane-maria
   -
-    id: social-section
+    id: social_section
     template: vertical-social-media-template
     publisher: social
     depends: social-links
     context:
       embedLink: embed-water-use-15.html
   -
-    id: national-water-use
+    id: national_water_use
     name: embed-water-use-15
     publisher: page
     template: embed
@@ -266,15 +281,17 @@ publish:
       hashes: url_hashes
       projection: custom_projection
       map_utils: map_utils
+      legend_utils: legend_utils
       map_counties: map_counties
       map: build_map
       directions_text: directions_text
       state_boundaries: state_boundaries_topojson
       county_boundaries: county_boundaries_topojson
       county_centroids_wu: county_centroids_wu_topojson
+      wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties"]
+                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties", "legend_utils"]
       embed: ["map","directions_text"]
   -
     id: description_text
