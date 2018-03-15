@@ -32,34 +32,35 @@ var stateStyle = {
 };
   
 function addCentroids(map, countyCentroids) {
-    
-  var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
-  
-  scaleCircles
-    .domain([
-              d3.min(geojson.features, function(d) { return d.properties[[activeCategory]]; }),
-              d3.max(geojson.features, function(d) { return d.properties[[activeCategory]]; })
-    ]);
   
   map.selectAll('county-point')
-    .data(geojson.features)
+    .data(countyCentroids.features)
     .enter()
     .append('circle')
     .classed('county-point', true)
-    ///////////////////
-    // Alaska still gives errors
-    .filter(function(d) { return d.properties.STATE !== "AK"; })
-    ///////////////////
     .sort(function(a,b) { 
       return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
     })
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
     .attr("cx", function(d) { 
-      return projection(d.geometry.coordinates)[0]; 
+      var proj = projection(d.geometry.coordinates);
+      if(!proj) {
+        console.log('bad projection:');
+        console.log(d);
+        console.log(projection(d.geometry.coordinates));
+        return 0;
+      } else {
+        return projection(d.geometry.coordinates)[0]; 
+      }
     })
     .attr("cy", function(d) { 
-      return projection(d.geometry.coordinates)[1]; 
+      var proj = projection(d.geometry.coordinates);
+      if(!proj) {
+        return 0;
+      } else {
+        return projection(d.geometry.coordinates)[1]; 
+      }
     })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
@@ -82,7 +83,7 @@ function addStates(map, stateData) {
     .append('path')
     .classed('state', true)
     .attr('id', function(d) {
-      return d.properties.ID;
+      return d.properties.STATE_ABBV;
     })
     .attr('d', buildPath)
     .style("fill", function(d) { return formatState('fill', d, false); })
@@ -111,7 +112,7 @@ formatState = function(attr, d, active) {
   if(activeView == 'USA') {
     var view = 'nationView';
   } else {
-    active = (d.properties.ID === activeView);
+    active = (d.properties.STATE_ABBV === activeView);
     var view = 'stateView';
   }
   if(active) {
@@ -143,7 +144,7 @@ function zoomToFromState(data) {
 
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  clickedView = d3.select(this).attr('id'); // should be same as data.properties.ID;
+  clickedView = d3.select(this).attr('id'); // should be same as data.properties.STATE_ABBV;
 
   // determine the new view
   if(clickedView === 'map-background' || activeView != 'USA') {
@@ -177,15 +178,17 @@ function updateView(newView) {
     k = 1;
   } else {
     var stateGeom, centroid, x0, y0, x1, y1, stateDims;
+    
     // find the state data we want to zoom to
     stateGeom = stateData.features.filter(function(d) {
-      return d.properties.ID === activeView;
+      return d.properties.STATE_ABBV === activeView;
     })[0];
-    console.log(stateGeom);
+    
     // find the center point to zoom to
     centroid = buildPath.centroid(stateGeom);
     x = centroid[0];
     y = centroid[1];
+    
     // find the maximum zoom (up to nation bounding box size) that keeps the
     // whole state in view
     [[x0,y0],[x1,y1]] = buildPath.bounds(stateGeom);
@@ -201,7 +204,7 @@ function updateView(newView) {
   // set the styling: all states inactive for view=USA, just one state active
   // otherwise. i tried doing this with .classed('active') and
   // .classed('hidden') and css (conditional on activeView=='USA' and
-  // d.properties.ID === activeView), but that didn't work with transitions.
+  // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
   var states = map.selectAll('.state');
   if(activeView === 'USA') {
     hideCounties();
@@ -246,15 +249,7 @@ function updateTitle(category) {
 }
 
 function updateCircles(category) {
-  
-  var geojson = topojson.feature(countyCentroids, countyCentroids.objects.foo);
-  
-  scaleCircles
-    .domain([
-        d3.min(geojson.features, function(d) { return d.properties[[category]]; }),
-        d3.max(geojson.features, function(d) { return d.properties[[category]]; })
-    ]);
-  
+
   d3.selectAll(".county-point")
       .sort(function(a,b) { 
         return d3.descending(a.properties[[category]], b.properties[[category]]);
@@ -262,6 +257,11 @@ function updateCircles(category) {
       .transition().duration(600)
       .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
       .style("fill", categoryToColor(category));
+      
+  d3.selectAll(".legend-point")
+    .transition().duration(600)
+    .style("fill", categoryToColor(category));
+    
 }
 
 function showToolTip(currentCircle, d, category) {

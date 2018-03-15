@@ -13,22 +13,22 @@ var projection = albersUsaTerritories()
     
 var buildPath = d3.geoPath()
     .projection(projection);
+
+// circle scale
+var scaleCircles = d3.scaleSqrt()
+  .range([0, 20])
     
 //Create container
 var container = d3.select('body')
   .append('div')
-  .attr('id', 'content-container');
-
-// circle scale
-var scaleCircles = d3.scaleSqrt()
-  .range([0, 20]);
+  .classed('svg-container', true);
 
 // Setup tooltips
 var tooltipDiv = d3.select("body").append("div")
       .classed("tooltip hidden", true);
 
 // Create SVG
-var svg = d3.select("#content-container")
+var svg = d3.select(".svg-container")
     .append("svg")
     .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
 	  .attr('preserveAspectRatio', 'xMidYMid');
@@ -47,10 +47,9 @@ var stateData, stateDict, countyDict;
 var countyData = new Map();
 
 d3.queue()
-  .defer(d3.json, "data/state_boundaries.geojson")
-  .defer(d3.json, "data/states.json")
-  .defer(d3.json, "data/counties.json") // could load this later
-  .defer(d3.json, "data/county_centroids.json")
+  .defer(d3.json, "data/state_boundaries_USA.json")
+  .defer(d3.json, "data/county_centroids_wu.json")
+  .defer(d3.json, "data/wu_data_15_range.json")
   .await(create_map);
 
 // Zoom status: default is nation-wide
@@ -79,14 +78,28 @@ function create_map() {
 	if (error) throw error;
 
 	// the rest of the indices of arguments are all the other arguments passed in -
-	// so in this case, all of the results from q.await
-	stateData = arguments[1];
-	stateDict = arguments[2];
-	countyDict = arguments[3];
-	countyCentroids = arguments[4];
+	// so in this case, all of the results from q.await. Immediately convert to
+	// geojson so we have that converted data available globally.
+	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
+	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
-  addStates(map, stateData, stateDict);
-  addCentroids(map, countyCentroids);
+  // set up scaling for circles
+  
+    var rangeWateruse = arguments[3],
+        minWateruse = rangeWateruse[0],
+        maxWateruse = rangeWateruse[1];
+    
+    // update circle scale with data
+    scaleCircles
+      .domain(rangeWateruse);
+  
+    // add legend
+    addLegend(minWateruse, maxWateruse);
+  
+  ////
+  
+  addStates(map, stateData);
+  addCentroids(map, countyCentroids, scaleCircles);
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
@@ -97,7 +110,7 @@ function create_map() {
 
 }
 
-var buttonContainer = d3.select('#content-container')
+var buttonContainer = d3.select('.svg-container')
   .append('div')
   .attr('id', 'button-container');
   

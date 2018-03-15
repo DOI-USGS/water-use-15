@@ -1,0 +1,28 @@
+---
+description_text-markdown: |+
+  ## Interesting info about water use
+  
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
+  pariatur. Excepteur sint occaecat cupidatat non proident, sunt in 
+  culpa qui officia deserunt mollit anim id est laborum.
+  
+  
+  [fancy link](https://owi.usgs.gov/ "OWI") 
+  
+  <https://owi.usgs.gov/>
+  
+directions_text-markdown: |+
+  ## How to use the map:
+  
+  Explore how water is used throughout the United States. Click or 
+  hover over on any of the specific use-case boxes below the map to 
+  discover how thermoelectric, public supply, irrigation, or industrial 
+  water use is distributed. Click on a state to zoom in to more easily see the
+  difference in county use. Once zoomed in, simply click anywhere outside
+  the state on the map to return to the full country view. Hover (tap on 
+  mobile) over any of the individual counties to get more information.
+  
