@@ -70,7 +70,7 @@ svg.append("text")
   .attr("y", chart_height*0.10); // bring in 10% of chart height
 
 // Initialize page info
-updateTitle();
+updateTitle(activeCategory);
 setHash('view', activeView);
 setHash('category', activeCategory);
 
