@@ -222,16 +222,31 @@ function updateView(newView) {
       "translate(" + -x + "," + -y + ")");
 }
 
-function updateCategory(category) {
+function updateCategory(category, prevCategory) {
   
   if (category === "piechart") {
     
+    // shrink circles
+    d3.selectAll(".county-point")
+      .transition(500)
+      .attr("r", 0);
+  
     addPieCharts();
     
-  } else {
+  } else if(prevCategory === "piechart") {
   
+  // shrink pies
+  d3.selectAll(".pieslice")
+    .transition(500)
+    .attr("d", arcpath.outerRadius(0));
+    
   // update circles
   updateCircles(category);
+    
+  } else {
+    
+    // update circles
+    updateCircles(category);
     
   }
   

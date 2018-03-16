@@ -61,6 +61,8 @@ if(!activeView) activeView = 'USA';
 // let's use full-length space-removed lower-case labels, e.g. publicsupply and thermoelectric
 var activeCategory = getHash('category');
 if(!activeCategory) activeCategory = 'total';
+// default for prev is total
+var prevCategory = 'total';
 
 svg.append("text")
   .attr("id", "maptitle")
@@ -129,12 +131,13 @@ var categoryButtons = d3.select('#button-container')
     return d;
   })
   .on('click', function(d){
+    prevCategory = activeCategory;
     activeCategory = d.toLowerCase(); // put this here so it only changes on click
     updateCategory(activeCategory);
   })
   .on('mouseover', function(d){
-    updateCategory(d.toLowerCase());
+    updateCategory(d.toLowerCase(), activeCategory);
   })
   .on('mouseout', function(d){
-    updateCategory(activeCategory);
+    updateCategory(activeCategory, d.toLowerCase());
   });

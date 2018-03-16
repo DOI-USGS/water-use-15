@@ -37,6 +37,8 @@ function addPieCharts() {
       })
       .enter()
       .append("path")
+        .classed("pieslice", true)
+        .transition(500)
         .attr("d", arcpath.outerRadius(function(d) {
           var totalwuvalue = +d3.select(this.parentNode).attr("data-totalwu");
           return scaleCircles(totalwuvalue);
