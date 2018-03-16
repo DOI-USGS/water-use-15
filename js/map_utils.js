@@ -332,7 +332,7 @@ function categoryToColor(category) {
   else if (category == "publicsupply") { return "rgba(186,50,40, 0.8)"; }
   else if (category == "irrigation") { return "rgba(155,197,61, 0.8)"; }
   else if (category == "industrial") { return "rgba(138,113,106, 0.8)"; }
-  else if (category == "other") { return "rgba(211,211,211, 0.8)"; }
+  else if (category == "other") { return "rgba(143,73,186, 0.8)"; }
   else { return "none"; }
 }
 
