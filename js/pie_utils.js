@@ -26,8 +26,9 @@ function addPieCharts() {
         return d.piechartmeta[1]; 
       })
       .attr("transform", function(d) {
-        var coords = projection(d.piechartmeta[0]); // need to add projection thing for missing.
-        return "translate("+coords[0]+","+coords[1]+")";
+        var xcoord = projectX(d.piechartmeta[0]),
+            ycoord = projectY(d.piechartmeta[0]);
+        return "translate("+xcoord+","+ycoord+")";
       });
       
   piearc.selectAll('path')  
@@ -45,7 +46,6 @@ function addPieCharts() {
         });
   
 }
-
 
 function pieData(geodata) {
   

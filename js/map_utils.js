@@ -43,24 +43,13 @@ function addCentroids(map, countyCentroids) {
     })
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
-    .attr("cx", function(d) { 
-      var proj = projection(d.geometry.coordinates);
-      if(!proj) {
-        console.log('bad projection:');
-        console.log(d);
-        console.log(projection(d.geometry.coordinates));
-        return 0;
-      } else {
-        return projection(d.geometry.coordinates)[0]; 
-      }
+    .attr("cx", function(d) {
+      var coordx = projectX(d.geometry.coordinates);
+      if(coordx === 0) { console.log(d); } // moved outside of project function bc coordinates aren't always d.geometry.coordinates (like in pies)
+      return coordx;
     })
     .attr("cy", function(d) { 
-      var proj = projection(d.geometry.coordinates);
-      if(!proj) {
-        return 0;
-      } else {
-        return projection(d.geometry.coordinates)[1]; 
-      }
+      return projectY(d.geometry.coordinates)
     })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
@@ -332,3 +321,23 @@ function categoryToColor(category) {
   else { return "none"; }
 }
 
+// projection functions to catch and log bad ones
+function projectX(coordinates) {
+  var proj = projection(coordinates);
+  if(!proj) {
+    console.log('bad projection:');
+    console.log(projection(coordinates));
+    return 0;
+  } else {
+    return projection(coordinates)[0]; 
+  }
+}
+
+function projectY(coordinates) {
+  var proj = projection(coordinates);
+  if(!proj) {
+    return 0;
+  } else {
+    return projection(coordinates)[1]; 
+  }
+}
