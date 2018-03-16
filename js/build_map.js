@@ -3,7 +3,8 @@ var chart_width     =   1000;
 var chart_height    =   700;
 
 // define categories
-var tempCategories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
+var tempCategories = ["total", "thermoelectric", "publicsupply", 
+                      "irrigation", "industrial", "piechart"];
 
 // Projection
 var projection = albersUsaTerritories()

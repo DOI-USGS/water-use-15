@@ -235,12 +235,21 @@ function updateView(newView) {
 
 function updateCategory(category) {
   
+  if (category === "piechart") {
+    
+    addPieCharts();
+    
+  } else {
+  
   // update circles
   updateCircles(category);
+    
+  }
   
   // update page info
   updateTitle(category);
   setHash('category', category);
+  
 }
 
 function updateTitle(category) {
@@ -309,6 +318,7 @@ function categoryToName(category) {
   else if (category == "publicsupply") { return "Public Supply"; }
   else if (category == "irrigation") { return "Irrigation"; }
   else if (category == "industrial") { return "Industrial"; }
+  else if (category == "piechart") { return "Pie Chart"; }
   else { return "none"; }
 }
 
@@ -318,5 +328,7 @@ function categoryToColor(category) {
   else if (category == "publicsupply") { return "rgba(186,50,40, 0.8)"; }
   else if (category == "irrigation") { return "rgba(155,197,61, 0.8)"; }
   else if (category == "industrial") { return "rgba(138,113,106, 0.8)"; }
+  else if (category == "other") { return "rgba(211,211,211, 0.8)"; }
   else { return "none"; }
 }
+
