@@ -31,7 +31,7 @@ function addPieCharts() {
         return "translate("+xcoord+","+ycoord+")";
       });
       
-  piearc.selectAll('path')  
+  piearc.selectAll('pieslice')  
       .data(function(d) {
         return pie(d.piechartdata);
       })
