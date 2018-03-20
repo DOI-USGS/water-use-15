@@ -56,6 +56,9 @@ info:
     sf:
       repo: CRAN
       version: 0.5.4
+    sbtools:
+      repo: CRAN
+      version: 1.1.6
       
   contributors:
     -
@@ -95,42 +98,34 @@ fetch:
   - 
     id: county_boundaries_topojson
     location: cache/county_boundaries_USA.json
-    fetch_args:
-      object_name: "county_boundaries_USA.json"
-      bucket_name: "viz-water-use-15"
     reader: json
     mimetype: application/json
-    fetcher: s3_object
-    scripts: [scripts/fetch/s3_object.R]
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "county_boundaries_USA.json"
   -
     id: state_boundaries_topojson
     location: cache/state_boundaries_USA.json
-    fetch_args:
-      object_name: "state_boundaries_USA.json"
-      bucket_name: "viz-water-use-15"
     reader: json
     mimetype: application/json
-    fetcher: s3_object
-    scripts: [scripts/fetch/s3_object.R]
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "state_boundaries_USA.json"
   -
     id: county_centroids_topojson
     location: cache/county_centroids_USA.json
-    fetch_args:
-      object_name: "county_centroids_USA.json"
-      bucket_name: "viz-water-use-15"
     reader: json
     mimetype: application/json
-    fetcher: s3_object
-    scripts: [scripts/fetch/s3_object.R]
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "county_centroids_USA.json"
   -
     id: wu_data_15
     location: cache/wu_data_15.xlsx
-    fetch_args:
-      object_name: "usco2015v2.0-dataviz.xlsx"
-      bucket_name: "viz-water-use-15"
     reader: excel
-    fetcher: s3_object
-    scripts: [scripts/fetch/s3_object.R]
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "usco2015v2.0-dataviz.xlsx"
   -
     id: description_text_md
     location: data/description_text.yaml
