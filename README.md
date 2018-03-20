@@ -1,6 +1,8 @@
 # water-use-15
 USGS water use data visualization emphasizing the newly added 2015 dataset.
 
+You will need to run `sbtools::authenticate_sb` before building in order to access Sciencebase.
+
 # Contributing
 In your PRs: include a screenshot with changes (if applicable). Also check that your changes still work on a mobile view before submitting a PR, and make notes in your PR comment about any usability aspects that need attention.
 
