@@ -43,24 +43,13 @@ function addCentroids(map, countyCentroids) {
     })
     .attr('fips', function(d) { return d.properties.GEOID; })
     .text(function(d) { return d.properties.GEOID; })
-    .attr("cx", function(d) { 
-      var proj = projection(d.geometry.coordinates);
-      if(!proj) {
-        console.log('bad projection:');
-        console.log(d);
-        console.log(projection(d.geometry.coordinates));
-        return 0;
-      } else {
-        return projection(d.geometry.coordinates)[0]; 
-      }
+    .attr("cx", function(d) {
+      var coordx = projectX(d.geometry.coordinates);
+      if(coordx === 0) { console.log(d); } // moved outside of project function bc coordinates aren't always d.geometry.coordinates (like in pies)
+      return coordx;
     })
     .attr("cy", function(d) { 
-      var proj = projection(d.geometry.coordinates);
-      if(!proj) {
-        return 0;
-      } else {
-        return projection(d.geometry.coordinates)[1]; 
-      }
+      return projectY(d.geometry.coordinates)
     })
     .attr("r", function(d) { 
       return scaleCircles(d.properties[[activeCategory]]);
@@ -233,14 +222,38 @@ function updateView(newView) {
       "translate(" + -x + "," + -y + ")");
 }
 
-function updateCategory(category) {
+function updateCategory(category, prevCategory) {
   
+  if (category === "piechart") {
+    
+    // shrink circles
+    d3.selectAll(".county-point")
+      .transition(500)
+      .attr("r", 0);
+  
+    addPieCharts();
+    
+  } else if(prevCategory === "piechart") {
+  
+  // shrink pies
+  d3.selectAll(".pieslice")
+    .transition(500)
+    .attr("d", arcpath.outerRadius(0));
+    
   // update circles
   updateCircles(category);
+    
+  } else {
+    
+    // update circles
+    updateCircles(category);
+    
+  }
   
   // update page info
   updateTitle(category);
   setHash('category', category);
+  
 }
 
 function updateTitle(category) {
@@ -309,6 +322,7 @@ function categoryToName(category) {
   else if (category == "publicsupply") { return "Public Supply"; }
   else if (category == "irrigation") { return "Irrigation"; }
   else if (category == "industrial") { return "Industrial"; }
+  else if (category == "piechart") { return "Pie Chart"; }
   else { return "none"; }
 }
 
@@ -318,5 +332,27 @@ function categoryToColor(category) {
   else if (category == "publicsupply") { return "rgba(186,50,40, 0.8)"; }
   else if (category == "irrigation") { return "rgba(155,197,61, 0.8)"; }
   else if (category == "industrial") { return "rgba(138,113,106, 0.8)"; }
+  else if (category == "other") { return "rgba(143,73,186, 0.8)"; }
   else { return "none"; }
+}
+
+// projection functions to catch and log bad ones
+function projectX(coordinates) {
+  var proj = projection(coordinates);
+  if(!proj) {
+    console.log('bad projection:');
+    console.log(projection(coordinates));
+    return 0;
+  } else {
+    return projection(coordinates)[0]; 
+  }
+}
+
+function projectY(coordinates) {
+  var proj = projection(coordinates);
+  if(!proj) {
+    return 0;
+  } else {
+    return projection(coordinates)[1]; 
+  }
 }

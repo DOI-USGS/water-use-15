@@ -52,6 +52,10 @@
   button.industrial{
     background:rgb(138,113,106);
   }
+  
+  button.piechart{
+    background:rgb(143,73,186);
+  }
 
 .legend {
   fill: none;
