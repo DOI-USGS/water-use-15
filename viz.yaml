@@ -310,4 +310,3 @@ publish:
     depends: description_text_md
     context:
       text: description_text_md.directions_text-markdown
-
