@@ -179,8 +179,9 @@ publish:
       custom_css: "custom_css"
       social: "social_section"
       socialCSS: "lib-social-media-css"
+      description_text: "description_text"
+      directions_text: "directions_text"
       header: "header_section"
-      text_section: "text_section"
       footer: "footer_section"
       hashes: "url_hashes"
       projection: "custom_projection"
@@ -197,7 +198,7 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
                   "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties", 
                   "legend_utils", "pie_utils"]
-      sections: ["social", "map", "text_section"] # adding header and footer here, doubled each on the page
+      sections: ["social","map","description_text", "directions_text"] # adding header and footer here, doubled each on the page
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -247,14 +248,6 @@ publish:
     context:
       title: "Water use in the U.S. from 1950 to 2015"
   -
-    id: text_section
-    template: layout/templates/textSection.mustache
-    publisher: section
-    depends: description_text_md
-    context:
-      directions: description_text_md.directions_text-markdown
-      description: description_text_md.description_text-markdown
-  -
     id: footer_section
     template: footer-template
     publisher: footer
@@ -291,9 +284,9 @@ publish:
       map_utils: map_utils
       legend_utils: legend_utils
       pie_utils: pie_utils
-      text_section: text_section
       map_counties: map_counties
       map: build_map
+      directions_text: directions_text
       state_boundaries: state_boundaries_topojson
       county_boundaries: county_boundaries_topojson
       county_centroids_wu: county_centroids_wu_topojson
@@ -302,4 +295,18 @@ publish:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "map_utils", 
                   "map_counties", "legend_utils", "pie_utils"]
-      embed: ["map", "text_section"]
+      embed: ["map","directions_text"]
+  -
+    id: description_text
+    template: printall
+    publisher: section
+    depends: description_text_md
+    context:
+      text: description_text_md.description_text-markdown
+  -
+    id: directions_text
+    template: printall
+    publisher: section
+    depends: description_text_md
+    context:
+      text: description_text_md.directions_text-markdown
