@@ -11,7 +11,7 @@ function addPieCharts() {
   
   //relies on map and pieformdata as a global variable
   
-  var piearc = map.selectAll('pie')
+  var pies = map.selectAll('.pie')
     .data(pieformdata)
     .enter()
     .append('g')
@@ -25,20 +25,28 @@ function addPieCharts() {
       .attr("transform", function(d) {
         var xcoord = projectX(d.piechartmeta[0]),
             ycoord = projectY(d.piechartmeta[0]);
-        return "translate("+xcoord+","+ycoord+")";
+        //var radius = scaleCircles(d.piechartmeta[1]);
+        return "translate("+xcoord+","+ycoord+")";// scale("+(radius/10)+")";
       });
-      
-  piearc.selectAll('pieslice')  
+    
+  
+  var pieslices = map.selectAll('.pie').selectAll('.pieslice')  
       .data(function(d) {
         return pie(d.piechartdata);
-      })
+      });
+  
+  var pieenter = pieslices
       .enter()
       .append("path")
-        .classed("pieslice", true)
-        .transition(500)
+        .classed("pieslice", true);
+  
+  //var pieupdate = pieenter
+  //      .merge(pieslices); // merges update selection (where pieslices var is created) w/ enter selection (comes out of above line)
+  
   piesBaked = true;
   updatePieCharts();
   
+}
 
 function updatePieCharts() {
   
