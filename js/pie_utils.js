@@ -36,10 +36,19 @@ function addPieCharts() {
       .append("path")
         .classed("pieslice", true)
         .transition(500)
+  piesBaked = true;
+  updatePieCharts();
+  
+
+function updatePieCharts() {
+  
+  map.selectAll('.pie').selectAll('.pieslice')
+        //.transition().duration(0)
         .attr("d", arcpath.outerRadius(function(d) {
           var totalwuvalue = +d3.select(this.parentNode).attr("data-totalwu");
           return scaleCircles(totalwuvalue);
         }))
+        //.attr("d", arcpath)
         .attr("fill", function(d) { 
           return categoryToColor(d.data.category); 
         });

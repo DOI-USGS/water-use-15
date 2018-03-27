@@ -46,6 +46,7 @@ var mapBackground = map.append("rect")
 // Datasets
 var stateData, pieformdata;
 var countyData = new Map();
+var piesBaked = false;
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")

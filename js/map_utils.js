@@ -231,7 +231,12 @@ function updateCategory(category, prevCategory) {
       .transition(500)
       .attr("r", 0);
   
-    addPieCharts();
+    if (!piesBaked) {
+      addPieCharts();
+      console.log("baking pies");
+    } else {
+      updatePieCharts();
+    }
     
   } else if(prevCategory === "piechart") {
   
