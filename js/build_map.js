@@ -87,6 +87,10 @@ function create_map() {
 	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
 	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
+  // relies on countyCentroids as global vars
+  pieformdata = pieData(countyCentroids);
+  console.log(pieformdata);
+	
   // set up scaling for circles
   
     var rangeWateruse = arguments[3],
