@@ -6,6 +6,7 @@ var pie = d3.pie()
 
 var arcpath = d3.arc()
     .innerRadius(0);
+    //.outerRadius(10);
 
 function addPieCharts() {
   
