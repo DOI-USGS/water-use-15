@@ -232,7 +232,7 @@ function updateCategory(category, prevCategory) {
     
     // shrink circles
     d3.selectAll(".county-point")
-      .transition(500)
+      //.transition().duration(0)
       .attr("r", 0);
   
     if (!piesBaked) {
@@ -246,7 +246,7 @@ function updateCategory(category, prevCategory) {
   
   // shrink pies
   d3.selectAll(".pieslice")
-    .transition(500)
+    //.transition().duration(0)
     .attr("d", arcpath.outerRadius(0));
     
   // update circles
@@ -272,7 +272,7 @@ function updateCircles(category) {
       .sort(function(a,b) { 
         return d3.descending(a.properties[[category]], b.properties[[category]]);
       })
-      .transition().duration(600)
+      //.transition().duration(0)
       .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
       .style("fill", categoryToColor(category));
       
