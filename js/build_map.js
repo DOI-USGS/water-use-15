@@ -44,7 +44,7 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateData, pieformdata;
+var stateData, pieFormData;
 var countyData = new Map();
 var piesBaked = false;
 
@@ -87,9 +87,8 @@ function create_map() {
 	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
 	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
-  // relies on countyCentroids as global vars
-  pieformdata = pieData(countyCentroids);
-  console.log(pieformdata);
+  // also prepare the centroid data for presentation as pie charts
+  pieFormData = pieData(countyCentroids);
 	
   // set up scaling for circles
   

@@ -10,10 +10,10 @@ var arcpath = d3.arc()
 
 function addPieCharts() {
   
-  //relies on map and pieformdata as a global variable
+  //relies on map and pieFormData as a global variable
   
   var pies = map.selectAll('.pie')
-    .data(pieformdata)
+    .data(pieFormData)
     .enter()
     .append('g')
       .classed("pie", true)
