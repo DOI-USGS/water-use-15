@@ -17,9 +17,7 @@ function addPieCharts() {
     .append('g')
       .classed("pie", true)
       .attr("transform", function(d) {
-        var xcoord = projectX(d.coordinates),
-            ycoord = projectY(d.coordinates);
-        return "translate("+xcoord+","+ycoord+")";
+        return "translate(" + d.coordinates.x + "," + d.coordinates.y + ")";
       });
     
   
@@ -58,6 +56,7 @@ function pieData(geodata) {
   
     for (var i=0; i<geodata.features.length; i++) {
       properties = geodata.features[i].properties;
+      var proj = projection(geodata.features[i].geometry.coordinates);
       pieAll.push( {
         sliceGeomData: pie([
           { "category": "thermoelectric", 
@@ -80,7 +79,10 @@ function pieData(geodata) {
             "value": properties.other,
             "total": properties.total
           }]),
-        coordinates: geodata.features[i].geometry.coordinates
+        coordinates: {
+          x: proj[0],
+          y: proj[1]
+        }
       });
     }
     
