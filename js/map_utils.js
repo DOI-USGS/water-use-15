@@ -224,6 +224,10 @@ function updateView(newView) {
 
 function updateCategory(category, prevCategory) {
   
+  // update page info
+  updateTitle(category);
+  setHash('category', category);
+  
   if (category === "piechart") {
     
     // shrink circles
@@ -254,10 +258,6 @@ function updateCategory(category, prevCategory) {
     updateCircles(category);
     
   }
-  
-  // update page info
-  updateTitle(category);
-  setHash('category', category);
   
 }
 
