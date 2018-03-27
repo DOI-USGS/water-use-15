@@ -71,18 +71,18 @@ function pieData(geodata) {
         pieAll.push( {
           piechartdata: [
             {"category": "thermoelectric", 
-                "value": parseInt(geodata.features[i].properties.thermoelectric)},
+                "value": geodata.features[i].properties.thermoelectric},
             {"category": "publicsupply", 
-                "value": parseInt(geodata.features[i].properties.publicsupply)},
+                "value": geodata.features[i].properties.publicsupply},
             {"category": "irrigation", 
-                "value": parseInt(geodata.features[i].properties.irrigation)},
+                "value": geodata.features[i].properties.irrigation},
             {"category": "industrial", 
-                "value": parseInt(geodata.features[i].properties.industrial)},
+                "value": geodata.features[i].properties.industrial},
             {"category": "other", 
-                "value": parseInt(geodata.features[i].properties.other)}],
+                "value": geodata.features[i].properties.other}],
           piechartmeta: [
             geodata.features[i].geometry.coordinates,
-            parseInt(geodata.features[i].properties.total)
+            geodata.features[i].properties.total
           ]
         });
     }
