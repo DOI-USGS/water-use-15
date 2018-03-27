@@ -16,22 +16,16 @@ function addPieCharts() {
     .enter()
     .append('g')
       .classed("pie", true)
-      .attr("data-totalwu", function (d) {
-        //include as attribute to use for outerRadius for each arc
-        //when arcs are added data is already subsetted to just the single category
-        //but they need to use "total" to set the outer radius
-        return d.piechartmeta[1]; 
-      })
       .attr("transform", function(d) {
-        var xcoord = projectX(d.piechartmeta[0]),
-            ycoord = projectY(d.piechartmeta[0]);
+        var xcoord = projectX(d.coordinates),
+            ycoord = projectY(d.coordinates);
         return "translate("+xcoord+","+ycoord+")";
       });
     
   
   var pieslices = map.selectAll('.pie').selectAll('.pieslice')  
       .data(function(d) {
-        return d.piechartdata;
+        return d.sliceGeomData;
       });
   
   var pieenter = pieslices
@@ -49,8 +43,7 @@ function updatePieCharts() {
   map.selectAll('.pie').selectAll('.pieslice')
     //.transition().duration(0)
     .attr("d", arcpath.outerRadius(function(d) {
-      var totalwuvalue = +d3.select(this.parentNode).attr("data-totalwu");
-      return scaleCircles(totalwuvalue);
+      return scaleCircles(d.data.total);
     }))
     .attr("d", arcpath)
     .attr("fill", function(d) { 
@@ -64,23 +57,31 @@ function pieData(geodata) {
   var pieAll = [];
   
     for (var i=0; i<geodata.features.length; i++) {
-        pieAll.push( {
-          piechartdata: pie([
-            {"category": "thermoelectric", 
-                "value": geodata.features[i].properties.thermoelectric},
-            {"category": "publicsupply", 
-                "value": geodata.features[i].properties.publicsupply},
-            {"category": "irrigation", 
-                "value": geodata.features[i].properties.irrigation},
-            {"category": "industrial", 
-                "value": geodata.features[i].properties.industrial},
-            {"category": "other", 
-                "value": geodata.features[i].properties.other}]),
-          piechartmeta: [
-            geodata.features[i].geometry.coordinates,
-            geodata.features[i].properties.total
-          ]
-        });
+      properties = geodata.features[i].properties;
+      pieAll.push( {
+        sliceGeomData: pie([
+          { "category": "thermoelectric", 
+            "value": properties.thermoelectric,
+            "total": properties.total
+          },
+          { "category": "publicsupply", 
+            "value": properties.publicsupply,
+            "total": properties.total
+          },
+          { "category": "irrigation", 
+            "value": properties.irrigation,
+            "total": properties.total
+          },
+          { "category": "industrial", 
+            "value": properties.industrial,
+            "total": properties.total
+          },
+          { "category": "other", 
+            "value": properties.other,
+            "total": properties.total
+          }]),
+        coordinates: geodata.features[i].geometry.coordinates
+      });
     }
     
   return pieAll;
