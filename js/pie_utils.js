@@ -31,7 +31,7 @@ function addPieCharts() {
   
   var pieslices = map.selectAll('.pie').selectAll('.pieslice')  
       .data(function(d) {
-        return pie(d.piechartdata);
+        return d.piechartdata;
       });
   
   var pieenter = pieslices
@@ -65,7 +65,7 @@ function pieData(geodata) {
   
     for (var i=0; i<geodata.features.length; i++) {
         pieAll.push( {
-          piechartdata: [
+          piechartdata: pie([
             {"category": "thermoelectric", 
                 "value": geodata.features[i].properties.thermoelectric},
             {"category": "publicsupply", 
@@ -75,7 +75,7 @@ function pieData(geodata) {
             {"category": "industrial", 
                 "value": geodata.features[i].properties.industrial},
             {"category": "other", 
-                "value": geodata.features[i].properties.other}],
+                "value": geodata.features[i].properties.other}]),
           piechartmeta: [
             geodata.features[i].geometry.coordinates,
             geodata.features[i].properties.total
