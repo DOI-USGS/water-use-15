@@ -44,7 +44,7 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateData, stateDict, countyDict;
+var stateData, pieformdata;
 var countyData = new Map();
 
 d3.queue()

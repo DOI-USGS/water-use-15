@@ -9,10 +9,7 @@ var arcpath = d3.arc()
 
 function addPieCharts() {
   
-  // relies on map and countyCentroids as global vars
-   
-  var pieformdata = pieData(countyCentroids);
-  console.log(pieformdata);
+  //relies on map and pieformdata as a global variable
   
   var piearc = map.selectAll('pie')
     .data(pieformdata)
