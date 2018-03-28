@@ -63,6 +63,11 @@ function pieData(geodata) {
     for (var i=0; i<geodata.features.length; i++) {
       properties = geodata.features[i].properties;
       var proj = projection(geodata.features[i].geometry.coordinates);
+      if(proj === null) {
+        console.log('bad projection:');
+        console.log(proj);
+        console.log(geodata.features[i]);
+      }
       pieAll.push( {
         sliceGeomData: pie([
           { "category": "thermoelectric", 
