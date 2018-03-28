@@ -31,45 +31,57 @@ var stateStyle = {
   }
 };
   
-function addCentroids(map, countyCentroids) {
+function addCircles() {
   
-  map.selectAll('county-point')
+  // uses globals map, countyCentroids, scaleCircles, activeCategory
+  
+  var circleGroup = map.append('g')
+    .classed('circles', true);
+  circleGroup.selectAll('.county-point')
     .data(countyCentroids.features)
     .enter()
     .append('circle')
     .classed('county-point', true)
-    .sort(function(a,b) { 
-      return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
-    })
-    .attr('fips', function(d) { return d.properties.GEOID; })
-    .text(function(d) { return d.properties.GEOID; })
-    .attr("cx", function(d) { 
-      var proj = projection(d.geometry.coordinates);
-      if(!proj) {
-        console.log('bad projection:');
-        console.log(d);
-        console.log(projection(d.geometry.coordinates));
-        return 0;
-      } else {
-        return projection(d.geometry.coordinates)[0]; 
-      }
+    .attr("cx", function(d) {
+      var coordx = projectX(d.geometry.coordinates);
+      if(coordx === 0) { console.log(d); } // moved outside of project function bc coordinates aren't always d.geometry.coordinates (like in pies)
+      return coordx;
     })
     .attr("cy", function(d) { 
-      var proj = projection(d.geometry.coordinates);
-      if(!proj) {
-        return 0;
-      } else {
-        return projection(d.geometry.coordinates)[1]; 
-      }
-    })
-    .attr("r", function(d) { 
-      return scaleCircles(d.properties[[activeCategory]]);
+      return projectY(d.geometry.coordinates);
     })
     // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
     // because people won't be able to see tooltips at the same time anyways
     .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
-    .on("mouseout", function(d) { hideTooltip(this, d); })
-    .style("fill", categoryToColor(activeCategory));
+    .on("mouseout", function(d) { hideTooltip(this, d); });
+    
+  circlesAdded = true;
+  
+  // these newly added circles won't work until updateCircles is called, but
+  // since this function always gets called from updateCircles, that should be fine
+}
+
+function updateCircles(category) {
+  
+  // add the circles if needed
+  if (!circlesAdded) {
+    addCircles();
+  }
+
+  d3.selectAll(".county-point")
+    .sort(function(a,b) { 
+      return d3.descending(a.properties[[category]], b.properties[[category]]);
+    })
+    //.transition().duration(0)
+    .attr("r", function(d) {
+      return scaleCircles(d.properties[[category]]);
+    })
+    .style("fill", categoryToColor(category));
+      
+  d3.selectAll(".legend-point")
+    .transition().duration(600)
+    .style("fill", categoryToColor(category));
+    
 }
 
 // Create the state polygons
@@ -233,35 +245,44 @@ function updateView(newView) {
       "translate(" + -x + "," + -y + ")");
 }
 
-function updateCategory(category) {
-  
-  // update circles
-  updateCircles(category);
+function updateCategory(category, prevCategory) {
   
   // update page info
   updateTitle(category);
   setHash('category', category);
+  
+  if (category === "piechart") {
+    
+    // shrink circles
+    d3.selectAll(".county-point")
+      //.transition().duration(0)
+      .attr("r", 0);
+  
+    // create or expand and update the pies
+    updatePieCharts();
+    
+  } else if(prevCategory === "piechart") {
+  
+    // shrink pies
+    d3.selectAll(".pieslice")
+      //.transition().duration(0)
+      .attr("d", arcpath.outerRadius(0));
+      
+    // create or expand and update the circles
+    updateCircles(category);
+    
+  } else {
+    
+    // update circles
+    updateCircles(category);
+    
+  }
+  
 }
 
 function updateTitle(category) {
   d3.select("#maptitle")
     .text("Water Use Data for " + activeView + ", 2015, " + category);
-}
-
-function updateCircles(category) {
-
-  d3.selectAll(".county-point")
-      .sort(function(a,b) { 
-        return d3.descending(a.properties[[category]], b.properties[[category]]);
-      })
-      .transition().duration(600)
-      .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
-      .style("fill", categoryToColor(category));
-      
-  d3.selectAll(".legend-point")
-    .transition().duration(600)
-    .style("fill", categoryToColor(category));
-    
 }
 
 function showToolTip(currentCircle, d, category) {
@@ -309,6 +330,7 @@ function categoryToName(category) {
   else if (category == "publicsupply") { return "Public Supply"; }
   else if (category == "irrigation") { return "Irrigation"; }
   else if (category == "industrial") { return "Industrial"; }
+  else if (category == "piechart") { return "Pie Chart"; }
   else { return "none"; }
 }
 
@@ -318,5 +340,27 @@ function categoryToColor(category) {
   else if (category == "publicsupply") { return "rgba(186,50,40, 0.8)"; }
   else if (category == "irrigation") { return "rgba(155,197,61, 0.8)"; }
   else if (category == "industrial") { return "rgba(138,113,106, 0.8)"; }
+  else if (category == "other") { return "rgba(143,73,186, 0.8)"; }
   else { return "none"; }
+}
+
+// projection functions to catch and log bad ones
+function projectX(coordinates) {
+  var proj = projection(coordinates);
+  if(!proj) {
+    console.log('bad projection:');
+    console.log(projection(coordinates));
+    return 0;
+  } else {
+    return projection(coordinates)[0]; 
+  }
+}
+
+function projectY(coordinates) {
+  var proj = projection(coordinates);
+  if(!proj) {
+    return 0;
+  } else {
+    return projection(coordinates)[1]; 
+  }
 }

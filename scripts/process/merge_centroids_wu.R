@@ -6,7 +6,10 @@ process.merge_centroids_wu <- function(viz) {
   # merge datasets and keep a minimal set of columns
   centroids_data <- centroids_topo@data %>%
     left_join(wu_data_15_simple, by=c('GEOID'='FIPS')) %>%
-    select(GEOID, STATE_ABBV, COUNTY, countypop:industrial)
+    select(GEOID, STATE_ABBV, COUNTY, countypop:industrial) %>% 
+    rowwise() %>% 
+    mutate(other = total - sum(thermoelectric, publicsupply, irrigation, industrial))
+  
   centroids_topo@data <- centroids_data
   
   # write to file

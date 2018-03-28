@@ -187,6 +187,7 @@ publish:
       projection: "custom_projection"
       map_utils: "map_utils"
       legend_utils: "legend_utils"
+      pie_utils: "pie_utils"
       map_counties: "map_counties"
       map: "build_map"
       state_boundaries: "state_boundaries_topojson"
@@ -195,7 +196,8 @@ publish:
       wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
-                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties", "legend_utils"]
+                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties", 
+                  "legend_utils", "pie_utils"]
       sections: ["social","map","description_text", "directions_text"] # adding header and footer here, doubled each on the page
   -
     id: topojson
@@ -221,6 +223,10 @@ publish:
   -
     id: legend_utils
     location: "js/legend_utils.js"
+    mimetype: application/javascript
+  -
+    id: pie_utils
+    location: "js/pie_utils.js"
     mimetype: application/javascript
   -
     id: map_counties
@@ -277,6 +283,7 @@ publish:
       projection: custom_projection
       map_utils: map_utils
       legend_utils: legend_utils
+      pie_utils: pie_utils
       map_counties: map_counties
       map: build_map
       directions_text: directions_text
@@ -286,7 +293,8 @@ publish:
       wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties", "legend_utils"]
+                  "map_css", "custom_css", "hashes", "projection", "map_utils", 
+                  "map_counties", "legend_utils", "pie_utils"]
       embed: ["map","directions_text"]
   -
     id: description_text
@@ -302,4 +310,3 @@ publish:
     depends: description_text_md
     context:
       text: description_text_md.directions_text-markdown
-
