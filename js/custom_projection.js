@@ -101,7 +101,7 @@ function albersUsaTerritories() {
     lower48.scale(_);
     alaska.scale(_ * 0.35);
     hawaii.scale(_);
-    puertoRico.scale(_);
+    puertoRico.scale(_ * 3);
     return albersUsa.translate(lower48.translate());
   };
 
@@ -176,8 +176,8 @@ function albersUsaTerritories() {
         .stream(pointStream);
 
     puertoRicoPoint = puertoRico
-        .translate([x + 0.350 * k, y + 0.224 * k])
-        .clipExtent([[x + 0.312 * k + epsilon, y + 0.2064 * k + epsilon],[x + 0.385 * k - epsilon, y + 0.233 * k - epsilon]])
+        .translate([x + 0.340 * k, y + 0.170 * k])
+        .clipExtent([[x + 0.280 * k + epsilon, y + 0.130 * k + epsilon],[x + 0.410 * k - epsilon, y + 0.190 * k - epsilon]])
         .stream(pointStream);
 
 
