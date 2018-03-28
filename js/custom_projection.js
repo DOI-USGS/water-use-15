@@ -78,7 +78,7 @@ function albersUsaTerritories() {
 
     return (y >= 0.120 && y < 0.234 && x >= -0.425 && x < -0.214 ? alaska
         : y >= 0.166 && y < 0.234 && x >= -0.214 && x < -0.115 ? hawaii
-        : y >= 0.2064 && y < 0.2413 && x >= 0.312 && x < 0.385 ? puertoRico
+        : y >= 0.130 && y < 0.190 && x >= 0.280 && x < 0.410 ? puertoRico
         : lower48).invert(coordinates);
 
   };
