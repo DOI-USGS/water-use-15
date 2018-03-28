@@ -44,9 +44,10 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateData, pieformdata;
+var stateData, countyCentroids, pieFormData;
 var countyData = new Map();
 var piesBaked = false;
+var circlesAdded = false;
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
@@ -87,27 +88,29 @@ function create_map() {
 	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
 	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
-  // relies on countyCentroids as global vars
-  pieformdata = pieData(countyCentroids);
-  console.log(pieformdata);
-	
   // set up scaling for circles
+  var rangeWateruse = arguments[3],
+      minWateruse = rangeWateruse[0],
+      maxWateruse = rangeWateruse[1];
   
-    var rangeWateruse = arguments[3],
-        minWateruse = rangeWateruse[0],
-        maxWateruse = rangeWateruse[1];
-    
-    // update circle scale with data
-    scaleCircles
-      .domain(rangeWateruse);
+  // update circle scale with data
+  scaleCircles = scaleCircles
+    .domain(rangeWateruse);
+
+  // add legend
+  addLegend(minWateruse, maxWateruse);
   
-    // add legend
-    addLegend(minWateruse, maxWateruse);
-  
-  ////
-  
+  // add the main, active map features
   addStates(map, stateData);
-  addCentroids(map, countyCentroids, scaleCircles);
+  if(activeCategory === 'piechart') {
+    // prepare and then use the centroid data for presentation as pie charts
+    pieFormData = pieData(countyCentroids);
+    updatePieCharts();
+  } else {
+    // first render circles, and then (after we're otherwise good to go) prepare the centroid data for presentation as pie charts
+    updateCircles(activeCategory);
+    pieFormData = pieData(countyCentroids);
+  }
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
