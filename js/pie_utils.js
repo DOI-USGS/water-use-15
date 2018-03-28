@@ -1,11 +1,11 @@
 // functions related to the pie charts
 
 var pie = d3.pie()
-    .sort(null)
-    .value(function(d) { return d.value; });
+  .sort(null)
+  .value(function(d) { return d.value; });
 
 var arcpath = d3.arc()
-    .innerRadius(0);
+  .innerRadius(0);
 
 function addPieCharts() {
   

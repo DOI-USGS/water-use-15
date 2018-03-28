@@ -91,20 +91,18 @@ function create_map() {
   pieFormData = pieData(countyCentroids);
 	
   // set up scaling for circles
+  var rangeWateruse = arguments[3],
+      minWateruse = rangeWateruse[0],
+      maxWateruse = rangeWateruse[1];
   
-    var rangeWateruse = arguments[3],
-        minWateruse = rangeWateruse[0],
-        maxWateruse = rangeWateruse[1];
-    
-    // update circle scale with data
-    scaleCircles
-      .domain(rangeWateruse);
+  // update circle scale with data
+  scaleCircles = scaleCircles
+    .domain(rangeWateruse);
+
+  // add legend
+  addLegend(minWateruse, maxWateruse);
   
-    // add legend
-    addLegend(minWateruse, maxWateruse);
-  
-  ////
-  
+  // add the main map features
   addStates(map, stateData);
   addCircles(map, countyCentroids);
   

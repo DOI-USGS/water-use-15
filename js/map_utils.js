@@ -237,22 +237,22 @@ function updateCategory(category, prevCategory) {
       //.transition().duration(0)
       .attr("r", 0);
   
+    // create or expand and update the pies
     if (!piesBaked) {
       addPieCharts();
-      console.log("baking pies");
     } else {
       updatePieCharts();
     }
     
   } else if(prevCategory === "piechart") {
   
-  // shrink pies
-  d3.selectAll(".pieslice")
-    //.transition().duration(0)
-    .attr("d", arcpath.outerRadius(0));
-    
-  // update circles
-  updateCircles(category);
+    // shrink pies
+    d3.selectAll(".pieslice")
+      //.transition().duration(0)
+      .attr("d", arcpath.outerRadius(0));
+      
+    // expand and update circles
+    updateCircles(category);
     
   } else {
     
