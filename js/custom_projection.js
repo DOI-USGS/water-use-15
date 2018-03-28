@@ -177,7 +177,7 @@ function albersUsaTerritories() {
 
     puertoRicoPoint = puertoRico
         .translate([x + 0.340 * k, y + 0.170 * k])
-        .clipExtent([[x + 0.280 * k + epsilon, y + 0.130 * k + epsilon],[x + 0.410 * k - epsilon, y + 0.190 * k - epsilon]])
+        .clipExtent([[x + 0.270 * k + epsilon, y + 0.130 * k + epsilon],[x + 0.410 * k - epsilon, y + 0.190 * k - epsilon]])
         .stream(pointStream);
 
 
