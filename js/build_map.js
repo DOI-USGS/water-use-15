@@ -88,9 +88,6 @@ function create_map() {
 	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
 	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
 	
-  // also prepare the centroid data for presentation as pie charts
-  pieFormData = pieData(countyCentroids);
-	
   // set up scaling for circles
   var rangeWateruse = arguments[3],
       minWateruse = rangeWateruse[0],
@@ -106,9 +103,13 @@ function create_map() {
   // add the main, active map features
   addStates(map, stateData);
   if(activeCategory === 'piechart') {
+    // prepare and then use the centroid data for presentation as pie charts
+    pieFormData = pieData(countyCentroids);
     updatePieCharts();
   } else {
+    // first render circles, and then (after we're otherwise good to go) prepare the centroid data for presentation as pie charts
     updateCircles(activeCategory);
+    pieFormData = pieData(countyCentroids);
   }
   
   // get started downloading county data right away.
