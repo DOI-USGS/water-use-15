@@ -33,11 +33,17 @@ function addPieCharts() {
       .classed("pieslice", true);
   
   piesBaked = true;
-  updatePieCharts();
   
+  // these newly added pie charts won't work until updatePieCharts is called, but
+  // since this function always gets called from updatePieCharts, that should be fine
 }
 
 function updatePieCharts() {
+  
+  // add the pies if needed
+  if (!piesBaked) {
+    addPieCharts();
+  }
   
   map.selectAll('.pie').selectAll('.pieslice')
     //.transition().duration(0)

@@ -31,9 +31,9 @@ var stateStyle = {
   }
 };
   
-function addCircles(map, countyCentroids) {
+function addCircles() {
   
-  // uses global scaleCircles
+  // uses globals map, countyCentroids, scaleCircles, activeCategory
   
   map.selectAll('county-point')
     .data(countyCentroids.features)
@@ -61,9 +61,18 @@ function addCircles(map, countyCentroids) {
     .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
     .on("mouseout", function(d) { hideTooltip(this, d); })
     .style("fill", categoryToColor(activeCategory));
+  circlesAdded = true;
+  
+  // these newly added circles won't work until updateCircles is called, but
+  // since this function always gets called from updateCircles, that should be fine
 }
 
 function updateCircles(category) {
+  
+  // add the circles if needed
+  if (!circlesAdded) {
+    addCircles();
+  }
 
   d3.selectAll(".county-point")
       .sort(function(a,b) { 

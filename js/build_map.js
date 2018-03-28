@@ -44,9 +44,10 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateData, pieFormData;
+var stateData, countyCentroids, pieFormData;
 var countyData = new Map();
 var piesBaked = false;
+var circlesAdded = false;
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
@@ -102,9 +103,13 @@ function create_map() {
   // add legend
   addLegend(minWateruse, maxWateruse);
   
-  // add the main map features
+  // add the main, active map features
   addStates(map, stateData);
-  addCircles(map, countyCentroids);
+  if(activeCategory === 'piechart') {
+    updatePieCharts();
+  } else {
+    updateCircles(activeCategory);
+  }
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
