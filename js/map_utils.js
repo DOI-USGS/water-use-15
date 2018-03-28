@@ -31,34 +31,57 @@ var stateStyle = {
   }
 };
   
-function addCentroids(map, countyCentroids) {
+function addCircles() {
   
-  map.selectAll('county-point')
+  // uses globals map, countyCentroids, scaleCircles, activeCategory
+  
+  var circleGroup = map.append('g')
+    .classed('circles', true);
+  circleGroup.selectAll('.county-point')
     .data(countyCentroids.features)
     .enter()
     .append('circle')
     .classed('county-point', true)
-    .sort(function(a,b) { 
-      return d3.descending(a.properties[[activeCategory]], b.properties[[activeCategory]]);
-    })
-    .attr('fips', function(d) { return d.properties.GEOID; })
-    .text(function(d) { return d.properties.GEOID; })
     .attr("cx", function(d) {
       var coordx = projectX(d.geometry.coordinates);
       if(coordx === 0) { console.log(d); } // moved outside of project function bc coordinates aren't always d.geometry.coordinates (like in pies)
       return coordx;
     })
     .attr("cy", function(d) { 
-      return projectY(d.geometry.coordinates)
-    })
-    .attr("r", function(d) { 
-      return scaleCircles(d.properties[[activeCategory]]);
+      return projectY(d.geometry.coordinates);
     })
     // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
     // because people won't be able to see tooltips at the same time anyways
     .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
-    .on("mouseout", function(d) { hideTooltip(this, d); })
-    .style("fill", categoryToColor(activeCategory));
+    .on("mouseout", function(d) { hideTooltip(this, d); });
+    
+  circlesAdded = true;
+  
+  // these newly added circles won't work until updateCircles is called, but
+  // since this function always gets called from updateCircles, that should be fine
+}
+
+function updateCircles(category) {
+  
+  // add the circles if needed
+  if (!circlesAdded) {
+    addCircles();
+  }
+
+  d3.selectAll(".county-point")
+    .sort(function(a,b) { 
+      return d3.descending(a.properties[[category]], b.properties[[category]]);
+    })
+    //.transition().duration(0)
+    .attr("r", function(d) {
+      return scaleCircles(d.properties[[category]]);
+    })
+    .style("fill", categoryToColor(category));
+      
+  d3.selectAll(".legend-point")
+    .transition().duration(600)
+    .style("fill", categoryToColor(category));
+    
 }
 
 // Create the state polygons
@@ -224,24 +247,29 @@ function updateView(newView) {
 
 function updateCategory(category, prevCategory) {
   
+  // update page info
+  updateTitle(category);
+  setHash('category', category);
+  
   if (category === "piechart") {
     
     // shrink circles
     d3.selectAll(".county-point")
-      .transition(500)
+      //.transition().duration(0)
       .attr("r", 0);
   
-    addPieCharts();
+    // create or expand and update the pies
+    updatePieCharts();
     
   } else if(prevCategory === "piechart") {
   
-  // shrink pies
-  d3.selectAll(".pieslice")
-    .transition(500)
-    .attr("d", arcpath.outerRadius(0));
-    
-  // update circles
-  updateCircles(category);
+    // shrink pies
+    d3.selectAll(".pieslice")
+      //.transition().duration(0)
+      .attr("d", arcpath.outerRadius(0));
+      
+    // create or expand and update the circles
+    updateCircles(category);
     
   } else {
     
@@ -250,31 +278,11 @@ function updateCategory(category, prevCategory) {
     
   }
   
-  // update page info
-  updateTitle(category);
-  setHash('category', category);
-  
 }
 
 function updateTitle(category) {
   d3.select("#maptitle")
     .text("Water Use Data for " + activeView + ", 2015, " + category);
-}
-
-function updateCircles(category) {
-
-  d3.selectAll(".county-point")
-      .sort(function(a,b) { 
-        return d3.descending(a.properties[[category]], b.properties[[category]]);
-      })
-      .transition().duration(600)
-      .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
-      .style("fill", categoryToColor(category));
-      
-  d3.selectAll(".legend-point")
-    .transition().duration(600)
-    .style("fill", categoryToColor(category));
-    
 }
 
 function showToolTip(currentCircle, d, category) {

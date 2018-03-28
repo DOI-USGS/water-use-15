@@ -1,51 +1,58 @@
 // functions related to the pie charts
 
 var pie = d3.pie()
-    .sort(null)
-    .value(function(d) { return d.value; });
+  .sort(null)
+  .value(function(d) { return d.value; });
 
 var arcpath = d3.arc()
-    .innerRadius(0);
+  .innerRadius(0);
 
 function addPieCharts() {
   
-  // relies on map and countyCentroids as global vars
-   
-  var pieformdata = pieData(countyCentroids);
-  console.log(pieformdata);
+  //relies on map and pieFormData as a global variable
   
-  var piearc = map.selectAll('pie')
-    .data(pieformdata)
+  // each pie is a group of pie slices. here add the pie groups
+  var pies = map.selectAll('.pie')
+    .data(pieFormData);
+  var piesMerged = pies
     .enter()
     .append('g')
       .classed("pie", true)
-      .attr("data-totalwu", function (d) {
-        //include as attribute to use for outerRadius for each arc
-        //when arcs are added data is already subsetted to just the single category
-        //but they need to use "total" to set the outer radius
-        return d.piechartmeta[1]; 
-      })
       .attr("transform", function(d) {
-        var xcoord = projectX(d.piechartmeta[0]),
-            ycoord = projectY(d.piechartmeta[0]);
-        return "translate("+xcoord+","+ycoord+")";
-      });
-      
-  piearc.selectAll('pieslice')  
-      .data(function(d) {
-        return pie(d.piechartdata);
+        return "translate(" + d.coordinates.x + "," + d.coordinates.y + ")";
       })
-      .enter()
-      .append("path")
-        .classed("pieslice", true)
-        .transition(500)
-        .attr("d", arcpath.outerRadius(function(d) {
-          var totalwuvalue = +d3.select(this.parentNode).attr("data-totalwu");
-          return scaleCircles(totalwuvalue);
-        }))
-        .attr("fill", function(d) { 
-          return categoryToColor(d.data.category); 
-        });
+      .merge(pies);
+  
+  // add pie slices to each pie group
+  piesMerged.selectAll('.pieslice')  
+    .data(function(d) {
+      return d.sliceGeomData;
+    })
+    .enter()
+    .append("path")
+      .classed("pieslice", true);
+  
+  piesBaked = true;
+  
+  // these newly added pie charts won't work until updatePieCharts is called, but
+  // since this function always gets called from updatePieCharts, that should be fine
+}
+
+function updatePieCharts() {
+  
+  // add the pies if needed
+  if (!piesBaked) {
+    addPieCharts();
+  }
+  
+  map.selectAll('.pie').selectAll('.pieslice')
+    //.transition().duration(0)
+    .attr("d", arcpath.outerRadius(function(d) {
+      return scaleCircles(d.data.total);
+    }))
+    .attr("fill", function(d) { 
+      return categoryToColor(d.data.category); 
+    });
   
 }
 
@@ -54,23 +61,35 @@ function pieData(geodata) {
   var pieAll = [];
   
     for (var i=0; i<geodata.features.length; i++) {
-        pieAll.push( {
-          piechartdata: [
-            {"category": "thermoelectric", 
-                "value": parseInt(geodata.features[i].properties.thermoelectric)},
-            {"category": "publicsupply", 
-                "value": parseInt(geodata.features[i].properties.publicsupply)},
-            {"category": "irrigation", 
-                "value": parseInt(geodata.features[i].properties.irrigation)},
-            {"category": "industrial", 
-                "value": parseInt(geodata.features[i].properties.industrial)},
-            {"category": "other", 
-                "value": parseInt(geodata.features[i].properties.other)}],
-          piechartmeta: [
-            geodata.features[i].geometry.coordinates,
-            parseInt(geodata.features[i].properties.total)
-          ]
-        });
+      properties = geodata.features[i].properties;
+      var proj = projection(geodata.features[i].geometry.coordinates);
+      pieAll.push( {
+        sliceGeomData: pie([
+          { "category": "thermoelectric", 
+            "value": properties.thermoelectric,
+            "total": properties.total
+          },
+          { "category": "publicsupply", 
+            "value": properties.publicsupply,
+            "total": properties.total
+          },
+          { "category": "irrigation", 
+            "value": properties.irrigation,
+            "total": properties.total
+          },
+          { "category": "industrial", 
+            "value": properties.industrial,
+            "total": properties.total
+          },
+          { "category": "other", 
+            "value": properties.other,
+            "total": properties.total
+          }]),
+        coordinates: {
+          x: proj[0],
+          y: proj[1]
+        }
+      });
     }
     
   return pieAll;
