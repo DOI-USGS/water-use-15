@@ -11,25 +11,26 @@ function addPieCharts() {
   
   //relies on map and pieFormData as a global variable
   
+  // each pie is a group of pie slices. here add the pie groups
   var pies = map.selectAll('.pie')
-    .data(pieFormData)
+    .data(pieFormData);
+  var piesMerged = pies
     .enter()
     .append('g')
       .classed("pie", true)
       .attr("transform", function(d) {
         return "translate(" + d.coordinates.x + "," + d.coordinates.y + ")";
-      });
-    
+      })
+      .merge(pies);
   
-  var pieslices = map.selectAll('.pie').selectAll('.pieslice')  
-      .data(function(d) {
-        return d.sliceGeomData;
-      });
-  
-  var pieenter = pieslices
-      .enter()
-      .append("path")
-        .classed("pieslice", true);
+  // add pie slices to each pie group
+  piesMerged.selectAll('.pieslice')  
+    .data(function(d) {
+      return d.sliceGeomData;
+    })
+    .enter()
+    .append("path")
+      .classed("pieslice", true);
   
   piesBaked = true;
   updatePieCharts();
@@ -43,7 +44,6 @@ function updatePieCharts() {
     .attr("d", arcpath.outerRadius(function(d) {
       return scaleCircles(d.data.total);
     }))
-    .attr("d", arcpath)
     .attr("fill", function(d) { 
       return categoryToColor(d.data.category); 
     });
