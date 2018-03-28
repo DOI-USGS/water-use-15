@@ -31,7 +31,9 @@ var stateStyle = {
   }
 };
   
-function addCentroids(map, countyCentroids) {
+function addCircles(map, countyCentroids) {
+  
+  // uses global scaleCircles
   
   map.selectAll('county-point')
     .data(countyCentroids.features)

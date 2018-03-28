@@ -106,7 +106,7 @@ function create_map() {
   ////
   
   addStates(map, stateData);
-  addCentroids(map, countyCentroids, scaleCircles);
+  addCircles(map, countyCentroids);
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
