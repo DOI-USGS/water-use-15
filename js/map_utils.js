@@ -37,7 +37,7 @@ function addCircles() {
   
   var circleGroup = map.append('g')
     .classed('circles', true);
-  circleGroup.selectAll('county-point')
+  circleGroup.selectAll('.county-point')
     .data(countyCentroids.features)
     .enter()
     .append('circle')
