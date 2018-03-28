@@ -63,6 +63,22 @@ function addCircles(map, countyCentroids) {
     .style("fill", categoryToColor(activeCategory));
 }
 
+function updateCircles(category) {
+
+  d3.selectAll(".county-point")
+      .sort(function(a,b) { 
+        return d3.descending(a.properties[[category]], b.properties[[category]]);
+      })
+      //.transition().duration(0)
+      .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
+      .style("fill", categoryToColor(category));
+      
+  d3.selectAll(".legend-point")
+    .transition().duration(600)
+    .style("fill", categoryToColor(category));
+    
+}
+
 // Create the state polygons
 function addStates(map, stateData) {
 
@@ -266,22 +282,6 @@ function updateCategory(category, prevCategory) {
 function updateTitle(category) {
   d3.select("#maptitle")
     .text("Water Use Data for " + activeView + ", 2015, " + category);
-}
-
-function updateCircles(category) {
-
-  d3.selectAll(".county-point")
-      .sort(function(a,b) { 
-        return d3.descending(a.properties[[category]], b.properties[[category]]);
-      })
-      //.transition().duration(0)
-      .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
-      .style("fill", categoryToColor(category));
-      
-  d3.selectAll(".legend-point")
-    .transition().duration(600)
-    .style("fill", categoryToColor(category));
-    
 }
 
 function showToolTip(currentCircle, d, category) {
