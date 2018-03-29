@@ -1,9 +1,3 @@
-function hideCounties() {
-  map.selectAll('.county')
-    //.data([])
-    //.exit()
-    .remove();
-}
 
 function hideCountyLines() {
   d3.selectAll('.county')
