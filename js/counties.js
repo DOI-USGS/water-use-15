@@ -92,12 +92,14 @@ function displayCountyData(error, activeCountyData) {
       .attr('d', buildPath)
       .on("mouseover", function(d) {
         highlightCounty(this); 
+        highlightCircle(d3.select("#"+"circle-"+d.properties.GEOID));
+        showToolTip(d, activeCategory); 
         // OK to use global var activeCategory which only changes on click 
         // because people won't be able to hover on tooltips at the same time as hovering buttons
-        showToolTip(d, activeCategory); 
       })
       .on("mouseout", function(d) { 
-        unhighlightCounty(this); 
+        unhighlightCounty(this);
+        unhighlightCircle();
         hideToolTip();
       });
     
