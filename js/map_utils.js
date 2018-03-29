@@ -198,32 +198,9 @@ function updateCategory(category, prevCategory) {
   updateTitle(category);
   setHash('category', category);
   
-  if (category === "piechart") {
-    
-    // shrink circles
-    d3.selectAll(".county-point")
-      //.transition().duration(0)
-      .attr("r", 0);
+  updatePies(category, prevCategory);
   
-    // create or expand and update the pies
-    updatePieCharts();
-    
-  } else if(prevCategory === "piechart") {
-  
-    // shrink pies
-    d3.selectAll(".pieslice")
-      //.transition().duration(0)
-      .attr("d", arcpath.outerRadius(0));
-      
-    // create or expand and update the circles
-    updateCircles(category);
-    
-  } else {
-    
-    // update circles
-    updateCircles(category);
-    
-  }
+  updateLegend(category);
   
 }
 
@@ -240,7 +217,7 @@ function showToolTip(currentCircle, d, category) {
   
   // style duplicated circles sitting on top
   duplicate
-    .classed('county-point-duplicate', true)
+    .classed('tin-duplicate', true)
     .style("pointer-events", "none")
     .style("opacity", 1); // makes the duplicate circle on the top
   
@@ -251,14 +228,14 @@ function showToolTip(currentCircle, d, category) {
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
-    .html(d.properties.COUNTY + "<br/>" + 
-            "Population: " + d.properties.countypop + "<br/>" +
+    .html(d.COUNTY + "<br/>" + 
+            "Population: " + d.countypop + "<br/>" +
             categoryToName(category) + ": " + 
-              d.properties[[category]] + " " + "MGD");
+              d[[category]] + " " + "MGD");
 }
 
 function hideTooltip(currentCircle, d) {
-  d3.select('.county-point-duplicate')
+  d3.select('.tin-duplicate')
     .remove(); // delete duplicate
   d3.select(".tooltip")
     .classed("shown", false)

@@ -46,8 +46,8 @@ var mapBackground = map.append("rect")
 // Datasets
 var stateData, countyCentroids, pieFormData;
 var countyData = new Map();
+var tinsAdded = false;
 var piesBaked = false;
-var circlesAdded = false;
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
@@ -102,15 +102,9 @@ function create_map() {
   
   // add the main, active map features
   addStates(map, stateData);
-  if(activeCategory === 'piechart') {
-    // prepare and then use the centroid data for presentation as pie charts
-    pieFormData = pieData(countyCentroids);
-    updatePieCharts();
-  } else {
-    // first render circles, and then (after we're otherwise good to go) prepare the centroid data for presentation as pie charts
-    updateCircles(activeCategory);
-    pieFormData = pieData(countyCentroids);
-  }
+  pieFormData = pieData(countyCentroids);
+  addPies();
+  updatePies(activeCategory, prevCategory);
   
   // get started downloading county data right away.
   // for now, pretend that we know that state '01' is the most likely state
