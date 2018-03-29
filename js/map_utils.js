@@ -50,16 +50,6 @@ function addCircles() {
     })
     .attr("cy", function(d) { 
       return projectY(d.geometry.coordinates);
-    })
-    // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
-    // because people won't be able to see tooltips at the same time anyways
-    .on("mouseover", function(d) { 
-      highlightCircle(d3.select(this));
-      showToolTip(d, activeCategory); 
-    })
-    .on("mouseout", function(d) { 
-      unhighlightCircle();
-      hideToolTip(); 
     });
     
   circlesAdded = true;
@@ -107,10 +97,7 @@ function addStates(map, stateData) {
     .attr('d', buildPath)
     .style("fill", function(d) { return formatState('fill', d, false); })
     .style("stroke", function(d) { return formatState('stroke', d, false); })
-    .style("stroke-width", function(d) { return formatState('stroke-width', d, false); })
-    .on('mouseover', function(d) { return highlightState(d3.select(this)); })
-    .on('mouseout', function(d) { return unhighlightState(d3.select(this)); })
-    .on('click', zoomToFromState);
+    .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
 
   var nationBounds = buildPath.bounds(stateData);
   nationDims = {

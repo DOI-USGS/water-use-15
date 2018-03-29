@@ -24,6 +24,11 @@
   stroke-width: 0;
 }
 
+.county-point,
+.pieslice {
+  pointer-events: none;
+}
+
 #slideraxis path,
 #slideraxis line {
   stroke: #fff;
