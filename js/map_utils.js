@@ -175,7 +175,7 @@ function zoomToFromState(data) {
 
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  clickedView = d3.select(this).attr('id'); // should be same as data.properties.STATE_ABBV;
+  clickedView = data.properties.STATE_ABBV;
 
   // determine the new view
   if(clickedView === 'map-background' || activeView != 'USA') {
@@ -238,7 +238,7 @@ function updateView(newView) {
   // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
   var states = map.selectAll('.state');
   if(activeView === 'USA') {
-    hideCounties();
+    //hideCounties();
     states
       .transition()
       .duration(750)
@@ -246,7 +246,7 @@ function updateView(newView) {
       .style("stroke", function(d) { return formatState('stroke', d, false); })
       .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
   } else {
-    showCounties(activeView);
+    //showCounties(activeView);
     states
       .transition()
       .duration(750)

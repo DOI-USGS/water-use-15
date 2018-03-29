@@ -104,7 +104,8 @@ function displayCountyData(error, activeCountyData) {
         unhighlightCounty(this);
         unhighlightCircle();
         hideToolTip();
-      });
+      })
+      .on('click', zoomToFromState);
     
     // update
     countyBounds
