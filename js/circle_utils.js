@@ -23,16 +23,26 @@ function addTins() {
   // since this function always gets called from updateCircles, that should be fine
 }
 
-function updatePieTins(category, prevTransition) {
+function updatePieTins(category, delay, duration) {
   
   // add the circles if needed
   if (!tinsAdded) {
     addTins();
   }
 
-  d3.selectAll(".tin")
-    .transition(prevTransition).duration(0)
-    .style("fill", categoryToColor(category));
+  if(category === 'piechart') {
+    d3.selectAll(".tin")
+      .transition().delay(delay).duration(duration)
+      .style("fill", "transparent")
+      .style("stroke", "lightgrey")
+      .style("stroke-width", "0.01");
+  } else {
+    d3.selectAll(".tin")
+      .transition().delay(delay).duration(duration)
+      .style("fill", categoryToColor(category))
+      .style("stroke", "transparent"); // we should repoint this to use a lookup in styles.js
+
+  }
 }
 
 

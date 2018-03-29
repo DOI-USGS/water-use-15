@@ -185,6 +185,7 @@ publish:
       footer: "footer_section"
       hashes: "url_hashes"
       projection: "custom_projection"
+      styles: "styles"
       map_utils: "map_utils"
       legend_utils: "legend_utils"
       symbol_utils: "symbol_utils"
@@ -198,7 +199,7 @@ publish:
       wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
-                  "map_css", "custom_css", "hashes", "projection", "map_utils", "map_counties", 
+                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_counties", 
                   "legend_utils", "symbol_utils", "circle_utils", "pie_utils"]
       sections: ["social","map","description_text", "directions_text"] # adding header and footer here, doubled each on the page
   -
@@ -217,6 +218,10 @@ publish:
   -
     id: build_map
     location: "js/build_map.js"
+    mimetype: application/javascript
+  -
+    id: styles
+    location: "js/styles.js"
     mimetype: application/javascript
   -
     id: map_utils
@@ -291,6 +296,7 @@ publish:
       custom_css: custom_css
       hashes: url_hashes
       projection: custom_projection
+      styles: styles
       map_utils: map_utils
       legend_utils: legend_utils
       symbol_utils: symbol_utils
@@ -305,7 +311,7 @@ publish:
       wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "map_utils", 
+                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", 
                   "map_counties", "legend_utils", "symbol_utils", "circle_utils", "pie_utils"]
       embed: ["map","directions_text"]
   -

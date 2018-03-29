@@ -9,14 +9,14 @@ function addPieSlices() {
   //relies on map as a global variable
   
   // add pie slices to each pie group
-  map.selectAll('g.pie').selectAll('.pieslice')  
+  map.selectAll('g.pie').selectAll('.slice')  
     .data(function(d) {
       return d.sliceGeomData;
     })
     .enter()
     .append("path")
-      .classed("pieslice", true)
-      .attr("fill", function(d) { 
+      .classed("slice", true)
+      .style("fill", function(d) { 
         return categoryToColor(d.data.category); 
       })
       .attr("d", arcpath);
@@ -27,16 +27,21 @@ function addPieSlices() {
   // since this function always gets called from updatePieCharts, that should be fine
 }
 
-function updatePieSlices(prevTransition) {
+function updatePieSlices(category, delay, duration) {
   
   // add the pies if needed
   if (!piesBaked) {
     addPieSlices();
   }
   
-  var newTransition = map.selectAll('.pieslice') 
-    .transition(prevTransition).duration(0);
-    
-  return newTransition;
+  if(category === 'piechart') {
+    d3.selectAll(".slice")
+      .transition().delay(delay).duration(duration)
+      .style("display", null);
+  } else {
+    d3.selectAll(".slice")
+      .transition().delay(delay).duration(duration)
+      .style("display", "none");
+  }
 }
 
