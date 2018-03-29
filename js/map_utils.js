@@ -53,7 +53,7 @@ function addCircles() {
     // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
     // because people won't be able to see tooltips at the same time anyways
     .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
-    .on("mouseout", function(d) { hideTooltip(this, d); });
+    .on("mouseout", function(d) { hideToolTip(this, d); });
     
   circlesAdded = true;
   
@@ -324,7 +324,7 @@ function showToolTip(currentCircle, d, category) {
               d.properties[[category]] + " " + "MGD");
 }
 
-function hideTooltip(currentCircle, d) {
+function hideToolTip(currentCircle, d) {
   d3.select('.county-point-duplicate')
     .remove(); // delete duplicate
   d3.select(".tooltip")
