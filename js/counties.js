@@ -19,11 +19,11 @@ function loadCountyData(state, callback) {
   // for now let's always load the county data all at once. later we can again split
   // into single-state files if that turns out to be useful for performance.
   if(!countyData.has('USA')) {
-    d3.json("data/county_boundaries_USA.json", function(error, allCountiesTopo) {
+    d3.json("data/county_boundaries_wu.json", function(error, allCountiesTopo) {
       if(error) callback(error);
       
       // extract the topojson to geojson
-      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties);
+      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.foo);
       
       // cache in countyData
       countyData.set('USA', allCountiesGeo);
