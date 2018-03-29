@@ -108,8 +108,8 @@ function addStates(map, stateData) {
     .style("fill", function(d) { return formatState('fill', d, false); })
     .style("stroke", function(d) { return formatState('stroke', d, false); })
     .style("stroke-width", function(d) { return formatState('stroke-width', d, false); })
-    .on('mouseover', highlightState)
-    .on('mouseout', unhighlightState)
+    .on('mouseover', function(d) { return highlightState(d3.select(this)); })
+    .on('mouseout', function(d) { return unhighlightState(d3.select(this)); })
     .on('click', zoomToFromState);
 
   var nationBounds = buildPath.bounds(stateData);
@@ -143,16 +143,16 @@ formatState = function(attr, d, active) {
 }
 
 // on mouseover
-function highlightState() {
-  d3.select(this)
+function highlightState(selection) {
+  selection
     .style('fill', function(d) { return formatState('fill', d, true); })
     .style('stroke', function(d) { return formatState('stroke', d, true); })
     .style('stroke-width', function(d) { return formatState('stroke-width', d, true); });
 }
 
 // on mouseout
-function unhighlightState() {
-  d3.select(this)
+function unhighlightState(selection) {
+  selection
     .style("fill", function(d) { return formatState('fill', d, false); })
     .style('stroke', function(d) { return formatState('stroke', d, false); })
     .style('stroke-width', function(d) { return formatState('stroke-width', d, false); });
