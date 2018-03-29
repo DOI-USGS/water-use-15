@@ -66,9 +66,6 @@ function updateCircles(category) {
   }
 
   d3.selectAll(".county-point")
-    .sort(function(a,b) { 
-      return d3.descending(a.properties[[category]], b.properties[[category]]);
-    })
     //.transition().duration(0)
     .attr("r", function(d) {
       return scaleCircles(d.properties[[category]]);
