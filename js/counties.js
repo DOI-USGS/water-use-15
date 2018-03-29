@@ -23,7 +23,7 @@ function loadCountyData(state, callback) {
       if(error) callback(error);
       
       // extract the topojson to geojson
-      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.foo);
+      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.foo).features;
       
       // cache in countyData
       countyData.set('USA', allCountiesGeo);
@@ -44,7 +44,7 @@ function cacheCountyData(state, callback) {
   // state-caching approach could be useful in near future
   if(!countyData.has(state)) {
     // subset the data and run the processing function
-    oneStateCounties = countyData.get('USA').features.filter(function(d) {
+    oneStateCounties = countyData.get('USA').filter(function(d) {
       return(d.properties.STATE_ABBV === state);
     });
     countyData.set(state, oneStateCounties);
@@ -68,7 +68,8 @@ function displayCountyData(error, activeCountyData) {
     if(error) throw error;
     
     // create paths
-    var countyBounds = map.selectAll(".county")
+    var countyBounds = map.select('.county-bounds')
+      .selectAll(".county")
       .data(activeCountyData, function(d) {
         return d.properties.GEOID;
       });
