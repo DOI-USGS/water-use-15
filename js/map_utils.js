@@ -42,6 +42,7 @@ function addCircles() {
     .enter()
     .append('circle')
     .classed('county-point', true)
+    .attr("id", function(d) { return "circle-"+d.properties.GEOID; })
     .attr("cx", function(d) {
       var coordx = projectX(d.geometry.coordinates);
       if(coordx === 0) { console.log(d); } // moved outside of project function bc coordinates aren't always d.geometry.coordinates (like in pies)
