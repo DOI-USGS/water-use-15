@@ -86,10 +86,16 @@ function displayCountyData(error, activeCountyData) {
       .attr('id', function(d) {
         return d.properties.GEOID;
       })
-      .style("fill", 'none')
+      .style("fill", 'transparent') // none made it so you have to mouseover the boundary
       .style("stroke", 'darkgrey')
       .style("stroke-width", 0.2)
-      .attr('d', buildPath);
+      .attr('d', buildPath)
+      .on("mouseover", function(d) {
+        highlightCounty(this); 
+      })
+      .on("mouseout", function(d) { 
+        unhighlightCounty(this); 
+      });
     
     // update
     countyBounds
