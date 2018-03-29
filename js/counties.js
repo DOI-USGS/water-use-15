@@ -94,11 +94,11 @@ function displayCountyData(error, activeCountyData) {
         highlightCounty(this); 
         // OK to use global var activeCategory which only changes on click 
         // because people won't be able to hover on tooltips at the same time as hovering buttons
-        showToolTip(this, d, activeCategory); 
+        showToolTip(d, activeCategory); 
       })
       .on("mouseout", function(d) { 
         unhighlightCounty(this); 
-        hideToolTip(this, d, activeCategory);
+        hideToolTip();
       });
     
     // update

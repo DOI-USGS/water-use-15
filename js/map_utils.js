@@ -52,8 +52,14 @@ function addCircles() {
     })
     // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
     // because people won't be able to see tooltips at the same time anyways
-    .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
-    .on("mouseout", function(d) { hideToolTip(this, d); });
+    .on("mouseover", function(d) { 
+      highlightCircle(this);
+      showToolTip(d, activeCategory); 
+    })
+    .on("mouseout", function(d) { 
+      unhighlightCircle();
+      hideToolTip(); 
+    });
     
   circlesAdded = true;
   
@@ -297,18 +303,26 @@ function updateTitle(category) {
     .text("Water Use Data for " + activeView + ", 2015, " + category);
 }
 
-function showToolTip(currentCircle, d, category) {
+function highlightCircle(currentCircle) {
   var orig = d3.select(currentCircle),
       origNode = orig.node();
   var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
                                                             origNode.nextSibling));
-  
+                                                            
   // style duplicated circles sitting on top
   duplicate
     .classed('county-point-duplicate', true)
     .style("pointer-events", "none")
     .style("opacity", 1); // makes the duplicate circle on the top
-  
+}
+
+function unhighlightCircle() {
+  d3.select('.county-point-duplicate')
+    .remove(); // delete duplicate
+}
+
+function showToolTip(d, category) {
+
   // change tooltip
   d3.select(".tooltip")
     .classed("shown", true)
@@ -322,9 +336,7 @@ function showToolTip(currentCircle, d, category) {
               d.properties[[category]] + " " + "MGD");
 }
 
-function hideToolTip(currentCircle, d) {
-  d3.select('.county-point-duplicate')
-    .remove(); // delete duplicate
+function hideToolTip() {
   d3.select(".tooltip")
     .classed("shown", false)
     .classed("hidden", true);
