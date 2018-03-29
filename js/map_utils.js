@@ -53,7 +53,7 @@ function addCircles() {
     // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
     // because people won't be able to see tooltips at the same time anyways
     .on("mouseover", function(d) { 
-      highlightCircle(this);
+      highlightCircle(d3.select(this));
       showToolTip(d, activeCategory); 
     })
     .on("mouseout", function(d) { 
@@ -304,7 +304,7 @@ function updateTitle(category) {
 }
 
 function highlightCircle(currentCircle) {
-  var orig = d3.select(currentCircle),
+  var orig = currentCircle,
       origNode = orig.node();
   var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
                                                             origNode.nextSibling));
