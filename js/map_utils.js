@@ -159,8 +159,13 @@ function zoomToFromState(data) {
 
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  clickedView = data.properties.STATE_ABBV;
-
+  clickedView = d3.select(this).attr('id'); // need this in order to use background
+  
+  if( clickedView != 'map-background' ) {
+    // id of selection is a county code, but need to extract the state abbreviation from it
+    var clickedView = d3.select(this).data()[0].properties.STATE_ABBV;
+  }
+  
   // determine the new view
   if(clickedView === 'map-background' || activeView != 'USA') {
     // could have made it so we go national only if they click on the background
