@@ -12,7 +12,6 @@ function hideCountyLines() {
 
 function showCountyLines(state) {
   d3.selectAll('.county')
-    .filter(function(d) { return d.properties.STATE_ABBV === activeView; })
     .classed('hidden-border', false);
 }
 
