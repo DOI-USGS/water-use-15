@@ -5,6 +5,17 @@ function hideCounties() {
     .remove();
 }
 
+function hideCountyLines() {
+  d3.selectAll('.county')
+    .classed('hidden-border', true);
+}
+
+function showCountyLines(state) {
+  d3.selectAll('.county')
+    .filter(function(d) { return d.properties.STATE_ABBV === activeView; })
+    .classed('hidden-border', false);
+}
+
 // call a series of functions to 
 // make sure we have the USA data and then
 // make sure we have this state stored in countyData and then
@@ -84,12 +95,10 @@ function displayCountyData(error, activeCountyData) {
       .enter()
       .append("path")
       .classed('county', true)
+      .classed('hidden-border', true) // add county shapes, but don't outline
       .attr('id', function(d) {
         return d.properties.GEOID;
       })
-      .style("fill", 'transparent') // none made it so you have to mouseover the boundary
-      .style("stroke", 'darkgrey')
-      .style("stroke-width", 0.2)
       .attr('d', buildPath)
       .on("mouseover", function(d) {
         highlightState(d3.select("#"+d.properties.STATE_ABBV));

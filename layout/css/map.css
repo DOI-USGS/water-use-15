@@ -13,6 +13,17 @@
   stroke-linecap: round;
 }
 
+.county {
+  fill: transparent;
+  stroke: darkgrey;
+  stroke-width: 0.2;
+}
+
+.hidden-border {
+  stroke: transparent;
+  stroke-width: 0;
+}
+
 #slideraxis path,
 #slideraxis line {
   stroke: #fff;

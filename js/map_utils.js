@@ -238,7 +238,7 @@ function updateView(newView) {
   // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
   var states = map.selectAll('.state');
   if(activeView === 'USA') {
-    //hideCounties();
+    hideCountyLines();
     states
       .transition()
       .duration(750)
@@ -246,7 +246,7 @@ function updateView(newView) {
       .style("stroke", function(d) { return formatState('stroke', d, false); })
       .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
   } else {
-    //showCounties(activeView);
+    showCountyLines(activeView);
     states
       .transition()
       .duration(750)
