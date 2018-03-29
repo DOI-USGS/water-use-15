@@ -51,7 +51,7 @@ function updatePieCharts() {
       return scaleCircles(d.data.total);
     }))
     .attr("fill", function(d) { 
-      return categoryToColor(d.data.category); 
+      return (categoryToColor(d.data.category)+"CC"); 
     });
   
 }

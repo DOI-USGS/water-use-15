@@ -44,13 +44,15 @@ function addLegend(minWateruse, maxWateruse) {
     .enter()
     .append('circle')
       .classed('legend-point', true)
+      .style('stroke-width','0.75')
       .attr('r', function(d) { return scaleCircles(d); })
       .attr('transform', function(d, i) {
         var xpos = 0,
             ypos = yPosMinMax[i];
         return 'translate('+xpos+','+ypos+')'; 
       })
-      .style("fill", categoryToColor(activeCategory));
+      .style("fill", categoryToColor(activeCategory) + "CC")
+      .style("stroke", categoryToColor(activeCategory));
 
   // add label to circles
   legend

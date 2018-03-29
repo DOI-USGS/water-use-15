@@ -7,26 +7,26 @@ var nationDims;
 var stateStyle = {
   nationView: {
     active: {
-      'fill': '#BEBEBE',
-      'stroke': 'transparent', // looks OK white, too
-      'stroke-width': 0
+      'fill': '#e5e5e5',
+      'stroke': '#999999', // looks OK white, too
+      'stroke-width': 1.5
     },
     inactive: {
-      'fill': '#DCDCDC',
-      'stroke': 'transparent', // i think we're avoiding borders usually?
-      'stroke-width': 0
+      'fill': '#ffffff',
+      'stroke': '#999999', // i think we're avoiding borders usually?
+      'stroke-width': 1
     }
   },
   stateView: {
     active: {
-      'fill': '#DCDCDC',
-      'stroke': 'transparent', // no need for border when there's fill
-      'stroke-width': 0
+      'fill': '#e5e5e5',
+      'stroke': '#999999', // no need for border when there's fill
+      'stroke-width': 0.5
     },
     inactive: {
-      'fill': 'transparent',
-      'stroke': 'transparent', // could use #DCDCDC to show neighbor outlines
-      'stroke-width': 0
+      'fill': '#ffffff',
+      'stroke': '#999999', // could use #DCDCDC to show neighbor outlines
+      'stroke-width': 0.5
     }
   }
 };
@@ -41,6 +41,7 @@ function addCircles() {
     .data(countyCentroids.features)
     .enter()
     .append('circle')
+    .style('stroke-width','0.5')
     .classed('county-point', true)
     .attr("cx", function(d) {
       var coordx = projectX(d.geometry.coordinates);
@@ -76,11 +77,13 @@ function updateCircles(category) {
     .attr("r", function(d) {
       return scaleCircles(d.properties[[category]]);
     })
-    .style("fill", categoryToColor(category));
+    .style("fill", categoryToColor(category) + "CC")
+    .style("stroke", categoryToColor(category));
       
   d3.selectAll(".legend-point")
     .transition().duration(600)
-    .style("fill", categoryToColor(category));
+    .style("fill", categoryToColor(category) + "CC")
+    .style("stroke", categoryToColor(category));
     
 }
 
@@ -335,12 +338,12 @@ function categoryToName(category) {
 }
 
 function categoryToColor(category) {
-  if (category == "total") { return "rgba(46, 134, 171, 0.8)"; }
-  else if (category == "thermoelectric") { return "rgba(252,186,4, 0.8)"; }
-  else if (category == "publicsupply") { return "rgba(186,50,40, 0.8)"; }
-  else if (category == "irrigation") { return "rgba(155,197,61, 0.8)"; }
-  else if (category == "industrial") { return "rgba(138,113,106, 0.8)"; }
-  else if (category == "other") { return "rgba(143,73,186, 0.8)"; }
+  if (category == "total") { return "#4e79a7"; }
+  else if (category == "thermoelectric") { return "#edc948"; }
+  else if (category == "publicsupply") { return "#76b7b2"; }
+  else if (category == "irrigation") { return "#59a14f"; }
+  else if (category == "industrial") { return "#e15759"; }
+  else if (category == "other") { return "#A9A9A9"; }
   else { return "none"; }
 }
 

@@ -34,23 +34,23 @@
   }
   
   button.total{
-    background:rgb(46, 134, 171);
+    background:#4e79a7;
   }
   
   button.thermoelectric{
-    background:rgb(252,186,4);
+    background:#edc948;
   }
   
   button.publicsupply{
-    background:rgb(186,50,40);
+    background:#76b7b2;
   }
   
   button.irrigation{
-    background:rgb(155,197,61);
+    background:#59a14f;
   }
   
   button.industrial{
-    background:rgb(138,113,106);
+    background:#e15759;
   }
   
   button.piechart{
