@@ -14,7 +14,8 @@ function updatePies(category, prevCategory) {
   // find the pies (groups of slices and tins=circles)
   var pies = map.selectAll('g.pie');
   
-  var t1, t2, t3;
+  // define duration times for each phase (in milliseconds)
+  var t1 = 500, t2 = 50, t3 = 500;
   
   var oldRadius, newRadius;
   if(prevCategory === 'piechart') {
@@ -29,34 +30,54 @@ function updatePies(category, prevCategory) {
   }
   
   // phase 1: sort and then transition width to 0, height to halfway to new value
-  t1 = pies
-    .sort(function(a,b) { 
+  pies
+    /*.sort(function(a,b) { 
       return d3.descending(a.properties[[category]], b.properties[[category]]);
-    })
-    .transition().duration(500)
-    .attr("transform", function(d) {
+    })*/
+    .transition().duration(t1)
+    /*.attr("style", function(d) {  
       var halfheight = (scaleCircles(d.properties[[oldCat]]) + scaleCircles(d.properties[[newCat]])) / 2;
-      return "translate(" + d.coordinates.x + "," + d.coordinates.y + ")"+
+      return "transform: "+
+               "translate(" + d.coordinates.x + "," + d.coordinates.y + ") "+
+               "scale(0 " + halfheight + ")";
+    });*/
+    .attr("transform", function(d) {  
+      var halfheight = (scaleCircles(d.properties[[oldCat]]) + scaleCircles(d.properties[[newCat]])) / 2;
+      return "translate(" + d.coordinates.x + " " + d.coordinates.y + ")"+
              "scale(0 " + halfheight + ")";
     });
+    /*.style(function(d) {
+      var halfheight = (scaleCircles(d.properties[[oldCat]]) + scaleCircles(d.properties[[newCat]])) / 2;
+      return {
+        transform: "translate(" + d.coordinates.x + " " + d.coordinates.y + ")"+
+                   "scale(0 " + halfheight + ")"
+        //transition: "all 1s ease-in-out"}; 
+      };
+    });*/
     
-  // phase 2: quickly sort and switch to new view
-  t2 = t1.transition().duration(0);
-  if (category === 'piechart') {
-    console.log('updating pie slices');
-    updatePieSlices();
-  } else {
-    console.log('updating pie tins');
-    updatePieTins(category);
-  }
+  // phase 2: quickly switch to new view
+  updatePieSlices(category, t1, t2);
+  updatePieTins(category, t1, t2);
     
   // phase 3: transition to final width and height
-  t3 = t2.transition().duration(500)
-    .attr("transform", function(d) {
-      return "translate(" + d.coordinates.x + "," + d.coordinates.y + ")"+
-             "scale(" + scaleCircles(d.properties[[newCat]]) + ")";
+  pies.transition().delay(t1+t2).duration(t3)
+    /*.attr("style", function(d) {  
+      var halfheight = (scaleCircles(d.properties[[oldCat]]) + scaleCircles(d.properties[[newCat]])) / 2;
+      return "transform: "+
+               "translate(" + d.coordinates.x + "," + d.coordinates.y + ") "+
+               "scale(0 " + scaleCircles(d.properties[[newCat]]) + ")";
+    });*/
+    .attr("transform", function(d) {  
+      return "translate(" + d.coordinates.x + " " + d.coordinates.y + ")"+
+             "scale(0 " + scaleCircles(d.properties[[newCat]]) + ")";
     });
-  
+    /*.style(function(d) {
+      return {
+        transform: "translate(" + d.coordinates.x + " " + d.coordinates.y + ")"+
+                   "scale(0 " + scaleCircles(d.properties[[newCat]]) + ")"
+        //transition: "all 1s ease-in-out"}; 
+      };
+    });*/
 }
 
 
