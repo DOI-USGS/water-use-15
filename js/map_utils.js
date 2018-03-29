@@ -153,14 +153,12 @@ function unhighlightState() {
 
 // on mouseover
 function highlightCounty(selection) {
-  console.log("highlighting");
   d3.select(selection)
     .style('fill', function(d) { return "darkgrey"; });
 }
 
 // on mouseout
 function unhighlightCounty(selection) {
-  console.log("unhighlighting");
   d3.select(selection)
     .style("fill", function(d) { return "transparent" });
 }
