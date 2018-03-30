@@ -156,7 +156,16 @@ process:
     location: cache/county_centroids_wu.json
     mimetype: application/json
     depends:
-      centroids_topo: county_centroids_topojson
+      topo: county_centroids_topojson
+      wu_data_15_simple: wu_data_15_simple
+    processor: merge_centroids_wu
+    scripts: [scripts/process/merge_centroids_wu.R]
+  -
+    id: county_boundaries_wu_topojson
+    location: cache/county_boundaries_wu.json
+    mimetype: application/json
+    depends:
+      topo: county_boundaries_topojson
       wu_data_15_simple: wu_data_15_simple
     processor: merge_centroids_wu
     scripts: [scripts/process/merge_centroids_wu.R]
@@ -194,7 +203,7 @@ publish:
       map_counties: "map_counties"
       map: "build_map"
       state_boundaries: "state_boundaries_topojson"
-      county_boundaries: "county_boundaries_topojson"
+      county_boundaries_wu: "county_boundaries_wu_topojson"
       county_centroids_wu: "county_centroids_wu_topojson"
       wu_data_15_range:  "wu_data_15_range_json"
     context:
@@ -306,7 +315,7 @@ publish:
       map: build_map
       directions_text: directions_text
       state_boundaries: state_boundaries_topojson
-      county_boundaries: county_boundaries_topojson
+      county_boundaries_wu: county_boundaries_wu_topojson
       county_centroids_wu: county_centroids_wu_topojson
       wu_data_15_range:  wu_data_15_range_json
     context:

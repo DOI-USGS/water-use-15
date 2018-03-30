@@ -102,16 +102,18 @@ function create_map() {
   
   // add the main, active map features
   addStates(map, stateData);
+  
+  // add placeholder group for county boundaries
+  map.append('g').classed("county-bounds", true);
+  
+  // add the pie groups and either circles or pie slices
   pieFormData = pieData(countyCentroids);
   addPies();
   updatePies(activeCategory, prevCategory);
   
-  // get started downloading county data right away.
-  // for now, pretend that we know that state '01' is the most likely state
-  // for the user to click on; we could make this dynamic in the future.
-  loadCountyData("AL", function(error, data) {
-    if (error) throw error;
-  });
+  // load all county data - it's OK if it's not done right away
+  // it should be loaded by the time anyone tries to hover!
+  showCounties('USA');
 
 }
 
