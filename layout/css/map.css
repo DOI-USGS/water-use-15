@@ -13,6 +13,22 @@
   stroke-linecap: round;
 }
 
+.county {
+  fill: transparent;
+  stroke: darkgrey;
+  stroke-width: 0.2;
+}
+
+.hidden-border {
+  stroke: transparent;
+  stroke-width: 0;
+}
+
+.county-point,
+.pieslice {
+  pointer-events: none;
+}
+
 #slideraxis path,
 #slideraxis line {
   stroke: #fff;

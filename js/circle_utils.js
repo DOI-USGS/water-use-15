@@ -1,4 +1,4 @@
-function addTins() {
+function addPieTins() {
   
   // uses globals map, countyCentroids, scaleCircles, activeCategory
   
@@ -9,25 +9,22 @@ function addTins() {
     .enter()
     .append('circle')
     .classed('tin', true)
+    .attr("id", function(d) { return "circle-"+d.GEOID; })
     .attr("cx", 0)
     .attr("cy", 0)
-    .attr("r", 1)
-    // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
-    // because people won't be able to see tooltips at the same time anyways
-    .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
-    .on("mouseout", function(d) { hideTooltip(this, d); });
+    .attr("r", 1);
     
   tinsAdded = true;
   
-  // these newly added circles won't work until updateCircles is called, but
-  // since this function always gets called from updateCircles, that should be fine
+  // these newly added circles won't work until updatePieTins is called, but
+  // since this function always gets called from updatePieTins, that should be fine
 }
 
 function updatePieTins(category, delay, duration) {
   
   // add the circles if needed
   if (!tinsAdded) {
-    addTins();
+    addPieTins();
   }
 
   if(category === 'piechart') {
@@ -44,5 +41,3 @@ function updatePieTins(category, delay, duration) {
 
   }
 }
-
-

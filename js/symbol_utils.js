@@ -69,7 +69,7 @@ function updatePies(category, prevCategory) {
     });*/
     .attr("transform", function(d) {  
       return "translate(" + d.coordinates.x + " " + d.coordinates.y + ")"+
-             "scale(0 " + scaleCircles(d.properties[[newCat]]) + ")";
+             "scale(" + scaleCircles(d.properties[[newCat]]) + ")";
     });
     /*.style(function(d) {
       return {

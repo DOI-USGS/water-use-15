@@ -8,12 +8,12 @@ var tempCategories = ["total", "thermoelectric", "publicsupply",
 
 // Projection
 var projection = albersUsaTerritories()
-    .scale([1200])
-    .translate([chart_width / 2, chart_height / 2]);
-    // default is .rotate([96,0]) to center on US (we want this)
+  .scale([1200])
+  .translate([chart_width / 2, chart_height / 2]);
+  // default is .rotate([96,0]) to center on US (we want this)
     
 var buildPath = d3.geoPath()
-    .projection(projection);
+  .projection(projection);
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
@@ -26,13 +26,13 @@ var container = d3.select('body')
 
 // Setup tooltips
 var tooltipDiv = d3.select("body").append("div")
-      .classed("tooltip hidden", true);
+  .classed("tooltip hidden", true);
 
 // Create SVG
 var svg = d3.select(".svg-container")
-    .append("svg")
-    .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
-	  .attr('preserveAspectRatio', 'xMidYMid');
+  .append("svg")
+  .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
+  .attr('preserveAspectRatio', 'xMidYMid');
 
 var map = svg.append("g")
   .attr("id", "map");
@@ -102,16 +102,18 @@ function create_map() {
   
   // add the main, active map features
   addStates(map, stateData);
+  
+  // add placeholder group for county boundaries
+  map.append('g').classed("county-bounds", true);
+  
+  // add the pie groups and either circles or pie slices
   pieFormData = pieData(countyCentroids);
   addPies();
   updatePies(activeCategory, prevCategory);
   
-  // get started downloading county data right away.
-  // for now, pretend that we know that state '01' is the most likely state
-  // for the user to click on; we could make this dynamic in the future.
-  loadCountyData("AL", function(error, data) {
-    if (error) throw error;
-  });
+  // load all county data - it's OK if it's not done right away
+  // it should be loaded by the time anyone tries to hover!
+  showCounties('USA');
 
 }
 

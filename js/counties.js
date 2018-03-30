@@ -1,8 +1,12 @@
-function hideCounties() {
-  map.selectAll('.county')
-    //.data([])
-    //.exit()
-    .remove();
+
+function hideCountyLines() {
+  d3.selectAll('.county')
+    .classed('hidden-border', true);
+}
+
+function showCountyLines(state) {
+  d3.selectAll('.county')
+    .classed('hidden-border', false);
 }
 
 // call a series of functions to 
@@ -19,11 +23,11 @@ function loadCountyData(state, callback) {
   // for now let's always load the county data all at once. later we can again split
   // into single-state files if that turns out to be useful for performance.
   if(!countyData.has('USA')) {
-    d3.json("data/county_boundaries_USA.json", function(error, allCountiesTopo) {
+    d3.json("data/county_boundaries_wu.json", function(error, allCountiesTopo) {
       if(error) callback(error);
       
       // extract the topojson to geojson
-      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties);
+      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.foo).features;
       
       // cache in countyData
       countyData.set('USA', allCountiesGeo);
@@ -44,7 +48,7 @@ function cacheCountyData(state, callback) {
   // state-caching approach could be useful in near future
   if(!countyData.has(state)) {
     // subset the data and run the processing function
-    oneStateCounties = countyData.get('USA').features.filter(function(d) {
+    oneStateCounties = countyData.get('USA').filter(function(d) {
       return(d.properties.STATE_ABBV === state);
     });
     countyData.set(state, oneStateCounties);
@@ -68,7 +72,8 @@ function displayCountyData(error, activeCountyData) {
     if(error) throw error;
     
     // create paths
-    var countyBounds = map.selectAll(".county")
+    var countyBounds = map.select('.county-bounds')
+      .selectAll(".county")
       .data(activeCountyData, function(d) {
         return d.properties.GEOID;
       });
@@ -83,13 +88,26 @@ function displayCountyData(error, activeCountyData) {
       .enter()
       .append("path")
       .classed('county', true)
+      .classed('hidden-border', true) // add county shapes, but don't outline
       .attr('id', function(d) {
         return d.properties.GEOID;
       })
-      .style("fill", 'none')
-      .style("stroke", 'darkgrey')
-      .style("stroke-width", 0.2)
-      .attr('d', buildPath);
+      .attr('d', buildPath)
+      .on("mouseover", function(d) {
+        highlightState(d3.select("#"+d.properties.STATE_ABBV));
+        highlightCounty(this); 
+        highlightCircle(d3.select("#"+"circle-"+d.properties.GEOID));
+        showToolTip(d, activeCategory); 
+        // OK to use global var activeCategory which only changes on click 
+        // because people won't be able to hover on tooltips at the same time as hovering buttons
+      })
+      .on("mouseout", function(d) { 
+        unhighlightState(d3.select("#"+d.properties.STATE_ABBV));
+        unhighlightCounty(this);
+        unhighlightCircle();
+        hideToolTip();
+      })
+      .on('click', zoomToFromState);
     
     // update
     countyBounds
