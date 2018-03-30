@@ -9,7 +9,7 @@ function addPieSlices() {
   //relies on map as a global variable
   
   // add pie slices to each pie group
-  map.selectAll('g.pie').selectAll('.slice')  
+  map.selectAll('g.pie-scales').selectAll('.slice')  
     .data(function(d) {
       return d.sliceGeomData;
     })
@@ -27,7 +27,7 @@ function addPieSlices() {
   // since this function always gets called from updatePieCharts, that should be fine
 }
 
-function updatePieSlices(category, delay, duration) {
+function updatePieSlices(category, delay) {
   
   // add the pies if needed
   if (!piesBaked) {
@@ -36,11 +36,11 @@ function updatePieSlices(category, delay, duration) {
   
   if(category === 'piechart') {
     d3.selectAll(".slice")
-      .transition().delay(delay).duration(duration)
+      .transition().delay(delay).duration(0)
       .style("display", null);
   } else {
     d3.selectAll(".slice")
-      .transition().delay(delay).duration(duration)
+      .transition().delay(delay).duration(0)
       .style("display", "none");
   }
 }
