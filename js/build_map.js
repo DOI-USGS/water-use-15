@@ -8,12 +8,12 @@ var tempCategories = ["total", "thermoelectric", "publicsupply",
 
 // Projection
 var projection = albersUsaTerritories()
-    .scale([1200])
-    .translate([chart_width / 2, chart_height / 2]);
-    // default is .rotate([96,0]) to center on US (we want this)
+  .scale([1200])
+  .translate([chart_width / 2, chart_height / 2]);
+  // default is .rotate([96,0]) to center on US (we want this)
     
 var buildPath = d3.geoPath()
-    .projection(projection);
+  .projection(projection);
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
@@ -26,13 +26,13 @@ var container = d3.select('body')
 
 // Setup tooltips
 var tooltipDiv = d3.select("body").append("div")
-      .classed("tooltip hidden", true);
+  .classed("tooltip hidden", true);
 
 // Create SVG
 var svg = d3.select(".svg-container")
-    .append("svg")
-    .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
-	  .attr('preserveAspectRatio', 'xMidYMid');
+  .append("svg")
+  .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
+  .attr('preserveAspectRatio', 'xMidYMid');
 
 var map = svg.append("g")
   .attr("id", "map");

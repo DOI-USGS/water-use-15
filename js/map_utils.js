@@ -223,10 +223,10 @@ function showToolTip(d, category) {
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
-    .html(d.COUNTY + "<br/>" + 
-            "Population: " + d.countypop + "<br/>" +
+    .html(d.properties.COUNTY + "<br/>" + 
+            "Population: " + d.properties.countypop + "<br/>" +
             categoryToName(category) + ": " + 
-              d[[category]] + " " + "MGD");
+              d.properties[[category]] + " " + "MGD");
 }
 
 function hideToolTip() {

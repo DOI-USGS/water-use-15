@@ -9,7 +9,7 @@ function addPieTins() {
     .enter()
     .append('circle')
     .classed('tin', true)
-    .attr("id", function(d) { return "circle-"+d.properties.GEOID; })
+    .attr("id", function(d) { return "circle-"+d.GEOID; })
     .attr("cx", 0)
     .attr("cy", 0)
     .attr("r", 1);
