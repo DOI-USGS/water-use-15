@@ -66,3 +66,11 @@ function addLegend(minWateruse, maxWateruse) {
       .text(function(d) { return d+' Mgal/day'; });
   
 }
+
+function updateLegend(category) {
+  
+  d3.selectAll(".legend-point")
+    //.transition().duration(600)
+    .style("fill", categoryToColor(category));
+  
+}
