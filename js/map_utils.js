@@ -2,6 +2,7 @@
 
 // Bounding box coordinates for the nation, for scaling states
 var nationDims;
+var zoom_scale;
 
 // Create the state polygons
 function addStates(map, stateData) {
@@ -56,7 +57,7 @@ function highlightState(selection) {
   selection
     .style('fill', function(d) { return formatState('fill', d, true); })
     .style('stroke', function(d) { return formatState('stroke', d, true); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, true); });
+    .style('stroke-width', function(d) { return formatState('stroke-width', d, true)/zoom_scale; });
 }
 
 // on mouseout
@@ -64,7 +65,7 @@ function unhighlightState(selection) {
   selection
     .style("fill", function(d) { return formatState('fill', d, false); })
     .style('stroke', function(d) { return formatState('stroke', d, false); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, false); });
+    .style('stroke-width', function(d) { return formatState('stroke-width', d, false)/zoom_scale; });
 }
 
 // on mouseover
@@ -117,11 +118,11 @@ function updateView(newView) {
   setHash('view', activeView);
 
   // determine the center point and scaling for the new view
-  var x, y, k;
+  var x, y;
   if(activeView === 'USA') {
     x = chart_width / 2;
     y = chart_height / 2;
-    k = 1;
+    zoom_scale = 1;
   } else {
     var stateGeom, centroid, x0, y0, x1, y1, stateDims;
     
@@ -142,7 +143,7 @@ function updateView(newView) {
       width: 2 * d3.max([ x1 - x, x - x0]),
       height: 2 * d3.max([ y1 - y, y - y0])
     };
-    k = d3.min([
+    zoom_scale = d3.min([
       nationDims.height/stateDims.height,
       nationDims.width/stateDims.width]);
   }
@@ -167,7 +168,7 @@ function updateView(newView) {
       .duration(750)
       .style("fill", function(d) { return formatState('fill', d); })
       .style("stroke", function(d) { return formatState('stroke', d); })
-      .style("stroke-width", function(d) { return formatState('stroke-width', d); });
+      .style("stroke-width", function(d) { return formatState('stroke-width', d) / zoom_scale; }); // for zoom scaling
   }
 
  // apply the transform (i.e., actually zoom in or out)
@@ -175,8 +176,9 @@ function updateView(newView) {
     .duration(750)
     .attr('transform',
       "translate(" + chart_width / 2 + "," + chart_height / 2 + ")"+
-      "scale(" + k + ")" +
+      "scale(" + zoom_scale + ")" +
       "translate(" + -x + "," + -y + ")");
+  
 }
 
 function updateCategory(category, prevCategory) {
@@ -210,7 +212,7 @@ function highlightCircle(currentCircle) {
 }
 
 function unhighlightCircle() {
-  d3.select('.county-point-duplicate')
+  d3.select('.tin-duplicate')
     .remove(); // delete duplicate
 }
 
