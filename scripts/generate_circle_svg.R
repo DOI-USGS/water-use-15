@@ -95,12 +95,13 @@ bd %>% xml_add_child('script',
                      .attr('d', function(d){
                       return d.therm;
                      })
-                     .attr('id','path-circle')
+                     .style('fill','#b2e7e2')
+                     .style('stroke','#b2e7e2')
+                     .attr('id','path-circle');
+
                     svg.append('use')
                       .attr('xlink:href','#path-circle')
-                      .attr('id','circle')
-                     .style('fill','#b2e7e2')
-                     .style('stroke','#b2e7e2');
+                      .attr('id','circle');
 
                      var cg = defs.append('g')
                       .attr('id','circle-circle')
@@ -113,49 +114,32 @@ bd %>% xml_add_child('script',
                                 return 'translate('+d.cx+','+d.cy+')scale('+d.scale1+','+d.scale1+')';
                              })
                             .attr('r',1)
-                             .attr('class','dot');
+                             .attr('class','dot')
+                              .style('fill','#b2e7e2')
+                             .style('stroke','#b2e7e2');
                      svg.append('use')
                       .attr('xlink:href','#circle-circle')
-                      .attr('id','circles')
-                             .style('fill','#b2e7e2')
-                             .style('stroke','#b2e7e2');
+                      .attr('id','circles');
+                             
                      function flipPath(){
-                     d3.selectAll('#path-circle')
-                       .transition()
-                         .ease(d3.easeLinear)
-                         .duration(aniDur/2)
-                         .attr('d', function(d){
-                          return d.mid;
-                         });
                     d3.selectAll('#path-circle')
-                       .transition().delay(aniDur/2)
+                       .transition()
                              .ease(d3.easeLinear)
-                             .duration(aniDur/2)
+                             .duration(aniDur)
                              .attr('d', function(d){
                              return d.end;
-                             });
-                     d3.selectAll('#circle').transition()
-                         .ease(d3.easeLinear)
+                             })
                              .duration(aniDur).style('fill','red').style('stroke','red');
                      }
                              function flipCircles(){
                      d3.selectAll('circle')
+                             d3.selectAll('circle')
                              .transition()
                              .ease(d3.easeLinear)
-                             .duration(aniDur/2)
-                             .attr('transform', function(d){
-                                var midscale = (d.scale1+d.scale2)/2;
-                                return 'translate('+d.cx+','+d.cy+')scale(0.1,'+midscale+')';
-                             })
-                             d3.selectAll('circle')
-                             .transition().delay(aniDur/2)
-                             .ease(d3.easeLinear)
-                             .duration(aniDur/2)
+                             .duration(aniDur)
                              .attr('transform', function(d){
                                 return 'translate('+d.cx+','+d.cy+')scale('+d.scale2+','+d.scale2+')';
                              })
-                              d3.selectAll('#circles').transition()
-                         .ease(d3.easeLinear)
-                             .duration(aniDur).style('fill','red').style('stroke','red');
+                              .style('fill','red').style('stroke','red');
                              }", path_from, path_mid, path_to, circle_data)) 
 write_xml(m, 'test.html')
