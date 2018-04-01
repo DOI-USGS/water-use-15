@@ -23,7 +23,11 @@ bd %>% xml_add_child('style',
       stroke:#b2e7e2;
       stroke-width:0.3;
 			fill-opacity:0.5;
-		}
+                     }
+    .dot {
+                     stroke-width:0.3;
+                     fill-opacity:0.5;
+                     }
 		.irr {
 			fill:red;
       stroke:red;
@@ -82,16 +86,21 @@ bd %>% xml_add_child('script',
                              .text('circles as circle')
                              .attr('transform','translate(225,188)scale(0.4)')
                              .on('click',flipCircles);                     
-
-                     svg.selectAll('path')
+                    var defs = svg.append('defs');
+                     defs.selectAll('path')
                      .data(data)
                      .enter()
                      .append('path')
+                     .classed('dot',true)
                      .attr('d', function(d){
                       return d.therm;
                      })
-                     .attr('id','circle')
-                     .attr('class','therm');
+                     .attr('id','path-circle')
+                    svg.append('use')
+                      .attr('href','#path-circle')
+                      .attr('id','circle')
+                     .style('fill','#b2e7e2')
+                     .style('stroke','#b2e7e2');
 
                      var cg = svg.append('g')
                       .attr('transform','translate(150,0)');
@@ -106,23 +115,23 @@ bd %>% xml_add_child('script',
                              .attr('class','therm');
                      
                      function flipPath(){
-                     d3.selectAll('#circle')
+                     d3.selectAll('#path-circle')
                        .transition()
                          .ease(d3.easeLinear)
                          .duration(aniDur/2)
                          .attr('d', function(d){
                           return d.mid;
                          });
-                    d3.selectAll('#circle').transition().delay(aniDur/2).duration(0)
-                      .attr('class','irr')
-                    d3.selectAll('#circle')
+                    d3.selectAll('#path-circle')
                        .transition().delay(aniDur/2)
                              .ease(d3.easeLinear)
                              .duration(aniDur/2)
                              .attr('d', function(d){
                              return d.end;
                              });
-                     
+                     d3.selectAll('#circle').transition()
+                         .ease(d3.easeLinear)
+                             .duration(aniDur).style('fill','red').style('stroke','red');
                      }
                              function flipCircles(){
                      d3.selectAll('circle')
