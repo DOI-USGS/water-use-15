@@ -97,12 +97,13 @@ bd %>% xml_add_child('script',
                      })
                      .attr('id','path-circle')
                     svg.append('use')
-                      .attr('href','#path-circle')
+                      .attr('xlink:href','#path-circle')
                       .attr('id','circle')
                      .style('fill','#b2e7e2')
                      .style('stroke','#b2e7e2');
 
-                     var cg = svg.append('g')
+                     var cg = defs.append('g')
+                      .attr('id','circle-circle')
                       .attr('transform','translate(150,0)');
                     cg.selectAll('circle')
                      .data(circles)
@@ -112,8 +113,12 @@ bd %>% xml_add_child('script',
                                 return 'translate('+d.cx+','+d.cy+')scale('+d.scale1+','+d.scale1+')';
                              })
                             .attr('r',1)
-                             .attr('class','therm');
-                     
+                             .attr('class','dot');
+                     svg.append('use')
+                      .attr('xlink:href','#circle-circle')
+                      .attr('id','circles')
+                             .style('fill','#b2e7e2')
+                             .style('stroke','#b2e7e2');
                      function flipPath(){
                      d3.selectAll('#path-circle')
                        .transition()
@@ -142,8 +147,6 @@ bd %>% xml_add_child('script',
                                 var midscale = (d.scale1+d.scale2)/2;
                                 return 'translate('+d.cx+','+d.cy+')scale(0.1,'+midscale+')';
                              })
-                             d3.selectAll('circle').transition().delay(aniDur/2).duration(0)
-                             .attr('class','irr')
                              d3.selectAll('circle')
                              .transition().delay(aniDur/2)
                              .ease(d3.easeLinear)
@@ -151,6 +154,8 @@ bd %>% xml_add_child('script',
                              .attr('transform', function(d){
                                 return 'translate('+d.cx+','+d.cy+')scale('+d.scale2+','+d.scale2+')';
                              })
-                             
+                              d3.selectAll('#circles').transition()
+                         .ease(d3.easeLinear)
+                             .duration(aniDur).style('fill','red').style('stroke','red');
                              }", path_from, path_mid, path_to, circle_data)) 
 write_xml(m, 'test.html')
