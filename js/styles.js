@@ -3,24 +3,24 @@ var stateStyle = {
   nationView: {
     active: {
       'fill': 'white',
-      'stroke': 'black', // looks OK white, too
+      'stroke': 'black', 
       'stroke-width': 1.5
     },
     inactive: {
       'fill': 'white',
-      'stroke': 'black', // i think we're avoiding borders usually?
+      'stroke': 'black', 
       'stroke-width': 1.0
     }
   },
   stateView: {
     active: {
       'fill': '#DCDCDC',
-      'stroke': 'black', // no need for border when there's fill
+      'stroke': 'black', 
       'stroke-width': 1.5
     },
     inactive: {
       'fill': 'transparent',
-      'stroke': 'black', // could use #DCDCDC to show neighbor outlines
+      'stroke': 'black', 
       'stroke-width': 1.0
     }
   }
