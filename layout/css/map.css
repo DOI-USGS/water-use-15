@@ -24,8 +24,8 @@
   stroke-width: 0;
 }
 
-.county-point,
-.pieslice {
+.tin,
+.slice {
   pointer-events: none;
 }
 
