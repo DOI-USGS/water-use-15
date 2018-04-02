@@ -100,6 +100,9 @@ function create_map() {
   // add legend
   addLegend(minWateruse, maxWateruse);
   
+  // add watermark
+  addUSGS();
+  
   // add the main, active map features
   addStates(map, stateData);
   
