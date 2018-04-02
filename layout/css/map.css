@@ -72,7 +72,6 @@
 }
 
 .watermark {
-  cursor: pointer;
   fill: #DCDCDC;
   stroke: #c6c6c6;
   stroke-width:0.5;
