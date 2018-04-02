@@ -43,6 +43,7 @@ function updatePies(category, prevCategory) {
         return "scale(0.1 " + halfheight + ")";
       })
     .transition()
+      .ease(d3.easeLinear)
       .duration(animDur/2).delay(animDur/2)
       .attr("transform", function(d) {  
         return "scale(" + scaleCircles(d.properties[[newCat]]) + ")";
