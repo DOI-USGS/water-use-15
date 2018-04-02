@@ -94,11 +94,8 @@ function zoomToFromState(data) {
   
   // determine the new view
   var newView;
-  if(clickedView === 'map-background' || activeView != 'USA') {
-    // could have made it so we go national only if they click on the background
-    // or the same state: if(clickedView === 'map-background' || activeView ===
-    // clickedView) {}. but instead let's always zoom out if they're in state
-    // view, in if they're in nation view (and click on a state)
+  if(clickedView === 'map-background' || clickedView === activeView) { 
+    // if they clicked the background or same state, zoom back out
     newView = 'USA';
   } else {
     // if they clicked on a different state, prepare to zoom in
