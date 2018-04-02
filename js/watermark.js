@@ -22,7 +22,7 @@ function addUSGS() {
 var watermark = svg
       .append('g')
         .attr('transform', 
-              'translate('+xPosWatermark+','+yPosWatermark+')scale(0.22)')
+              'translate('+xPosWatermark+','+yPosWatermark+')scale(0.25)')
         .append('a')
         .attr("xlink:href", "https://www2.usgs.gov/water")
         .attr("target", "_blank");
