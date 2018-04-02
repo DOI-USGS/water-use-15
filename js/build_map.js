@@ -17,7 +17,7 @@ var buildPath = d3.geoPath()
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
-  .range([0, 20]);
+  .range([0, 15]);
     
 //Create container
 var container = d3.select('body')
