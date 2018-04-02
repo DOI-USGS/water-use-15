@@ -11,6 +11,7 @@ r_0 <- rlnorm(num_pies, 0, .6)/2
 r_1 <- rlnorm(num_pies, 0, .6)/2
 
 library(xml2)
+library(dplyr)
 m = xml_new_document() %>% 
   xml_add_child('html', prefix="og: http://ogp.me/ns#", lang="en") 
 m %>% xml_add_child('head') %>% 
@@ -50,7 +51,7 @@ for (i in 1:num_pies){
   path_to <- paste0(path_to, sprintf(path_template, x_coords[i]-r_1[i], y_coords[i], r_1[i], r_1[i]))
 }
 
-circle_data <- data.frame('cx'=x_coords, 'cy'=y_coords, 'scale1'=r_0, scale2 = r_1) %>% 
+circle_data <- data.frame('cx'=x_coords, 'cy'=y_coords, 'scale1'=r_0, 'scale2' = r_1) %>% 
   jsonlite::toJSON()
 
 bd %>% xml_add_child('script', 
@@ -110,10 +111,15 @@ bd %>% xml_add_child('script',
                      .data(circles)
                              .enter()
                              .append('circle')
-                             .attr('transform', function(d){
-                                return 'translate('+d.cx+','+d.cy+')scale('+d.scale1+','+d.scale1+')';
+                             .attr('cx', function(d){
+                                return d.cx;
                              })
-                            .attr('r',1)
+                             .attr('cy', function(d){
+                                return d.cy;
+                             })
+                            .attr('r', function(d){
+                                return d.scale1;
+                             })
                              .attr('class','dot')
                               .style('fill','#b2e7e2')
                              .style('stroke','#b2e7e2');
@@ -137,9 +143,9 @@ bd %>% xml_add_child('script',
                              .transition()
                              .ease(d3.easeLinear)
                              .duration(aniDur)
-                             .attr('transform', function(d){
-                                return 'translate('+d.cx+','+d.cy+')scale('+d.scale2+','+d.scale2+')';
+                             .attr('r', function(d){
+                                return d.scale2;
                              })
                               .style('fill','red').style('stroke','red');
                              }", path_from, path_mid, path_to, circle_data)) 
-write_xml(m, 'test.html')
+write_xml(m, 'scripts/sandbox/test.html')
