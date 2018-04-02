@@ -21,20 +21,32 @@ function addUSGS() {
   // add group for legend elements & move into the Atlantic Ocean
 var watermark = svg
       .append('g')
-        .classed('watermark', true)
         .attr('transform', 
               'translate('+xPosWatermark+','+yPosWatermark+')scale(0.22)')
-        .append("a")
-          .attr("xlink:href", "https://www2.usgs.gov/water/")
-          .attr("target", "_blank");
+        .append('a')
+        .attr("xlink:href", "https://www2.usgs.gov/water")
+        .attr("target", "_blank");
+
+    watermark
+      .append('rect')
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", 500)
+        .attr("height", 140)
+        .attr("fill", "white");
         
     watermark
         .append('path')
-          .attr('d', usgs);
+          .attr('d', usgs)
+          .classed('watermark', true);
           
     watermark
-        .append('path')
-          .attr('d', wave);
+      .append('path')
+          .attr('d', wave)
+          .classed('watermark', true);
+
+        
+          
 
 
 
