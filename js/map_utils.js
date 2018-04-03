@@ -159,7 +159,9 @@ function updateView(newView) {
       .style("stroke", function(d) { return formatState('stroke', d, false); })
       .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
   } else {
-    showCountyLines(activeView);
+    var statecounties = d3.selectAll('.county')
+      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+    showCountyLines(statecounties);
     states
       .transition()
       .duration(750)

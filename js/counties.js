@@ -4,8 +4,8 @@ function hideCountyLines() {
     .classed('hidden-border', true);
 }
 
-function showCountyLines(state) {
-  d3.selectAll('.county')
+function showCountyLines(selection) {
+  selection
     .classed('hidden-border', false);
 }
 
