@@ -3,6 +3,30 @@
   margin:0;
 }
 
+#key-stories{
+  background:#fff;
+  min-height: 100px;
+  margin-top:20px;
+}
+
+#key-stories .viz-text{
+  padding:0;
+}
+
+#key-stories h2{
+  margin-top:20px;
+}
+
+.key-story-plot{
+  border:1px solid #000;
+  min-height:200px;
+  margin:10px 0;
+}
+
+.key-story-plot img{
+  width:100%;
+}
+
 #button-container{
   text-align: center;
   position: relative;
