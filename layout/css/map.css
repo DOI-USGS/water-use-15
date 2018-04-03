@@ -29,26 +29,6 @@
   pointer-events: none;
 }
 
-#slideraxis path,
-#slideraxis line {
-  stroke: #fff;
-}
-
-.track {
-  stroke: #000;
-  stroke-opacity: 0.3;
-  stroke-width: 10px;
-  stroke-linecap: round;
-}
-
-.track-circle {
-  fill: #fff;
-  stroke: #000;
-  stroke-opacity: 0.5;
-  stroke-width: 1.25px;
-  cursor: move; /* was using grab, but that only works in Firefox*/
-}
-
 .dragging {
   cursor: move; /* was using grabbing, but that only works in Firefox*/
 }
