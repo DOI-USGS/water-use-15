@@ -191,6 +191,7 @@ publish:
       description_text: "description_text"
       directions_text: "directions_text"
       header: "header_section"
+      key_stories: "key_stories"
       footer: "footer_section"
       hashes: "url_hashes"
       projection: "custom_projection"
@@ -210,7 +211,7 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_counties", 
                   "legend_utils", "symbol_utils", "circle_utils", "pie_utils"]
-      sections: ["social","map","description_text", "directions_text"] # adding header and footer here, doubled each on the page
+      sections: ["social","map","description_text", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -271,6 +272,10 @@ publish:
     depends: "lib-header-css"
     context:
       title: "Water use in the U.S. from 1950 to 2015"
+  -
+    id: key_stories
+    template: layout/templates/key_stories.mustache
+    publisher: section
   -
     id: footer_section
     template: footer-template
