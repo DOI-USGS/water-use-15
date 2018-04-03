@@ -32,7 +32,7 @@ function addStates(map, stateData) {
   var newView = getHash('view');
   if(newView == null) { newView = 'USA'; }
   if(newView != 'USA') {
-    updateView(newView);
+    updateView(newView, fireAnalytics = false);
   }
 }
 
@@ -106,7 +106,7 @@ function zoomToFromState(data) {
   updateView(newView);
 }
 
-function updateView(newView) {
+function updateView(newView, fireAnalytics = true) {
   // update the global variable that stores the current view
   activeView = newView;
   
@@ -175,7 +175,12 @@ function updateView(newView) {
       "translate(" + chart_width / 2 + "," + chart_height / 2 + ")"+
       "scale(" + zoom_scale + ")" +
       "translate(" + -x + "," + -y + ")");
-  
+      
+  if(fireAnalytics) {
+    gtag('event', 'update view', {
+  'event_category': 'figure',
+  'event_label': newView});
+  }    
 }
 
 function updateCategory(category, prevCategory) {
