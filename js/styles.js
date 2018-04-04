@@ -35,42 +35,34 @@ function categoryToColor(category) {
 
 function showCountyLines(selection) {
   selection
-    //.transition()
-    //.duration(750)
-    .style("stroke", countyStyle.showbounds.stroke);
+    .classed("show-county-bounds", true);
 }
 function emphasizeCounty(selection) {
   selection
-    .transition()
-    .duration(1000)
-    .style("fill", countyStyle.emphasize.fill);
+    .classed("emphasize-county", true);
 }
 
 // on zoom out
 
 function hideCountyLines() {
   d3.selectAll('.county')
-    //.transition()
-    //.duration(750)
-    .style("stroke", null); // use null to revert back to whatever is in CSS
+    .classed("show-county-bounds", false); 
 }
 
 function deemphasizeCounty() {
   d3.selectAll('.county')
-    .transition()
-    .duration(750)
-    .style("fill", null);
+    .classed("emphasize-county", false);
 }
 
 // on mouseover
 function highlightCounty(selection) {
   d3.select(selection)
-    .style("fill", countyStyle.highlight.fill);
+    .classed("highlighted-county", true);
 }
 
 // on mouseout
 function unhighlightCounty(selection) {
   d3.select(selection)
-    .style("fill", null);
+    .classed("highlighted-county", false);
 }
 

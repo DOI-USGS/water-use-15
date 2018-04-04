@@ -23,6 +23,15 @@
   stroke-width: 0.2;
 }
 
+.show-county-bounds {
+  stroke: darkgrey;
+}
+
+/* must be listed before highlighted-county*/
+.emphasize-county {
+  fill: pink;
+}
+
 .highlighted-county {
   fill: darkgrey;
 } 
