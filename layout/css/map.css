@@ -24,16 +24,16 @@
 }
 
 .show-county-bounds {
-  stroke: darkgrey;
+  stroke: #bdbdbd; /* dark-ish grey */
 }
 
 /* must be listed before highlighted-county*/
 .emphasize-county {
-  fill: pink;
+  fill: #d7d7d7; /* light-ish grey */
 }
 
 .highlighted-county {
-  fill: darkgrey;
+  fill: #bdbdbd; /* dark-ish grey */
 } 
 
 .tin,
