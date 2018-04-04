@@ -115,10 +115,7 @@ function updateView(newView, fireAnalytics = true) {
       nationDims.width/stateDims.width]);
   }
 
-  // set the styling: all states inactive for view=USA, just one state active
-  // otherwise. i tried doing this with .classed('active') and
-  // .classed('hidden') and css (conditional on activeView=='USA' and
-  // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
+  // set the styling: setting by adding or removing class, so d3 transitions not used
   
   // reset counties each time a zoom changes
   // cannot go inside first if because panning to adjacent state won't reset

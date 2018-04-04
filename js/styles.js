@@ -1,15 +1,3 @@
-// Style definitions (need them here instead of css to do transitions)
-var countyStyle = {
-  showbounds: {
-    'stroke': 'darkgrey'
-  },
-  emphasize: {
-    'fill': 'pink'
-  },
-  highlight: {
-    'fill': 'darkgrey'
-  }
-};
 
 function categoryToName(category) {
   if (category == "total") { return "Total"; }
