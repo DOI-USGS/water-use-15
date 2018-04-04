@@ -127,6 +127,11 @@ function updateView(newView, fireAnalytics = true) {
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom_scale);
     foregroundState(thisstate, scale = zoom_scale);
+    
+    statecounties
+      .transition()
+      .duration(500) 
+      .style("stroke-width",  0.75/zoom_scale); // make all counties have scaled stroke-width
   }
 
   // apply the transform (i.e., actually zoom in or out)
