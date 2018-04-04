@@ -42,6 +42,11 @@ function emphasizeCounty(selection) {
     .classed("emphasize-county", true);
 }
 
+function deemphasizeState(selection) {
+  selection
+    .classed("nonfocal-state", true);
+}
+
 // on zoom out
 
 function hideCountyLines() {
@@ -52,6 +57,11 @@ function hideCountyLines() {
 function deemphasizeCounty() {
   d3.selectAll('.county')
     .classed("emphasize-county", false);
+}
+
+function reemphasizeState(selection) {
+  d3.selectAll('.state')
+    .classed("nonfocal-state", false);
 }
 
 // on mouseover
