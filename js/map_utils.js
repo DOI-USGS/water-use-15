@@ -5,12 +5,12 @@ var nationDims;
 var zoom_scale;
 
 // Create the state polygons
-function addStates(map, stateData) {
+function addStates(map, stateBounds) {
 
   // add states
-  map.append("g").attr('id', 'statepolygons')
+  map.select('#state-bounds')
     .selectAll( 'path' )
-    .data(stateData.features)
+    .data(stateBounds.features)
     .enter()
     .append('path')
     .classed('state', true)
@@ -22,7 +22,7 @@ function addStates(map, stateData) {
     .style("stroke", function(d) { return formatState('stroke', d, false); })
     .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
 
-  var nationBounds = buildPath.bounds(stateData);
+  var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
     width: nationBounds[1][0] - nationBounds[0][0],
     height: nationBounds[1][1] - nationBounds[0][1]
@@ -124,7 +124,7 @@ function updateView(newView) {
     var stateGeom, centroid, x0, y0, x1, y1, stateDims;
     
     // find the state data we want to zoom to
-    stateGeom = stateData.features.filter(function(d) {
+    stateGeom = stateBoundsUSA.features.filter(function(d) {
       return d.properties.STATE_ABBV === activeView;
     })[0];
     
