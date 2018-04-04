@@ -18,10 +18,6 @@
   pointer-events: none;
 }
 
-.nonfocal-state {
-  stroke-dasharray: 2,2;
-}
-
 .county {
   fill: transparent;
   stroke: transparent;

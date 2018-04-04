@@ -123,28 +123,22 @@ function updateView(newView) {
   // cannot go inside first if because panning to adjacent state won't reset
   hideCountyLines();
   deemphasizeCounty();
-  reemphasizeState();
   
   var states = map.selectAll('.state');
   
   if(activeView === 'USA') {
-    //states
-    //  .transition()
-    //  .duration(750)
-    //  .style("stroke-width", null); // turn off stroke-width and revert back to CSS
+    states
+      .transition()
+      .duration(750)
+      .style("stroke-width", null); // turn off stroke-width and revert back to CSS
   } else {
     
     // select counties in current state
     var statecounties = d3.selectAll('.county')
       .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
-    var otherstates = states
-      .filter(function(d) { return d.properties.STATE_ABBV !== activeView; });
-    var thisstate = states
-      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
     
     showCountyLines(statecounties);
     emphasizeCounty(statecounties);
-    deemphasizeState(otherstates);
     
     states
       .transition()
