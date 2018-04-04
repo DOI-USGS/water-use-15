@@ -42,7 +42,7 @@ function backgroundState(selection, scale = 1) {
   selection
     .transition()
     .duration(500)
-    .style("stroke-dasharray",  2.5/scale) // scale dashed line spacing
+    .style("stroke-dasharray",  (3/scale)+","+(3/scale) ) // scale dashed line spacing
     .style("stroke-width",  1/scale); // scale stroke-width;
 }
 
