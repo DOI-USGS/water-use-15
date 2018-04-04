@@ -1,30 +1,3 @@
-// Style definitions (need them here instead of css to do transitions)
-var stateStyle = {
-  nationView: {
-    active: {
-      'fill': 'white',
-      'stroke': 'black', 
-      'stroke-width': 1.5
-    },
-    inactive: {
-      'fill': 'white',
-      'stroke': 'black', 
-      'stroke-width': 1.0
-    }
-  },
-  stateView: {
-    active: {
-      'fill': '#DCDCDC',
-      'stroke': 'black', 
-      'stroke-width': 1.5
-    },
-    inactive: {
-      'fill': 'transparent',
-      'stroke': 'black', 
-      'stroke-width': 1.0
-    }
-  }
-};
 
 function categoryToName(category) {
   if (category == "total") { return "Total"; }
@@ -45,3 +18,61 @@ function categoryToColor(category) {
   else if (category == "other") { return "#A9A9A9"; }
   else { return "none"; }
 }
+
+// on zoom in
+
+function showCountyLines(selection) {
+  selection
+    .classed("show-county-bounds", true);
+}
+function emphasizeCounty(selection) {
+  selection
+    .classed("emphasize-county", true);
+}
+
+function foregroundState(selection, scale = 1) {
+  selection
+    .transition()
+    .duration(500)
+    .style("stroke-width",  2.5/scale); // scale stroke-width
+}
+
+function backgroundState(selection, scale = 1) {
+  console.log(scale);
+  selection
+    .transition()
+    .duration(500)
+    .style("stroke-width",  0.75/scale); // scale stroke-width;
+}
+
+// on zoom out
+
+function hideCountyLines() {
+  d3.selectAll('.county')
+    .classed("show-county-bounds", false); 
+}
+
+function deemphasizeCounty() {
+  d3.selectAll('.county')
+    .classed("emphasize-county", false);
+}
+
+function resetState() {
+  d3.selectAll('.state')
+    .transition()
+    .duration(750)
+    .style("stroke-width", null); // use null to get back to CSS
+}
+
+// on mouseover
+function highlightCounty(selection) {
+  d3.select(selection)
+    .classed("highlighted-county", true);
+}
+
+// on mouseout
+function unhighlightCounty(selection) {
+  d3.select(selection)
+    .classed("highlighted-county", false);
+}
+
