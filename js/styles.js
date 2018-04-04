@@ -34,7 +34,7 @@ function foregroundState(selection, scale = 1) {
   selection
     .transition()
     .duration(500)
-    .style("stroke-width",  2/scale); // scale stroke-width
+    .style("stroke-width",  2.5/scale); // scale stroke-width
 }
 
 function backgroundState(selection, scale = 1) {
@@ -42,8 +42,7 @@ function backgroundState(selection, scale = 1) {
   selection
     .transition()
     .duration(500)
-    .style("stroke-dasharray",  (3/scale)+","+(3/scale) ) // scale dashed line spacing
-    .style("stroke-width",  1/scale); // scale stroke-width;
+    .style("stroke-width",  0.75/scale); // scale stroke-width;
 }
 
 // on zoom out
@@ -62,7 +61,6 @@ function resetState() {
   d3.selectAll('.state')
     .transition()
     .duration(750)
-    .style("stroke-dasharray", null)
     .style("stroke-width", null); // use null to get back to CSS
 }
 
