@@ -1,7 +1,13 @@
 // Style definitions (need them here instead of css to do transitions)
 var countyStyle = {
+  showbounds: {
+    'stroke': 'darkgrey'
+  },
   emphasize: {
     'fill': 'pink'
+  },
+  highlight: {
+    'fill': 'darkgrey'
   }
 };
 
@@ -29,7 +35,9 @@ function categoryToColor(category) {
 
 function showCountyLines(selection) {
   selection
-    .classed('hidden-border', false);
+    //.transition()
+    //.duration(750)
+    .style("stroke", countyStyle.showbounds.stroke);
 }
 function emphasizeCounty(selection) {
   selection
@@ -42,7 +50,9 @@ function emphasizeCounty(selection) {
 
 function hideCountyLines() {
   d3.selectAll('.county')
-    .classed('hidden-border', true);
+    //.transition()
+    //.duration(750)
+    .style("stroke", null); // use null to revert back to whatever is in CSS
 }
 
 function deemphasizeCounty() {
@@ -55,12 +65,12 @@ function deemphasizeCounty() {
 // on mouseover
 function highlightCounty(selection) {
   d3.select(selection)
-    .classed("highlighted-county", true);
+    .style("fill", countyStyle.highlight.fill);
 }
 
 // on mouseout
 function unhighlightCounty(selection) {
   d3.select(selection)
-    .classed("highlighted-county", false);
+    .style("fill", null);
 }
 

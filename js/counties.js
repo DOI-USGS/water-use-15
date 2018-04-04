@@ -77,8 +77,7 @@ function displayCountyData(error, activeCountyData) {
     countyBounds
       .enter()
       .append("path")
-      .classed('county', true)
-      .classed('hidden-border', true) // add county shapes, but don't outline
+      .classed('county', true) // by default, county bounds not seen
       .attr('id', function(d) {
         return d.properties.GEOID;
       })

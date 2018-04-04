@@ -19,18 +19,13 @@
 
 .county {
   fill: transparent;
-  stroke: darkgrey;
+  stroke: transparent;
   stroke-width: 0.2;
 }
 
 .highlighted-county {
   fill: darkgrey;
-}  
-
-.hidden-border {
-  stroke: transparent;
-  stroke-width: 0;
-}
+} 
 
 .tin,
 .slice {
