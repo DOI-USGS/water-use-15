@@ -19,10 +19,7 @@ function addStates(map, stateBounds) {
     .attr('id', function(d) {
       return d.properties.STATE_ABBV;
     })
-    .attr('d', buildPath)
-    .style("fill", function(d) { return formatState('fill', d, false); })
-    .style("stroke", function(d) { return formatState('stroke', d, false); })
-    .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
+    .attr('d', buildPath);
 
   var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
@@ -53,34 +50,6 @@ function formatState(attr, d, active) {
     activeness = 'inactive';
   }
   return stateStyle[view][activeness][attr];
-}
-
-// on mouseover
-function highlightState(selection) {
-  selection
-    .style('fill', function(d) { return formatState('fill', d, true); })
-    .style('stroke', function(d) { return formatState('stroke', d, true); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, true)/zoom_scale; });
-}
-
-// on mouseout
-function unhighlightState(selection) {
-  selection
-    .style("fill", function(d) { return formatState('fill', d, false); })
-    .style('stroke', function(d) { return formatState('stroke', d, false); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, false)/zoom_scale; });
-}
-
-// on mouseover
-function highlightCounty(selection) {
-  d3.select(selection)
-    .style('fill', function(d) { return "darkgrey"; });
-}
-
-// on mouseout
-function unhighlightCounty(selection) {
-  d3.select(selection)
-    .style("fill", function(d) { return "transparent" });
 }
 
 // on click
@@ -153,27 +122,33 @@ function updateView(newView, fireAnalytics = true) {
   updateCounties(activeView);
   updateStates(activeView);
   
-  // set the styling: all states inactive for view=USA, just one state active
-  // otherwise. i tried doing this with .classed('active') and
-  // .classed('hidden') and css (conditional on activeView=='USA' and
-  // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
-  var states = map.selectAll('.state');
-  if(activeView === 'USA') {
-    hideCountyLines();
-    states
+  // set the styling: setting by adding or removing class, so d3 transitions not used
+  
+  // reset counties each time a zoom changes
+  // cannot go inside first if because panning to adjacent state won't reset
+  hideCountyLines();
+  deemphasizeCounty();
+  resetState();
+  
+  if(activeView !== 'USA') {
+    
+    // select counties in current state
+    var statecounties = d3.selectAll('.county')
+      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+    var otherstates = d3.selectAll('.state')
+      .filter(function(d) { return d.properties.STATE_ABBV !== activeView; });
+    var thisstate = d3.selectAll('.state')
+      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+    
+    showCountyLines(statecounties);
+    emphasizeCounty(statecounties);
+    backgroundState(otherstates, scale = zoom_scale);
+    foregroundState(thisstate, scale = zoom_scale);
+    
+    statecounties
       .transition()
-      .duration(750)
-      .style("fill", function(d) { return formatState('fill', d, false); })
-      .style("stroke", function(d) { return formatState('stroke', d, false); })
-      .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
-  } else {
-    showCountyLines(activeView);
-    states
-      .transition()
-      .duration(750)
-      .style("fill", function(d) { return formatState('fill', d); })
-      .style("stroke", function(d) { return formatState('stroke', d); })
-      .style("stroke-width", function(d) { return formatState('stroke-width', d) / zoom_scale; }); // for zoom scaling
+      .duration(500) 
+      .style("stroke-width",  0.75/zoom_scale); // make all counties have scaled stroke-width
   }
 
  // apply the transform (i.e., actually zoom in or out)

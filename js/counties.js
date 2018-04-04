@@ -1,14 +1,4 @@
 
-function hideCountyLines() {
-  d3.selectAll('.county')
-    .classed('hidden-border', true);
-}
-
-function showCountyLines(state) {
-  d3.selectAll('.county')
-    .classed('hidden-border', false);
-}
-
 // call a series of functions to 
 // make sure we have the USA data and then
 // make sure we have this state stored in countyBoundsZoom and then
@@ -97,14 +87,12 @@ function displayCountyBounds(error, activeCountyData) {
     countyBounds
       .enter()
       .append("path")
-      .classed('county', true)
-      .classed('hidden-border', true) // add county shapes, but don't outline
+      .classed('county', true) // by default, county bounds not seen
       .attr('id', function(d) {
         return d.properties.GEOID;
       })
       .attr('d', buildPath)
       .on("mouseover", function(d) {
-        highlightState(d3.select("#"+d.properties.STATE_ABBV));
         highlightCounty(this); 
         highlightCircle(d3.select("#"+"circle-"+d.properties.GEOID));
         showToolTip(d, activeCategory); 
@@ -112,7 +100,6 @@ function displayCountyBounds(error, activeCountyData) {
         // because people won't be able to hover on tooltips at the same time as hovering buttons
       })
       .on("mouseout", function(d) { 
-        unhighlightState(d3.select("#"+d.properties.STATE_ABBV));
         unhighlightCounty(this);
         unhighlightCircle();
         hideToolTip();
