@@ -13,6 +13,6 @@ process.merge_centroids_wu <- function(viz) {
   # put the result back into the topojson
   topo@data <- county_data
   
-  # write to file. don't use geojsonio::topojson_write because we can't specify two layers [yet; geojsonio is growing fast]
+  # write to file
   geojsonio::topojson_write(topo, file=viz[['location']], overwrite=TRUE, object_name=viz$process_args$layer)
 }

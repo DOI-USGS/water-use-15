@@ -30,26 +30,9 @@ function addStates(map, stateBounds) {
   // if URL specifies a state view, zoom to that now
   var newView = getHash('view');
   if(newView === null) { newView = 'USA'; }
-  if(newView != 'USA') {
+  if(newView !== 'USA') {
     updateView(newView, fireAnalytics = false);
   }
-}
-
-// Function to look up a style
-function formatState(attr, d, active) {
-  var view;
-  if(activeView == 'USA') {
-    view = 'nationView';
-  } else {
-    active = (d.properties.STATE_ABBV === activeView);
-    view = 'stateView';
-  }
-  if(active) {
-    activeness = 'active';
-  } else {
-    activeness = 'inactive';
-  }
-  return stateStyle[view][activeness][attr];
 }
 
 // on click
@@ -59,7 +42,7 @@ function zoomToFromState(data) {
   // could also use clickedState to set the URL, later
   var clickedView = d3.select(this).attr('id'); // need this in order to use background
   
-  if( clickedView != 'map-background' ) {
+  if( clickedView !== 'map-background' ) {
     // id of selection is a county code, but need to extract the state abbreviation from it
     clickedView = d3.select(this).data()[0].properties.STATE_ABBV;
   }
@@ -144,14 +127,9 @@ function updateView(newView, fireAnalytics = true) {
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom_scale);
     foregroundState(thisstate, scale = zoom_scale);
-    
-    statecounties
-      .transition()
-      .duration(500) 
-      .style("stroke-width",  0.75/zoom_scale); // make all counties have scaled stroke-width
   }
 
- // apply the transform (i.e., actually zoom in or out)
+  // apply the transform (i.e., actually zoom in or out)
   map.transition()
     .duration(750)
     .attr('transform',
