@@ -23,6 +23,14 @@
   stroke-width: 0.2;
 }
 
+.emphasize-county {
+  fill: pink;
+}
+
+.highlighted-county {
+  fill: darkgrey;
+}  
+
 .hidden-border {
   stroke: transparent;
   stroke-width: 0;

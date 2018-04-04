@@ -49,34 +49,6 @@ formatState = function(attr, d, active) {
   return stateStyle[view][activeness][attr];
 }
 
-// on mouseover
-function highlightState(selection) {
-  selection
-    .style('fill', function(d) { return formatState('fill', d, true); })
-    .style('stroke', function(d) { return formatState('stroke', d, true); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, true)/zoom_scale; });
-}
-
-// on mouseout
-function unhighlightState(selection) {
-  selection
-    .style("fill", function(d) { return formatState('fill', d, false); })
-    .style('stroke', function(d) { return formatState('stroke', d, false); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, false)/zoom_scale; });
-}
-
-// on mouseover
-function highlightCounty(selection) {
-  d3.select(selection)
-    .style('fill', function(d) { return "darkgrey"; });
-}
-
-// on mouseout
-function unhighlightCounty(selection) {
-  d3.select(selection)
-    .style("fill", function(d) { return "transparent" });
-}
-
 // on click
 function zoomToFromState(data) {
 
@@ -149,14 +121,20 @@ function updateView(newView) {
   var states = map.selectAll('.state');
   if(activeView === 'USA') {
     hideCountyLines();
+    deemphasizeCounty();
     states
       .transition()
       .duration(750)
       .style("stroke-width", null); // turn off stroke-width and revert back to CSS
   } else {
+    
+    // select counties in current state
     var statecounties = d3.selectAll('.county')
       .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+    
     showCountyLines(statecounties);
+    emphasizeCounty(statecounties);
+    
     states
       .transition()
       .duration(500) 

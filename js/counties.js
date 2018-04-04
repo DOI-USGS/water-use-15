@@ -1,12 +1,37 @@
 
+// on zoom in
+
+function showCountyLines(selection) {
+  selection
+    .classed('hidden-border', false);
+}
+function emphasizeCounty(selection) {
+  selection
+    .classed("emphasize-county", true);
+}
+
+// on zoom out
+
 function hideCountyLines() {
   d3.selectAll('.county')
     .classed('hidden-border', true);
 }
 
-function showCountyLines(selection) {
-  selection
-    .classed('hidden-border', false);
+function deemphasizeCounty() {
+  d3.selectAll('.county')
+    .classed("emphasize-county", false);
+}
+
+// on mouseover
+function highlightCounty(selection) {
+  d3.select(selection)
+    .classed("highlighted-county", true);
+}
+
+// on mouseout
+function unhighlightCounty(selection) {
+  d3.select(selection)
+    .classed("highlighted-county", false);
 }
 
 // call a series of functions to 
