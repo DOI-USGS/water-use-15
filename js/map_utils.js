@@ -148,6 +148,10 @@ function updateView(newView) {
       nationDims.width/stateDims.width]);
   }
 
+  // update the geospatial data for the upcoming resolution
+  updateCounties(activeView);
+  updateStates(activeView);
+  
   // set the styling: all states inactive for view=USA, just one state active
   // otherwise. i tried doing this with .classed('active') and
   // .classed('hidden') and css (conditional on activeView=='USA' and

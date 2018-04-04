@@ -64,6 +64,9 @@ function cacheCountyData(state, callback) {
       return(d.properties.STATE_ABBV === state);
     });
     countyBoundsZoom.set(state, oneStateCounties);
+    
+    // apply to the boundaries. could choose between calling callback on
+    // get(state), get('USA'), or multiple calls for get(multiple states)
     callback(null, countyBoundsZoom.get(state));
     
     // here's how we used to download the data and run the processing function:
@@ -90,11 +93,6 @@ function displayCountyBounds(error, activeCountyData) {
         return d.properties.GEOID;
       });
     
-    // exit
-    countyBounds
-      .exit()
-      .remove();
-      
     // enter
     countyBounds
       .enter()
