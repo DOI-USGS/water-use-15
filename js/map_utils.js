@@ -118,10 +118,15 @@ function updateView(newView) {
   // otherwise. i tried doing this with .classed('active') and
   // .classed('hidden') and css (conditional on activeView=='USA' and
   // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
+  
+  // reset counties each time a zoom changes
+  // cannot go inside first if because panning to adjacent state won't reset
+  hideCountyLines();
+  deemphasizeCounty();
+  
   var states = map.selectAll('.state');
+  
   if(activeView === 'USA') {
-    hideCountyLines();
-    deemphasizeCounty();
     states
       .transition()
       .duration(750)
