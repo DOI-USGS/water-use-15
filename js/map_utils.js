@@ -34,7 +34,7 @@ function addStates(map, stateBounds) {
   var newView = getHash('view');
   if(newView === null) { newView = 'USA'; }
   if(newView != 'USA') {
-    updateView(newView);
+    updateView(newView, fireAnalytics = false);
   }
 }
 
@@ -109,8 +109,9 @@ function zoomToFromState(data) {
   updateView(newView);
 }
 
-function updateView(newView) {
+function updateView(newView, fireAnalytics = true) {
   // update the global variable that stores the current view
+  oldView = activeView;
   activeView = newView;
   
   // update page info
@@ -182,10 +183,18 @@ function updateView(newView) {
       "translate(" + chart_width / 2 + "," + chart_height / 2 + ")"+
       "scale(" + zoom_scale + ")" +
       "translate(" + -x + "," + -y + ")");
-  
+  // don't need timeout for view change   
+  if(fireAnalytics) {
+    gtag('event', 'update view', {
+  'event_category': 'figure',
+  'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
+    });
+  }    
 }
 
-function updateCategory(category, prevCategory) {
+var updateCategoryTimer = null;
+var updateCategoryDelay = 1000; //ms
+function updateCategory(category, prevCategory, action) {
   
   // update page info
   updateTitle(category);
@@ -194,7 +203,15 @@ function updateCategory(category, prevCategory) {
   updatePies(category, prevCategory);
   
   updateLegend(category);
-  
+  if(updateCategoryTimer){
+    clearTimeout(updateCategoryTimer);
+  }
+  updateCategoryTimer = setTimeout(function(){
+     gtag('event', action + ' update category', {
+  'event_category': 'figure',
+  'event_label': category + '; view=' + activeView
+     });
+  }, updateCategoryDelay);
 }
 
 function updateTitle(category) {
@@ -220,6 +237,8 @@ function unhighlightCircle() {
     .remove(); // delete duplicate
 }
 
+var toolTipTimer = null;
+var toolTipDelay = 1000; //ms
 function showToolTip(d, category) {
 
   // change tooltip
@@ -233,12 +252,23 @@ function showToolTip(d, category) {
             "Population: " + d.properties.countypop + "<br/>" +
             categoryToName(category) + ": " + 
               d.properties[[category]] + " " + "MGD");
+  if(toolTipTimer){
+    clearTimeout(toolTipTimer);
+  }
+  toolTipTimer = setTimeout(function(){
+     gtag('event', 'hover', {
+  'event_category': 'figure',
+  'event_label': d.properties.COUNTY + ", " + d.properties.STATE_ABBV + '; category=' + category + '; view=' + activeView});
+  }, toolTipDelay);
 }
 
 function hideToolTip() {
   d3.select(".tooltip")
     .classed("shown", false)
     .classed("hidden", true);
+  if (toolTipTimer){
+      clearTimeout(toolTipTimer); // stop ga for edge states
+    }
 }
 
 d3.selection.prototype.moveToFront = function() {  
