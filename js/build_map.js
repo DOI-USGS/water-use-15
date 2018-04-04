@@ -44,7 +44,7 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateBoundsUSA, countyBoundsUSA, countyCentroids, pieFormData;
+var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids, pieFormData;
 var countyBoundsZoom = new Map();
 var tinsAdded = false;
 var piesBaked = false;

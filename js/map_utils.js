@@ -10,7 +10,9 @@ function addStates(map, stateBounds) {
   // add states
   map.select('#state-bounds')
     .selectAll( 'path' )
-    .data(stateBounds.features)
+    .data(stateBounds.features, function(d) {
+      return d.properties.STATE_ABBV;
+    })
     .enter()
     .append('path')
     .classed('state', true)
