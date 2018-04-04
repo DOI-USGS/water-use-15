@@ -11,26 +11,26 @@ function showCountyLines(state) {
 
 // call a series of functions to 
 // make sure we have the USA data and then
-// make sure we have this state stored in countyData and then
+// make sure we have this state stored in countyBoundsZoom and then
 // visualize
 function showCounties(state) {
-  loadCountyData(state, displayCountyData);
+  loadCountyData(state, displayCountyBounds);
 }
 
 // make sure we have the USA data and then
-// call the next function (make sure we have this state stored in countyData and then visualize)
+// call the next function (make sure we have this state stored in countyBoundsZoom and then visualize)
 function loadCountyData(state, callback) {
   // for now let's always load the county data all at once. later we can again split
   // into single-state files if that turns out to be useful for performance.
-  if(!countyData.has('USA')) {
-    d3.json("data/county_boundaries_wu.json", function(error, allCountiesTopo) {
+  if(!countyBoundsZoom.has('USA')) {
+    d3.json("data/county_boundaries_zoom_wu.json", function(error, allCountiesTopo) {
       if(error) callback(error);
       
       // extract the topojson to geojson
-      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.foo).features;
+      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
       
-      // cache in countyData
-      countyData.set('USA', allCountiesGeo);
+      // cache in countyBounds
+      countyBoundsZoom.set('USA', allCountiesGeo);
       
       cacheCountyData(state, callback);
     });
@@ -39,40 +39,41 @@ function loadCountyData(state, callback) {
   }
 }
 
-// make sure we have the state stored in countyData and then
+// make sure we have the state stored in countyBoundsZoom and then
 // call the next function (visualization)
 function cacheCountyData(state, callback) {
   // if the county boundaries for this state are already loaded, do nothing.
   // otherwise load them now. (loading currently just means subsetting them from
   // the complete set of counties). keeping this code in here because this
   // state-caching approach could be useful in near future
-  if(!countyData.has(state)) {
+  if(!countyBoundsZoom.has(state)) {
     // subset the data and run the processing function
-    oneStateCounties = countyData.get('USA').filter(function(d) {
+    oneStateCounties = countyBoundsZoom.get('USA').filter(function(d) {
       return(d.properties.STATE_ABBV === state);
     });
-    countyData.set(state, oneStateCounties);
-    callback(null, countyData.get(state));
+    countyBoundsZoom.set(state, oneStateCounties);
+    callback(null, countyBoundsZoom.get(state));
     
     // here's how we used to download the data and run the processing function:
     // oneStateCounties = d3.json("data/" + stateFIPS + "-quantized.json", function(error, oneStateCounties) {
     //   if(error) callback(error);
-    //   countyData.set(state, oneStateCounties);
-    //   callback(error, countyData.get(state));
+    //   countyBoundsZoom.set(state, oneStateCounties);
+    //   callback(error, countyBoundsZoom.get(state));
     // });
     
   } else {
     // if we already have the data, just run the processing function
-    callback(null, countyData.get(state));
+    callback(null, countyBoundsZoom.get(state));
   }
 }
 
 // visualize
-function displayCountyData(error, activeCountyData) {
+function displayCountyBounds(error, activeCountyData) {
+    console.log('start displayCountyBounds');
     if(error) throw error;
     
     // create paths
-    var countyBounds = map.select('.county-bounds')
+    var countyBounds = map.select('#county-bounds')
       .selectAll(".county")
       .data(activeCountyData, function(d) {
         return d.properties.GEOID;
@@ -112,4 +113,5 @@ function displayCountyData(error, activeCountyData) {
     // update
     countyBounds
       .attr('d', buildPath);
+    console.log('end displayCountyBounds');
 }
