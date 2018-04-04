@@ -140,6 +140,11 @@ function updateView(newView) {
     showCountyLines(statecounties);
     emphasizeCounty(statecounties);
     
+    statecounties
+      .transition()
+      .duration(500) 
+      .style("stroke-width",  0.75/zoom_scale); // make all counties have scaled stroke-width
+    
     states
       .transition()
       .duration(500) 
