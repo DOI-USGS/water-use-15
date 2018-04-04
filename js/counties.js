@@ -81,10 +81,9 @@ function cacheCountyData(state, callback) {
 
 // visualize
 function displayCountyBounds(error, activeCountyData) {
-    console.log('start displayCountyBounds');
     if(error) throw error;
     
-    // create paths
+    // attach data
     var countyBounds = map.select('#county-bounds')
       .selectAll(".county")
       .data(activeCountyData, function(d) {
@@ -125,5 +124,4 @@ function displayCountyBounds(error, activeCountyData) {
     // update
     countyBounds
       .attr('d', buildPath);
-    console.log('end displayCountyBounds');
 }

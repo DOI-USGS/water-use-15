@@ -32,19 +32,20 @@ function addStates(map, stateBounds) {
 
   // if URL specifies a state view, zoom to that now
   var newView = getHash('view');
-  if(newView == null) { newView = 'USA'; }
+  if(newView === null) { newView = 'USA'; }
   if(newView != 'USA') {
     updateView(newView);
   }
 }
 
 // Function to look up a style
-formatState = function(attr, d, active) {
+function formatState(attr, d, active) {
+  var view;
   if(activeView == 'USA') {
-    var view = 'nationView';
+    view = 'nationView';
   } else {
     active = (d.properties.STATE_ABBV === activeView);
-    var view = 'stateView';
+    view = 'stateView';
   }
   if(active) {
     activeness = 'active';
