@@ -90,22 +90,22 @@ targets:
   # --- publish --- #
   
   SB_county_boundaries_USA_json:
-    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_USA.json", I("county_boundaries_USA.json"))
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_USA.json", I("test_county_boundaries_USA.json"))
   
   SB_county_boundaries_zoom_json:
-    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_zoom.json", I("county_boundaries_zoom.json"))
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_zoom.json", I("test_county_boundaries_zoom.json"))
   
   SB_state_boundaries_USA_json:
-    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_USA.json", I("state_boundaries_USA.json"))
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_USA.json", I("test_state_boundaries_USA.json"))
   
   SB_state_boundaries_zoom_json:
-    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_zoom.json", I("state_boundaries_zoom.json"))
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_zoom.json", I("test_state_boundaries_zoom.json"))
   
   SB_all_boundaries_USA_json:
-    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_all_boundaries_USA.json", I("all_boundaries_USA.json"))
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_all_boundaries_USA.json", I("test_all_boundaries_USA.json"))
   
   SB_all_boundaries_zoom_json:
-    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_all_boundaries_zoom.json", I("all_boundaries_zoom.json"))
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_all_boundaries_zoom.json", I("test_all_boundaries_zoom.json"))
 
   SB_county_centroids_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_centroids_USA.json", I("county_centroids_USA.json"))

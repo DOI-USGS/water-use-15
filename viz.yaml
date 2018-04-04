@@ -102,7 +102,7 @@ fetch:
     mimetype: application/json
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "state_boundaries_USA.json"
+    remoteFilename: "test_state_boundaries_USA.json"
   -
     id: state_boundaries_zoom_topojson
     location: cache/state_boundaries_zoom.json
@@ -110,7 +110,7 @@ fetch:
     mimetype: application/json
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "state_boundaries_zoom.json"
+    remoteFilename: "test_state_boundaries_zoom.json"
   -
     id: county_boundaries_USA_topojson
     location: cache/county_boundaries_USA.json
@@ -118,7 +118,7 @@ fetch:
     mimetype: application/json
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "county_boundaries_USA.json"
+    remoteFilename: "test_county_boundaries_USA.json"
   -
     id: county_boundaries_zoom_topojson
     location: cache/county_boundaries_zoom.json
@@ -126,7 +126,7 @@ fetch:
     mimetype: application/json
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "county_boundaries_zoom.json"
+    remoteFilename: "test_county_boundaries_zoom.json"
   -
     id: county_centroids_topojson
     location: cache/county_centroids_USA.json
