@@ -1,5 +1,4 @@
 function updateStates(newView) {
-  console.log('updating states to new view: '+newView);
   updateStateData(newView, updateStateBounds);
 }
 
@@ -22,7 +21,6 @@ function updateStateData(newView, callback) {
 }
 
 function updateStateBounds(error, stateBounds) {
-  console.log('updating state bounds');
   map.select('#state-bounds')
     .selectAll( 'path.state' )
     .data(stateBounds.features, function(d) {
