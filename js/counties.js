@@ -94,7 +94,6 @@ function displayCountyData(error, activeCountyData) {
       })
       .attr('d', buildPath)
       .on("mouseover", function(d) {
-        highlightState(d3.select("#"+d.properties.STATE_ABBV));
         highlightCounty(this); 
         highlightCircle(d3.select("#"+"circle-"+d.properties.GEOID));
         showToolTip(d, activeCategory); 
@@ -102,7 +101,6 @@ function displayCountyData(error, activeCountyData) {
         // because people won't be able to hover on tooltips at the same time as hovering buttons
       })
       .on("mouseout", function(d) { 
-        unhighlightState(d3.select("#"+d.properties.STATE_ABBV));
         unhighlightCounty(this);
         unhighlightCircle();
         hideToolTip();

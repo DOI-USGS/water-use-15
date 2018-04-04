@@ -17,10 +17,7 @@ function addStates(map, stateData) {
     .attr('id', function(d) {
       return d.properties.STATE_ABBV;
     })
-    .attr('d', buildPath)
-    .style("fill", function(d) { return formatState('fill', d, false); })
-    .style("stroke", function(d) { return formatState('stroke', d, false); })
-    .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
+    .attr('d', buildPath);
 
   var nationBounds = buildPath.bounds(stateData);
   nationDims = {
@@ -155,19 +152,15 @@ function updateView(newView) {
     states
       .transition()
       .duration(750)
-      .style("fill", function(d) { return formatState('fill', d, false); })
-      .style("stroke", function(d) { return formatState('stroke', d, false); })
-      .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
+      .style("stroke-width", null); // turn off stroke-width and revert back to CSS
   } else {
     var statecounties = d3.selectAll('.county')
       .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
     showCountyLines(statecounties);
     states
       .transition()
-      .duration(750)
-      .style("fill", function(d) { return formatState('fill', d); })
-      .style("stroke", function(d) { return formatState('stroke', d); })
-      .style("stroke-width", function(d) { return formatState('stroke-width', d) / zoom_scale; }); // for zoom scaling
+      .duration(500) 
+      .style("stroke-width",  1/zoom_scale); // make all states have scaled stroke-width
   }
 
  // apply the transform (i.e., actually zoom in or out)

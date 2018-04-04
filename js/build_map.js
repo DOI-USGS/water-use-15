@@ -103,11 +103,11 @@ function create_map() {
   // add watermark
   addWatermark();
   
-  // add the main, active map features
-  addStates(map, stateData);
-  
   // add placeholder group for county boundaries
   map.append('g').classed("county-bounds", true);
+  
+  // add the main, active map features
+  addStates(map, stateData);
   
   // add the pie groups and either circles or pie slices
   pieFormData = pieData(countyCentroids);
