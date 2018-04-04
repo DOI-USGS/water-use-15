@@ -51,7 +51,6 @@ var piesBaked = false;
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
-  .defer(d3.json, "data/county_boundaries_USA_wu.json")
   .defer(d3.json, "data/county_centroids_wu.json")
   .defer(d3.json, "data/wu_data_15_range.json")
   .await(create_map);
@@ -87,11 +86,10 @@ function create_map() {
 	// so in this case, all of the results from q.await. Immediately convert to
 	// geojson so we have that converted data available globally.
 	stateBoundsUSA = topojson.feature(arguments[1], arguments[1].objects.states);
-	countyBoundsUSA = topojson.feature(arguments[2], arguments[2].objects.counties);
-	countyCentroids = topojson.feature(arguments[3], arguments[3].objects.centroids);
+	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.centroids);
 	
   // set up scaling for circles
-  var rangeWateruse = arguments[4],
+  var rangeWateruse = arguments[3],
       minWateruse = rangeWateruse[0],
       maxWateruse = rangeWateruse[1];
   
@@ -119,7 +117,7 @@ function create_map() {
   
   // load all county data - it's OK if it's not done right away
   // it should be loaded by the time anyone tries to hover!
-  showCounties('USA');
+  updateCounties('USA');
 }
 
 var buttonContainer = d3.select('.svg-container')

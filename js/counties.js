@@ -13,7 +13,7 @@ function showCountyLines(state) {
 // make sure we have the USA data and then
 // make sure we have this state stored in countyBoundsZoom and then
 // visualize
-function showCounties(state) {
+function updateCounties(state) {
   loadCountyData(state, displayCountyBounds);
 }
 
@@ -22,9 +22,21 @@ function showCounties(state) {
 function loadCountyData(state, callback) {
   // for now let's always load the county data all at once. later we can again split
   // into single-state files if that turns out to be useful for performance.
-  if(!countyBoundsZoom.has('USA')) {
+  if(state === 'USA') {
+    // For national view, use the coarse-resolution county boundaries
+    if(!countyBoundsUSA) {
+      d3.json('data/county_boundaries_USA_wu.json', function(error, allCountiesTopo) {
+        // cache the data to a global variable
+        countyBoundsUSA = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
+        // do the update
+        callback(null, countyBoundsUSA);
+      });
+    } else {
+      callback(null, countyBoundsUSA);
+    }
+  } else if(!countyBoundsZoom.has('USA')) {
     d3.json("data/county_boundaries_zoom_wu.json", function(error, allCountiesTopo) {
-      if(error) callback(error);
+      if(error) throw error;
       
       // extract the topojson to geojson
       allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
