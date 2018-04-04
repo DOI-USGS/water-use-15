@@ -1,28 +1,7 @@
 // Style definitions (need them here instead of css to do transitions)
-var stateStyle = {
-  nationView: {
-    active: {
-      'fill': 'white',
-      'stroke': 'black', 
-      'stroke-width': 1.5
-    },
-    inactive: {
-      'fill': 'white',
-      'stroke': 'black', 
-      'stroke-width': 1.0
-    }
-  },
-  stateView: {
-    active: {
-      'fill': '#DCDCDC',
-      'stroke': 'black', 
-      'stroke-width': 1.5
-    },
-    inactive: {
-      'fill': 'transparent',
-      'stroke': 'black', 
-      'stroke-width': 1.0
-    }
+var countyStyle = {
+  emphasize: {
+    'fill': 'pink'
   }
 };
 
