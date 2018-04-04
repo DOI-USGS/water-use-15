@@ -24,3 +24,43 @@ function categoryToColor(category) {
   else if (category == "other") { return "#A9A9A9"; }
   else { return "none"; }
 }
+
+// on zoom in
+
+function showCountyLines(selection) {
+  selection
+    .classed('hidden-border', false);
+}
+function emphasizeCounty(selection) {
+  selection
+    .transition()
+    .duration(1000)
+    .style("fill", countyStyle.emphasize.fill);
+}
+
+// on zoom out
+
+function hideCountyLines() {
+  d3.selectAll('.county')
+    .classed('hidden-border', true);
+}
+
+function deemphasizeCounty() {
+  d3.selectAll('.county')
+    .transition()
+    .duration(750)
+    .style("fill", null);
+}
+
+// on mouseover
+function highlightCounty(selection) {
+  d3.select(selection)
+    .classed("highlighted-county", true);
+}
+
+// on mouseout
+function unhighlightCounty(selection) {
+  d3.select(selection)
+    .classed("highlighted-county", false);
+}
+

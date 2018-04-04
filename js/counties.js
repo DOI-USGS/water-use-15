@@ -1,43 +1,4 @@
 
-// on zoom in
-
-function showCountyLines(selection) {
-  selection
-    .classed('hidden-border', false);
-}
-function emphasizeCounty(selection) {
-  selection
-    .transition()
-    .duration(1000)
-    .style("fill", countyStyle.emphasize.fill);
-}
-
-// on zoom out
-
-function hideCountyLines() {
-  d3.selectAll('.county')
-    .classed('hidden-border', true);
-}
-
-function deemphasizeCounty() {
-  d3.selectAll('.county')
-    .transition()
-    .duration(750)
-    .style("fill", null);
-}
-
-// on mouseover
-function highlightCounty(selection) {
-  d3.select(selection)
-    .classed("highlighted-county", true);
-}
-
-// on mouseout
-function unhighlightCounty(selection) {
-  d3.select(selection)
-    .classed("highlighted-county", false);
-}
-
 // call a series of functions to 
 // make sure we have the USA data and then
 // make sure we have this state stored in countyData and then
