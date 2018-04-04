@@ -121,32 +121,27 @@ function updateView(newView, fireAnalytics = true) {
   // cannot go inside first if because panning to adjacent state won't reset
   hideCountyLines();
   deemphasizeCounty();
+  resetState();
   
-  var states = map.selectAll('.state');
-  
-  if(activeView === 'USA') {
-    states
-      .transition()
-      .duration(750)
-      .style("stroke-width", null); // turn off stroke-width and revert back to CSS
-  } else {
+  if(activeView !== 'USA') {
     
     // select counties in current state
     var statecounties = d3.selectAll('.county')
       .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+    var otherstates = d3.selectAll('.state')
+      .filter(function(d) { return d.properties.STATE_ABBV !== activeView; });
+    var thisstate = d3.selectAll('.state')
+      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
     
     showCountyLines(statecounties);
     emphasizeCounty(statecounties);
+    backgroundState(otherstates, scale = zoom_scale);
+    foregroundState(thisstate, scale = zoom_scale);
     
     statecounties
       .transition()
       .duration(500) 
       .style("stroke-width",  0.75/zoom_scale); // make all counties have scaled stroke-width
-    
-    states
-      .transition()
-      .duration(500) 
-      .style("stroke-width",  1/zoom_scale); // make all states have scaled stroke-width
   }
 
  // apply the transform (i.e., actually zoom in or out)

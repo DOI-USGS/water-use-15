@@ -30,6 +30,22 @@ function emphasizeCounty(selection) {
     .classed("emphasize-county", true);
 }
 
+function foregroundState(selection, scale = 1) {
+  selection
+    .transition()
+    .duration(500)
+    .style("stroke-width",  2/scale); // scale stroke-width
+}
+
+function backgroundState(selection, scale = 1) {
+  console.log(scale);
+  selection
+    .transition()
+    .duration(500)
+    .style("stroke-dasharray",  2.5/scale) // scale dashed line spacing
+    .style("stroke-width",  1/scale); // scale stroke-width;
+}
+
 // on zoom out
 
 function hideCountyLines() {
@@ -40,6 +56,14 @@ function hideCountyLines() {
 function deemphasizeCounty() {
   d3.selectAll('.county')
     .classed("emphasize-county", false);
+}
+
+function resetState() {
+  d3.selectAll('.state')
+    .transition()
+    .duration(750)
+    .style("stroke-dasharray", null)
+    .style("stroke-width", null); // use null to get back to CSS
 }
 
 // on mouseover
