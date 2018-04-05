@@ -58,23 +58,23 @@
   }
   
   button.total{
-    background:#2678b2;
+    background:rgb(38, 120, 178);
   }
   
   button.thermoelectric{
-    background:#edc948;
+    background:rgb(237, 201, 72);
   }
   
   button.publicsupply{
-    background:#76b7b2;
+    background:rgb(118, 183, 178);
   }
   
   button.irrigation{
-    background:#59a14f;
+    background:rgb(89, 161, 79);
   }
   
   button.industrial{
-    background:#e15759;
+    background:rgb(225, 87, 89);
   }
 
 .legend {
