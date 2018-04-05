@@ -170,7 +170,6 @@ function updateCategory(category, prevCategory, action) {
   
   updateCircles(category);
   
-  updateLegend(category);
   if(updateCategoryTimer){
     clearTimeout(updateCategoryTimer);
   }

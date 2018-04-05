@@ -77,16 +77,6 @@
     background:rgb(225, 87, 89);
   }
 
-.legend {
-  fill: none;
-  stroke: none;
-}
-
-.legendText {
-  text-anchor: middle;
-  font-size: 0.7em;
-}
-
 @media screen and (min-width:580px){
   #button-container button{
     font-size:.9em;
