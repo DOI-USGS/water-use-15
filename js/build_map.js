@@ -44,8 +44,8 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateData, countyCentroids, pieFormData;
-var countyData = new Map();
+var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids, pieFormData;
+var countyBoundsZoom = new Map();
 var tinsAdded = false;
 var piesBaked = false;
 
@@ -85,8 +85,8 @@ function create_map() {
 	// the rest of the indices of arguments are all the other arguments passed in -
 	// so in this case, all of the results from q.await. Immediately convert to
 	// geojson so we have that converted data available globally.
-	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
-	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
+	stateBoundsUSA = topojson.feature(arguments[1], arguments[1].objects.states);
+	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.centroids);
 	
   // set up scaling for circles
   var rangeWateruse = arguments[3],
@@ -100,11 +100,12 @@ function create_map() {
   // add watermark
   addWatermark();
   
-  // add placeholder group for county boundaries
-  map.append('g').classed("county-bounds", true);
+  // add placeholder groups for state and county boundaries
+  map.append('g').attr('id', 'county-bounds');
+  map.append('g').attr('id', 'state-bounds');
   
   // add the main, active map features
-  addStates(map, stateData);
+  addStates(map, stateBoundsUSA);
   
   // add the pie groups and either circles or pie slices
   pieFormData = pieData(countyCentroids);
@@ -113,8 +114,7 @@ function create_map() {
   
   // load all county data - it's OK if it's not done right away
   // it should be loaded by the time anyone tries to hover!
-  showCounties('USA');
-
+  updateCounties('USA');
 }
 
 var buttonContainer = d3.select('.svg-container')

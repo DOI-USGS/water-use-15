@@ -5,6 +5,8 @@ geo=$1
 raw=$2
 simple=$3
 quantized=$4
+simplify=$5
+quantize=$6
 
 # convert
 echo Topojsonifying...
@@ -12,10 +14,10 @@ geo2topo counties=$geo -o $raw
 
 # simplify
 echo Simplifying...
-toposimplify -s 1e-8 -f $raw -o $simple
+toposimplify -s $simplify -f $raw -o $simple
 
 # quantize (store as integers, scale later)
 echo Quantizing...
-topoquantize 1e8 $simple -o $quantized
+topoquantize $quantize $simple -o $quantized
 
 echo Done.

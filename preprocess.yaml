@@ -44,16 +44,44 @@ targets:
   cache/pre_state_dictionary.json:
     command: process_state_dictionary(target_name, county_boundaries_census_sp)
   
+  # simplify closer to 1e-1 and quantize closer to 1e1 make smaller files
   cache/pre_county_boundaries_USA.json:
     command: process_counties(
       outfile=target_name, county_sp=county_boundaries_census_sp,
+      simplify=I(1e-6), quantize=I(1e6),
       county_dict_file='cache/pre_county_dictionary.json', script_file='scripts/preprocess/process_counties.sh')
-    
+  
+  # simplify closer to 1e-20 and quantize closer to 1e20 make higher resolution boundaries (bigger files)  
+  cache/pre_county_boundaries_zoom.json:
+    command: process_counties(
+      outfile=target_name, county_sp=county_boundaries_census_sp,
+      simplify=I(1e-8), quantize=I(1e8),
+      county_dict_file='cache/pre_county_dictionary.json', script_file='scripts/preprocess/process_counties.sh')
+
   cache/pre_state_boundaries_USA.json:
     command: process_counties_to_states(
-      outfile=target_name, county_topojson='cache/pre_county_boundaries_USA.json',
+      outfile=target_name, objects=I('states'), quantize=I(1e6),
+      county_topojson='cache/pre_county_boundaries_USA.json',
+      state_dict_file='cache/pre_state_dictionary.json', script_file = 'scripts/preprocess/process_counties_to_states.js') 
+  
+  cache/pre_all_boundaries_USA.json:
+    command: process_counties_to_states(
+      outfile=target_name, objects=I('states-and-counties'), quantize=I(1e6),
+      county_topojson='cache/pre_county_boundaries_USA.json',
       state_dict_file='cache/pre_state_dictionary.json', script_file = 'scripts/preprocess/process_counties_to_states.js') 
       
+  cache/pre_state_boundaries_zoom.json:
+    command: process_counties_to_states(
+      outfile=target_name, objects=I('states'), quantize=I(1e8),
+      county_topojson='cache/pre_county_boundaries_zoom.json',
+      state_dict_file='cache/pre_state_dictionary.json', script_file = 'scripts/preprocess/process_counties_to_states.js') 
+  
+  cache/pre_all_boundaries_zoom.json:
+    command: process_counties_to_states(
+      outfile=target_name, objects=I('states-and-counties'), quantize=I(1e8),
+      county_topojson='cache/pre_county_boundaries_zoom.json',
+      state_dict_file='cache/pre_state_dictionary.json', script_file = 'scripts/preprocess/process_counties_to_states.js') 
+  
   cache/pre_county_centroids_USA.json:
     command: process_compute_centroids(
       outfile=target_name, spdat=county_boundaries_census_sp,
@@ -61,12 +89,24 @@ targets:
   
   # --- publish --- #
   
-  SB_county_boundaries_json:
+  SB_county_boundaries_USA_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_USA.json", I("county_boundaries_USA.json"))
-                            
-  SB_state_boundaries_json:
+  
+  SB_county_boundaries_zoom_json:
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_zoom.json", I("county_boundaries_zoom.json"))
+  
+  SB_state_boundaries_USA_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_USA.json", I("state_boundaries_USA.json"))
   
+  SB_state_boundaries_zoom_json:
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_zoom.json", I("state_boundaries_zoom.json"))
+  
+  SB_all_boundaries_USA_json:
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_all_boundaries_USA.json", I("all_boundaries_USA.json"))
+  
+  SB_all_boundaries_zoom_json:
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_all_boundaries_zoom.json", I("all_boundaries_zoom.json"))
+
   SB_county_centroids_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_centroids_USA.json", I("county_centroids_USA.json"))
   
@@ -74,6 +114,10 @@ targets:
   
   preprocess:
     depends:
-      - SB_county_boundaries_json
-      - SB_state_boundaries_json
+      - SB_county_boundaries_USA_json
+      - SB_county_boundaries_zoom_json
+      - SB_state_boundaries_USA_json
+      - SB_state_boundaries_zoom_json
+      - SB_all_boundaries_USA_json
+      - SB_all_boundaries_zoom_json
       - SB_county_centroids_json
