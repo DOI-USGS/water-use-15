@@ -1,5 +1,7 @@
 process_counties_to_states <- function(
   outfile='cache/pre_state_boundaries_USA.json',
+  objects='states and counties',
+  quantize=1e8,
   county_topojson='cache/pre_county_boundaries_USA.json',
   state_dict_file='cache/pre_state_dictionary.json',
   script_file = 'scripts/preprocess/process_counties_to_states.js') {
@@ -10,7 +12,10 @@ process_counties_to_states <- function(
     script_file,
     sprintf('--counties %s',county_topojson),
     sprintf('--statedict %s', state_dict_file),
-    sprintf('--states %s',outfile))
+    sprintf('--outfile %s',outfile),
+    sprintf('--quantize "%0.0f"', quantize),
+    sprintf('--objects "%s"', objects))
+  message(cmd)
   # for the following line to work, the system environment variable PATH should
   # include paths to bash, dirname, etc. - for Alison, that required adding
   # C:\Program Files\Git\usr\bin to the windows system PATH variable

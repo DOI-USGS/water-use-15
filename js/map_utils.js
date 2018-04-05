@@ -5,12 +5,14 @@ var nationDims;
 var zoom_scale;
 
 // Create the state polygons
-function addStates(map, stateData) {
+function addStates(map, stateBounds) {
 
   // add states
-  map.append("g").attr('id', 'statepolygons')
+  map.select('#state-bounds')
     .selectAll( 'path' )
-    .data(stateData.features)
+    .data(stateBounds.features, function(d) {
+      return d.properties.STATE_ABBV;
+    })
     .enter()
     .append('path')
     .classed('state', true)
@@ -19,7 +21,7 @@ function addStates(map, stateData) {
     })
     .attr('d', buildPath);
 
-  var nationBounds = buildPath.bounds(stateData);
+  var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
     width: nationBounds[1][0] - nationBounds[0][0],
     height: nationBounds[1][1] - nationBounds[0][1]
@@ -27,26 +29,10 @@ function addStates(map, stateData) {
 
   // if URL specifies a state view, zoom to that now
   var newView = getHash('view');
-  if(newView == null) { newView = 'USA'; }
-  if(newView != 'USA') {
+  if(newView === null) { newView = 'USA'; }
+  if(newView !== 'USA') {
     updateView(newView, fireAnalytics = false);
   }
-}
-
-// Function to look up a style
-formatState = function(attr, d, active) {
-  if(activeView == 'USA') {
-    var view = 'nationView';
-  } else {
-    active = (d.properties.STATE_ABBV === activeView);
-    var view = 'stateView';
-  }
-  if(active) {
-    activeness = 'active';
-  } else {
-    activeness = 'inactive';
-  }
-  return stateStyle[view][activeness][attr];
 }
 
 // on click
@@ -56,7 +42,7 @@ function zoomToFromState(data) {
   // could also use clickedState to set the URL, later
   var clickedView = d3.select(this).attr('id'); // need this in order to use background
   
-  if( clickedView != 'map-background' ) {
+  if( clickedView !== 'map-background' ) {
     // id of selection is a county code, but need to extract the state abbreviation from it
     clickedView = d3.select(this).data()[0].properties.STATE_ABBV;
   }
@@ -94,7 +80,7 @@ function updateView(newView, fireAnalytics = true) {
     var stateGeom, centroid, x0, y0, x1, y1, stateDims;
     
     // find the state data we want to zoom to
-    stateGeom = stateData.features.filter(function(d) {
+    stateGeom = stateBoundsUSA.features.filter(function(d) {
       return d.properties.STATE_ABBV === activeView;
     })[0];
     
@@ -115,6 +101,10 @@ function updateView(newView, fireAnalytics = true) {
       nationDims.width/stateDims.width]);
   }
 
+  // update the geospatial data for the upcoming resolution
+  updateCounties(activeView);
+  updateStates(activeView);
+  
   // set the styling: setting by adding or removing class, so d3 transitions not used
   
   // reset counties each time a zoom changes
@@ -144,7 +134,7 @@ function updateView(newView, fireAnalytics = true) {
       .style("stroke-width",  0.75/zoom_scale); // make all counties have scaled stroke-width
   }
 
- // apply the transform (i.e., actually zoom in or out)
+  // apply the transform (i.e., actually zoom in or out)
   map.transition()
     .duration(750)
     .attr('transform',
