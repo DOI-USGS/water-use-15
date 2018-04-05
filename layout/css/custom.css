@@ -3,6 +3,12 @@
   margin:0;
 }
 
+.viz-text ul {
+    padding-left: 20px;
+    min-height: 20px;
+    padding: 15px;
+}
+
 #key-stories{
   background:#fff;
   min-height: 100px;
@@ -11,6 +17,11 @@
 
 #key-stories .viz-text{
   padding:0;
+}
+
+#key-stories p{
+  padding-top: 10px; 
+  padding-bottom: 10px;
 }
 
 #key-stories h2{
