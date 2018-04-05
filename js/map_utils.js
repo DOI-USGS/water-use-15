@@ -2,94 +2,8 @@
 
 // Bounding box coordinates for the nation, for scaling states
 var nationDims;
-<<<<<<< HEAD
 
-// Style definitions (need them here instead of css to do transitions)
-var stateStyle = {
-  nationView: {
-    active: {
-      'fill': '#e5e5e5',
-      'stroke': '#999999', // looks OK white, too
-      'stroke-width': 1.5
-    },
-    inactive: {
-      'fill': '#ffffff',
-      'stroke': '#999999', // i think we're avoiding borders usually?
-      'stroke-width': 1
-    }
-  },
-  stateView: {
-    active: {
-      'fill': '#e5e5e5',
-      'stroke': '#999999', // no need for border when there's fill
-      'stroke-width': 0.5
-    },
-    inactive: {
-      'fill': '#ffffff',
-      'stroke': '#999999', // could use #DCDCDC to show neighbor outlines
-      'stroke-width': 0.5
-    }
-  }
-};
-  
-function addCircles() {
-  
-  // uses globals map, countyCentroids, scaleCircles, activeCategory
-  
-  var circleGroup = map.append('g')
-    .classed('circles', true);
-  circleGroup.selectAll('.county-point')
-    .data(countyCentroids.features)
-    .enter()
-    .append('circle')
-    .style('stroke-width','0.5')
-    .classed('county-point', true)
-    .attr("cx", function(d) {
-      var coordx = projectX(d.geometry.coordinates);
-      if(coordx === 0) { console.log(d); } // moved outside of project function bc coordinates aren't always d.geometry.coordinates (like in pies)
-      return coordx;
-    })
-    .attr("cy", function(d) { 
-      return projectY(d.geometry.coordinates);
-    })
-    // this is OK to not worry about it changing on hover (activeCategory only changes on click) 
-    // because people won't be able to see tooltips at the same time anyways
-    .on("mouseover", function(d) { showToolTip(this, d, activeCategory); })
-    .on("mouseout", function(d) { hideTooltip(this, d); });
-    
-  circlesAdded = true;
-  
-  // these newly added circles won't work until updateCircles is called, but
-  // since this function always gets called from updateCircles, that should be fine
-}
-
-function updateCircles(category) {
-  
-  // add the circles if needed
-  if (!circlesAdded) {
-    addCircles();
-  }
-
-  d3.selectAll(".county-point")
-    .sort(function(a,b) { 
-      return d3.descending(a.properties[[category]], b.properties[[category]]);
-    })
-    //.transition().duration(0)
-    .attr("r", function(d) {
-      return scaleCircles(d.properties[[category]]);
-    })
-    .style("fill", categoryToColor(category) + "CC")
-    .style("stroke", categoryToColor(category));
-      
-  d3.selectAll(".legend-point")
-    .transition().duration(600)
-    .style("fill", categoryToColor(category) + "CC")
-    .style("stroke", categoryToColor(category));
-    
-}
-=======
 var zoom_scale;
->>>>>>> 3062065decc2f6f7d3ce90861599b0675586b140
 
 // Create the state polygons
 function addStates(map, stateBounds) {
@@ -316,37 +230,10 @@ function hideToolTip() {
 }
 
 d3.selection.prototype.moveToFront = function() {  
-<<<<<<< HEAD
-      return this.each(function(){
-        this.parentNode.appendChild(this);
-      });
-    };
-
-function categoryToName(category) {
-  if (category == "total") { return "Total"; }
-  else if (category == "thermoelectric") { return "Thermoelectric"; }
-  else if (category == "publicsupply") { return "Public Supply"; }
-  else if (category == "irrigation") { return "Irrigation"; }
-  else if (category == "industrial") { return "Industrial"; }
-  else if (category == "piechart") { return "Pie Chart"; }
-  else { return "none"; }
-}
-
-function categoryToColor(category) {
-  if (category == "total") { return "#4e79a7"; }
-  else if (category == "thermoelectric") { return "#edc948"; }
-  else if (category == "publicsupply") { return "#76b7b2"; }
-  else if (category == "irrigation") { return "#59a14f"; }
-  else if (category == "industrial") { return "#e15759"; }
-  else if (category == "other") { return "#A9A9A9"; }
-  else { return "none"; }
-}
-=======
   return this.each(function(){
     this.parentNode.appendChild(this);
   });
 };
->>>>>>> 3062065decc2f6f7d3ce90861599b0675586b140
 
 // projection functions to catch and log bad ones
 function projectX(coordinates) {

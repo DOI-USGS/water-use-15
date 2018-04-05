@@ -58,29 +58,6 @@
   }
   
   button.total{
-<<<<<<< HEAD
-    background:#4e79a7;
-  }
-  
-  button.thermoelectric{
-    background:#edc948;
-  }
-  
-  button.publicsupply{
-    background:#76b7b2;
-  }
-  
-  button.irrigation{
-    background:#59a14f;
-  }
-  
-  button.industrial{
-    background:#e15759;
-  }
-  
-  button.piechart{
-    background:rgb(143,73,186);
-=======
     background:rgb(38, 120, 178);
   }
   
@@ -98,7 +75,6 @@
   
   button.industrial{
     background:rgb(225, 87, 89);
->>>>>>> 3062065decc2f6f7d3ce90861599b0675586b140
   }
 
 @media screen and (min-width:580px){
