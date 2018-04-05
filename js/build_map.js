@@ -101,8 +101,8 @@ function create_map() {
   addWatermark();
   
   // add placeholder groups for state and county boundaries
-  map.append('g').attr('id', 'state-bounds');
   map.append('g').attr('id', 'county-bounds');
+  map.append('g').attr('id', 'state-bounds');
   
   // add the main, active map features
   addStates(map, stateBoundsUSA);
