@@ -125,7 +125,9 @@ var buttonContainer = d3.select('.svg-container')
   .attr('id', 'button-container');
   
 buttonContainer.append('div').classed('select-arrowbox', true);
-  
+
+var mouseoverCatTimer = null;
+var mouseoverCatDelay = 200; //ms
 var categoryButtons = d3.select('#button-container')
   .selectAll('button')
   .data(tempCategories)
@@ -140,12 +142,18 @@ var categoryButtons = d3.select('#button-container')
   .on('click', function(d){
     prevCategory = activeCategory;
     activeCategory = d.toLowerCase(); // put this here so it only changes on click
-    updateCategory(activeCategory, action = 'click');
+    updateCategory(activeCategory, prevCategory.toLowerCase(), 
+    action = 'click');
   })
   .on('mouseover', function(d){
-    updateCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+    if(mouseoverCatTimer) { clearTimeout(mouseoverCatTimer) }
+    mouseoverCatTimer = setTimeout(function(){    
+      updateCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+    }, mouseoverCatDelay);
+    
   })
   .on('mouseout', function(d){
+    if(mouseoverCatTimer) { clearTimeout(mouseoverCatTimer)}
     updateCategory(activeCategory, d.toLowerCase(),
     action = 'mouseout');
   });
