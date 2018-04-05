@@ -160,7 +160,6 @@ function updateCategory(category, prevCategory, action) {
   
   updatePies(category, prevCategory);
   
-  updateLegend(category);
   if(updateCategoryTimer){
     clearTimeout(updateCategoryTimer);
   }
