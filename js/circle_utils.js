@@ -31,7 +31,7 @@ function updateCircles(category) {
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d.properties[[category]]); })
     .style("fill", categoryToColor(category))
-    .style("stroke", categoryToColor(category)) // we should repoint this to use a lookup in styles.js
+    .style("stroke", categoryToColor(category))
     .style("stroke-width", "0.1");
 
 }
