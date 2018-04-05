@@ -2,7 +2,6 @@
 
 // Bounding box coordinates for the nation, for scaling states
 var nationDims;
-
 var zoom_scale;
 
 // Create the state polygons
