@@ -4,16 +4,16 @@ var chart_height    =   700;
 
 // define categories
 var tempCategories = ["total", "thermoelectric", "publicsupply", 
-                      "irrigation", "industrial", "piechart"];
+                      "irrigation", "industrial"];
 
 // Projection
 var projection = albersUsaTerritories()
-    .scale([1200])
-    .translate([chart_width / 2, chart_height / 2]);
-    // default is .rotate([96,0]) to center on US (we want this)
+  .scale([1200])
+  .translate([chart_width / 2, chart_height / 2]);
+  // default is .rotate([96,0]) to center on US (we want this)
     
 var buildPath = d3.geoPath()
-    .projection(projection);
+  .projection(projection);
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
@@ -26,13 +26,13 @@ var container = d3.select('body')
 
 // Setup tooltips
 var tooltipDiv = d3.select("body").append("div")
-      .classed("tooltip hidden", true);
+  .classed("tooltip hidden", true);
 
 // Create SVG
 var svg = d3.select(".svg-container")
-    .append("svg")
-    .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
-	  .attr('preserveAspectRatio', 'xMidYMid');
+  .append("svg")
+  .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
+  .attr('preserveAspectRatio', 'xMidYMid');
 
 var map = svg.append("g")
   .attr("id", "map");
@@ -44,9 +44,8 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateData, countyCentroids, pieFormData;
-var countyData = new Map();
-var piesBaked = false;
+var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids, pieFormData;
+var countyBoundsZoom = new Map();
 var circlesAdded = false;
 
 d3.queue()
@@ -85,8 +84,8 @@ function create_map() {
 	// the rest of the indices of arguments are all the other arguments passed in -
 	// so in this case, all of the results from q.await. Immediately convert to
 	// geojson so we have that converted data available globally.
-	stateData = topojson.feature(arguments[1], arguments[1].objects.states);
-	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.foo);
+	stateBoundsUSA = topojson.feature(arguments[1], arguments[1].objects.states);
+	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.centroids);
 	
   // set up scaling for circles
   var rangeWateruse = arguments[3],
@@ -97,28 +96,25 @@ function create_map() {
   scaleCircles = scaleCircles
     .domain(rangeWateruse);
 
-  // add legend
-  addLegend(minWateruse, maxWateruse);
+  // add watermark
+  addWatermark();
+  
+  // add placeholder groups for state and county boundaries
+  map.append('g').attr('id', 'county-bounds');
+  map.append('g').attr('id', 'state-bounds');
+  
+  map.append('g').attr('id', 'wu-circles');
   
   // add the main, active map features
-  addStates(map, stateData);
-  if(activeCategory === 'piechart') {
-    // prepare and then use the centroid data for presentation as pie charts
-    pieFormData = pieData(countyCentroids);
-    updatePieCharts();
-  } else {
-    // first render circles, and then (after we're otherwise good to go) prepare the centroid data for presentation as pie charts
-    updateCircles(activeCategory);
-    pieFormData = pieData(countyCentroids);
-  }
+  addStates(map, stateBoundsUSA);
   
-  // get started downloading county data right away.
-  // for now, pretend that we know that state '01' is the most likely state
-  // for the user to click on; we could make this dynamic in the future.
-  loadCountyData("AL", function(error, data) {
-    if (error) throw error;
-  });
-
+  // add the circles
+  addCircles();
+  updateCircles(activeCategory);
+  
+  // load all county data - it's OK if it's not done right away
+  // it should be loaded by the time anyone tries to hover!
+  updateCounties('USA');
 }
 
 var buttonContainer = d3.select('.svg-container')
@@ -141,11 +137,12 @@ var categoryButtons = d3.select('#button-container')
   .on('click', function(d){
     prevCategory = activeCategory;
     activeCategory = d.toLowerCase(); // put this here so it only changes on click
-    updateCategory(activeCategory);
+    updateCategory(activeCategory, action = 'click');
   })
   .on('mouseover', function(d){
-    updateCategory(d.toLowerCase(), activeCategory);
+    updateCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
   })
   .on('mouseout', function(d){
-    updateCategory(activeCategory, d.toLowerCase());
+    updateCategory(activeCategory, d.toLowerCase(),
+    action = 'mouseout');
   });

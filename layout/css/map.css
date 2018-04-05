@@ -9,28 +9,35 @@
 }
 
 .state {
+  fill: transparent;
+  stroke: black;
+  stroke-width: 1.5;
   stroke-linejoin: round;
   stroke-linecap: round;
+  pointer-events: none;
 }
 
-#slideraxis path,
-#slideraxis line {
-  stroke: #fff;
+.county {
+  fill: transparent;
+  stroke: transparent;
 }
 
-.track {
-  stroke: #000;
-  stroke-opacity: 0.3;
-  stroke-width: 10px;
-  stroke-linecap: round;
+.show-county-bounds {
+  stroke: #bdbdbd; /* dark-ish grey */
 }
 
-.track-circle {
-  fill: #fff;
-  stroke: #000;
-  stroke-opacity: 0.5;
-  stroke-width: 1.25px;
-  cursor: move; /* was using grab, but that only works in Firefox*/
+/* must be listed before highlighted-county*/
+/* THIS IS WHAT WILL MAKE THE ZOOMED IN STATE EMPHASIZED*/
+.emphasize-county {
+  fill: #e3e3e3; /* light-ish grey */
+}
+
+.highlighted-county {
+  fill: #bdbdbd; /* dark-ish grey */
+} 
+
+.circle {
+  pointer-events: none;
 }
 
 .dragging {
@@ -53,4 +60,11 @@
 
 .shown {
 	display: block;
+}
+
+.watermark {
+  fill: #DCDCDC;
+  stroke: #c6c6c6;
+  stroke-width:0.5;
+  opacity: 0.8;
 }

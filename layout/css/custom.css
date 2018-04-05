@@ -3,6 +3,30 @@
   margin:0;
 }
 
+#key-stories{
+  background:#fff;
+  min-height: 100px;
+  margin-top:20px;
+}
+
+#key-stories .viz-text{
+  padding:0;
+}
+
+#key-stories h2{
+  margin-top:20px;
+}
+
+.key-story-plot{
+  border:1px solid #000;
+  min-height:200px;
+  margin:10px 0;
+}
+
+.key-story-plot img{
+  width:100%;
+}
+
 #button-container{
   text-align: center;
   position: relative;
@@ -34,6 +58,7 @@
   }
   
   button.total{
+<<<<<<< HEAD
     background:#4e79a7;
   }
   
@@ -55,17 +80,26 @@
   
   button.piechart{
     background:rgb(143,73,186);
+=======
+    background:rgb(38, 120, 178);
   }
-
-.legend {
-  fill: none;
-  stroke: none;
-}
-
-.legendText {
-  text-anchor: middle;
-  font-size: 0.7em;
-}
+  
+  button.thermoelectric{
+    background:rgb(237, 201, 72);
+  }
+  
+  button.publicsupply{
+    background:rgb(118, 183, 178);
+  }
+  
+  button.irrigation{
+    background:rgb(89, 161, 79);
+  }
+  
+  button.industrial{
+    background:rgb(225, 87, 89);
+>>>>>>> 3062065decc2f6f7d3ce90861599b0675586b140
+  }
 
 @media screen and (min-width:580px){
   #button-container button{

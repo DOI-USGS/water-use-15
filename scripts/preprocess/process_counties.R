@@ -1,4 +1,4 @@
-process_counties <- function(outfile, county_sp, county_dict_file, script_file) {
+process_counties <- function(outfile, county_sp, simplify, quantize, county_dict_file, script_file) {
   
   # edit the properties in the county_sp, removing unnecessary ones and adding
   # others from county_dict. this code should match similar lines in
@@ -29,7 +29,9 @@ process_counties <- function(outfile, county_sp, county_dict_file, script_file) 
     geo_raw,
     topo_raw,
     topo_simple,
-    topo_quantized)
+    topo_quantized,
+    simplify,
+    quantize)
   # for the following line to work, the system environment variable PATH should
   # include paths to bash, dirname, etc. - for Alison, that required adding
   # C:\Program Files\Git\usr\bin to the windows system PATH variable

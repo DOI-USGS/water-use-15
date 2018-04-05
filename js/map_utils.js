@@ -2,6 +2,7 @@
 
 // Bounding box coordinates for the nation, for scaling states
 var nationDims;
+<<<<<<< HEAD
 
 // Style definitions (need them here instead of css to do transitions)
 var stateStyle = {
@@ -86,29 +87,28 @@ function updateCircles(category) {
     .style("stroke", categoryToColor(category));
     
 }
+=======
+var zoom_scale;
+>>>>>>> 3062065decc2f6f7d3ce90861599b0675586b140
 
 // Create the state polygons
-function addStates(map, stateData) {
+function addStates(map, stateBounds) {
 
   // add states
-  map.append("g").attr('id', 'statepolygons')
+  map.select('#state-bounds')
     .selectAll( 'path' )
-    .data(stateData.features)
+    .data(stateBounds.features, function(d) {
+      return d.properties.STATE_ABBV;
+    })
     .enter()
     .append('path')
     .classed('state', true)
     .attr('id', function(d) {
       return d.properties.STATE_ABBV;
     })
-    .attr('d', buildPath)
-    .style("fill", function(d) { return formatState('fill', d, false); })
-    .style("stroke", function(d) { return formatState('stroke', d, false); })
-    .style("stroke-width", function(d) { return formatState('stroke-width', d, false); })
-    .on('mouseover', highlightState)
-    .on('mouseout', unhighlightState)
-    .on('click', zoomToFromState);
+    .attr('d', buildPath);
 
-  var nationBounds = buildPath.bounds(stateData);
+  var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
     width: nationBounds[1][0] - nationBounds[0][0],
     height: nationBounds[1][1] - nationBounds[0][1]
@@ -116,42 +116,10 @@ function addStates(map, stateData) {
 
   // if URL specifies a state view, zoom to that now
   var newView = getHash('view');
-  if(newView == null) { newView = 'USA'; }
-  if(newView != 'USA') {
-    updateView(newView);
+  if(newView === null) { newView = 'USA'; }
+  if(newView !== 'USA') {
+    updateView(newView, fireAnalytics = false);
   }
-}
-
-// Function to look up a style
-formatState = function(attr, d, active) {
-  if(activeView == 'USA') {
-    var view = 'nationView';
-  } else {
-    active = (d.properties.STATE_ABBV === activeView);
-    var view = 'stateView';
-  }
-  if(active) {
-    activeness = 'active';
-  } else {
-    activeness = 'inactive';
-  }
-  return stateStyle[view][activeness][attr];
-}
-
-// on mouseover
-function highlightState() {
-  d3.select(this)
-    .style('fill', function(d) { return formatState('fill', d, true); })
-    .style('stroke', function(d) { return formatState('stroke', d, true); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, true); });
-}
-
-// on mouseout
-function unhighlightState() {
-  d3.select(this)
-    .style("fill", function(d) { return formatState('fill', d, false); })
-    .style('stroke', function(d) { return formatState('stroke', d, false); })
-    .style('stroke-width', function(d) { return formatState('stroke-width', d, false); });
 }
 
 // on click
@@ -159,26 +127,30 @@ function zoomToFromState(data) {
 
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  clickedView = d3.select(this).attr('id'); // should be same as data.properties.STATE_ABBV;
-
+  var clickedView = d3.select(this).attr('id'); // need this in order to use background
+  
+  if( clickedView !== 'map-background' ) {
+    // id of selection is a county code, but need to extract the state abbreviation from it
+    clickedView = d3.select(this).data()[0].properties.STATE_ABBV;
+  }
+  
   // determine the new view
-  if(clickedView === 'map-background' || activeView != 'USA') {
-    // could have made it so we go national only if they click on the background
-    // or the same state: if(clickedView === 'map-background' || activeView ===
-    // clickedView) {}. but instead let's always zoom out if they're in state
-    // view, in if they're in nation view (and click on a state)
-    var newView = 'USA';
+  var newView;
+  if(clickedView === 'map-background' || clickedView === activeView) { 
+    // if they clicked the background or same state, zoom back out
+    newView = 'USA';
   } else {
     // if they clicked on a different state, prepare to zoom in
-    var newView = clickedView;
+    newView = clickedView;
   }
 
   // zoom to the new view
   updateView(newView);
 }
 
-function updateView(newView) {
+function updateView(newView, fireAnalytics = true) {
   // update the global variable that stores the current view
+  oldView = activeView;
   activeView = newView;
   
   // update page info
@@ -186,16 +158,16 @@ function updateView(newView) {
   setHash('view', activeView);
 
   // determine the center point and scaling for the new view
-  var x, y, k;
+  var x, y;
   if(activeView === 'USA') {
     x = chart_width / 2;
     y = chart_height / 2;
-    k = 1;
+    zoom_scale = 1;
   } else {
     var stateGeom, centroid, x0, y0, x1, y1, stateDims;
     
     // find the state data we want to zoom to
-    stateGeom = stateData.features.filter(function(d) {
+    stateGeom = stateBoundsUSA.features.filter(function(d) {
       return d.properties.STATE_ABBV === activeView;
     })[0];
     
@@ -211,76 +183,79 @@ function updateView(newView) {
       width: 2 * d3.max([ x1 - x, x - x0]),
       height: 2 * d3.max([ y1 - y, y - y0])
     };
-    k = d3.min([
+    zoom_scale = d3.min([
       nationDims.height/stateDims.height,
       nationDims.width/stateDims.width]);
   }
 
-  // set the styling: all states inactive for view=USA, just one state active
-  // otherwise. i tried doing this with .classed('active') and
-  // .classed('hidden') and css (conditional on activeView=='USA' and
-  // d.properties.STATE_ABBV === activeView), but that didn't work with transitions.
-  var states = map.selectAll('.state');
-  if(activeView === 'USA') {
-    hideCounties();
-    states
+  // update the geospatial data for the upcoming resolution
+  updateCounties(activeView);
+  updateStates(activeView);
+  
+  // set the styling: setting by adding or removing class, so d3 transitions not used
+  
+  // reset counties each time a zoom changes
+  // cannot go inside first if because panning to adjacent state won't reset
+  hideCountyLines();
+  deemphasizeCounty();
+  resetState();
+  
+  if(activeView !== 'USA') {
+    
+    // select counties in current state
+    var statecounties = d3.selectAll('.county')
+      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+    var otherstates = d3.selectAll('.state')
+      .filter(function(d) { return d.properties.STATE_ABBV !== activeView; });
+    var thisstate = d3.selectAll('.state')
+      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+    
+    showCountyLines(statecounties);
+    emphasizeCounty(statecounties);
+    backgroundState(otherstates, scale = zoom_scale);
+    foregroundState(thisstate, scale = zoom_scale);
+    
+    statecounties
       .transition()
-      .duration(750)
-      .style("fill", function(d) { return formatState('fill', d, false); })
-      .style("stroke", function(d) { return formatState('stroke', d, false); })
-      .style("stroke-width", function(d) { return formatState('stroke-width', d, false); });
-  } else {
-    showCounties(activeView);
-    states
-      .transition()
-      .duration(750)
-      .style("fill", function(d) { return formatState('fill', d); })
-      .style("stroke", function(d) { return formatState('stroke', d); })
-      .style("stroke-width", function(d) { return formatState('stroke-width', d); });
+      .duration(500) 
+      .style("stroke-width",  0.75/zoom_scale); // make all counties have scaled stroke-width
   }
 
- // apply the transform (i.e., actually zoom in or out)
+  // apply the transform (i.e., actually zoom in or out)
   map.transition()
     .duration(750)
     .attr('transform',
       "translate(" + chart_width / 2 + "," + chart_height / 2 + ")"+
-      "scale(" + k + ")" +
+      "scale(" + zoom_scale + ")" +
       "translate(" + -x + "," + -y + ")");
+  // don't need timeout for view change   
+  if(fireAnalytics) {
+    gtag('event', 'update view', {
+  'event_category': 'figure',
+  'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
+    });
+  }    
 }
 
-function updateCategory(category, prevCategory) {
+var updateCategoryTimer = null;
+var updateCategoryDelay = 1000; //ms
+function updateCategory(category, prevCategory, action) {
   
   // update page info
   updateTitle(category);
   setHash('category', category);
   
-  if (category === "piechart") {
-    
-    // shrink circles
-    d3.selectAll(".county-point")
-      //.transition().duration(0)
-      .attr("r", 0);
+  updateCircles(category);
   
-    // create or expand and update the pies
-    updatePieCharts();
-    
-  } else if(prevCategory === "piechart") {
-  
-    // shrink pies
-    d3.selectAll(".pieslice")
-      //.transition().duration(0)
-      .attr("d", arcpath.outerRadius(0));
-      
-    // create or expand and update the circles
-    updateCircles(category);
-    
-  } else {
-    
-    // update circles
-    updateCircles(category);
-    
+  if(updateCategoryTimer){
+    clearTimeout(updateCategoryTimer);
   }
-  
+  updateCategoryTimer = setTimeout(function(){
+     gtag('event', action + ' update category', {
+  'event_category': 'figure',
+  'event_label': category + '; view=' + activeView
+     });
+  }, updateCategoryDelay);
 }
 
 function updateTitle(category) {
@@ -288,18 +263,28 @@ function updateTitle(category) {
     .text("Water Use Data for " + activeView + ", 2015, " + category);
 }
 
-function showToolTip(currentCircle, d, category) {
-  var orig = d3.select(currentCircle),
+function highlightCircle(currentCircle) {
+  var orig = currentCircle,
       origNode = orig.node();
   var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
                                                             origNode.nextSibling));
-  
+                                                            
   // style duplicated circles sitting on top
   duplicate
-    .classed('county-point-duplicate', true)
+    .classed('circle-duplicate', true)
     .style("pointer-events", "none")
     .style("opacity", 1); // makes the duplicate circle on the top
-  
+}
+
+function unhighlightCircle() {
+  d3.select('.circle-duplicate')
+    .remove(); // delete duplicate
+}
+
+var toolTipTimer = null;
+var toolTipDelay = 1000; //ms
+function showToolTip(d, category) {
+
   // change tooltip
   d3.select(".tooltip")
     .classed("shown", true)
@@ -307,21 +292,31 @@ function showToolTip(currentCircle, d, category) {
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
-    .html(d.properties.COUNTY + "<br/>" + 
+    .html(d.properties.COUNTY + ", " + d.properties.STATE_ABBV + "<br/>" + 
             "Population: " + d.properties.countypop + "<br/>" +
             categoryToName(category) + ": " + 
               d.properties[[category]] + " " + "MGD");
+  if(toolTipTimer){
+    clearTimeout(toolTipTimer);
+  }
+  toolTipTimer = setTimeout(function(){
+     gtag('event', 'hover', {
+  'event_category': 'figure',
+  'event_label': d.properties.COUNTY + ", " + d.properties.STATE_ABBV + '; category=' + category + '; view=' + activeView});
+  }, toolTipDelay);
 }
 
-function hideTooltip(currentCircle, d) {
-  d3.select('.county-point-duplicate')
-    .remove(); // delete duplicate
+function hideToolTip() {
   d3.select(".tooltip")
     .classed("shown", false)
     .classed("hidden", true);
+  if (toolTipTimer){
+      clearTimeout(toolTipTimer); // stop ga for edge states
+    }
 }
 
 d3.selection.prototype.moveToFront = function() {  
+<<<<<<< HEAD
       return this.each(function(){
         this.parentNode.appendChild(this);
       });
@@ -346,6 +341,12 @@ function categoryToColor(category) {
   else if (category == "other") { return "#A9A9A9"; }
   else { return "none"; }
 }
+=======
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+>>>>>>> 3062065decc2f6f7d3ce90861599b0675586b140
 
 // projection functions to catch and log bad ones
 function projectX(coordinates) {
