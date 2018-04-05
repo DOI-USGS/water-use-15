@@ -228,7 +228,6 @@ publish:
       projection: "custom_projection"
       styles: "styles"
       map_utils: "map_utils"
-      legend_utils: "legend_utils"
       watermark_utils: "watermark_utils"
       symbol_utils: "symbol_utils"
       circle_utils: "circle_utils"
@@ -245,7 +244,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties", 
-                  "legend_utils", "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
+                  "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
       sections: ["social","map","description_text", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
   -
     id: topojson
@@ -271,10 +270,6 @@ publish:
   -
     id: map_utils
     location: "js/map_utils.js"
-    mimetype: application/javascript
-  -
-    id: legend_utils
-    location: "js/legend_utils.js"
     mimetype: application/javascript
   -
     id: watermark_utils
@@ -355,7 +350,6 @@ publish:
       projection: custom_projection
       styles: styles
       map_utils: map_utils
-      legend_utils: legend_utils
       watermark_utils: watermark_utils
       symbol_utils: symbol_utils
       circle_utils: circle_utils
@@ -373,7 +367,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
-                  "map_counties", "legend_utils", "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
+                  "map_counties", "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
       embed: ["map","directions_text"]
   -
     id: description_text
