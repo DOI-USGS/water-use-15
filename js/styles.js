@@ -5,17 +5,16 @@ function categoryToName(category) {
   else if (category == "publicsupply") { return "Public Supply"; }
   else if (category == "irrigation") { return "Irrigation"; }
   else if (category == "industrial") { return "Industrial"; }
-  else if (category == "piechart") { return "Pie Chart"; }
   else { return "none"; }
 }
 
 function categoryToColor(category) {
-  if (category == "total") { return "#2678b2"; }
-  else if (category == "thermoelectric") { return "#edc948"; }
-  else if (category == "publicsupply") { return "#76b7b2"; }
-  else if (category == "irrigation") { return "#59a14f"; }
-  else if (category == "industrial") { return "#e15759"; }
-  else if (category == "other") { return "#A9A9A9"; }
+  if (category == "total") { return "rgba(38, 120, 178, 0.8)"; }
+  else if (category == "thermoelectric") { return "rgba(237, 201, 72, 0.8)"; }
+  else if (category == "publicsupply") { return "rgba(118, 183, 178, 0.8)"; }
+  else if (category == "irrigation") { return "rgba(89, 161, 79, 0.8)"; }
+  else if (category == "industrial") { return "rgba(225, 87, 89, 0.8)"; }
+  else if (category == "other") { return "rgba(169, 169, 169, 0.8)"; }
   else { return "none"; }
 }
 
