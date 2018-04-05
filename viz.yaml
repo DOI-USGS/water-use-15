@@ -366,8 +366,8 @@ publish:
       wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
-                  "map_counties", "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
+                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties",
+                  "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
       embed: ["map","directions_text"]
   -
     id: description_text
