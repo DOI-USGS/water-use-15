@@ -168,7 +168,7 @@ function updateCategory(category, prevCategory, action) {
   updateTitle(category);
   setHash('category', category);
   
-  updatePies(category, prevCategory);
+  updateCircles(category);
   
   updateLegend(category);
   if(updateCategoryTimer){
@@ -195,13 +195,13 @@ function highlightCircle(currentCircle) {
                                                             
   // style duplicated circles sitting on top
   duplicate
-    .classed('tin-duplicate', true)
+    .classed('circle-duplicate', true)
     .style("pointer-events", "none")
     .style("opacity", 1); // makes the duplicate circle on the top
 }
 
 function unhighlightCircle() {
-  d3.select('.tin-duplicate')
+  d3.select('.circle-duplicate')
     .remove(); // delete duplicate
 }
 

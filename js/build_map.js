@@ -4,7 +4,7 @@ var chart_height    =   700;
 
 // define categories
 var tempCategories = ["total", "thermoelectric", "publicsupply", 
-                      "irrigation", "industrial", "piechart"];
+                      "irrigation", "industrial"];
 
 // Projection
 var projection = albersUsaTerritories()
@@ -44,10 +44,9 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateData, countyCentroids, pieFormData;
+var stateData, countyCentroids;
 var countyData = new Map();
-var tinsAdded = false;
-var piesBaked = false;
+var circlesAdded = false;
 
 d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
@@ -106,13 +105,14 @@ function create_map() {
   // add placeholder group for county boundaries
   map.append('g').classed("county-bounds", true);
   
+  map.append('g').attr('id', 'wu-circles');
+  
   // add the main, active map features
   addStates(map, stateData);
   
-  // add the pie groups and either circles or pie slices
-  pieFormData = pieData(countyCentroids);
-  addPies();
-  updatePies(activeCategory, prevCategory);
+  // add the circles
+  addCircles();
+  updateCircles(activeCategory);
   
   // load all county data - it's OK if it's not done right away
   // it should be loaded by the time anyone tries to hover!

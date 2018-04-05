@@ -5,7 +5,6 @@ function categoryToName(category) {
   else if (category == "publicsupply") { return "Public Supply"; }
   else if (category == "irrigation") { return "Irrigation"; }
   else if (category == "industrial") { return "Industrial"; }
-  else if (category == "piechart") { return "Pie Chart"; }
   else { return "none"; }
 }
 

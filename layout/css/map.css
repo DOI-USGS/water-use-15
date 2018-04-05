@@ -36,8 +36,7 @@
   fill: #bdbdbd; /* dark-ish grey */
 } 
 
-.tin,
-.slice {
+.circle {
   pointer-events: none;
 }
 
