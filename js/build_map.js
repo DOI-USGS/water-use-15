@@ -97,9 +97,6 @@ function create_map() {
   scaleCircles = scaleCircles
     .domain(rangeWateruse);
 
-  // add legend
-  addLegend(minWateruse, maxWateruse);
-  
   // add watermark
   addWatermark();
   
