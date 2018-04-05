@@ -170,6 +170,9 @@ function updateCategory(category, prevCategory, action) {
   
   updatePies(category, prevCategory);
   
+  if(updateCategoryTimer){
+    clearTimeout(updateCategoryTimer);
+  }
   updateCategoryTimer = setTimeout(function(){
      gtag('event', action + ' update category', {
   'event_category': 'figure',
