@@ -228,6 +228,7 @@ publish:
       projection: "custom_projection"
       styles: "styles"
       map_utils: "map_utils"
+      rank_states_utils: "rank_states_utils"
       watermark_utils: "watermark_utils"
       circle_utils: "circle_utils"
       map_states: map_states
@@ -243,7 +244,7 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties", 
                   "watermark_utils", "circle_utils"]
-      sections: ["social","map","description_text", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
+      sections: ["social","map","description_text", "directions_text", "key_stories", "rank_states_utils"] # adding header and footer here, doubled each on the page
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -268,6 +269,10 @@ publish:
   -
     id: map_utils
     location: "js/map_utils.js"
+    mimetype: application/javascript
+  -
+    id: rank_states_utils
+    location: "js/rank_states_utils.js"
     mimetype: application/javascript
   -
     id: watermark_utils
@@ -303,6 +308,7 @@ publish:
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
+    depends: "rank_states_utils"
     publisher: section
   -
     id: footer_section
