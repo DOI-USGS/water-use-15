@@ -142,13 +142,8 @@ var categoryButtons = d3.select('#button-container')
     updateCategory(activeCategory, prevCategory.toLowerCase());
   })
   .on('mouseover', function(d){
-    //if(mouseoverCatTimer) { clearTimeout(mouseoverCatTimer) }
-    //mouseoverCatTimer = setTimeout(function(){    
-    //  updateCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
-    //}, mouseoverCatDelay);
     showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
   })
   .on('mouseout', function(d){
-    //if(mouseoverCatTimer) { clearTimeout(mouseoverCatTimer)}
     showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
   });
