@@ -163,7 +163,7 @@ function updateView(newView, fireAnalytics = true) {
 var updateCategoryTimer = null;
 var updateCategoryDelay = 1000; //ms
 function updateCategory(category, prevCategory, action) {
-  if(category == prevCategory) {
+  if(category === prevCategory) {
     return;
   }
   console.log("Executing updatecategory from " + action);
