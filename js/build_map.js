@@ -122,7 +122,7 @@ var buttonContainer = d3.select('.svg-container')
   .attr('id', 'button-container');
   
 buttonContainer.append('div').classed('select-arrowbox', true);
-  
+
 var categoryButtons = d3.select('#button-container')
   .selectAll('button')
   .data(tempCategories)
@@ -135,14 +135,11 @@ var categoryButtons = d3.select('#button-container')
     return d;
   })
   .on('click', function(d){
-    prevCategory = activeCategory;
-    activeCategory = d.toLowerCase(); // put this here so it only changes on click
-    updateCategory(activeCategory, action = 'click');
+    updateCategory(d.toLowerCase(), activeCategory);
   })
   .on('mouseover', function(d){
-    updateCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+    showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
   })
   .on('mouseout', function(d){
-    updateCategory(activeCategory, d.toLowerCase(),
-    action = 'mouseout');
+    showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
   });

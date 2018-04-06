@@ -150,26 +150,41 @@ function updateView(newView, fireAnalytics = true) {
   }    
 }
 
-var updateCategoryTimer = null;
-var updateCategoryDelay = 1000; //ms
-function updateCategory(category, prevCategory, action) {
+
+function updateCategory(category, prevCategory) {
+  if(category === prevCategory) {
+    return;
+  }
+  // update the globals about category view status
+  activeCategory = category;
   
   // update page info
   updateTitle(category);
   setHash('category', category);
-  
-  updateCircles(category);
-  
+  documentCategorySwitch(category, prevCategory, action = "click");
+}
+
+function showCategory(category, prevCategory, action) {
+  if(prevCategory !== category) {
+    updateCircles(category, prevCategory);
+    documentCategorySwitch(category, prevCategory, action);
+  }
+} 
+
+var updateCategoryTimer = null;
+var updateCategoryDelay = 600; //ms
+function documentCategorySwitch(category, prevCategory, action) {
   if(updateCategoryTimer){
     clearTimeout(updateCategoryTimer);
   }
   updateCategoryTimer = setTimeout(function(){
      gtag('event', action + ' update category', {
   'event_category': 'figure',
-  'event_label': category + '; view=' + activeView
-     });
+  'event_label': category + '; from='+ prevCategory + '; view=' + activeView });
   }, updateCategoryDelay);
 }
+
+
 
 function updateTitle(category) {
   d3.select("#maptitle")
