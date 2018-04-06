@@ -37,7 +37,6 @@ function foregroundState(selection, scale = 1) {
 }
 
 function backgroundState(selection, scale = 1) {
-  console.log(scale);
   selection
     .transition()
     .duration(500)

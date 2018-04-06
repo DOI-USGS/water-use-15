@@ -3,8 +3,7 @@ var chart_width     =   1000;
 var chart_height    =   700;
 
 // define categories
-var tempCategories = ["total", "thermoelectric", "publicsupply", 
-                      "irrigation", "industrial"];
+var categories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
 
 // Projection
 var projection = albersUsaTerritories()
@@ -44,7 +43,7 @@ var mapBackground = map.append("rect")
   .on('click', zoomToFromState);
 
 // Datasets
-var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids, pieFormData;
+var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids, circlesPaths;
 var countyBoundsZoom = new Map();
 var circlesAdded = false;
 
@@ -52,7 +51,7 @@ d3.queue()
   .defer(d3.json, "data/state_boundaries_USA.json")
   .defer(d3.json, "data/county_centroids_wu.json")
   .defer(d3.json, "data/wu_data_15_range.json")
-  .await(create_map);
+  .await(fillMap);
 
 // Zoom status: default is nation-wide
 var activeView = getHash('view');
@@ -70,12 +69,24 @@ svg.append("text")
   .attr("x", chart_width/2)
   .attr("y", chart_height*0.10); // bring in 10% of chart height
 
-// Initialize page info
-updateTitle(activeCategory);
-setHash('view', activeView);
-setHash('category', activeCategory);
+function prepareMap() {
+  // Initialize page info
+  updateTitle(activeCategory);
+  setHash('view', activeView);
+  setHash('category', activeCategory);
+  
+  // add watermark
+  addWatermark();
+}
+prepareMap();
 
-function create_map() {
+// add placeholder groups for geographic boundaries and circles
+map.append('g').attr('id', 'county-bounds');
+map.append('g').attr('id', 'state-bounds');
+map.append('g').attr('id', 'wu-circles');
+
+
+function fillMap() {
 
   // arguments[0] is the error
 	var error = arguments[0];
@@ -95,27 +106,19 @@ function create_map() {
   // update circle scale with data
   scaleCircles = scaleCircles
     .domain(rangeWateruse);
-
-  // add watermark
-  addWatermark();
-  
-  // add placeholder groups for state and county boundaries
-  map.append('g').attr('id', 'county-bounds');
-  map.append('g').attr('id', 'state-bounds');
-  
-  map.append('g').attr('id', 'wu-circles');
-  
+    
   // add the main, active map features
   addStates(map, stateBoundsUSA);
   
   // add the circles
-  addCircles();
+  circlesPaths = prepareCirclePaths(categories, countyCentroids);
   updateCircles(activeCategory);
   
   // load all county data - it's OK if it's not done right away
   // it should be loaded by the time anyone tries to hover!
   updateCounties('USA');
 }
+
 
 var buttonContainer = d3.select('.svg-container')
   .append('div')
@@ -125,7 +128,7 @@ buttonContainer.append('div').classed('select-arrowbox', true);
   
 var categoryButtons = d3.select('#button-container')
   .selectAll('button')
-  .data(tempCategories)
+  .data(categories)
   .enter()
   .append('button')
   .text(function(d){
