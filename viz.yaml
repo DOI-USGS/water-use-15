@@ -243,6 +243,7 @@ publish:
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties", 
                   "watermark_utils", "map_circles"]
       sections: ["social","map", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
+
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -267,6 +268,10 @@ publish:
   -
     id: map_utils
     location: "js/map_utils.js"
+    mimetype: application/javascript
+  -
+    id: rank_states_utils
+    location: "js/rank_states_utils.js"
     mimetype: application/javascript
   -
     id: watermark_utils
@@ -302,6 +307,9 @@ publish:
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
+    depends: "rank_states_utils"
+    context:
+      sections: ["rank_states_utils"]
     publisher: section
   -
     id: footer_section
