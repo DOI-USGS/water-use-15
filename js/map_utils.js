@@ -156,7 +156,6 @@ function updateCategory(category, prevCategory) {
     return;
   }
   // update the globals about category view status
-  prevCategory = activeCategory;
   activeCategory = category;
   
   // update page info
@@ -173,7 +172,7 @@ function showCategory(category, prevCategory, action) {
 } 
 
 var updateCategoryTimer = null;
-var updateCategoryDelay = 1000; //ms
+var updateCategoryDelay = 600; //ms
 function documentCategorySwitch(category, prevCategory, action) {
   if(updateCategoryTimer){
     clearTimeout(updateCategoryTimer);
