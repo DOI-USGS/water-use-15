@@ -51,5 +51,11 @@ function mergeCounties(countyTopo, stateDict) {
 statesGeojson = mergeCounties(countyTopo, stateDict);
 
 // write the output to topojson file
-statesTopojson = topojson.topology({ states: statesGeojson }, 1e8);
-fs.writeFileSync(argv.states, JSON.stringify(statesTopojson));
+var outTopojson;
+if(argv.objects === 'states-and-counties') {
+  var countiesGeojson = topojson.feature(countyTopo, countyTopo.objects.counties);
+  outTopojson = topojson.topology({ states: statesGeojson, counties: countiesGeojson }, argv.quantize);
+} else if(argv.objects === 'states') {
+  outTopojson = topojson.topology({ states: statesGeojson }, argv.quantize);
+}
+fs.writeFileSync(argv.outfile, JSON.stringify(outTopojson));

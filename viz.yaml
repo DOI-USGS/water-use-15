@@ -1,12 +1,12 @@
 info:
   id: water-use-15
-  name: U.S. Water Use from 1950 to 2015.
+  name: U.S. Water Use
   date: 2018-01-18
   publish-date:
   path: /water-use-15
   analytics-id: UA-78530187-12
   description: >-
-    Data visualization of water use from 1950 - 2015.
+    Data visualization of water use.
   keywords:
   audience:
   url:
@@ -31,7 +31,7 @@ info:
       version: 0.7.0
     geojsonio:
       repo: CRAN
-      version: 0.5.0
+      version: 0.6.0
     jsonlite:
       repo: CRAN
       version: 1.5
@@ -96,7 +96,23 @@ fetch:
       spatial_metadata: spatial_metadata
     comment: sets up the basic view window and projection
   - 
-    id: county_boundaries_topojson
+    id: state_boundaries_USA_topojson
+    location: cache/state_boundaries_USA.json
+    reader: json
+    mimetype: application/json
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "state_boundaries_USA.json"
+  -
+    id: state_boundaries_zoom_topojson
+    location: cache/state_boundaries_zoom.json
+    reader: json
+    mimetype: application/json
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "state_boundaries_zoom.json"
+  -
+    id: county_boundaries_USA_topojson
     location: cache/county_boundaries_USA.json
     reader: json
     mimetype: application/json
@@ -104,13 +120,13 @@ fetch:
     remoteItemId: "5ab154b1e4b081f61ab26420"
     remoteFilename: "county_boundaries_USA.json"
   -
-    id: state_boundaries_topojson
-    location: cache/state_boundaries_USA.json
+    id: county_boundaries_zoom_topojson
+    location: cache/county_boundaries_zoom.json
     reader: json
     mimetype: application/json
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "state_boundaries_USA.json"
+    remoteFilename: "county_boundaries_zoom.json"
   -
     id: county_centroids_topojson
     location: cache/county_centroids_USA.json
@@ -155,17 +171,32 @@ process:
     id: county_centroids_wu_topojson
     location: cache/county_centroids_wu.json
     mimetype: application/json
+    process_args:
+      layer: centroids
     depends:
       topo: county_centroids_topojson
       wu_data_15_simple: wu_data_15_simple
     processor: merge_centroids_wu
     scripts: [scripts/process/merge_centroids_wu.R]
   -
-    id: county_boundaries_wu_topojson
-    location: cache/county_boundaries_wu.json
+    id: county_boundaries_USA_wu_topojson
+    location: cache/county_boundaries_USA_wu.json
     mimetype: application/json
+    process_args:
+      layer: counties
     depends:
-      topo: county_boundaries_topojson
+      topo: county_boundaries_USA_topojson
+      wu_data_15_simple: wu_data_15_simple
+    processor: merge_centroids_wu
+    scripts: [scripts/process/merge_centroids_wu.R]
+  -
+    id: county_boundaries_zoom_wu_topojson
+    location: cache/county_boundaries_zoom_wu.json
+    mimetype: application/json
+    process_args:
+      layer: counties
+    depends:
+      topo: county_boundaries_zoom_topojson
       wu_data_15_simple: wu_data_15_simple
     processor: merge_centroids_wu
     scripts: [scripts/process/merge_centroids_wu.R]
@@ -188,7 +219,6 @@ publish:
       custom_css: "custom_css"
       social: "social_section"
       socialCSS: "lib-social-media-css"
-      description_text: "description_text"
       directions_text: "directions_text"
       header: "header_section"
       key_stories: "key_stories"
@@ -197,22 +227,24 @@ publish:
       projection: "custom_projection"
       styles: "styles"
       map_utils: "map_utils"
-      legend_utils: "legend_utils"
+      rank_states_utils: "rank_states_utils"
       watermark_utils: "watermark_utils"
-      symbol_utils: "symbol_utils"
       circle_utils: "circle_utils"
-      pie_utils: "pie_utils"
+      map_states: map_states
       map_counties: "map_counties"
       map: "build_map"
-      state_boundaries: "state_boundaries_topojson"
-      county_boundaries_wu: "county_boundaries_wu_topojson"
+      state_boundaries_USA_wu: state_boundaries_USA_topojson
+      state_boundaries_zoom_wu: state_boundaries_zoom_topojson
+      county_boundaries_USA_wu: county_boundaries_USA_wu_topojson
+      county_boundaries_zoom_wu: county_boundaries_zoom_wu_topojson
       county_centroids_wu: "county_centroids_wu_topojson"
       wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_counties", 
-                  "legend_utils", "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
-      sections: ["social","map","description_text", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
+                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties", 
+                  "watermark_utils", "circle_utils"]
+      sections: ["social","map", "directions_text", "key_stories", "rank_states_utils"] # adding header and footer here, doubled each on the page
+
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -239,24 +271,20 @@ publish:
     location: "js/map_utils.js"
     mimetype: application/javascript
   -
-    id: legend_utils
-    location: "js/legend_utils.js"
+    id: rank_states_utils
+    location: "js/rank_states_utils.js"
     mimetype: application/javascript
   -
     id: watermark_utils
     location: "js/watermark.js"
     mimetype: application/javascript
   -
-    id: symbol_utils
-    location: "js/symbol_utils.js"
-    mimetype: application/javascript
-  -
     id: circle_utils
     location: "js/circle_utils.js"
     mimetype: application/javascript
   -
-    id: pie_utils
-    location: "js/pie_utils.js"
+    id: map_states
+    location: "js/states.js"
     mimetype: application/javascript
   -
     id: map_counties
@@ -276,10 +304,11 @@ publish:
     publisher: header
     depends: "lib-header-css"
     context:
-      title: "Water use in the U.S. from 1950 to 2015"
+      title: "Water use in the U.S."
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
+    depends: "rank_states_utils"
     publisher: section
   -
     id: footer_section
@@ -317,30 +346,24 @@ publish:
       projection: custom_projection
       styles: styles
       map_utils: map_utils
-      legend_utils: legend_utils
       watermark_utils: watermark_utils
-      symbol_utils: symbol_utils
       circle_utils: circle_utils
-      pie_utils: pie_utils
+      map_states: map_states
       map_counties: map_counties
       map: build_map
       directions_text: directions_text
-      state_boundaries: state_boundaries_topojson
-      county_boundaries_wu: county_boundaries_wu_topojson
+      state_boundaries_USA_wu: state_boundaries_USA_topojson
+      state_boundaries_zoom_wu: state_boundaries_zoom_topojson
+      county_boundaries_USA_wu: county_boundaries_USA_wu_topojson
+      county_boundaries_zoom_wu: county_boundaries_zoom_wu_topojson
       county_centroids_wu: county_centroids_wu_topojson
       wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", 
-                  "map_counties", "legend_utils", "watermark_utils", "symbol_utils", "circle_utils", "pie_utils"]
+                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
+                  "map_counties", "watermark_utils", "circle_utils"]
       embed: ["map","directions_text"]
-  -
-    id: description_text
-    template: printall
-    publisher: section
-    depends: description_text_md
-    context:
-      text: description_text_md.description_text-markdown
+
   -
     id: directions_text
     template: printall

@@ -27,5 +27,5 @@ process_compute_centroids <- function(outfile, spdat, county_dict_file) {
   centroid_spdf <- sp::SpatialPointsDataFrame(centroids, spdat@data, match.ID=FALSE, proj4string=proj4string(spdat))
   
   # write to file
-  geojsonio::topojson_write(centroid_spdf, file=outfile, overwrite=TRUE) # geojson would be about 37% larger
+  geojsonio::topojson_write(centroid_spdf, file=outfile, overwrite=TRUE, object_name='centroids') # geojson would be about 37% larger
 }
