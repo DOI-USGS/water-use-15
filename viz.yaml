@@ -1,12 +1,12 @@
 info:
   id: water-use-15
-  name: U.S. Water Use from 1950 to 2015.
+  name: U.S. Water Use
   date: 2018-01-18
   publish-date:
   path: /water-use-15
   analytics-id: UA-78530187-12
   description: >-
-    Data visualization of water use from 1950 - 2015.
+    Data visualization of water use.
   keywords:
   audience:
   url:
@@ -219,7 +219,6 @@ publish:
       custom_css: "custom_css"
       social: "social_section"
       socialCSS: "lib-social-media-css"
-      description_text: "description_text"
       directions_text: "directions_text"
       header: "header_section"
       key_stories: "key_stories"
@@ -244,7 +243,8 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties", 
                   "watermark_utils", "circle_utils"]
-      sections: ["social","map","description_text", "directions_text", "key_stories", "rank_states_utils"] # adding header and footer here, doubled each on the page
+      sections: ["social","map", "directions_text", "key_stories", "rank_states_utils"] # adding header and footer here, doubled each on the page
+
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -304,7 +304,7 @@ publish:
     publisher: header
     depends: "lib-header-css"
     context:
-      title: "Water use in the U.S. from 1950 to 2015"
+      title: "Water use in the U.S."
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
@@ -363,13 +363,7 @@ publish:
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
                   "map_counties", "watermark_utils", "circle_utils"]
       embed: ["map","directions_text"]
-  -
-    id: description_text
-    template: printall
-    publisher: section
-    depends: description_text_md
-    context:
-      text: description_text_md.description_text-markdown
+
   -
     id: directions_text
     template: printall
