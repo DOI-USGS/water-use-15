@@ -9,6 +9,6 @@ boxes.append('rect')
     .attr('height',"300")
     .attr('width',"1000");
 boxes.append('circle')
-    .attr('fill', 'white')
+    .attr('fill', 'yellow')
     .attr('r','2')
     .attr('transform','translate(200,100)scale(20)');
