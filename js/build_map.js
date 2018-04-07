@@ -170,7 +170,7 @@ function addButtons() {
     
   d3.select('#button-container')
     .selectAll('button')
-    .data(tempCategories)
+    .data(categories)
     .enter()
     .append('button')
     .text(function(d){
