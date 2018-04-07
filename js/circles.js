@@ -38,14 +38,19 @@ function addCircles() {
     .attr("r", 0)
     .style("fill", "transparent"); // start transparent & updateCircles will transition to color*/
   
-  map.selectAll('g#wu-circles').selectAll('.wu-path')
+  map.selectAll('g#wu-circles')
     .datum(circlesPaths)
     .append('path')
     .classed('wu-path', true)
-    .attr('')
-    .style('stroke','purple')
-    .style('stroke-width','1')
-    .style("fill", "transparent"); // start transparent & updateCircles will transition to color
+    .style('stroke','transparent')
+    .style('fill', "transparent"); // start transparent & updateCircles will transition to color
+    
+  map.selectAll('g#wu-circles')
+    .append('circle')
+    .classed('wu-highlight', true)
+    .style('pointer-events', 'none')
+    .style('opacity', 1);
+  unhighlightCircle()
   
   circlesAdded = true;
   
