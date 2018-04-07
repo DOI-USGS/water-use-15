@@ -50,8 +50,8 @@ function updateCircles(category) {
   d3.select('#wu-path')
     .transition().duration(1000)
     .attr("d", function(d) { return d[[category]]; })
-    .style("fill", categoryToColor(category))
-    .style("stroke", categoryToColor(category));
+    .style("stroke", categoryToColor(category))
+    .style("fill", categoryToColor(category));
 
 }
 
@@ -63,8 +63,8 @@ function highlightCircle(countyDatum, category) {
     .attr('cx', projectX([countyDatum.properties.lon, countyDatum.properties.lat]))
     .attr('cy', projectY([countyDatum.properties.lon, countyDatum.properties.lat]))
     .attr('r', scaleCircles(countyDatum.properties[category]))
-    .style('fill', categoryToColor(category))
-    .style('stroke', categoryToColor(category));
+    .style('stroke', categoryToColor(category))
+    .style('fill', categoryToColor(category));
 
   
 }
