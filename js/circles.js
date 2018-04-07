@@ -5,11 +5,13 @@ function prepareCirclePaths(categories, countyCentroids) {
   // create an object literal of many-circle paths, one per category
   var catPaths = {};
   categories.forEach(function(cat) {
-    // create an array of 1-circle paths of the form 'Mx y a r r 0 1 1 0 0.01'
+    // create an array of 1-circle paths of the form 'Mx y a r r 0 1 1 0 0.01',
+    // where x is the leftmost point (cx - r), y is cy, and r is radius
     var pathArray = [];
-    countyCentroids.features.forEach(function(d) {
-      var path = 'M' + projectX(d.geometry.coordinates) + ' ' + projectY(d.geometry.coordinates) +
-        ' a ' + scaleCircles(d.properties[['total']]) + ' ' + scaleCircles(d.properties[['total']]) +
+    countyCentroids.forEach(function(d) {
+      var radius = scaleCircles(d[[cat]]);
+      var path = 'M' + (projectX([d.lon, d.lat]) - radius) + ' ' + projectY([d.lon, d.lat]) +
+        ' a ' + radius + ' ' + radius +
         ' 0 1 1 0 0.01';
       pathArray.push(path);
     });
