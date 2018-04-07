@@ -176,22 +176,18 @@ function updateTitle(category) {
     .text("Water Use Data for " + activeView + ", 2015, " + category);
 }
 
-function highlightCircle(currentCircle) {
-  var orig = currentCircle,
-      origNode = orig.node();
-  var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
-                                                            origNode.nextSibling));
-                                                            
-  // style duplicated circles sitting on top
-  duplicate
-    .classed('circle-duplicate', true)
-    .style("pointer-events", "none")
-    .style("opacity", 1); // makes the duplicate circle on the top
+function highlightCircle(countyDatum, category) {
+  // style a duplicated circle sitting on top of the active county's circle
+  map.select('circle.wu-highlight')
+    .attr('cx', 10)
+    .attr('cy', 10)
+    .attr('r', 10)
+    .style('color', categoryToColor(category));
 }
 
 function unhighlightCircle() {
-  d3.select('.circle-duplicate')
-    .remove(); // delete duplicate
+  map.select('circle.wu-highlight')
+    .attr('display', 'none');
 }
 
 var toolTipTimer = null;
