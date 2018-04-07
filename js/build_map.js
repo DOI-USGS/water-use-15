@@ -63,6 +63,27 @@ var activeCategory = getHash('category');
 if(!activeCategory) activeCategory = 'total';
 // default for prev is total
 var prevCategory = 'total';
+function renameCountyData(data) {
+  // reverse the column name simplifications done in merge_centroids_wu.R
+  dataVerbose = [];
+  for (var i = 0; i < data.length; i++) {
+    dataVerbose.push({
+      GEOID: data[i].G,
+      STATE_ABBV: data[i].A,
+      COUNTY: data[i].C,
+      countypop: data[i].p,
+      total: data[i].t,
+      thermoelectric: data[i].e,
+      publicsupply: data[i].s,
+      irrigation: data[i].i,
+      industrial: data[i].n,
+      other: data[i].o,
+      lon: data[i].x,
+      lat: data[i].y
+    });
+  }
+  return(dataVerbose);
+}
 
 svg.append("text")
   .attr("id", "maptitle")
@@ -96,7 +117,7 @@ function fillMap() {
 	// so in this case, all of the results from q.await. Immediately convert to
 	// geojson so we have that converted data available globally.
 	stateBoundsUSA = topojson.feature(arguments[1], arguments[1].objects.states);
-	countyCentroids = topojson.feature(arguments[2], arguments[2].objects.centroids);
+	countyCentroids = renameCountyData(arguments[2]);
 	
   // set up scaling for circles
   var rangeWateruse = arguments[3],
