@@ -23,6 +23,7 @@ function prepareCirclePaths(categories, countyCentroids) {
   });
   
   return catPaths;
+
 }
 
 function addCircles(circlesPaths) {
@@ -32,15 +33,13 @@ function addCircles(circlesPaths) {
   map.selectAll('g#wu-circles')
     .datum(circlesPaths)
     .append('path')
-    .classed('wu-path', true)
+    .attr('id', 'wu-path')
     .style('stroke','transparent')
     .style('fill', "transparent"); // start transparent & updateCircles will transition to color
     
   map.selectAll('g#wu-circles')
     .append('circle')
-    .classed('wu-highlight', true)
-    .style('pointer-events', 'none')
-    .style('opacity', 1);
+    .attr('id', 'wu-highlight');
   unhighlightCircle()
   
 }
@@ -48,18 +47,17 @@ function addCircles(circlesPaths) {
 function updateCircles(category) {
   
   // grow circles to appropriate size
-  d3.select('.wu-path')
+  d3.select('#wu-path')
     .transition().duration(1000)
     .attr("d", function(d) { return d[[category]]; })
     .style("fill", categoryToColor(category))
-    .style("stroke", categoryToColor(category))
-    .style("stroke-width", "0.1");
+    .style("stroke", categoryToColor(category));
 
 }
 
 function highlightCircle(countyDatum, category) {
+  
   // style a duplicated circle sitting on top of the active county's circle
-  console.log(categoryToColor(category));
   map.select('circle#wu-highlight')
     .classed('hidden', false)
     .attr('cx', projectX([countyDatum.properties.lon, countyDatum.properties.lat]))
@@ -67,8 +65,13 @@ function highlightCircle(countyDatum, category) {
     .attr('r', scaleCircles(countyDatum.properties[category]))
     .style('fill', categoryToColor(category))
     .style('stroke', categoryToColor(category));
+
+  
 }
 
 function unhighlightCircle() {
+
   map.select('circle#wu-highlight')
     .classed('hidden', true);
+
+}

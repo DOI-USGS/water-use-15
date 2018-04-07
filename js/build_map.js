@@ -155,8 +155,8 @@ function fillMap() {
   addCircles(circlesPaths);
   updateCircles(activeCategory);
   
-  // load all county data - it's OK if it's not done right away
-  // it should be loaded by the time anyone tries to hover!
+  // load county data, add and update county polygons.
+  // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   updateCounties('USA');
 }
 

@@ -166,7 +166,7 @@ function updateCategory(category, prevCategory) {
 
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
-    updateCircles(category, prevCategory);
+    updateCircles(category);
     documentCategorySwitch(category, prevCategory, action);
   }
 } 
@@ -197,7 +197,6 @@ function showToolTip(d, category) {
 
   // change tooltip
   d3.select(".tooltip")
-    .classed("shown", true)
     .classed("hidden", false)
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
@@ -218,7 +217,6 @@ function showToolTip(d, category) {
 
 function hideToolTip() {
   d3.select(".tooltip")
-    .classed("shown", false)
     .classed("hidden", true);
   if (toolTipTimer){
       clearTimeout(toolTipTimer); // stop ga for edge states

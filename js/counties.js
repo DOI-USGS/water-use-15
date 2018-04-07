@@ -60,7 +60,6 @@ function addDataToCounties(countyBounds) {
     countyBounds[i].properties = currentCountyData;
   }
   
-  console.log(countyBounds);
   return(countyBounds);
 }
 
