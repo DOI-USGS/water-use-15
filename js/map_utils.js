@@ -191,20 +191,6 @@ function updateTitle(category) {
     .text("Water Use Data for " + activeView + ", 2015, " + category);
 }
 
-function highlightCircle(countyDatum, category) {
-  // style a duplicated circle sitting on top of the active county's circle
-  map.select('circle.wu-highlight')
-    .attr('cx', 10)
-    .attr('cy', 10)
-    .attr('r', 10)
-    .style('color', categoryToColor(category));
-}
-
-function unhighlightCircle() {
-  map.select('circle.wu-highlight')
-    .attr('display', 'none');
-}
-
 var toolTipTimer = null;
 var toolTipDelay = 1000; //ms
 function showToolTip(d, category) {

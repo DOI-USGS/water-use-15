@@ -56,3 +56,19 @@ function updateCircles(category) {
     .style("stroke-width", "0.1");
 
 }
+
+function highlightCircle(countyDatum, category) {
+  // style a duplicated circle sitting on top of the active county's circle
+  console.log(categoryToColor(category));
+  map.select('circle#wu-highlight')
+    .classed('hidden', false)
+    .attr('cx', projectX([countyDatum.properties.lon, countyDatum.properties.lat]))
+    .attr('cy', projectY([countyDatum.properties.lon, countyDatum.properties.lat]))
+    .attr('r', scaleCircles(countyDatum.properties[category]))
+    .style('fill', categoryToColor(category))
+    .style('stroke', categoryToColor(category));
+}
+
+function unhighlightCircle() {
+  map.select('circle#wu-highlight')
+    .classed('hidden', true);
