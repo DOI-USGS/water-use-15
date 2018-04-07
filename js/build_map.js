@@ -44,9 +44,8 @@ var mapBackground = map.append("rect")
 
 // Globals
 var activeView, activeCategory, prevCategory;
-var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids, circlesPaths;
+var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
 var countyBoundsZoom = new Map();
-var circlesAdded = false;
 
 // Set up some map info and map elements so we're ready to add data piece by piece
 readHashes();
@@ -152,7 +151,8 @@ function fillMap() {
   addStates(map, stateBoundsUSA);
   
   // add the circles
-  circlesPaths = prepareCirclePaths(categories, countyCentroids);
+  var circlesPaths = prepareCirclePaths(categories, countyCentroids);
+  addCircles(circlesPaths);
   updateCircles(activeCategory);
   
   // load all county data - it's OK if it's not done right away

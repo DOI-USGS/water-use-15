@@ -34,7 +34,7 @@ function loadCountyBounds(state, callback) {
       
       // extract the topojson to geojson and add data
       allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
-      allCountiesGeoData = addDataToCounties(allCountiesGeoData);
+      allCountiesGeoData = addDataToCounties(allCountiesGeo);
       
       // cache in countyBoundsZoom
       countyBoundsZoom.set('USA', allCountiesGeo);
