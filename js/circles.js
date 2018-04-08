@@ -12,7 +12,7 @@ function prepareCirclePaths(categories, countyCentroids) {
       var radius = scaleCircles(d[[cat]]);
       var path = 'M' + (projectX([d.lon, d.lat]) - radius) + ' ' + projectY([d.lon, d.lat]) +
         ' a ' + radius + ' ' + radius +
-        ' 0 1 1 0 0.01';
+        ' 0 1 1 0 0.01z';
       pathArray.push(path);
     });
   
