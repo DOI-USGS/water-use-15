@@ -33,14 +33,16 @@ function addCircles(circlesPaths) {
   map.selectAll('g#wu-circles')
     .datum(circlesPaths)
     .append('path')
+    .classed('wu-circle', true)
     .attr('id', 'wu-path')
-    .style('stroke','transparent')
-    .style('fill', "transparent"); // start transparent & updateCircles will transition to color
+    .style('stroke','none')
+    .style('fill', "none"); // start transparent & updateCircles will transition to color
     
   map.selectAll('g#wu-circles')
     .append('circle')
+    .classed('wu-circle', true)
     .attr('id', 'wu-highlight');
-  unhighlightCircle()
+  unhighlightCircle();
   
 }
 

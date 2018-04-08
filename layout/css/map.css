@@ -36,14 +36,12 @@
   fill: #bdbdbd; /* dark-ish grey */
 } 
 
-#wu-path {
+.wu-circle {
   pointer-events: none;
   stroke-width: 0.1;
 }
 
 #wu-highlight {
-  pointer-events: none;
-  stroke-width: 0.1;
   opacity: 1;
 }
 
