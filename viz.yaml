@@ -168,8 +168,8 @@ process:
     processor: find_range
     scripts: [scripts/process/find_range.R]
   -
-    id: county_centroids_wu_json
-    location: cache/county_centroids_wu.json
+    id: county_centroids_wu_tsv
+    location: cache/county_centroids_wu.tsv
     mimetype: application/json
     process_args:
       layer: centroids
@@ -214,7 +214,7 @@ publish:
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
       county_boundaries_zoom: county_boundaries_zoom_topojson
-      county_centroids_wu: "county_centroids_wu_json"
+      county_centroids_wu: "county_centroids_wu_tsv"
       wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS",
@@ -335,7 +335,7 @@ publish:
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
       county_boundaries_zoom: county_boundaries_zoom_topojson
-      county_centroids_wu: county_centroids_wu_json
+      county_centroids_wu: county_centroids_wu_tsv
       wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 

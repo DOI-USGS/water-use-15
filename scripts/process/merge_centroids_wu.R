@@ -17,13 +17,8 @@ process.merge_centroids_wu <- function(viz) {
   county_data <- county_data %>%
     left_join(centroid_coords, by='GEOID')
   
-  # rename for efficient storage in json - saves (240 Kb) (42% of json table, 29% of centroids topojson)!
-  county_data <- county_data %>% 
-    rename(
-      G=GEOID, A=STATE_ABBV, C=COUNTY, p=countypop,
-      t=total, e=thermoelectric, s=publicsupply, i=irrigation, n=industrial, o=other,
-      x=lon, y=lat)
-  
-  # write to file - save centroids as simple json instead of topojson for efficiency (412 Kb instead of 586 Kb)
-  jsonlite::write_json(county_data, path=viz[['location']])
+  # write to file - save centroids as tsv instead of topojson for efficiency
+  # (307 Kb instead of 412 for simplified json with 1 character per column name,
+  # or 664 Kb for json with complete column names)
+  readr::write_tsv(county_data, path=viz[['location']])
 }
