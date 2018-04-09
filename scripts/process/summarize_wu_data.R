@@ -17,5 +17,7 @@ process.summarize_wu_data <- function(viz) {
     dplyr::mutate(other = .[[total_i]] - sum_cats) %>% 
     select(-sum_cats)
   
-  jsonlite::write_json(wu_df_national, viz[["location"]])
+  wu_df_national_transf <- tidyr::gather(wu_df_national, key = "category", value = "wateruse")
+  
+  jsonlite::write_json(wu_df_national_transf, viz[["location"]])
 }
