@@ -89,16 +89,9 @@ function prepareMap() {
   // add watermark
   addWatermark();
 
-  // create map title
-  svg.append("text")
-    .attr("id", "maptitle")
-    .attr("x", chart_width/2)
-    .attr("y", chart_height*0.10); // bring in 10% of chart height
-  
-  /** Initialize title and URL **/
+  /** Initialize URL **/
   
   // Initialize page info
-  updateTitle(activeCategory);
   setHash('view', activeView);
   setHash('category', activeCategory);
   
