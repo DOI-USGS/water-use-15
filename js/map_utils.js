@@ -185,25 +185,6 @@ function documentCategorySwitch(category, prevCategory, action) {
   }, updateCategoryDelay);
 }
 
-
-function highlightCircle(currentCircle) {
-  var orig = currentCircle,
-      origNode = orig.node();
-  var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
-                                                            origNode.nextSibling));
-                                                            
-  // style duplicated circles sitting on top
-  duplicate
-    .classed('circle-duplicate', true)
-    .style("pointer-events", "none")
-    .style("opacity", 1); // makes the duplicate circle on the top
-}
-
-function unhighlightCircle() {
-  d3.select('.circle-duplicate')
-    .remove(); // delete duplicate
-}
-
 var toolTipTimer = null;
 var toolTipDelay = 1000; //ms
 function showToolTip(d, category) {
