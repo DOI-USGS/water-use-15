@@ -129,8 +129,11 @@ function fillMap() {
   addStates(map, stateBoundsUSA);
   
   // add the circles
-  var circlesPaths = prepareCirclePaths(categories, countyCentroids);
-  addCircles(circlesPaths);
+  // CIRCLES-AS-CIRCLES
+  addCircles(countyCentroids);
+  // CIRCLES-AS-PATHS
+  /*var circlesPaths = prepareCirclePaths(categories, countyCentroids);
+  addCircles(circlesPaths);*/
   updateCircles(activeCategory);
   
   // load county data, add and update county polygons.
