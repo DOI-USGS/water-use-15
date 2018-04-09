@@ -29,14 +29,22 @@ function emphasizeCounty(selection) {
     .classed("emphasize-county", true);
 }
 
-function foregroundState(selection, scale = 1) {
+function foregroundState(selection, scale) {
+   if(scale === undefined) {
+      scale = 1;
+   }
+  
   selection
     .transition()
     .duration(500)
     .style("stroke-width",  2.5/scale); // scale stroke-width
 }
 
-function backgroundState(selection, scale = 1) {
+function backgroundState(selection, scale) {
+   if(scale === undefined) {
+      scale = 1;
+   }
+  
   selection
     .transition()
     .duration(500)

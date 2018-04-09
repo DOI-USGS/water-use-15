@@ -61,7 +61,11 @@ function zoomToFromState(data) {
   updateView(newView);
 }
 
-function updateView(newView, fireAnalytics = true) {
+function updateView(newView, fireAnalytics) {
+   if(fireAnalytics === undefined) {
+      scale = true;
+   }
+  
   // update the global variable that stores the current view
   oldView = activeView;
   activeView = newView;
