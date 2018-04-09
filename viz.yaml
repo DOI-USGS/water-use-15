@@ -320,7 +320,7 @@ publish:
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
-    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json"]
+    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles"]
     context:
       sections: ["rank_states_utils", "national_pie"]
     publisher: section
