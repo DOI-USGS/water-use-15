@@ -168,6 +168,15 @@ process:
     processor: find_range
     scripts: [scripts/process/find_range.R]
   -
+    id: wu_data_15_sum_json
+    location: cache/wu_data_15_sum.json
+    mimetype: application/json
+    depends:
+      rawdata: wu_data_15_simple
+      col_names: wu_type_column_names
+    processor: summarize_wu_data
+    scripts: [scripts/process/summarize_wu_data.R]
+  -
     id: county_centroids_wu_tsv
     location: cache/county_centroids_wu.tsv
     mimetype: application/json
@@ -253,6 +262,10 @@ publish:
     location: "js/rank_states_utils.js"
     mimetype: application/javascript
   -
+    id: national_pie
+    location: "js/national_pie.js"
+    mimetype: application/javascript
+  -
     id: watermark_utils
     location: "js/watermark.js"
     mimetype: application/javascript
@@ -286,9 +299,9 @@ publish:
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
-    depends: "rank_states_utils"
+    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles"]
     context:
-      sections: ["rank_states_utils"]
+      sections: ["rank_states_utils", "national_pie"]
     publisher: section
   -
     id: footer_section
