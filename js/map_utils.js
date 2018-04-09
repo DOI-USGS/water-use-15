@@ -198,6 +198,7 @@ function highlightCircle(currentCircle) {
 function unhighlightCircle() {
   d3.select('.circle-duplicate')
     .remove(); // delete duplicate
+}
 
 var toolTipTimer = null;
 var toolTipDelay = 1000; //ms
