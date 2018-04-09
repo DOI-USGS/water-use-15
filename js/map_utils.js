@@ -66,8 +66,6 @@ function updateView(newView, fireAnalytics = true) {
   oldView = activeView;
   activeView = newView;
   
-  // update page info
-  updateTitle(activeCategory); // also OK not to worry about compatibility with hover
   setHash('view', activeView);
 
   // determine the center point and scaling for the new view
@@ -159,7 +157,6 @@ function updateCategory(category, prevCategory) {
   activeCategory = category;
   
   // update page info
-  updateTitle(category);
   setHash('category', category);
   documentCategorySwitch(category, prevCategory, action = "click");
 }

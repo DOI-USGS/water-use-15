@@ -67,7 +67,6 @@ var prevCategory = 'total';
 
 
 // Initialize page info
-updateTitle(activeCategory);
 setHash('view', activeView);
 setHash('category', activeCategory);
 
