@@ -82,8 +82,8 @@ parameter:
   - 
     id: social-links
     github: https://github.com/USGS-VIZLAB/water-use-15
-    twitter: https://twitter.com/share?url=TODO!!!
-    facebookLink: http://www.facebook.com/sharer.php?u=TODO!!!
+    twitter: https://twitter.com/share?url=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=twitter_button_share
+    facebookLink: http://www.facebook.com/sharer.php?u=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=fb_button_share
 
 fetch:
   -
