@@ -79,10 +79,6 @@ function readHashes() {
 
 function prepareMap() {
 
-// Initialize page info
-setHash('view', activeView);
-setHash('category', activeCategory);
-
   /** Add map elements **/
   
   // add placeholder groups for geographic boundaries and circles
