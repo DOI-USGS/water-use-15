@@ -31,8 +31,13 @@
   fill: #bdbdbd; /* dark-ish grey */
 } 
 
-.circle {
+.wu-circle {
   pointer-events: none;
+  stroke-width: 0.1;
+}
+
+#wu-highlight {
+  opacity: 1;
 }
 
 .dragging {
@@ -51,10 +56,6 @@
 
 .hidden {
 	display: none;
-}
-
-.shown {
-	display: block;
 }
 
 .watermark {
