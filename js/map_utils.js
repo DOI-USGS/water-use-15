@@ -184,13 +184,6 @@ function documentCategorySwitch(category, prevCategory, action) {
   }, updateCategoryDelay);
 }
 
-
-
-function updateTitle(category) {
-  d3.select("#maptitle")
-    .text("Water Use Data for " + activeView + ", 2015, " + category);
-}
-
 function highlightCircle(currentCircle) {
   var orig = currentCircle,
       origNode = orig.node();

@@ -65,10 +65,6 @@ if(!activeCategory) activeCategory = 'total';
 // default for prev is total
 var prevCategory = 'total';
 
-svg.append("text")
-  .attr("id", "maptitle")
-  .attr("x", chart_width/2)
-  .attr("y", chart_height*0.10); // bring in 10% of chart height
 
 // Initialize page info
 updateTitle(activeCategory);
