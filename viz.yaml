@@ -312,12 +312,21 @@ publish:
     alttext: "water use in the U.S."
     relpath: "images/WU_stories_static.png"
   -
+    id: rank_states_plot
+    location: "images/rank_states.png"
+    mimetype: image/png
+    export: true
+    title: "water use varies across U.S. states"
+    alttext: "water use varies across U.S. states"
+    relpath: "images/rank_states.png"
+  -
     id: key_stories
     template: layout/templates/key_stories.mustache
-    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure"]
+    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "rank_states_plot"]
     context:
       sections: ["rank_states_utils", "national_pie"]
       pie_map_plot: "static_story_figure"
+      rank_states_plot: "rank_states_plot"
     publisher: section
   -
     id: mobile_map_ui
