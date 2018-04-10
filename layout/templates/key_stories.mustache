@@ -1,27 +1,42 @@
 <div id="key-stories" class="viz-text">
 
-  <h2>How do we use water in the U.S.?</h2>
+  <h3>How do we use water in the U.S.?</h3>
   
-    <div class="key-story-plot" id="national-pie"></div>
+    <div class="key-story-plot" id="national-pie">
+    <p>
+    The U.S. states and territories used X billion gallons per day in 2015. This amount of water is approximately equal to YY (Some percentage of Lake Erie?). We use water in different ways to serve many economically and culturally important needs. The breakdown of different water uses is as follows:
+    </p>
+    </div>
   
     <p>
-    
+    Viewing the four major water-use categories at one time gives a better picture of the relative sizes of the withdrawals and the major water uses by county. Larger withdrawals generally are for irrigation or a combination of irrigation and public supply in the West, and thermoelectric power in the East. These three categories make up 90 percent of 2015 withdrawals. Industrial use, making up 5 percent of the total, can be spotted on the Gulf Coast and in Indiana, among other locations. A few counties show significant withdrawals for categories other than the 4 largest, such as aquaculture withdrawals in southern Idaho and western North Carolina. The remaining 4 categories of domestic, livestock, aquaculture, and mining together make up 5 percent of total withdrawals. See the map below for specific findings:
+
     </p>
     <div class="key-story-plot" id="national-static-pie">
     <figure>
      {{{ pie_map_plot }}}
     </figure>
     </div>
+    <p>
+    As a result of all these spatial differences in how we use water, total water use differs greatly among states. Can you guess where these three states rank in total water use and use?
+    </p>
+    <div class="key-story-plot" id="rank-states-static">
+    
+    <figure>
+     {{{ rank_states_plot }}}
+    </figure>
+    </div>
+    <p>
+    ....And a placeholder for the interactive version...
+    </p>
     <div class="key-story-plot" id="rank-states-interactive"></div>
- 
-[MVP: static plot of states ranked by water use]
-
+    
  
 <p>
-Note that not all water "use" is the same - some use is "consumptive" in the sense that it takes water out of the natural cycle by evaporation, transpiration, or incorporating in into a productby redirecting it to sewage drains (?), while other uses return the water to rivers or aquifers (possibly after adding heat or contaminants). Of the water withdrawn for irrigation, 62 percent is evaporated or transpired by the crops and won't re-enter the natural water cycle until the next rainfall, possibly far away from the point of water withdrawal. For thermoelectric power, consumptive use is 3 percent; the rest is returned to rivers or lakes, albeit warmer than before.
+Note that not all water "use" is the same - some use is "consumptive" in the sense that it takes water out of the natural cycle by evaporation, transpiration [link to water science school?], or incorporating into a product, or by redirecting it to sewage drains (?), while other uses return the water to rivers or aquifers (possibly after adding heat or contaminants). Of the water withdrawn for irrigation, 62 percent is evaporated or transpired by crops and won't re-enter the natural water cycle until the next rainfall, possibly far away from the point of water withdrawal. For thermoelectric power, consumptive use is 3 percent; the rest is returned to rivers or lakes, albeit warmer than before.
  </p>
  
-     <h2>Data Collection</h2>
+     <h3>Data Collection</h3>
  
 <p>
 Every 5 years since 1950, the USGS has compiled and estimated water-use information in cooperation with State, Federal, and local agencies to document how and where we use water. This information is essential to accurately understand how future water demands will be met, while maintaining adequate water quality and quantities for human and ecosystem needs. The fourteenth report in this series, [Estimated Use of Water in the United States in 2015], was released in May of 2018, along with the [county-level data] which supports the publication. The USGS Water Availability and Use Science Program hopes to produce higher spatial resolution and more frequent reports in the future. 
@@ -34,12 +49,11 @@ The visualization shows total withdrawals for each county, though U.S. counties 
     </p>
     
 
-     <h2>References</h2>
+     <h3>References</h3>
      
      <p>
 Dieter, C.A., Maupin, M.A., Caldwell, R.R., Harris, M.A., Ivahnenko, T.I., Lovelace, J.K., Barber, N.L., and Linsey, K.S., 2018, <i>Estimated use of water in the United States in 2015</i>: U.S. Geological Survey Circular 1441, 60? pages, <a href="https://doi.org/xxxx">https://doi.org/xxxx</a>
     </p>
-<br/> 
      <p>
 Dieter, C.A., Linsey, K.S., Caldwell, R.R., Harris, M.A., Ivahnenko, T.I., Lovelace, J.K., Maupin, M.A., and Barber, N.L., 2017, <i>Estimated use of water in the United States county-level data for 2015</i>: U.S. Geological Survey data release, <a href="https://doi.org/10.5066/F7TB15V5">https://doi.org/10.5066/F7TB15V5</a>.
     </p>
