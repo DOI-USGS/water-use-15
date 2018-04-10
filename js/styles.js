@@ -55,7 +55,7 @@ function backgroundState(selection, scale) {
 // on zoom out
 
 function hideCountyLines() {
-  d3.selectAll('.show-county-county')
+  d3.selectAll('.show-county-bounds')
     .classed("show-county-bounds", false); 
 }
 
