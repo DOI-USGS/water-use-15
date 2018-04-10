@@ -73,7 +73,7 @@ function resetState() {
 
 // on mouseover
 function highlightCounty(selection) {
-  d3.select(selection)
+  selection
     .classed("highlighted-county", true);
 }
 

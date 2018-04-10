@@ -108,7 +108,7 @@ function displayCountyBounds(error, activeCountyData) {
       })
       .attr('d', buildPath)
       .on("mouseover", function(d) {
-        highlightCounty(this); 
+        highlightCounty(d3.select(this)); 
         highlightCircle(d.properties, activeCategory);
         showToolTip(d, activeCategory); 
         // OK to use global var activeCategory which only changes on click 
