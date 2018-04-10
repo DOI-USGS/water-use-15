@@ -220,6 +220,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: "map_counties"
+      dropdown_selector: "dropdown_selector"
       map: "build_map"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
@@ -230,7 +231,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties",
-                  "watermark_utils", "map_circles"]
+                  "watermark_utils", "map_circles", "dropdown_selector"]
       sections: ["social", "mobile_map_ui", "map", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
   -
     id: topojson
@@ -280,6 +281,10 @@ publish:
   -
     id: map_counties
     location: "js/counties.js"
+    mimetype: application/javascript
+  -
+    id: dropdown_selector
+    location: "js/dropdown_selector.js"
     mimetype: application/javascript
   -
     id: map_css
