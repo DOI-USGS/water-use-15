@@ -374,6 +374,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: map_counties
+      dropdown_selector: "dropdown_selector"
       map: build_map
       directions_text: directions_text
       state_boundaries_USA: state_boundaries_USA_topojson
@@ -385,7 +386,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
-                  "map_counties", "watermark_utils", "map_circles"]
+                  "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
       embed: ["map","directions_text"]
   -
     id: directions_text
