@@ -48,10 +48,15 @@ function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
           var selectedView = menu.options[menu.selectedIndex].value;
           updateView(selectedView); // letting analytics fire every time for now
           
+          // reset county highlights
+          unhighlightCounty();
+          unhighlightCircle();
+          
           // filter to correct county data then update dropdowns
           var stateCountyData = countyCentroids
             .filter(function(d) { return d.STATE_ABBV === selectedView; });
           updateCountySelectorOptions(stateCountyData);
+          
         });
   
   // add states as options
@@ -91,7 +96,7 @@ function updateCountySelectorOptions(countyData) {
           highlightCounty(thisCountySel);
           highlightCircle(thisCountyData, activeCategory);
           
-          console.log("this will also update the data in the category legend", thisCountyGEOID);
+          console.log("this will also update the data in the category legend");
         });
         
   // add counties as options
@@ -107,5 +112,5 @@ function updateCountySelectorOptions(countyData) {
       .text(function(d) { return d.COUNTY; });
   
   // remove old options -- NOT WORKING RIGHT NOW
-  countyOptions.exit().remove();
+  // countyOptions.exit().remove();
 }
