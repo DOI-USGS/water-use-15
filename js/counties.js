@@ -115,7 +115,7 @@ function displayCountyBounds(error, activeCountyData) {
         // because people won't be able to hover on tooltips at the same time as hovering buttons
       })
       .on("mouseout", function(d) { 
-        unhighlightCounty(this);
+        unhighlightCounty();
         unhighlightCircle();
         hideToolTip();
       })

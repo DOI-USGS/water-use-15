@@ -78,8 +78,8 @@ function highlightCounty(selection) {
 }
 
 // on mouseout
-function unhighlightCounty(selection) {
-  d3.select(selection)
+function unhighlightCounty() {
+  d3.selectAll('.county')
     .classed("highlighted-county", false);
 }
 
