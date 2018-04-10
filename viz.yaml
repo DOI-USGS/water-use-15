@@ -314,9 +314,11 @@ publish:
       - name: Visualizing water use by region and time
         org: USGS-VIZLAB
         repo: water-use
+        alt: Water use viz thumb
       - name: Visualizing Hurricane Maria
         org: USGS-VIZLAB
         repo: hurricane-maria
+        alt: hurricane maria viz thumb
   -
     id: social_section
     template: vertical-social-media-template
