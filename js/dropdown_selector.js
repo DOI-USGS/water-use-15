@@ -1,5 +1,41 @@
 // dropdown selector utils
 
+function addZoomOutButton(view) {
+  
+  var zoomButton = d3.select("body")
+    .select(".zoom-out-button");
+  
+  zoomButton
+    .on("click", function() {
+      
+      // actually change the view
+      updateView('USA');
+      
+      // change selector back to default
+      d3.select("body")
+        .select(".view-select")
+        .selectAll("option")
+        .property("selected", function(d){ 
+          return d.properties.STATE_ABBV === 'USA'; 
+        });
+        
+    });
+  
+  // needed here in case initial view is not 'USA'
+  updateZoomOutButton(view);
+    
+}
+
+function updateZoomOutButton(view) {
+  var zoomButton = d3.select('.zoom-out-button');
+  if(view === 'USA'){
+    //grey out the zoom button at national view
+    zoomButton.classed("hidden", true);
+  } else {
+    zoomButton.classed("hidden", false);
+  }
+}
+
 function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
   
   var viewMenu = d3.select("body")
