@@ -297,6 +297,13 @@ publish:
     context:
       title: "Water use in the U.S."
   -
+    id: static_story_figure
+    location: "images/WU_stories_static.png"
+    mimetype: image/png
+    title: "water use in the U.S."
+    alttext: "water use in the U.S."
+    relpath: "images/WU_stories_static.png"
+  -
     id: key_stories
     template: layout/templates/key_stories.mustache
     depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles"]
@@ -345,6 +352,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: map_counties
+      static_story_figure: static_story_figure
       map: build_map
       directions_text: directions_text
       state_boundaries_USA: state_boundaries_USA_topojson
@@ -356,9 +364,8 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
-                  "map_counties", "watermark_utils", "map_circles"]
+                  "map_counties", "watermark_utils", "map_circles", "static_story_figure"]
       embed: ["map","directions_text"]
-
   -
     id: directions_text
     template: printall
