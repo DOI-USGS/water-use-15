@@ -1,20 +1,21 @@
 
 function categoryToName(category) {
-  if (category == "total") { return "Total"; }
-  else if (category == "thermoelectric") { return "Thermoelectric"; }
-  else if (category == "publicsupply") { return "Public Supply"; }
-  else if (category == "irrigation") { return "Irrigation"; }
-  else if (category == "industrial") { return "Industrial"; }
+  if (category === "total") { return "Total"; }
+  else if (category === "thermoelectric") { return "Thermoelectric"; }
+  else if (category === "publicsupply") { return "Public Supply"; }
+  else if (category === "irrigation") { return "Irrigation"; }
+  else if (category === "industrial") { return "Industrial"; }
+  else if (category === "other") { return "Other"; }
   else { return "none"; }
 }
 
 function categoryToColor(category) {
-  if (category == "total") { return "rgba(38, 120, 178, 0.8)"; }
-  else if (category == "thermoelectric") { return "rgba(237, 201, 72, 0.8)"; }
-  else if (category == "publicsupply") { return "rgba(118, 183, 178, 0.8)"; }
-  else if (category == "irrigation") { return "rgba(89, 161, 79, 0.8)"; }
-  else if (category == "industrial") { return "rgba(225, 87, 89, 0.8)"; }
-  else if (category == "other") { return "rgba(169, 169, 169, 0.8)"; }
+  if (category === "total") { return "rgba(38, 120, 178, 0.8)"; }
+  else if (category === "thermoelectric") { return "rgba(237, 201, 72, 0.8)"; }
+  else if (category === "publicsupply") { return "rgba(118, 183, 178, 0.8)"; }
+  else if (category === "irrigation") { return "rgba(89, 161, 79, 0.8)"; }
+  else if (category === "industrial") { return "rgba(225, 87, 89, 0.8)"; }
+  else if (category === "other") { return "rgba(169, 169, 169, 0.8)"; }
   else { return "none"; }
 }
 
@@ -29,15 +30,22 @@ function emphasizeCounty(selection) {
     .classed("emphasize-county", true);
 }
 
-function foregroundState(selection, scale = 1) {
+function foregroundState(selection, scale) {
+   if(scale === undefined) {
+      scale = 1;
+   }
+  
   selection
     .transition()
     .duration(500)
     .style("stroke-width",  2.5/scale); // scale stroke-width
 }
 
-function backgroundState(selection, scale = 1) {
-  console.log(scale);
+function backgroundState(selection, scale) {
+   if(scale === undefined) {
+      scale = 1;
+   }
+  
   selection
     .transition()
     .duration(500)

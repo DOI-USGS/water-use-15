@@ -61,13 +61,15 @@ function zoomToFromState(data) {
   updateView(newView);
 }
 
-function updateView(newView, fireAnalytics = true) {
+function updateView(newView, fireAnalytics) {
+   if(fireAnalytics === undefined) {
+      scale = true;
+   }
+  
   // update the global variable that stores the current view
   oldView = activeView;
   activeView = newView;
   
-  // update page info
-  updateTitle(activeCategory); // also OK not to worry about compatibility with hover
   setHash('view', activeView);
 
   // determine the center point and scaling for the new view
@@ -159,14 +161,13 @@ function updateCategory(category, prevCategory) {
   activeCategory = category;
   
   // update page info
-  updateTitle(category);
   setHash('category', category);
   documentCategorySwitch(category, prevCategory, action = "click");
 }
 
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
-    updateCircles(category, prevCategory);
+    updateCircles(category);
     documentCategorySwitch(category, prevCategory, action);
   }
 } 
@@ -184,38 +185,12 @@ function documentCategorySwitch(category, prevCategory, action) {
   }, updateCategoryDelay);
 }
 
-
-
-function updateTitle(category) {
-  d3.select("#maptitle")
-    .text("Water Use Data for " + activeView + ", 2015, " + category);
-}
-
-function highlightCircle(currentCircle) {
-  var orig = currentCircle,
-      origNode = orig.node();
-  var duplicate = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), 
-                                                            origNode.nextSibling));
-                                                            
-  // style duplicated circles sitting on top
-  duplicate
-    .classed('circle-duplicate', true)
-    .style("pointer-events", "none")
-    .style("opacity", 1); // makes the duplicate circle on the top
-}
-
-function unhighlightCircle() {
-  d3.select('.circle-duplicate')
-    .remove(); // delete duplicate
-}
-
 var toolTipTimer = null;
 var toolTipDelay = 1000; //ms
 function showToolTip(d, category) {
 
   // change tooltip
   d3.select(".tooltip")
-    .classed("shown", true)
     .classed("hidden", false)
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
@@ -236,7 +211,6 @@ function showToolTip(d, category) {
 
 function hideToolTip() {
   d3.select(".tooltip")
-    .classed("shown", false)
     .classed("hidden", true);
   if (toolTipTimer){
       clearTimeout(toolTipTimer); // stop ga for edge states
