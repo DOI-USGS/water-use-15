@@ -74,6 +74,9 @@ function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
         return d.properties.STATE_ABBV === view; 
       });
   }
+  
+  // needed here in case initial view is not 'USA'
+  updateCountySelectorDropdown(view);
 
 }
 
@@ -114,4 +117,15 @@ function updateCountySelectorOptions(countyData) {
   
   // remove old options -- NOT WORKING RIGHT NOW
   // countyOptions.exit().remove();
+}
+
+function updateCountySelectorDropdown(view) {
+  // hide county selector at the national scale
+  var countySelectorDiv = d3.select('.county-custom-select');
+  if(view === 'USA'){
+    //grey out the zoom button at national view
+    countySelectorDiv.classed("hidden", true);
+  } else {
+    countySelectorDiv.classed("hidden", false);
+  }
 }
