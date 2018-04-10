@@ -310,7 +310,7 @@ publish:
     depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure"]
     context:
       sections: ["rank_states_utils", "national_pie"]
-      figure: "static_story_figure"
+      pie_map_plot: "static_story_figure"
     publisher: section
   -
     id: footer_section
