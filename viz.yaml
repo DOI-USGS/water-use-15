@@ -82,8 +82,8 @@ parameter:
   - 
     id: social-links
     github: https://github.com/USGS-VIZLAB/water-use-15
-    twitter: https://twitter.com/share?url=TODO!!!
-    facebookLink: http://www.facebook.com/sharer.php?u=TODO!!!
+    twitter: https://twitter.com/share?url=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=twitter_button_share
+    facebookLink: http://www.facebook.com/sharer.php?u=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=fb_button_share
 
 fetch:
   -
@@ -167,6 +167,15 @@ process:
       col_names: wu_type_column_names
     processor: find_range
     scripts: [scripts/process/find_range.R]
+  -
+    id: wu_data_15_sum_json
+    location: cache/wu_data_15_sum.json
+    mimetype: application/json
+    depends:
+      rawdata: wu_data_15_simple
+      col_names: wu_type_column_names
+    processor: summarize_wu_data
+    scripts: [scripts/process/summarize_wu_data.R]
   -
     id: county_centroids_wu_tsv
     location: cache/county_centroids_wu.tsv
@@ -253,6 +262,10 @@ publish:
     location: "js/rank_states_utils.js"
     mimetype: application/javascript
   -
+    id: national_pie
+    location: "js/national_pie.js"
+    mimetype: application/javascript
+  -
     id: watermark_utils
     location: "js/watermark.js"
     mimetype: application/javascript
@@ -293,9 +306,9 @@ publish:
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
-    depends: "rank_states_utils"
+    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles"]
     context:
-      sections: ["rank_states_utils"]
+      sections: ["rank_states_utils", "national_pie"]
     publisher: section
   -
     id: mobile_map_ui
@@ -316,9 +329,11 @@ publish:
       - name: Visualizing water use by region and time
         org: USGS-VIZLAB
         repo: water-use
+        alt: Water use viz thumb
       - name: Visualizing Hurricane Maria
         org: USGS-VIZLAB
         repo: hurricane-maria
+        alt: hurricane maria viz thumb
   -
     id: social_section
     template: vertical-social-media-template

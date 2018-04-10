@@ -61,13 +61,15 @@ function zoomToFromState(data) {
   updateView(newView);
 }
 
-function updateView(newView, fireAnalytics = true) {
+function updateView(newView, fireAnalytics) {
+   if(fireAnalytics === undefined) {
+      scale = true;
+   }
+  
   // update the global variable that stores the current view
   oldView = activeView;
   activeView = newView;
   
-  // update page info
-  updateTitle(activeCategory); // also OK not to worry about compatibility with hover
   setHash('view', activeView);
 
   // determine the center point and scaling for the new view
@@ -159,7 +161,6 @@ function updateCategory(category, prevCategory) {
   activeCategory = category;
   
   // update page info
-  updateTitle(category);
   setHash('category', category);
   documentCategorySwitch(category, prevCategory, action = "click");
 }
@@ -182,13 +183,6 @@ function documentCategorySwitch(category, prevCategory, action) {
   'event_category': 'figure',
   'event_label': category + '; from='+ prevCategory + '; view=' + activeView });
   }, updateCategoryDelay);
-}
-
-
-
-function updateTitle(category) {
-  d3.select("#maptitle")
-    .text("Water Use Data for " + activeView + ", 2015, " + category);
 }
 
 var toolTipTimer = null;

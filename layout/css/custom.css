@@ -111,14 +111,28 @@
   margin-top:20px;
 }
 
+
 .key-story-plot{
-  border:1px solid #000;
   min-height:200px;
   margin:10px 0;
 }
 
 .key-story-plot img{
   width:100%;
+}
+
+.label-text {
+    alignment-baseline: middle;
+    font-size: 12px;
+    font-family: arial,helvetica,"sans-serif";
+    fill: #393939;
+}
+.label-line {
+    stroke-width: 1;
+    stroke: #393939;
+}
+.label-circle {
+    fill: #393939;
 }
 
 #button-container{
