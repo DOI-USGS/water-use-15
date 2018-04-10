@@ -103,6 +103,9 @@ function updateCountySelectorOptions(countyData) {
           console.log("this will also update the data in the category legend");
         });
         
+  // alphabetize counties
+  countyData.sort(function(a,b) { return d3.ascending(a.COUNTY, b.COUNTY); });
+  
   // add counties as options
   var countyOptions = countyMenu
         .selectAll("option")
