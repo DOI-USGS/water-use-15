@@ -209,6 +209,7 @@ publish:
       socialCSS: "lib-social-media-css"
       directions_text: "directions_text"
       header: "header_section"
+      mobile_map_ui: "mobile_map_ui"
       key_stories: "key_stories"
       footer: "footer_section"
       hashes: "url_hashes"
@@ -228,10 +229,9 @@ publish:
       wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties", 
+                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties",
                   "watermark_utils", "map_circles"]
-      sections: ["social","map", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
-
+      sections: ["social", "mobile_map_ui", "map", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -290,6 +290,13 @@ publish:
     location: "layout/css/custom.css"
     mimetype: text/css
   -
+    id: selectArrows
+    location: images/selectArrows.svg
+    mimetype: image/svg
+    inline: true
+    title: "Select Arrows"
+    alttext: "Select Input Custom Arrows"
+  -
     id: header_section
     template: header-template
     publisher: header
@@ -303,6 +310,14 @@ publish:
     context:
       sections: ["rank_states_utils", "national_pie"]
     publisher: section
+  -
+    id: mobile_map_ui
+    template: layout/templates/mobileMapUI.mustache
+    publisher: section
+    depends:
+      selectArrows: selectArrows
+    context:
+      selectArrows: selectArrows
   -
     id: footer_section
     template: footer-template

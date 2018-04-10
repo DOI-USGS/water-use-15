@@ -3,6 +3,89 @@
   margin:0;
 }
 
+.mobile-UI-Container{
+  display:flex;
+  flex-direction:row;
+}
+
+.drop-downs{
+  flex: 5;
+  padding:0 5px;
+}
+
+.drop-downs select{
+  width:100%;
+  border-radius:0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position:relative;
+  padding:0 5px;
+}
+
+.custom-select{
+  position:relative;
+}
+
+.view-select{
+  height:35px;
+  margin-bottom:3px;
+  font-size:1em;
+}
+
+.county-select{
+  height:25px;
+}
+
+.drop-down-indicator{
+  background:#c6c6c6;
+  width:25px;
+  position:absolute;
+  right:0;
+  top:0;
+  z-index:1000;
+  pointer-events:none;
+  text-align:center;
+}
+
+.drop-down-indicator img{
+  height:14px;
+}
+
+.view-custom-select .drop-down-indicator{
+  height:35px;
+}
+
+.view-custom-select .drop-down-indicator img{
+  margin-top:11px;
+}
+
+.county-custom-select .drop-down-indicator{
+  height:25px;
+}
+
+.county-custom-select .drop-down-indicator img{
+  margin-top:6px;
+}
+
+.drop-downs select,
+.zoom-out-button{
+  background: #f1f1f1;
+  outline:none;
+  border:none;
+  cursor:pointer;
+}
+
+.zoom-out-button-container{
+  flex:1;
+  padding-right:5px;
+}
+
+.zoom-out-button{
+  height:100%;
+  width:100%;
+}
+
 .viz-text ul {
     padding-left: 20px;
     min-height: 20px;
@@ -102,8 +185,12 @@
     background:rgb(225, 87, 89);
   }
 
-@media screen and (min-width:580px){
+@media screen and (min-width:600px){
   #button-container button{
     font-size:.9em;
+  } 
+  
+  .mobile-UI-Container{
+    display:none;
   }
 }
