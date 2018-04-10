@@ -89,9 +89,9 @@ function highlightCircle(countyDatum, category) {
   // style a duplicated circle sitting on top of the active county's circle
   map.select('circle#wu-highlight')
     .classed('hidden', false)
-    .attr('cx', projectX([countyDatum.properties.lon, countyDatum.properties.lat]))
-    .attr('cy', projectY([countyDatum.properties.lon, countyDatum.properties.lat]))
-    .attr('r', scaleCircles(countyDatum.properties[category]))
+    .attr('cx', projectX([countyDatum.lon, countyDatum.lat]))
+    .attr('cy', projectY([countyDatum.lon, countyDatum.lat]))
+    .attr('r', scaleCircles(countyDatum[category]))
     .style('stroke', categoryToColor(category))
     .style('fill', categoryToColor(category));
   

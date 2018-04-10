@@ -115,6 +115,10 @@ function updateView(newView, fireAnalytics) {
   deemphasizeCounty();
   resetState();
   
+  // change the zoom button or county dropdown based on view
+  updateZoomOutButton(activeView);
+  updateCountySelectorDropdown(activeView);
+  
   if(activeView !== 'USA') {
     
     // select counties in current state

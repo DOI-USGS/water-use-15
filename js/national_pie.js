@@ -81,8 +81,6 @@ d3.json("data/wu_data_15_sum.json", function(error, wu_national_data) {
       .attr("dy", "0.35em")
       .attr("text-anchor", function(d) {
         if( (textArc.centroid(d)[0] * 0.75) < path.centroid(d)[0] ) {
-          console.log(d.data.category);
-          console.log(d);
           // label is more than 3/4 left of the pie center than the slice x centroid
           // so essentially, only grabs labels way out on the left
           return "end";

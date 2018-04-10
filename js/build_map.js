@@ -129,6 +129,11 @@ function fillMap() {
   addCircles(circlesPaths);*/
   updateCircles(activeCategory);
   
+  // manipulate dropdowns
+  // need to figure out how to do this for only mobile views
+  updateViewSelectorOptions(activeView, stateBoundsUSA, countyCentroids);
+  addZoomOutButton(activeView);
+  
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   updateCounties('USA');
