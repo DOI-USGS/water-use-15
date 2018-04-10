@@ -27,12 +27,13 @@ function addZoomOutButton(view) {
 }
 
 function updateZoomOutButton(view) {
-  var zoomButton = d3.select('.zoom-out-button');
+  // hide div that button is in to let dropdowns autosize
+  var zoomButtonDiv = d3.select('.zoom-out-button-container');
   if(view === 'USA'){
-    //grey out the zoom button at national view
-    zoomButton.classed("hidden", true);
+    //hide the zoom button at national view
+    zoomButtonDiv.classed("hidden", true);
   } else {
-    zoomButton.classed("hidden", false);
+    zoomButtonDiv.classed("hidden", false);
   }
 }
 
