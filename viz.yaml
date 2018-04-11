@@ -215,6 +215,7 @@ publish:
       hashes: "url_hashes"
       projection: "custom_projection"
       styles: "styles"
+      buttons: buttons
       map_utils: "map_utils"
       watermark_utils: "watermark_utils"
       map_circles: map_circles
@@ -229,7 +230,7 @@ publish:
       wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties",
+                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "map_utils", "map_states", "map_counties",
                   "watermark_utils", "map_circles"]
       sections: ["social", "mobile_map_ui", "map", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
   -
@@ -264,6 +265,10 @@ publish:
   -
     id: national_pie
     location: "js/national_pie.js"
+    mimetype: application/javascript
+  -
+    id: buttons
+    location: "js/buttons.js"
     mimetype: application/javascript
   -
     id: watermark_utils
@@ -364,6 +369,7 @@ publish:
       hashes: url_hashes
       projection: custom_projection
       styles: styles
+      buttons: buttons
       map_utils: map_utils
       watermark_utils: watermark_utils
       map_circles: map_circles
@@ -379,7 +385,7 @@ publish:
       wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
+                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "map_utils", "map_states",
                   "map_counties", "watermark_utils", "map_circles"]
       embed: ["map","directions_text"]
   -

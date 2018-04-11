@@ -134,32 +134,5 @@ function fillMap() {
   updateCounties('USA');
 }
 
-function addButtons() {
-  var buttonContainer = d3.select('.svg-container')
-    .append('div')
-    .attr('id', 'button-container');
     
-  buttonContainer.append('div')
-    .classed('select-arrowbox', true);
-    
-  d3.select('#button-container')
-    .selectAll('button')
-    .data(categories)
-    .enter()
-    .append('button')
-    .text(function(d){
-      return categoryToName(d);
-    })
-    .attr('class', function(d){
-      return d;
-    })
-    .on('click', function(d){
-      updateCategory(d.toLowerCase(), activeCategory);
-    })
-    .on('mouseover', function(d){
-      showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
-    })
-    .on('mouseout', function(d){
-      showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
-    });
 }
