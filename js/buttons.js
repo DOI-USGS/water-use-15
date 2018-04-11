@@ -17,6 +17,9 @@ function addButtons() {
     .enter()
     .append('g')
     .classed('button', true)
+    .attr('id', function(d) {
+      return d;
+    })
     .attr('transform', function(d) {
       return 'translate(' + 10 + ', ' + buttonY(d) + ')';
     });
