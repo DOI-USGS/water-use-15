@@ -70,7 +70,7 @@ var mapBackground = map.append("rect")
   .attr("id", "map-background")
   .on('click', zoomToFromState);
 
-var buttonBox = addButtons();
+addButtons(); // sets waterUseViz.elements.buttonBox
 
 var watermark = addWatermark();
 
