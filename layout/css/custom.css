@@ -122,74 +122,41 @@
 }
 
 .label-text {
-    alignment-baseline: middle;
-    font-size: 12px;
-    font-family: arial,helvetica,"sans-serif";
-    fill: #393939;
+  alignment-baseline: middle;
+  font-size: 12px;
+  font-family: arial,helvetica,"sans-serif";
+  fill: #393939;
 }
 .label-line {
-    stroke-width: 1;
-    stroke: #393939;
+  stroke-width: 1;
+  stroke: #393939;
 }
-.label-circle {
-    fill: #393939;
-}
-
-#button-container{
-  text-align: center;
-  position: relative;
-  padding:0 10px;
+.label-circle{
+  fill: #393939;
 }
 
-#button-container button{
-    width:19%;
-    padding: 10px 0;
-    font-size:.5em;
-    outline:none;
-    opacity:.5;
-    margin-right:1%;
-    border: 3px;
-    -moz-user-select: none; 
-    -webkit-user-select: none; 
-    -ms-user-select:none; 
-    user-select:none;
-    -o-user-select:none;
-  }
-  
-  #button-container button:last-child{
-    border-right:1px solid rgb(100,100,100);
-    margin-right:0;
-  }
-  
-  #button-container button:hover{
-    opacity:1;
-  }
-  
-  button.total{
-    background:rgb(38, 120, 178);
-  }
-  
-  button.thermoelectric{
-    background:rgb(237, 201, 72);
-  }
-  
-  button.publicsupply{
-    background:rgb(118, 183, 178);
-  }
-  
-  button.irrigation{
-    background:rgb(89, 161, 79);
-  }
-  
-  button.industrial{
-    background:rgb(225, 87, 89);
-  }
+#button-background{
+  fill:white;
+  opacity:0.5;
+  pointer-events:none;
+}
+
+.button rect:hover{
+  opacity:1;
+}
+
+.button rect{
+  fill:white;
+  opacity:0.8;
+}
+
+.button text{
+  font-size:1.2em;
+  dominant-baseline:central;
+  pointer-events:none;
+}
 
 @media screen and (min-width:600px){
-  #button-container button{
-    font-size:.9em;
-  } 
-  
   .mobile-UI-Container{
     display:none;
   }
