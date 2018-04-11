@@ -108,25 +108,28 @@ function updateCountySelectorOptions(countyData) {
   
   // bind data to options in county dropdown menu
   var countyOptions = countyMenu
-        .selectAll("option")
-        .data(countyData);
-  
-  //update existing options with data
-  countyOptions
-    .property("value", function(d) { return d.GEOID; })
-    .text(function(d) { return d.COUNTY; });
+        .selectAll("option");
   
   // add new options
   countyOptions
+    .data(countyData)
     .enter()
-    .append("option")
-      .property("value", function(d) { return d.GEOID; })
-      .text(function(d) { return d.COUNTY; });
+    .append("option");
+  
+  //update existing options with data
+  countyMenu.selectAll("option")
+    .property("value", function(d) { return d.GEOID; })
+    .text(function(d) { return d.COUNTY; });
   
   // remove old options
   countyOptions
     .exit()
       .remove();
+      
+  countyMenu
+    .insert("option", ":first-child")
+      .property("value", "Select County")
+      .text("--Select County--");
       
 }
 
