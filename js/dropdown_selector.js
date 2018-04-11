@@ -93,12 +93,16 @@ function updateCountySelectorOptions(countyData) {
           
           var menu = document.getElementById("county-menu");
           var thisCountyGEOID = menu.options[menu.selectedIndex].value;
-          var thisCountySel = d3.selectAll('.county')
-                .filter(function(d) { return d.properties.GEOID === thisCountyGEOID; });
-          var thisCountyData = countyData.filter(function(d) { return d.GEOID === thisCountyGEOID; })[0];
           
-          highlightCounty(thisCountySel);
-          highlightCircle(thisCountyData, activeCategory);
+          if(thisCountyGEOID != "Select County") {
+            
+            var thisCountySel = d3.selectAll('.county')
+                  .filter(function(d) { return d.properties.GEOID === thisCountyGEOID; });
+            var thisCountyData = countyData.filter(function(d) { return d.GEOID === thisCountyGEOID; })[0];
+            
+            highlightCounty(thisCountySel);
+            highlightCircle(thisCountyData, activeCategory);
+          }
           
           console.log("this will also update the data in the category legend");
         });
