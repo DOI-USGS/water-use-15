@@ -93,12 +93,16 @@ function updateCountySelectorOptions(countyData) {
           
           var menu = document.getElementById("county-menu");
           var thisCountyGEOID = menu.options[menu.selectedIndex].value;
-          var thisCountySel = d3.selectAll('.county')
-                .filter(function(d) { return d.properties.GEOID === thisCountyGEOID; });
-          var thisCountyData = countyData.filter(function(d) { return d.GEOID === thisCountyGEOID; })[0];
           
-          highlightCounty(thisCountySel);
-          highlightCircle(thisCountyData, activeCategory);
+          if(thisCountyGEOID != "Select County") {
+            
+            var thisCountySel = d3.selectAll('.county')
+                  .filter(function(d) { return d.properties.GEOID === thisCountyGEOID; });
+            var thisCountyData = countyData.filter(function(d) { return d.GEOID === thisCountyGEOID; })[0];
+            
+            highlightCounty(thisCountySel);
+            highlightCircle(thisCountyData, activeCategory);
+          }
           
           console.log("this will also update the data in the category legend");
         });
@@ -106,20 +110,36 @@ function updateCountySelectorOptions(countyData) {
   // alphabetize counties
   countyData.sort(function(a,b) { return d3.ascending(a.COUNTY, b.COUNTY); });
   
-  // add counties as options
+  // bind data to options in county dropdown menu
   var countyOptions = countyMenu
-        .selectAll("option")
-        .data(countyData);
+        .selectAll("option");
   
   // add new options
   countyOptions
+    .data(countyData)
     .enter()
-    .append("option")
-      .property("value", function(d) { return d.GEOID; })
-      .text(function(d) { return d.COUNTY; });
+    .append("option");
   
-  // remove old options -- NOT WORKING RIGHT NOW
-  // countyOptions.exit().remove();
+  //update existing options with data
+  countyMenu.selectAll("option")
+    .property("value", function(d) { return d.GEOID; })
+    .text(function(d) { return d.COUNTY; });
+  
+  // remove old options
+  countyOptions
+    .exit()
+      .remove();
+      
+  countyMenu
+    .insert("option", ":first-child")
+      .property("value", "Select County")
+      .text("--Select County--");
+      
+  countyMenu.selectAll("option")
+    .property("selected", function(d,i) {
+      // select county was just inserted into the first spot (so index 0) above
+      return i === 0; 
+    });
 }
 
 function updateCountySelectorDropdown(view) {
