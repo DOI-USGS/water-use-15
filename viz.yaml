@@ -312,14 +312,14 @@ publish:
     publisher: header
     depends: "lib-header-css"
     context:
-      title: "Water use in the U.S."
+      title: "Water use in the U.S., 2015"
   -
     id: static_story_figure
     location: "images/WU_stories_static.png"
     mimetype: image/png
     export: true
-    title: "water use in the U.S."
-    alttext: "water use in the U.S."
+    title: "a static story"
+    alttext: "a static story"
     relpath: "images/WU_stories_static.png"
   -
     id: key_stories
