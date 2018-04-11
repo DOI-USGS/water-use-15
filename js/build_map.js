@@ -46,15 +46,17 @@ var buildPath = d3.geoPath()
 // circle scale
 var scaleCircles = d3.scaleSqrt()
   .range([0, 15]);
+  
+/** Get user view preferences **/
+
+readHashes();
+  
+/** Add major svg elements and then set their sizes **/
     
 // Create container
 var container = d3.select('body')
   .append('div')
   .classed('svg-container', true);
-
-// Setup tooltips
-var tooltipDiv = d3.select("body").append("div")
-  .classed("tooltip hidden", true);
 
 // Create SVG and map
 var svg = d3.select(".svg-container")
@@ -71,10 +73,18 @@ var mapBackground = map.append("rect")
   .attr("height", chart_height)
   .on('click', zoomToFromState);
 
+var buttonBox = addButtons();
 
-// Set up some map info and map elements so we're ready to add data piece by piece
-readHashes();
+var watermark = addWatermark();
+
+/** Add major map-specific elements **/
+
+// Set up some map elements so we're ready to add data piece by piece
 prepareMap();
+
+// Set up tooltips
+var tooltipDiv = d3.select("body").append("div")
+  .classed("tooltip hidden", true);
 
 // Read data and add to map
 d3.queue()
@@ -82,10 +92,6 @@ d3.queue()
   .defer(d3.tsv, "data/county_centroids_wu.tsv")
   .defer(d3.json, "data/wu_data_15_range.json")
   .await(fillMap);
-
-// Add buttons  
-addButtons();
-
 
 /** Functions **/
 
@@ -110,9 +116,6 @@ function prepareMap() {
   map.append('g').attr('id', 'county-bounds');
   map.append('g').attr('id', 'state-bounds');
   map.append('g').attr('id', 'wu-circles');
-  
-  // add watermark
-  addWatermark();
 
   /** Initialize URL **/
   
