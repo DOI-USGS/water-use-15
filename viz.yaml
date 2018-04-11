@@ -222,6 +222,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: "map_counties"
+      dropdown_selector: "dropdown_selector"
       map: "build_map"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
@@ -232,7 +233,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
       sections: ["social", "mobile_map_ui", "map", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
   -
     id: topojson
@@ -292,6 +293,10 @@ publish:
     location: "js/counties.js"
     mimetype: application/javascript
   -
+    id: dropdown_selector
+    location: "js/dropdown_selector.js"
+    mimetype: application/javascript
+  -
     id: map_css
     location: "layout/css/map.css"
     mimetype: text/css
@@ -322,12 +327,21 @@ publish:
     alttext: "a static story"
     relpath: "images/WU_stories_static.png"
   -
+    id: rank_states_plot
+    location: "images/rank_states.png"
+    mimetype: image/png
+    export: true
+    title: "water use varies across U.S. states"
+    alttext: "water use varies across U.S. states"
+    relpath: "images/rank_states.png"
+  -
     id: key_stories
     template: layout/templates/key_stories.mustache
-    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure"]
+    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "rank_states_plot"]
     context:
       sections: ["rank_states_utils", "national_pie"]
       pie_map_plot: "static_story_figure"
+      rank_states_plot: "rank_states_plot"
     publisher: section
   -
     id: mobile_map_ui
@@ -381,6 +395,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: map_counties
+      dropdown_selector: "dropdown_selector"
       map: build_map
       directions_text: directions_text
       state_boundaries_USA: state_boundaries_USA_topojson
@@ -392,7 +407,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
       embed: ["map","directions_text"]
   -
     id: directions_text
