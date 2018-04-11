@@ -106,10 +106,15 @@ function updateCountySelectorOptions(countyData) {
   // alphabetize counties
   countyData.sort(function(a,b) { return d3.ascending(a.COUNTY, b.COUNTY); });
   
-  // add counties as options
+  // bind data to options in county dropdown menu
   var countyOptions = countyMenu
         .selectAll("option")
         .data(countyData);
+  
+  //update existing options with data
+  countyOptions
+    .property("value", function(d) { return d.GEOID; })
+    .text(function(d) { return d.COUNTY; });
   
   // add new options
   countyOptions
@@ -118,8 +123,11 @@ function updateCountySelectorOptions(countyData) {
       .property("value", function(d) { return d.GEOID; })
       .text(function(d) { return d.COUNTY; });
   
-  // remove old options -- NOT WORKING RIGHT NOW
-  // countyOptions.exit().remove();
+  // remove old options
+  countyOptions
+    .exit()
+      .remove();
+      
 }
 
 function updateCountySelectorDropdown(view) {
