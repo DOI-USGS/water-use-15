@@ -131,6 +131,11 @@ function updateCountySelectorOptions(countyData) {
       .property("value", "Select County")
       .text("--Select County--");
       
+  countyMenu.selectAll("option")
+    .property("selected", function(d,i) {
+      // select county was just inserted into the first spot (so index 0) above
+      return i === 0; 
+    });
 }
 
 function updateCountySelectorDropdown(view) {
