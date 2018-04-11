@@ -54,14 +54,6 @@ function resize() {
     .attr('transform', 'translate(' + waterUseViz.dims.watermark.x0 + ',' + waterUseViz.dims.watermark.x0 + ')scale(0.25)');
   
   // Apply the changes to the button elements
-  waterUseViz.elements.buttonBox
-    .attr('transform', 'translate(' + 0 + ', ' + waterUseViz.dims.buttonBox.y0 + ')');
-  waterUseViz.elements.buttonBox.select('#button-background')  
-    .attr('width', waterUseViz.dims.buttonBox.width);
-  waterUseViz.elements.buttonBox.selectAll('.button .category-label')
-    .attr('x', waterUseViz.dims.buttonBox.width * 0.05); // nudge a little over from the rectangle's left edge
-  waterUseViz.elements.buttonBox.selectAll('.button .category-amount')
-    .attr('x', waterUseViz.dims.buttonBox.width * 0.9); // nudge a little over from the rectangle's left edge
-  updateButtons(activeCategory); // updates the button rectangle widths
+  resizeButtons();
   
 }

@@ -150,13 +150,37 @@
   opacity:0.8;
 }
 
+/* mobile */
 .button text{
-  font-size:1.2em;
+  font-size:2em;
   dominant-baseline:central;
+  pointer-events:none;
+}
+#legend-title{
+  font-size:2em;
+  font-weight:bold;
+  pointer-events:none;
+}
+#legend-subtitle{
+  font-size:1.4em;
   pointer-events:none;
 }
 
 @media screen and (min-width:600px){
+  .button text{
+    font-size:1.3em;
+    dominant-baseline:central;
+    pointer-events:none;
+  }
+  #legend-title{
+    font-size:1.3em;
+    font-weight:bold;
+    pointer-events:none;
+  }
+  #legend-subtitle{
+    font-size:1.1em;
+    pointer-events:none;
+  }
   .mobile-UI-Container{
     display:none;
   }
