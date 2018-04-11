@@ -1,14 +1,43 @@
-// Width and height
-var chart_width     =   1000;
-var chart_height    =   700;
+// Define one big global to eventually rule them all.
+// null values are placeholders for globals that will be filled in
+var waterUseViz = {
+  dims: {
+    map: {
+      width: 1000,
+      height: 700
+    },
+    buttonBox: {
+      widthDesktop: 250,
+      heightDesktop: 250,
+      width: null,
+      height: null
+    },
+    svg: {
+      width: null,
+      height: null
+    },
+    watermark: {
+      width: null,
+      height: null
+    }
+  },
+  elements: {
+    //svg: null,
+    //map: null,
+    buttonBox: null
+  }
+};
 
-// define categories
+// Globals not yet in waterUseViz
+var activeView, activeCategory, prevCategory;
+var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
+var countyBoundsZoom = new Map();
 var categories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
 
 // Projection
 var projection = albersUsaTerritories()
   .scale([1200])
-  .translate([chart_width / 2, chart_height / 2]);
+  .translate([waterUseViz.dims.map.width / 2, waterUseViz.dims.map.height / 2]);
   // default is .rotate([96,0]) to center on US (we want this)
     
 var buildPath = d3.geoPath()
@@ -42,10 +71,6 @@ var mapBackground = map.append("rect")
   .attr("height", chart_height)
   .on('click', zoomToFromState);
 
-// Globals
-var activeView, activeCategory, prevCategory;
-var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
-var countyBoundsZoom = new Map();
 
 // Set up some map info and map elements so we're ready to add data piece by piece
 readHashes();
