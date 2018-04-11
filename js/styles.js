@@ -10,7 +10,7 @@ function categoryToName(category) {
 }
 
 function categoryToColor(category) {
-  if (category === "total") { return "rgba(38, 120, 178, 0.8)"; }
+  if (category === "total") { return "rgba(38, 140, 178, 0.8)"; }
   else if (category === "thermoelectric") { return "rgba(237, 201, 72, 0.8)"; }
   else if (category === "publicsupply") { return "rgba(118, 183, 178, 0.8)"; }
   else if (category === "irrigation") { return "rgba(89, 161, 79, 0.8)"; }
@@ -38,7 +38,7 @@ function foregroundState(selection, scale) {
   selection
     .transition()
     .duration(500)
-    .style("stroke-width",  2.5/scale); // scale stroke-width
+    .style("stroke-width",  2/scale); // scale stroke-width
 }
 
 function backgroundState(selection, scale) {
@@ -49,7 +49,7 @@ function backgroundState(selection, scale) {
   selection
     .transition()
     .duration(500)
-    .style("stroke-width",  0.75/scale); // scale stroke-width;
+    .style("stroke-width",  1/scale); // scale stroke-width;
 }
 
 // on zoom out
@@ -68,7 +68,7 @@ function resetState() {
   d3.selectAll('.state')
     .transition()
     .duration(750)
-    .style("stroke-width", null); // use null to get back to CSS
+    .style("stroke-width", 1); // use null to get back to CSS
 }
 
 // on mouseover
