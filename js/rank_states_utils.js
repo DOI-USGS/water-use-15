@@ -81,14 +81,6 @@ var dragStates = ["ID","OK","MI"];
   
     function dragstarted(d) {
       /*d3.select(this).raise().classed("active", true); SLOW? RESET d.x?
-      var thisTransform = d3.select(this).attr("transform");
-      if (thisTransform !== null){
-        var regExp = /\(([^)]+)\)/;
-        var matches = regExp.exec(thisTransform);
-        d.x = matches[1].split(',')[0];
-        d.y = matches[1].split(',')[1];
-        console.log(d.y);
-      }
       */
     }
 
@@ -97,7 +89,9 @@ var dragStates = ["ID","OK","MI"];
     }
 
     function dragended(d) {
-      d3.select(this).classed("active", false);
+      d3.select(this).classed("active", false)
+        .transition().duration(600)
+          .attr('transform','translate(0,0)'); 
       d.x = 0;
       d.y = 0;
     }
