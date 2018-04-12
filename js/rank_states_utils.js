@@ -53,35 +53,68 @@ var dragStates = ["ID","OK","MI"];
       .on("drag", dragging)
       .on("end", dragdone));
     
-  var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":180, "abrv":'MI', "open":true}, {"wu":210, "abrv":'ID', "open":true}];
+  var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "open":false}, {"wu":180, "abrv":'MI', "open":true}, 
+    {"wu":210, "abrv":'ID', "open":true}, {"wu":260, "abrv":'TX', "open":false}, {"wu":310, "abrv":'CA', "open":false}];
   
-  svgStates.select('#ranked-states-bars')
-    .selectAll('rect')
+  var barGroups = svgStates.select('#ranked-states-bars')
+    .selectAll('g')
     .data(bardata)
     .enter()
-    .append('rect')
-    .attr('x', function(d, i){
-      return 500+i*30;
-    })
+    .append('g')
+    .attr('transform', function(d, i){
+      return 'translate(' + (500 + i *30) + "," + (280-d.wu) + ")";
+    });
+  
+  barGroups.append('text')
     .attr('y', function(d){
-      return 280-d.wu;
+      return d.wu;
     })
+    .classed('bar-name',true)
+    .classed('open-bar-name', function(d){
+      return d.open;
+    })
+    .attr('dy',"1em")
+    .text(function(d){
+      return d.abrv;
+    });
+  
+  barGroups.append('rect')
     .attr('height', function(d){
       return d.wu;
     })
     .attr('width','20')
     .style("stroke-dasharray","4, 2")
-    .classed('open-rank-bar', true)
+    .classed('open-rank-bar', function(d){
+      return d.open;
+    })
+    .classed('closed-rank-bar', function(d){
+      return !d.open;
+    })
+    .style('fill', function(d){
+      if (!d.open){
+        return categoryToColor("total");
+      } else {
+        null;
+      }
+    })
     .on('mouseover', function(d){
-      d3.select(this)
-        .style("stroke-dasharray",null)
-        .classed('chosen-rank-bar',true)
-        .style("fill", categoryToColor("total"));
+      if (d.open){
+        d3.select(this)
+          .style("stroke-dasharray",null)
+          .classed('chosen-rank-bar',true)
+          .style("fill", categoryToColor("total"));
+      } else {
+        null;
+      }
       })
     .on('mouseout', function(d){
-      d3.select(this)
-        .style("stroke-dasharray","4, 2")
-        .classed('chosen-rank-bar',false);
+      if (d.open){
+        d3.select(this)
+          .style("stroke-dasharray","4, 2")
+          .classed('chosen-rank-bar',false);
+        } else {
+          null;
+        }
       });
   
     function dragging(d) {
@@ -99,6 +132,8 @@ var dragStates = ["ID","OK","MI"];
           .on('mouseover', null)
           .on('mouseout', null)
           .attr('class','closed-rank-bar');
+        d3.select(barchoice.node().parentNode).select('text')
+          .classed('open-bar-name',false);
         d3.select(this)
           .transition().duration(600)
             .attr('opacity', 0); 
