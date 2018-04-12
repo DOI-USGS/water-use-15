@@ -54,12 +54,22 @@ var dragStates = ["ID","OK","MI"];
       .on("drag", dragged)
       .on("end", dragended));
     
+  var bardata = [80, 180, 210];
   
-  
-  svgStates.select('#ranked-states-bars').append('rect')
-    .attr('x','500')
-    .attr('y','80')
-    .attr('height','200')
+  svgStates.select('#ranked-states-bars')
+    .selectAll( 'rect' )
+    .data(bardata)
+    .enter()
+    .append('rect')
+    .attr('x', function(d, i){
+      return 500+i*30;
+    })
+    .attr('y', function(d){
+      return 280-d;
+    })
+    .attr('height', function(d){
+      return d;
+    })
     .attr('width','20')
     .style("stroke","rgb(190,190,190)")
     .style("stroke-dasharray","10, 10")
@@ -70,11 +80,13 @@ var dragStates = ["ID","OK","MI"];
       d3.select(this)
         .style("stroke-dasharray",null)
         .style("fill-opacity", null)
+        .classed('chosen-bar',true)
         .style("fill", categoryToColor("total"));
       })
     .on('mouseout', function(d){
       d3.select(this)
         .style("stroke-dasharray","10, 10")
+        .classed('chosen-bar',false)
         .style("fill-opacity", "0")
         .style("fill", "white");
       });
@@ -89,9 +101,21 @@ var dragStates = ["ID","OK","MI"];
     }
 
     function dragended(d) {
-      d3.select(this).classed("active", false)
+      var barchoice = d3.select('.chosen-bar');
+      if (barchoice.empty()){
+        d3.select(this).classed("active", false)
         .transition().duration(600)
           .attr('transform','translate(0,0)'); 
+      } else {
+        barchoice.style('fill','orange')
+          .on('mouseover', null)
+          .on('mouseout', null)
+          .classed('chosen-bar',null);
+        d3.select(this).classed("active", false)
+        .transition().duration(600)
+          .attr('opacity', 0); 
+      }
+      
       d.x = 0;
       d.y = 0;
     }
