@@ -85,6 +85,9 @@ function prepareMap() {
   map.append('g').attr('id', 'county-bounds');
   map.append('g').attr('id', 'state-bounds');
   map.append('g').attr('id', 'wu-circles');
+  /* creating "defs" which is where we can put things that the browser doesn't render, 
+  but can be used in parts of the svg that are rendered (e.g., <use/>) */
+  map.append('defs').append('g').attr('id', 'state-bounds-defs');
   
   // add watermark
   addWatermark();
