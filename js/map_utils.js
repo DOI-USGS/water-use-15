@@ -90,8 +90,8 @@ function updateView(newView, fireAnalytics) {
   // determine the center point and scaling for the new view
   var x, y;
   if(activeView === 'USA') {
-    x = chart_width / 2;
-    y = chart_height / 2;
+    x = waterUseViz.dims.map.width / 2;
+    y = waterUseViz.dims.map.height / 2;
     zoom_scale = 1;
   } else {
     var stateGeom, centroid, x0, y0, x1, y1, stateDims;
@@ -161,14 +161,15 @@ function updateView(newView, fireAnalytics) {
   map.transition()
     .duration(750)
     .attr('transform',
-      "translate(" + chart_width / 2 + "," + chart_height / 2 + ")"+
+      "translate(" + waterUseViz.dims.map.width / 2 + "," + waterUseViz.dims.map.height / 2 + ")"+
       "scale(" + zoom_scale + ")" +
-      "translate(" + -x + "," + -y + ")");
-  // don't need timeout for view change   
+      "translate(" + (waterUseViz.dims.map.x0/zoom_scale - x) + "," + -y + ")");
+      
+  // record the change for analytics. don't need timeout for view change   
   if(fireAnalytics) {
     gtag('event', 'update view', {
-  'event_category': 'figure',
-  'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
+      'event_category': 'figure',
+      'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
     });
   }    
 }
@@ -188,6 +189,7 @@ function updateCategory(category, prevCategory) {
 
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
+    updateButtons(category);
     updateCircles(category);
     documentCategorySwitch(category, prevCategory, action);
   }
@@ -200,9 +202,10 @@ function documentCategorySwitch(category, prevCategory, action) {
     clearTimeout(updateCategoryTimer);
   }
   updateCategoryTimer = setTimeout(function(){
-     gtag('event', action + ' update category', {
-  'event_category': 'figure',
-  'event_label': category + '; from='+ prevCategory + '; view=' + activeView });
+    gtag('event', action + ' update category', {
+      'event_category': 'figure',
+      'event_label': category + '; from='+ prevCategory + '; view=' + activeView
+    });
   }, updateCategoryDelay);
 }
 
