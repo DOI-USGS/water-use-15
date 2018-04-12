@@ -4,13 +4,15 @@ var svgStates = d3.select("#rank-states-interactive")
   .attr('viewBox', '0 0 1000 300')
   .attr('preserveAspectRatio', 'xMidYMid');
 
-svgStates.append('g')
-  .attr('id','ranked-states-moved')
+var stateMap = svgStates.append('g')
+  .attr('id','ranked-states-map')
   .attr('transform',"scale(0.4)");
 
-svgStates.append('g')
-  .attr('id','ranked-states-dragable')
-  .attr('transform',"scale(0.4)");
+stateMap.append('g')
+  .attr('id','ranked-states-moved');
+
+stateMap.append('g')
+  .attr('id','ranked-states-dragable');
   
 svgStates.append('g')
   .attr('id','ranked-states-bars');
@@ -26,10 +28,8 @@ var dragStates = ["ID","OK","MI"];
     .data(movedStates)
     .enter()
     .append('use')
-    .style("fill","rgb(240,240,240)")
-    .style("stroke","rgb(190,190,190)")
-    .style("stroke-dasharray","10, 10")
-    .style("stroke-width","4")
+    .style('stroke-dasharray',"10, 10")
+    .classed('moved-state', true)
     .attr('xlink:href', function(d) {
       return '#'+ d +'-pattern';
     });
@@ -50,14 +50,13 @@ var dragStates = ["ID","OK","MI"];
     })
     .datum({x: 0, y: 0})
     .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended));
+      .on("drag", dragging)
+      .on("end", dragdone));
     
-  var bardata = [80, 180, 210];
+  var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":180, "abrv":'MI', "open":true}, {"wu":210, "abrv":'ID', "open":true}];
   
   svgStates.select('#ranked-states-bars')
-    .selectAll( 'rect' )
+    .selectAll('rect')
     .data(bardata)
     .enter()
     .append('rect')
@@ -65,57 +64,45 @@ var dragStates = ["ID","OK","MI"];
       return 500+i*30;
     })
     .attr('y', function(d){
-      return 280-d;
+      return 280-d.wu;
     })
     .attr('height', function(d){
-      return d;
+      return d.wu;
     })
     .attr('width','20')
-    .style("stroke","rgb(190,190,190)")
-    .style("stroke-dasharray","10, 10")
-    .style("fill", "white")
-    .style("fill-opacity", "0")
-    .attr('id','test-rect')
+    .style("stroke-dasharray","4, 2")
+    .classed('open-rank-bar', true)
     .on('mouseover', function(d){
       d3.select(this)
         .style("stroke-dasharray",null)
-        .style("fill-opacity", null)
-        .classed('chosen-bar',true)
+        .classed('chosen-rank-bar',true)
         .style("fill", categoryToColor("total"));
       })
     .on('mouseout', function(d){
       d3.select(this)
-        .style("stroke-dasharray","10, 10")
-        .classed('chosen-bar',false)
-        .style("fill-opacity", "0")
-        .style("fill", "white");
+        .style("stroke-dasharray","4, 2")
+        .classed('chosen-rank-bar',false);
       });
   
-    function dragstarted(d) {
-      /*d3.select(this).raise().classed("active", true); SLOW? RESET d.x?
-      */
-    }
-
-    function dragged(d) {
+    function dragging(d) {
       d3.select(this).attr("transform", "translate(" + (d.x = d3.event.x) + "," + (d.y = d3.event.y) + ")");
     }
 
-    function dragended(d) {
-      var barchoice = d3.select('.chosen-bar');
+    function dragdone(d) {
+      var barchoice = d3.select('.chosen-rank-bar');
       if (barchoice.empty()){
-        d3.select(this).classed("active", false)
-        .transition().duration(600)
-          .attr('transform','translate(0,0)'); 
+        d3.select(this)
+          .transition().duration(600)
+            .attr('transform','translate(0,0)'); 
       } else {
-        barchoice.style('fill','orange')
+        barchoice
           .on('mouseover', null)
           .on('mouseout', null)
-          .classed('chosen-bar',null);
-        d3.select(this).classed("active", false)
-        .transition().duration(600)
-          .attr('opacity', 0); 
+          .attr('class','closed-rank-bar');
+        d3.select(this)
+          .transition().duration(600)
+            .attr('opacity', 0); 
       }
-      
       d.x = 0;
       d.y = 0;
     }
