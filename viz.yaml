@@ -215,6 +215,8 @@ publish:
       hashes: "url_hashes"
       projection: "custom_projection"
       styles: "styles"
+      buttons: buttons
+      resize: resize
       map_utils: "map_utils"
       watermark_utils: "watermark_utils"
       map_circles: map_circles
@@ -230,8 +232,8 @@ publish:
       wu_data_15_range:  "wu_data_15_range_json"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states", "map_counties",
-                  "watermark_utils", "map_circles", "dropdown_selector"]
+                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
       sections: ["social", "mobile_map_ui", "map", "directions_text", "key_stories"] # adding header and footer here, doubled each on the page
   -
     id: topojson
@@ -265,6 +267,14 @@ publish:
   -
     id: national_pie
     location: "js/national_pie.js"
+    mimetype: application/javascript
+  -
+    id: resize
+    location: "js/resize.js"
+    mimetype: application/javascript
+  -
+    id: buttons
+    location: "js/buttons.js"
     mimetype: application/javascript
   -
     id: watermark_utils
@@ -307,14 +317,14 @@ publish:
     publisher: header
     depends: "lib-header-css"
     context:
-      title: "Water use in the U.S."
+      title: "Water use in the U.S., 2015"
   -
     id: static_story_figure
     location: "images/WU_stories_static.png"
     mimetype: image/png
     export: true
-    title: "water use in the U.S."
-    alttext: "water use in the U.S."
+    title: "a static story"
+    alttext: "a static story"
     relpath: "images/WU_stories_static.png"
   -
     id: rank_states_plot
@@ -378,6 +388,8 @@ publish:
       hashes: url_hashes
       projection: custom_projection
       styles: styles
+      buttons: buttons
+      resize: resize
       map_utils: map_utils
       watermark_utils: watermark_utils
       map_circles: map_circles
@@ -394,8 +406,8 @@ publish:
       wu_data_15_range:  wu_data_15_range_json
     context:
       resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "styles", "map_utils", "map_states",
-                  "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
+                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
       embed: ["map","directions_text"]
   -
     id: directions_text

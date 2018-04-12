@@ -1,14 +1,43 @@
-// Width and height
-var chart_width     =   1000;
-var chart_height    =   700;
+// Define one big global to eventually rule them all.
+// null values are placeholders for globals that will be filled in
+var waterUseViz = {
+  dims: {
+    map: {
+      width: 1000,
+      height: 700
+    },
+    buttonBox: {
+      widthDesktop: 250,
+      heightDesktop: 250,
+      width: null,
+      height: null
+    },
+    svg: {
+      width: null,
+      height: null
+    },
+    watermark: {
+      width: null,
+      height: null
+    }
+  },
+  elements: {
+    //svg: null,
+    //map: null,
+    buttonBox: null
+  }
+};
 
-// define categories
+// Globals not yet in waterUseViz
+var activeView, activeCategory, prevCategory;
+var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
+var countyBoundsZoom = new Map();
 var categories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
 
 // Projection
 var projection = albersUsaTerritories()
   .scale([1200])
-  .translate([chart_width / 2, chart_height / 2]);
+  .translate([waterUseViz.dims.map.width / 2, waterUseViz.dims.map.height / 2]);
   // default is .rotate([96,0]) to center on US (we want this)
     
 var buildPath = d3.geoPath()
@@ -17,20 +46,21 @@ var buildPath = d3.geoPath()
 // circle scale
 var scaleCircles = d3.scaleSqrt()
   .range([0, 15]);
+  
+/** Get user view preferences **/
+
+readHashes();
+  
+/** Add major svg elements and then set their sizes **/
     
 // Create container
 var container = d3.select('body')
   .append('div')
   .classed('svg-container', true);
 
-// Setup tooltips
-var tooltipDiv = d3.select("body").append("div")
-  .classed("tooltip hidden", true);
-
 // Create SVG and map
 var svg = d3.select(".svg-container")
   .append("svg")
-  .attr('viewBox', '0 0 ' + chart_width + ' ' + chart_height + '')
   .attr('preserveAspectRatio', 'xMidYMid');
 
 var map = svg.append("g")
@@ -38,18 +68,24 @@ var map = svg.append("g")
 
 var mapBackground = map.append("rect")
   .attr("id", "map-background")
-  .attr("width", chart_width)
-  .attr("height", chart_height)
   .on('click', zoomToFromState);
 
-// Globals
-var activeView, activeCategory, prevCategory;
-var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
-var countyBoundsZoom = new Map();
+addButtons(); // sets waterUseViz.elements.buttonBox
 
-// Set up some map info and map elements so we're ready to add data piece by piece
-readHashes();
+var watermark = addWatermark();
+
+// Set sizes once now and plan to resize anytime the user resizes their window
+resize();
+d3.select(window).on('resize', resize); 
+
+/** Add major map-specific elements **/
+
+// Set up some map elements so we're ready to add data piece by piece
 prepareMap();
+
+// Set up tooltips
+var tooltipDiv = d3.select("body").append("div")
+  .classed("tooltip hidden", true);
 
 // Read data and add to map
 d3.queue()
@@ -57,10 +93,6 @@ d3.queue()
   .defer(d3.tsv, "data/county_centroids_wu.tsv")
   .defer(d3.json, "data/wu_data_15_range.json")
   .await(fillMap);
-
-// Add buttons  
-addButtons();
-
 
 /** Functions **/
 
@@ -85,9 +117,6 @@ function prepareMap() {
   map.append('g').attr('id', 'county-bounds');
   map.append('g').attr('id', 'state-bounds');
   map.append('g').attr('id', 'wu-circles');
-  
-  // add watermark
-  addWatermark();
 
   /** Initialize URL **/
   
@@ -137,34 +166,4 @@ function fillMap() {
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   updateCounties('USA');
-}
-
-function addButtons() {
-  var buttonContainer = d3.select('.svg-container')
-    .append('div')
-    .attr('id', 'button-container');
-    
-  buttonContainer.append('div')
-    .classed('select-arrowbox', true);
-    
-  d3.select('#button-container')
-    .selectAll('button')
-    .data(categories)
-    .enter()
-    .append('button')
-    .text(function(d){
-      return categoryToName(d);
-    })
-    .attr('class', function(d){
-      return d;
-    })
-    .on('click', function(d){
-      updateCategory(d.toLowerCase(), activeCategory);
-    })
-    .on('mouseover', function(d){
-      showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
-    })
-    .on('mouseout', function(d){
-      showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
-    });
 }
