@@ -12,29 +12,29 @@ stateMap.append('g')
   .attr('id','ranked-states-moved');
 
 stateMap.append('g')
-  .attr('id','ranked-states-dragable');
+  .attr('id','ranked-states-draggable');
   
 svgStates.append('g')
   .attr('id','ranked-states-bars');
   
   
-var movedStates = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","PR","VI"];
+var staticStates = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","PR","VI"];
 
 var dragStates = ["ID","OK","MI"];
 
 // add states
   svgStates.select('#ranked-states-moved')
     .selectAll( 'use' )
-    .data(movedStates)
+    .data(staticStates)
     .enter()
     .append('use')
     .style('stroke-dasharray',"10, 10")
-    .classed('moved-state', true)
+    .classed('static-state', true)
     .attr('xlink:href', function(d) {
       return '#'+ d +'-pattern';
     });
   
-  svgStates.select('#ranked-states-dragable')
+  svgStates.select('#ranked-states-draggable')
     .selectAll( 'use' )
     .data(dragStates)
     .enter()
@@ -93,8 +93,6 @@ var dragStates = ["ID","OK","MI"];
     .style('fill', function(d){
       if (!d.open){
         return categoryToColor("total");
-      } else {
-        null;
       }
     })
     .on('mouseover', function(d){
@@ -103,8 +101,6 @@ var dragStates = ["ID","OK","MI"];
           .style("stroke-dasharray",null)
           .classed('chosen-rank-bar',true)
           .style("fill", categoryToColor("total"));
-      } else {
-        null;
       }
       })
     .on('mouseout', function(d){
@@ -112,13 +108,11 @@ var dragStates = ["ID","OK","MI"];
         d3.select(this)
           .style("stroke-dasharray","4, 2")
           .classed('chosen-rank-bar',false);
-        } else {
-          null;
-        }
+        } 
       });
   
     function dragging(d) {
-      d3.select(this).attr("transform", "translate(" + (d.x = d3.event.x) + "," + (d.y = d3.event.y) + ")");
+      d3.select(this).attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
     }
 
     function dragdone(d) {
@@ -138,7 +132,5 @@ var dragStates = ["ID","OK","MI"];
           .transition().duration(600)
             .attr('opacity', 0); 
       }
-      d.x = 0;
-      d.y = 0;
     }
     

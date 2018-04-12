@@ -32,7 +32,7 @@
   fill: rgb(240,240,240);
 } 
 
-.moved-state {
+.static-state {
   fill: rgb(240,240,240);
   stroke: rgb(190,190,190);
   stroke-width: 4;
