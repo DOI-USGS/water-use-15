@@ -44,7 +44,7 @@ function zoomToFromState(data) {
   var clickedView = d3.select(this).attr('id'); // need this in order to use background
   
   if( clickedView !== 'map-background' ) {
-    // id of selection is a county code, but need to extract the state abbreviation from it
+    // need to extract the state abbreviation from either county or state polygon
     clickedView = d3.select(this).data()[0].properties.STATE_ABBV;
   }
   
@@ -71,8 +71,13 @@ function updateView(newView, fireAnalytics) {
   oldView = activeView;
   activeView = newView;
   
+  // set hash and set category selectors (will see on mobile)
   setHash('view', activeView);
-
+  if(d3.select(".view-select").selectAll("option").data().length > 1) {
+    // only update the selector if they've been added already
+    updateStateSelector(activeView);
+  } 
+  
   // determine the center point and scaling for the new view
   var x, y;
   if(activeView === 'USA') {
