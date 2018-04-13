@@ -81,7 +81,9 @@ function updateStateSelector(view) {
     });
     
   // update the available options
-  addCountyOptions(view);
+  if(view !== "USA") {
+    addCountyOptions(view);
+  }
 }
 
 function addCountyOptions(selectedView) {
