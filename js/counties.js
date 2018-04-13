@@ -119,7 +119,31 @@ function displayCountyBounds(error, activeCountyData) {
         unhighlightCircle();
         hideToolTip();
       })
-      .on('click', zoomToFromState);
+      .on('click', function(d) {
+        
+        // clicking a county on mobile has no affect on the 
+        // view unless it's the same county as last time
+        if(waterUseViz.mode === "mobile") {
+          
+          var prevCounty = waterUseViz.prevClickCounty;
+          var thisCountyID = d3.select(this).attr("id");
+          if(prevCounty === thisCountyID) {
+            
+            //only zoom out if you click on the same county 
+            zoomToFromState(d, d3.select(this));
+            
+            // hide on any zoom bc no county will be selected
+            unhighlightCounty();
+            unhighlightCircle();
+            hideToolTip(); 
+          }
+          // set prevClickCounty as global var for next click
+          waterUseViz.prevClickCounty = thisCountyID;
+        } else {
+          // desktop county clicks zoom in and out
+          zoomToFromState(d, d3.select(this));
+        }
+      });
     
     // update
     countyBounds

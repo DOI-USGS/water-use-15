@@ -45,15 +45,21 @@ function addStates(map, stateBounds) {
 }
 
 // on click
-function zoomToFromState(data) {
-
+function zoomToFromState(d, selection = null) {
+  
+  if(typeof selection === "number") { // because `i` is defaulted
+    // couldn't rely on this when I changed from `.on("click", zoomToFromState)`
+    // to `.on("click", function(d) { zoomToFromState(); })`
+    selection = d3.select(this);
+  } 
+  
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  var clickedView = d3.select(this).attr('id'); // need this in order to use background
+  var clickedView = selection.attr('id'); // need this in order to use background
   
   if( clickedView !== 'map-background' ) {
     // need to extract the state abbreviation from either county or state polygon
-    clickedView = d3.select(this).data()[0].properties.STATE_ABBV;
+    clickedView = selection.data()[0].properties.STATE_ABBV;
   }
   
   // determine the new view
