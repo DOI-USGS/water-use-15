@@ -8,18 +8,33 @@ var zoom_scale;
 function addStates(map, stateBounds) {
 
   // add states
-  map.select('#state-bounds')
+  map.select('#state-bounds-lowres')
     .selectAll( 'path' )
     .data(stateBounds.features, function(d) {
       return d.properties.STATE_ABBV;
     })
     .enter()
     .append('path')
+    .attr('id', function(d) {
+      return d.properties.STATE_ABBV+'-lowres';
+    })
+    .attr('d', buildPath);
+    
+  // add states
+  map.select('#state-bounds')
+    .selectAll( 'use' )
+    .data(stateBounds.features, function(d) {
+      return d.properties.STATE_ABBV;
+    })
+    .enter()
+    .append('use')
     .classed('state', true)
     .attr('id', function(d) {
       return d.properties.STATE_ABBV;
     })
-    .attr('d', buildPath);
+    .attr('xlink:href', function(d) {
+      return '#'+d.properties.STATE_ABBV+'-lowres';
+    });
 
   var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
