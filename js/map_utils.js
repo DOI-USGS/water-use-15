@@ -20,7 +20,8 @@ function addStates(map, stateBounds) {
     .attr('id', function(d) {
       return d.properties.STATE_ABBV;
     })
-    .attr('d', buildPath);
+    .attr('d', buildPath)
+    .on('click', zoomToFromState);
 
   var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
