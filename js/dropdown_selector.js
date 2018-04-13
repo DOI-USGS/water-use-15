@@ -37,7 +37,7 @@ function updateZoomOutButton(view) {
   }
 }
 
-function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
+function updateViewSelectorOptions(view, stateBounds) {
   
   var viewMenu = d3.select("body")
         .select(".view-select")
@@ -53,10 +53,7 @@ function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
           unhighlightCounty();
           unhighlightCircle();
           
-          // filter to correct county data then update dropdowns
-          var stateCountyData = countyCentroids
-            .filter(function(d) { return d.STATE_ABBV === selectedView; });
-          updateCountySelectorOptions(stateCountyData);
+          addCountyOptions(selectedView);
           
         });
   
@@ -82,6 +79,18 @@ function updateStateSelector(view) {
     .property("selected", function(d) {
       return d.properties.STATE_ABBV === view; 
     });
+    
+  // update the available options
+  addCountyOptions(view);
+}
+
+function addCountyOptions(selectedView) {
+  //uses global variable, `countyCentroids`
+  
+  // filter to correct county data then update dropdowns
+  var stateCountyData = countyCentroids
+    .filter(function(d) { return d.STATE_ABBV === selectedView; });
+  updateCountySelectorOptions(stateCountyData);
 }
 
 function updateCountySelectorOptions(countyData) {
