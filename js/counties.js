@@ -110,7 +110,7 @@ function displayCountyBounds(error, activeCountyData) {
       .on("mouseover", function(d) {
         highlightCounty(d3.select(this)); 
         highlightCircle(d.properties, activeCategory);
-        showToolTip(d, activeCategory); 
+        showToolTip(d.properties, activeCategory); 
         // OK to use global var activeCategory which only changes on click 
         // because people won't be able to hover on tooltips at the same time as hovering buttons
       })
@@ -136,7 +136,9 @@ function displayCountyBounds(error, activeCountyData) {
             unhighlightCounty();
             unhighlightCircle();
             hideToolTip(); 
-          }
+          } else {
+            updateCountySelector(thisCountyID);
+          }          
           // set prevClickCounty as global var for next click
           waterUseViz.prevClickCounty = thisCountyID;
         } else {

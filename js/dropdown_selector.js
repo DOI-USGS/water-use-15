@@ -96,7 +96,7 @@ function addCountyOptions(selectedView) {
 }
 
 function updateCountySelectorOptions(countyData) {
-  
+  console.log("counties added");
   var countyMenu = d3.select("body")
         .select(".county-select")
         .attr("id", "county-menu")
@@ -105,18 +105,22 @@ function updateCountySelectorOptions(countyData) {
           // start by resetting what is highlighted
           unhighlightCounty();
           unhighlightCircle();
+          hideToolTip();
           
           var menu = document.getElementById("county-menu");
           var thisCountyGEOID = menu.options[menu.selectedIndex].value;
           
           if(thisCountyGEOID != "Select County") {
-            
             var thisCountySel = d3.selectAll('.county')
                   .filter(function(d) { return d.properties.GEOID === thisCountyGEOID; });
             var thisCountyData = countyData.filter(function(d) { return d.GEOID === thisCountyGEOID; })[0];
             
             highlightCounty(thisCountySel);
             highlightCircle(thisCountyData, activeCategory);
+            showToolTip(thisCountyData, activeCategory);
+            
+            // set prevClickCounty as global var for next click
+            waterUseViz.prevClickCounty = thisCountyGEOID;
           }
           
           console.log("this will also update the data in the category legend");
@@ -164,7 +168,22 @@ function updateCountySelectorDropdown(view) {
   }
 }
 
+function updateCountySelector(countyGeoid) {
+  
+  d3.select("body")
+    .select(".county-select")
+    .selectAll("option")
+      .property("selected", function(d,i) {
+        if(i === 0) { // skip over "--Select County--" because d is undefined
+          return false;
+        } else {
+          return d.GEOID === countyGeoid; 
+        }
+      });
+}
+
 function resetCountySelector() {
+    
   d3.select("body")
     .select(".county-select")
     .selectAll("option")

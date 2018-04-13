@@ -11,7 +11,6 @@ function addStates(map, stateBounds) {
   var clickClass = "state-click-off"; // default to desktop
   if(waterUseViz.mode === "mobile") {
     clickClass = "state-click-on";
-    console.log(waterUseViz.mode);
   }
   
   // add states
@@ -224,17 +223,17 @@ function showToolTip(d, category) {
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
-    .html(d.properties.COUNTY + ", " + d.properties.STATE_ABBV + "<br/>" + 
-            "Population: " + d.properties.countypop + "<br/>" +
+    .html(d.COUNTY + ", " + d.STATE_ABBV + "<br/>" + 
+            "Population: " + d.countypop + "<br/>" +
             categoryToName(category) + ": " + 
-              d.properties[[category]] + " " + "MGD");
+              d[[category]] + " " + "MGD");
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
   }
   toolTipTimer = setTimeout(function(){
      gtag('event', 'hover', {
   'event_category': 'figure',
-  'event_label': d.properties.COUNTY + ", " + d.properties.STATE_ABBV + '; category=' + category + '; view=' + activeView});
+  'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView});
   }, toolTipDelay);
 }
 
