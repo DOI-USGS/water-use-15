@@ -26,5 +26,6 @@ function updateStateBounds(error, stateBounds) {
     .data(stateBounds.features, function(d) {
       return d.properties.STATE_ABBV;
     })
-    .attr('d', buildPath);  
+    .attr('d', buildPath)
+    .on('click', zoomToFromState); //only clicks on mobile because of pointer-events
 }

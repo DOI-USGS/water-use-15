@@ -8,7 +8,16 @@
   stroke: rgb(180,180,180);
   stroke-linejoin: round;
   stroke-linecap: round;
+}
+
+.state-desktop {
   pointer-events: none;
+}
+
+.state-mobile {
+  fill: white;
+  fill-opacity: 0;
+  pointer-events: fill;
 }
 
 .county {

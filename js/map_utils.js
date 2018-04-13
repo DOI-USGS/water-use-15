@@ -16,6 +16,7 @@ function addStates(map, stateBounds) {
     .enter()
     .append('path')
     .classed('state', true)
+    .classed('state-'+waterUseViz.mode, true) // changes pointer events depending on mobile or desktop
     .attr('id', function(d) {
       return d.properties.STATE_ABBV;
     })
