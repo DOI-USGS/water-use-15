@@ -68,16 +68,20 @@ function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
       .property("value", function(d) { return d.properties.STATE_ABBV; })
       .text(function(d) { return d.properties.STATE_NAME; });
         
-  // change default selection if view is different from USA on load
-  if(view !== "USA") {
-    viewOptions.property("selected", function(d){ 
-        return d.properties.STATE_ABBV === view; 
-      });
-  }
+  // make sure default selection matches view (esp if different from USA on load)
+  updateStateSelector(view);
   
   // needed here in case initial view is not 'USA'
   updateCountySelectorDropdown(view);
 
+}
+
+function updateStateSelector(view) {
+  d3.select(".view-select")
+    .selectAll("option")
+    .property("selected", function(d) {
+      return d.properties.STATE_ABBV === view; 
+    });
 }
 
 function updateCountySelectorOptions(countyData) {
@@ -134,12 +138,8 @@ function updateCountySelectorOptions(countyData) {
     .insert("option", ":first-child")
       .property("value", "Select County")
       .text("--Select County--");
-      
-  countyMenu.selectAll("option")
-    .property("selected", function(d,i) {
-      // select county was just inserted into the first spot (so index 0) above
-      return i === 0; 
-    });
+  resetCountySelector();
+  
 }
 
 function updateCountySelectorDropdown(view) {
@@ -151,4 +151,14 @@ function updateCountySelectorDropdown(view) {
   } else {
     countySelectorDiv.classed("hidden", false);
   }
+}
+
+function resetCountySelector() {
+  d3.select("body")
+    .select(".county-select")
+    .selectAll("option")
+      .property("selected", function(d,i) {
+        // select county was just inserted into the first spot (so index 0) above
+        return i === 0; 
+      });
 }
