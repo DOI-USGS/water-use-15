@@ -24,11 +24,15 @@ function updateStateData(newView, callback) {
             return d.properties.STATE_ABBV+'-highres';
           })
           .attr('d', buildPath);
-        
+        // do the update to highres data
+        callback(null, 'highres');
       });
-    } 
-    // do the update to highres data
+      
+    } else {
+      // do the update to highres data
     callback(null, 'highres');
+    }
+    
   }
 }
 
