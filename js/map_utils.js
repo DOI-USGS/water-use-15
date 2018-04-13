@@ -8,7 +8,7 @@ var zoom_scale;
 function addStates(map, stateBounds) {
 
   // add states
-  map.select('#state-bounds-defs')
+  map.select('#state-bounds-lowres')
     .selectAll( 'path' )
     .data(stateBounds.features, function(d) {
       return d.properties.STATE_ABBV;
@@ -16,7 +16,7 @@ function addStates(map, stateBounds) {
     .enter()
     .append('path')
     .attr('id', function(d) {
-      return d.properties.STATE_ABBV+'-pattern';
+      return d.properties.STATE_ABBV+'-lowres';
     })
     .attr('d', buildPath);
     
@@ -33,7 +33,7 @@ function addStates(map, stateBounds) {
       return d.properties.STATE_ABBV;
     })
     .attr('xlink:href', function(d) {
-      return '#'+d.properties.STATE_ABBV+'-pattern';
+      return '#'+d.properties.STATE_ABBV+'-lowres';
     });
 
   var nationBounds = buildPath.bounds(stateBounds);

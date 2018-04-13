@@ -31,7 +31,7 @@ var dragStates = ["ID","OK","MI"];
     .style('stroke-dasharray',"10, 10")
     .classed('static-state', true)
     .attr('xlink:href', function(d) {
-      return '#'+ d +'-pattern';
+      return '#'+ d +'-lowres';
     });
   
   svgStates.select('#ranked-states-draggable')
@@ -46,7 +46,7 @@ var dragStates = ["ID","OK","MI"];
       return d + '-rank';
     })
     .attr('xlink:href', function(d) {
-      return '#'+ d +'-pattern';
+      return '#'+ d +'-lowres';
     })
     .datum({x: 0, y: 0})
     .call(d3.drag()
