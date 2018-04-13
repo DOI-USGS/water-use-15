@@ -10,11 +10,11 @@
   stroke-linecap: round;
 }
 
-.state-desktop {
+.state-click-off {
   pointer-events: none;
 }
 
-.state-mobile {
+.state-click-on {
   fill: white;
   fill-opacity: 0;
   pointer-events: fill;

@@ -7,6 +7,13 @@ var zoom_scale;
 // Create the state polygons
 function addStates(map, stateBounds) {
 
+  // changes pointer events depending on mobile or desktop
+  var clickClass = "state-click-off"; // default to desktop
+  if(waterUseViz.mode === "mobile") {
+    clickClass = "state-click-on";
+    console.log(waterUseViz.mode);
+  }
+  
   // add states
   map.select('#state-bounds')
     .selectAll( 'path' )
@@ -16,7 +23,7 @@ function addStates(map, stateBounds) {
     .enter()
     .append('path')
     .classed('state', true)
-    .classed('state-'+waterUseViz.mode, true) // changes pointer events depending on mobile or desktop
+    .classed(clickClass, true)
     .attr('id', function(d) {
       return d.properties.STATE_ABBV;
     })
