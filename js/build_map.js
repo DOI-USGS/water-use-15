@@ -159,7 +159,6 @@ function fillMap() {
   updateCircles(activeCategory);
   
   // manipulate dropdowns
-  // need to figure out how to do this for only mobile views
   updateViewSelectorOptions(activeView, stateBoundsUSA);
   addZoomOutButton(activeView);
   
