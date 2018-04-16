@@ -106,7 +106,7 @@ function addCountyOptions(selectedView) {
 }
 
 function updateCountySelectorOptions(countyData) {
-  console.log("counties added");
+  
   var countyMenu = d3.select("body")
         .select(".county-select")
         .attr("id", "county-menu")
@@ -132,8 +132,6 @@ function updateCountySelectorOptions(countyData) {
             // set prevClickCounty as global var for next click
             waterUseViz.prevClickCounty = thisCountyGEOID;
           }
-          
-          console.log("this will also update the data in the category legend");
         });
         
   // alphabetize counties
