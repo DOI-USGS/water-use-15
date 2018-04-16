@@ -53,8 +53,6 @@ function updateViewSelectorOptions(view, stateBounds) {
           unhighlightCounty();
           unhighlightCircle();
           
-          addCountyOptions(selectedView);
-          
         });
   
   // add states as options
@@ -131,11 +129,16 @@ function updateCountySelectorOptions(countyData) {
   
   // bind data to options in county dropdown menu
   var countyOptions = countyMenu
-        .selectAll("option");
+        .selectAll("option")
+          .data(countyData);
+          
+  // remove old options
+  countyOptions
+    .exit()
+      .remove();
   
   // add new options
   countyOptions
-    .data(countyData)
     .enter()
     .append("option");
   
@@ -144,11 +147,6 @@ function updateCountySelectorOptions(countyData) {
     .property("value", function(d) { return d.GEOID; })
     .text(function(d) { return d.COUNTY; });
   
-  // remove old options
-  countyOptions
-    .exit()
-      .remove();
-      
   countyMenu
     .insert("option", ":first-child")
       .property("value", "Select County")
