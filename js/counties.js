@@ -119,7 +119,7 @@ function displayCountyBounds(error, activeCountyData) {
         unhighlightCircle();
         hideToolTip();
       })
-      .on('click', function(d) {
+      .on('click', function(d,i,j) {
         
         // clicking a county on mobile has no affect on the 
         // view unless it's the same county as last time
@@ -130,7 +130,7 @@ function displayCountyBounds(error, activeCountyData) {
           if(prevCounty === thisCountyID) {
             
             //only zoom out if you click on the same county 
-            zoomToFromState(d, d3.select(this));
+            zoomToFromState(d,i,j, d3.select(this));
             
             // hide on any zoom bc no county will be selected
             unhighlightCounty();
@@ -143,7 +143,7 @@ function displayCountyBounds(error, activeCountyData) {
           waterUseViz.prevClickCounty = thisCountyID;
         } else {
           // desktop county clicks zoom in and out
-          zoomToFromState(d, d3.select(this));
+          zoomToFromState(d,i,j, d3.select(this));
         }
       });
     

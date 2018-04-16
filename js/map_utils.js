@@ -64,11 +64,16 @@ function addStates(map, stateBounds) {
 }
 
 // on click
-function zoomToFromState(d, selection) {
+function zoomToFromState(d, i, j, selection) {
   
-  if(typeof selection === "number") { // because `i` is defaulted
-    // couldn't rely on this when I changed from `.on("click", zoomToFromState)`
-    // to `.on("click", function(d) { zoomToFromState(); })`
+    // In some cases use `.on("click", zoomToFromState)` which makes first two args
+    //  default to d (data), i (index), and j (parent data). If that's the case, we 
+    //  need to explicitly select `this` here.
+    // In other cases, we had to pass `d3.select(this)` in as an argument. I am not
+    //  quite sure why. But that's why the argument `selection` is added on. In those
+    //  cases, this function is called by `zoomToFromState(d,i,d3.select(this))`
+  
+  if(typeof selection === "undefined") {
     selection = d3.select(this);
   } 
   
