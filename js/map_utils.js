@@ -159,6 +159,9 @@ function updateView(newView, fireAnalytics) {
   hideCountyLines();
   deemphasizeCounty();
   resetState();
+  unhighlightCounty();
+  unhighlightCircle();
+  hideToolTip();
   
   // change the zoom button or county dropdown based on view
   updateZoomOutButton(activeView);
