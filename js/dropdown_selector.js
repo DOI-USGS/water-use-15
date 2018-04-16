@@ -10,14 +10,6 @@ function addZoomOutButton(view) {
       
       // actually change the view
       updateView('USA');
-      
-      // change selector back to default
-      d3.select("body")
-        .select(".view-select")
-        .selectAll("option")
-        .property("selected", function(d){ 
-          return d.properties.STATE_ABBV === 'USA'; 
-        });
         
     });
   
@@ -85,8 +77,17 @@ function updateViewSelectorOptions(view, stateBounds) {
 function updateStateSelector(view) {
   d3.select(".view-select")
     .selectAll("option")
-    .property("selected", function(d) {
-      return d.properties.STATE_ABBV === view; 
+    .property("selected", function(d,i) {
+      if(view === 'USA') {
+        return i === 0; // USA option was inserted as first, so 0 index
+      } else {
+        // skip over "USA" because d is undefined
+        if(i === 0) { 
+          return false;
+        } else {
+          return d.properties.STATE_ABBV === view; 
+        }
+      }
     });
     
   // update the available options
