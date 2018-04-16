@@ -25,7 +25,8 @@ var waterUseViz = {
     //svg: null,
     //map: null,
     buttonBox: null
-  }
+  },
+  stateAbrvs: []
 };
 
 // Globals not yet in waterUseViz
@@ -152,6 +153,9 @@ function fillMap() {
   scaleCircles = scaleCircles
     .domain(rangeWateruse);
     
+  // get state abreviations into waterUseViz.stateAbrvs for later use
+  extractNames(stateBoundsUSA);  
+  
   // add the main, active map features
   addStates(map, stateBoundsUSA);
   

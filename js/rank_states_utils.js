@@ -17,44 +17,44 @@ stateMap.append('g')
 svgStates.append('g')
   .attr('id','ranked-states-bars');
   
-  
-var staticStates = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","PR","VI"];
+var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "open":false}, {"wu":180, "abrv":'MI', "open":true}, 
+    {"wu":210, "abrv":'ID', "open":true}, {"wu":260, "abrv":'TX', "open":false}, {"wu":310, "abrv":'CA', "open":false}];
 
-var dragStates = ["ID","OK","MI"];
 
 // add states
   svgStates.select('#ranked-states-moved')
     .selectAll( 'use' )
-    .data(staticStates)
+    .data(bardata)
     .enter()
     .append('use')
     .style('stroke-dasharray',"10, 10")
     .classed('static-state', true)
     .attr('xlink:href', function(d) {
-      return '#'+ d +'-lowres';
+      return '#'+ d.abrv +'-lowres';
     });
   
   svgStates.select('#ranked-states-draggable')
     .selectAll( 'use' )
-    .data(dragStates)
+    .data(bardata)
     .enter()
     .append('use')
-    .classed('draggable','true') 
-    .style("fill",categoryToColor("total"))
-    .style("stroke-dasharray",null)
-    .attr('id', function(d) {
-      return d + '-rank';
+    .filter(function(d){
+      return d.open;
     })
-    .attr('xlink:href', function(d) {
-      return '#'+ d +'-lowres';
-    })
-    .datum({x: 0, y: 0})
-    .call(d3.drag()
-      .on("drag", dragging)
-      .on("end", dragdone));
+      .classed('draggable','true') 
+      .style("fill",categoryToColor("total"))
+      .style("stroke-dasharray",null)
+      .attr('id', function(d) {
+        return d.abrv + '-rank';
+      })
+      .attr('xlink:href', function(d) {
+        return '#'+ d.abrv +'-lowres';
+      })
+      .datum({x: 0, y: 0})
+      .call(d3.drag()
+        .on("drag", dragging)
+        .on("end", dragdone));
     
-  var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "open":false}, {"wu":180, "abrv":'MI', "open":true}, 
-    {"wu":210, "abrv":'ID', "open":true}, {"wu":260, "abrv":'TX', "open":false}, {"wu":310, "abrv":'CA', "open":false}];
   
   var barGroups = svgStates.select('#ranked-states-bars')
     .selectAll('g')

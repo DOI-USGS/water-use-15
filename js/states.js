@@ -41,7 +41,7 @@ function updateStateBounds(error, resolution) {
   map.select('#state-bounds')
     .selectAll( 'use' )
     .attr('xlink:href', function(d) {
-      return '#' + d.properties.STATE_ABBV + '-' + resolution;
+      return '#' + d + '-' + resolution;
     });
 }
   
