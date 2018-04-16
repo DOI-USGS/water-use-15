@@ -10,6 +10,7 @@ function updateCounties(state) {
 // make sure we have the USA data and then
 // call the next function (make sure we have this state stored in countyBoundsZoom and then visualize)
 function loadCountyBounds(state, callback) {
+  console.log("working on", state);
   // for now let's always load the county data all at once. later we can again split
   // into single-state files if that turns out to be useful for performance.
   if(state === 'USA') {
