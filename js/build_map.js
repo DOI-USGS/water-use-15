@@ -25,7 +25,8 @@ var waterUseViz = {
     //svg: null,
     //map: null,
     buttonBox: null
-  }
+  },
+  stateAbrvs: []
 };
 
 // Globals not yet in waterUseViz
@@ -117,6 +118,11 @@ function prepareMap() {
   map.append('g').attr('id', 'county-bounds');
   map.append('g').attr('id', 'state-bounds');
   map.append('g').attr('id', 'wu-circles');
+  /* creating "defs" which is where we can put things that the browser doesn't render, 
+  but can be used in parts of the svg that are rendered (e.g., <use/>) */
+  map.append('defs').append('g').attr('id', 'state-bounds-lowres');
+  
+
 
   /** Initialize URL **/
   
@@ -147,6 +153,9 @@ function fillMap() {
   scaleCircles = scaleCircles
     .domain(rangeWateruse);
     
+  // get state abreviations into waterUseViz.stateAbrvs for later use
+  extractNames(stateBoundsUSA);  
+  
   // add the main, active map features
   addStates(map, stateBoundsUSA);
   

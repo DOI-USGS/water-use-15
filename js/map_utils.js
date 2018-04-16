@@ -4,6 +4,11 @@
 var nationDims;
 var zoom_scale;
 
+function extractNames(stateBounds) {
+  stateBounds.features.forEach(function(d) {
+     waterUseViz.stateAbrvs.push(d.properties.STATE_ABBV);
+  });
+}
 // Create the state polygons
 function addStates(map, stateBounds) {
 
@@ -14,20 +19,35 @@ function addStates(map, stateBounds) {
   }
   
   // add states
-  map.select('#state-bounds')
+  map.select('#state-bounds-lowres')
     .selectAll( 'path' )
     .data(stateBounds.features, function(d) {
       return d.properties.STATE_ABBV;
     })
     .enter()
     .append('path')
-    .classed('state', true)
-    .classed(clickClass, true)
     .attr('id', function(d) {
-      return d.properties.STATE_ABBV;
+      return d.properties.STATE_ABBV+'-lowres';
     })
     .attr('d', buildPath)
     .on('click', zoomToFromState);
+    
+  // add states
+  map.select('#state-bounds')
+    .selectAll( 'use' )
+    .data(waterUseViz.stateAbrvs, function(d) {
+      return d;
+    })
+    .enter()
+    .append('use')
+    .classed('state', true)
+    .classed(clickClass, true)
+    .attr('id', function(d) {
+      return d;
+    })
+    .attr('xlink:href', function(d) {
+      return '#' + d + '-lowres';
+    });
 
   var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
@@ -144,9 +164,9 @@ function updateView(newView, fireAnalytics) {
     var statecounties = d3.selectAll('.county')
       .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
     var otherstates = d3.selectAll('.state')
-      .filter(function(d) { return d.properties.STATE_ABBV !== activeView; });
+      .filter(function(d) { return d !== activeView; });
     var thisstate = d3.selectAll('.state')
-      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+      .filter(function(d) { return d === activeView; });
     
     showCountyLines(statecounties);
     emphasizeCounty(statecounties);

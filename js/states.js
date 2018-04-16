@@ -4,28 +4,44 @@ function updateStates(newView) {
 
 function updateStateData(newView, callback) {
   if(newView === 'USA') {
-    callback(null, stateBoundsUSA);
+    callback(null, 'lowres');
   } else {
-    if(!stateBoundsZoom) {
+    if(map.select('#state-bounds-highres').empty()) {
+      
       d3.json('data/state_boundaries_zoom.json', function(error, stateBoundsTopo) {
-        // cache the data to a global variable
+        
+        
         stateBoundsZoom = topojson.feature(stateBoundsTopo, stateBoundsTopo.objects.states);
-        // do the update
-        callback(null, stateBoundsZoom);
+        // load the data and create the state boundaries in <use>
+        d3.select('defs').append('g').attr('id', 'state-bounds-highres')
+          .selectAll('path')
+          .data(stateBoundsZoom.features, function(d) {
+            return d.properties.STATE_ABBV;
+          })
+          .enter()
+          .append('path')
+          .attr('id', function(d) {
+            return d.properties.STATE_ABBV+'-highres';
+          })
+          .attr('d', buildPath);
+        // do the update to highres data
+        callback(null, 'highres');
       });
+      
     } else {
-      // do the update
-      callback(null, stateBoundsZoom);
+      // do the update to highres data
+    callback(null, 'highres');
     }
+    
   }
 }
 
-function updateStateBounds(error, stateBounds) {
+function updateStateBounds(error, resolution) {
+  
   map.select('#state-bounds')
-    .selectAll( 'path.state' )
-    .data(stateBounds.features, function(d) {
-      return d.properties.STATE_ABBV;
-    })
-    .attr('d', buildPath)
-    .on('click', zoomToFromState); //only clicks on mobile because of pointer-events
+    .selectAll( 'use' )
+    .attr('xlink:href', function(d) {
+      return '#' + d + '-' + resolution;
+    });
 }
+  

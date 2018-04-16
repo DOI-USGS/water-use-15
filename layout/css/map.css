@@ -41,6 +41,28 @@
   fill: rgb(240,240,240);
 } 
 
+.static-state {
+  fill: rgb(240,240,240);
+  stroke: rgb(190,190,190);
+  stroke-width: 4;
+}
+
+.bar-name {
+  text-align: center;
+}
+
+.open-bar-name {
+  opacity: 0;
+}
+
+.open-rank-bar {
+  stroke: rgb(190,190,190);
+  fill-opacity: 0;
+}
+.closed-rank-bar, .chosen-rank-bar {
+  fill-opacity: 1;
+}
+
 .wu-circle {
   pointer-events: none;
   stroke-width: 0.1;
