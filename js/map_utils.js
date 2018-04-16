@@ -64,7 +64,7 @@ function addStates(map, stateBounds) {
 }
 
 // on click
-function zoomToFromState(d, selection = null) {
+function zoomToFromState(d, selection) {
   
   if(typeof selection === "number") { // because `i` is defaulted
     // couldn't rely on this when I changed from `.on("click", zoomToFromState)`
