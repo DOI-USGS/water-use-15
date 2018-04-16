@@ -57,12 +57,23 @@ function updateViewSelectorOptions(view, stateBounds) {
   
   // add states as options
   var viewOptions = viewMenu.selectAll("option")
-    .data(stateBounds.features) // ALABAMA IS CURRENTLY MISSING
+        .data(stateBounds.features);
+  
+  // add new options
+  viewOptions
     .enter()
-    .append("option")
-      .property("value", function(d) { return d.properties.STATE_ABBV; })
-      .text(function(d) { return d.properties.STATE_NAME; });
-        
+    .append("option");
+  
+  //update existing options with data (aka include the one that initially exists)
+  viewMenu.selectAll("option")
+    .property("value", function(d) { return d.properties.STATE_ABBV; })
+    .text(function(d) { return d.properties.STATE_NAME; });
+  
+  viewMenu
+    .insert("option", ":first-child")
+      .property("value", "USA")
+      .text("United States");
+     
   // make sure default selection matches view (esp if different from USA on load)
   updateStateSelector(view);
   
