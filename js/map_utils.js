@@ -29,8 +29,7 @@ function addStates(map, stateBounds) {
     .attr('id', function(d) {
       return d.properties.STATE_ABBV+'-lowres';
     })
-    .attr('d', buildPath)
-    .on('click', zoomToFromState);
+    .attr('d', buildPath);
     
   // add states
   map.select('#state-bounds')
@@ -47,7 +46,8 @@ function addStates(map, stateBounds) {
     })
     .attr('xlink:href', function(d) {
       return '#' + d + '-lowres';
-    });
+    })
+    .on('click', zoomToFromState);
 
   var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
@@ -81,8 +81,9 @@ function zoomToFromState(d, i, j, selection) {
   // could also use clickedState to set the URL, later
   var clickedView = selection.attr('id'); // need this in order to use background
   
-  if( clickedView !== 'map-background' ) {
-    // need to extract the state abbreviation from either county or state polygon
+  if( clickedView !== 'map-background' && clickedView.length > 2 ) {
+    // only do this if the clicked thing is not a state or map background
+    // need to extract the state abbreviation from the clicked county
     clickedView = selection.data()[0].properties.STATE_ABBV;
   }
   
