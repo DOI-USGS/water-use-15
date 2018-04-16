@@ -5,9 +5,9 @@ var nationDims;
 var zoom_scale;
 
 function extractNames(stateBounds) {
-  for (var i = 0, len = stateBounds.features.length; i < len; i++) {
-    waterUseViz.stateAbrvs.push(stateBounds.features[i].properties.STATE_ABBV);
-  }
+  stateBounds.features.forEach(function(d) {
+     waterUseViz.stateAbrvs.push(d.properties.STATE_ABBV);
+  });
 }
 // Create the state polygons
 function addStates(map, stateBounds) {
