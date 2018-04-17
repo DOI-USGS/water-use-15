@@ -159,6 +159,10 @@ function fillMap() {
   // add the main, active map features
   addStates(map, stateBoundsUSA);
   
+  if(activeView !== "USA") {
+    loadInitialCounties();
+  }
+  
   // add the circles
   // CIRCLES-AS-CIRCLES
   addCircles(countyCentroids);
@@ -174,4 +178,16 @@ function fillMap() {
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   updateCounties('USA');
+}
+
+function loadInitialCounties() {
+  // update the view once the county data is loaded
+  
+  function waitForCounties(error, results){
+    updateView(activeView);
+  }
+  
+  d3.queue()
+    .defer(loadCountyBounds, activeView)
+    .await(waitForCounties);
 }

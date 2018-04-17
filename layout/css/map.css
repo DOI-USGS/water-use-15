@@ -26,7 +26,7 @@
 }
 
 .show-county-bounds {
-  stroke: #bdbdbd; /* dark-ish grey */
+  stroke: #bdbdbd;
 }
 
 /* must be listed before highlighted-county*/
