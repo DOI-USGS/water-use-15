@@ -180,7 +180,8 @@ process:
     id: wu_state_data_json
     location: cache/wu_state_data.json
     mimetype: application/json
-    drag_states: ["ID","OK","MI"]
+    process_args:
+      drag_states: ["ID","OK","MI"]
     depends:
       rawdata: wu_data_15_simple
     processor: state_wu_data

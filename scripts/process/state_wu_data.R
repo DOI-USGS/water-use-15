@@ -9,7 +9,7 @@ process.state_wu_data <- function(viz) {
   wu_df_state <- dplyr::select(wu_df, STATE, total) %>%
     dplyr::group_by(STATE) %>%
     dplyr::summarise(wu = round(sum(total))) %>%
-    dplyr::mutate(open = dplyr::case_when(STATE %in% viz[["drag_states"]] ~ TRUE, TRUE ~ FALSE))%>%
+    dplyr::mutate(open = STATE %in% viz[["process_args"]][["drag_states"]])%>%
     dplyr::rename(abrv=STATE)
   
   # calculate other category value
