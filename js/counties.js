@@ -110,7 +110,7 @@ function displayCountyBounds(error, activeCountyData) {
       .on("mouseover", function(d) {
         highlightCounty(d3.select(this)); 
         highlightCircle(d.properties, activeCategory);
-        showToolTip(d, activeCategory); 
+        showToolTip(d.properties, activeCategory); 
         // OK to use global var activeCategory which only changes on click 
         // because people won't be able to hover on tooltips at the same time as hovering buttons
       })
@@ -119,7 +119,33 @@ function displayCountyBounds(error, activeCountyData) {
         unhighlightCircle();
         hideToolTip();
       })
-      .on('click', zoomToFromState);
+      .on('click', function(d,i,j) {
+        
+        // clicking a county on mobile has no affect on the 
+        // view unless it's the same county as last time
+        if(waterUseViz.mode === "mobile") {
+          
+          var prevCounty = waterUseViz.prevClickCounty;
+          var thisCountyID = d3.select(this).attr("id");
+          if(prevCounty === thisCountyID) {
+            
+            //only zoom out if you click on the same county 
+            zoomToFromState(d,i,j, d3.select(this));
+            
+            // hide on any zoom bc no county will be selected
+            unhighlightCounty();
+            unhighlightCircle();
+            hideToolTip(); 
+          } else {
+            updateCountySelector(thisCountyID);
+          }          
+          // set prevClickCounty as global var for next click
+          waterUseViz.prevClickCounty = thisCountyID;
+        } else {
+          // desktop county clicks zoom in and out
+          zoomToFromState(d,i,j, d3.select(this));
+        }
+      });
     
     // update
     countyBounds
