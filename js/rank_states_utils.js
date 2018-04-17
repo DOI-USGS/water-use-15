@@ -63,6 +63,7 @@ function rankEm() {
         .on("drag", dragging)
         .on("end", dragdone));
     
+  // add states
   
   var barGroups = svgStates.select('#ranked-states-bars')
     .selectAll('g')
@@ -145,7 +146,6 @@ function rankEm() {
 }
   
 
-// add states
 
   
 
