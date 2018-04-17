@@ -15,11 +15,11 @@ function addButtons() {
       return d;
     });
     
-  // legend title
+    // legend title
   buttonBox.append('text')
     .classed('title', true)
     .attr('id', 'legend-title')
-    .text('Water Use in XXX');
+    .text("Water use");
   
   // legend subtitle
   buttonBox.append('text')
