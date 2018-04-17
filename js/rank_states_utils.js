@@ -11,7 +11,7 @@ var svgStates = d3.select("#rank-states-interactive")
 
 var stateMap = svgStates.append('g')
   .attr('id','ranked-states-map')
-  .attr('transform',"scale(0.4)");
+  .attr('transform',"translate(-20,-20)scale(0.4)");
 
 stateMap.append('g')
   .attr('id','ranked-states-moved');
@@ -34,6 +34,18 @@ function rankEm() {
 	if (error) throw error;
 	
 	var bardata = arguments[1];
+	
+	var x = d3.scaleLinear()
+	  .range([0, rankSvg.width])
+	  .domain([0, bardata.length]);
+	
+	var barWidth = rankSvg.width / bardata.length * 0.92;
+	
+	var y = d3.scaleLinear()
+	  .range([20, rankSvg.height])
+	  .domain([0, d3.max(bardata, function(d){
+	    return d.wu;
+	  })]);
 	
 	svgStates.select('#ranked-states-moved')
     .selectAll( 'use' )
@@ -75,27 +87,30 @@ function rankEm() {
     .enter()
     .append('g')
     .attr('transform', function(d, i){
-      return 'translate(' + (500 + i *30) + "," + (280-d.wu) + ")";
+      return 'translate(' + x(i) + "," + (rankSvg.height - y(d.wu)) + ")";
     });
     
     barGroups.append('text')
     .attr('y', function(d){
-      return d.wu;
+      return y(d.wu) - 20;
     })
+    .attr('x', barWidth/2)
+    .attr('text-anchor','middle')
+    .attr('alignment-baseline','hanging')
     .classed('bar-name',true)
     .classed('open-bar-name', function(d){
       return d.open;
     })
-    .attr('dy',"1em")
+    .attr('dy',"0.33em")
     .text(function(d){
       return d.abrv;
     });
   
   barGroups.append('rect')
     .attr('height', function(d){
-      return d.wu;
+      return y(d.wu) - 20;
     })
-    .attr('width','20')
+    .attr('width', barWidth)
     .style("stroke-dasharray","4, 2")
     .classed('open-rank-bar', function(d){
       return d.open;

@@ -10,7 +10,8 @@ process.state_wu_data <- function(viz) {
     dplyr::group_by(STATE) %>%
     dplyr::summarise(wu = round(sum(total))) %>%
     dplyr::mutate(open = STATE %in% viz[["process_args"]][["drag_states"]])%>%
-    dplyr::rename(abrv=STATE)
+    dplyr::rename(abrv=STATE) %>% 
+    dplyr::arrange(wu)
   
   # calculate other category value
   
