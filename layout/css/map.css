@@ -16,10 +16,6 @@
   stroke: transparent;
 }
 
-.show-county-bounds {
-  stroke: #bdbdbd; /* dark-ish grey */
-}
-
 /* must be listed before highlighted-county*/
 /* THIS IS WHAT WILL MAKE THE ZOOMED IN STATE EMPHASIZED*/
 .emphasize-county {

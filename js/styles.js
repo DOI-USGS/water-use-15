@@ -21,9 +21,18 @@ function categoryToColor(category) {
 
 // on zoom in
 
-function showCountyLines(selection) {
+function showCountyLines(selection, scale) {
+  if(scale === undefined) {
+      scale = 1;
+   }
+  
   selection
-    .classed("show-county-bounds", true);
+    .classed("show-county-bounds", true) // used so that hideCountyLines can easily select
+    .style("stroke-width",  1/scale) // scale stroke-width
+    .transition()
+    .duration(500)
+    .style("stroke", "#bdbdbd"); // dark-ish grey
+    
 }
 function emphasizeCounty(selection) {
   selection
@@ -56,7 +65,7 @@ function backgroundState(selection, scale) {
 
 function hideCountyLines() {
   d3.selectAll('.show-county-bounds')
-    .classed("show-county-bounds", false); 
+    .style("stroke", null); // revert to stroke in .county definition
 }
 
 function deemphasizeCounty() {
