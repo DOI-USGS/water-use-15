@@ -28,10 +28,7 @@ function showCountyLines(selection, scale) {
   
   selection
     .classed("show-county-bounds", true) // used so that hideCountyLines can easily select
-    .style("stroke-width",  1/scale) // scale stroke-width
-    .transition()
-    .duration(500)
-    .style("stroke", "#bdbdbd"); // dark-ish grey
+    .style("stroke-width",  1/scale); // don't wait to scale stroke-width after lines added
     
 }
 function emphasizeCounty(selection) {
@@ -65,7 +62,7 @@ function backgroundState(selection, scale) {
 
 function hideCountyLines() {
   d3.selectAll('.show-county-bounds')
-    .style("stroke", null); // revert to stroke in .county definition
+    .classed("show-county-bounds", false); // revert to stroke in .county definition
 }
 
 function deemphasizeCounty() {
