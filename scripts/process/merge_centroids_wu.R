@@ -1,6 +1,7 @@
 process.merge_centroids_wu <- function(viz) {
   deps <- readDepends(viz)
   wu_data_15_simple <- deps[["wu_data_15_simple"]]
+  
   topo <- rgdal::readOGR(as.viz(viz$depends$topo)$location, layer=viz$process_args$layer, drop_unsupported_fields=TRUE, stringsAsFactors=FALSE) # bypass readDepends for topojson
   
   # extract the centroid coordinates into a table with GEOID
@@ -11,8 +12,9 @@ process.merge_centroids_wu <- function(viz) {
     left_join(wu_data_15_simple, by=c('GEOID'='FIPS')) %>%
     select(GEOID, STATE_ABBV, COUNTY, countypop:industrial) %>% 
     rowwise() %>% 
-    mutate(other = total - sum(thermoelectric, publicsupply, irrigation, industrial))
-  
+    mutate(other = total - sum(thermoelectric, publicsupply, irrigation, industrial)) %>%
+    mutate(total = as.integer(round(total)))
+
   # add centroid coordinates to the WU data
   county_data <- county_data %>%
     left_join(centroid_coords, by='GEOID')

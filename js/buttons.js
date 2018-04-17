@@ -51,8 +51,8 @@ function addButtons() {
   // button category use values
   buttons.append('text')
     .classed('category-amount', true)
-    .text(function(d){
-      return 'XX';
+    .attr('id', function(d){
+      return (d + "_button_text");
     })
     .style('font-weight', 'thick')
     .attr('text-anchor', 'end');

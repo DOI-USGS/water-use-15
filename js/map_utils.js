@@ -245,7 +245,35 @@ var toolTipDelay = 1000; //ms
 
 function showToolTip(d, category) {
 
-  waterUseViz.elements.buttonBox.selectAll("#legend-title").text(d.COUNTY + ", " + d.STATE_ABBV);
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#legend-title")
+    .text(d.COUNTY + ", " + d.STATE_ABBV);
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#total_button_text")
+    .text(d[["total"]]);
+    
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#publicsupply_button_text")
+    .text(d[["publicsupply"]]);
+    
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#irrigation_button_text")
+    .text(d[["irrigation"]]);
+    
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#industrial_button_text")
+    .text(d[["industrial"]]);
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#thermoelectric_button_text")
+    .text(d[["thermoelectric"]]);
 
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
@@ -258,6 +286,36 @@ function showToolTip(d, category) {
 }
 
 function hideToolTip() {
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#legend-title")
+    .text("Water Use");
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#total_button_text")
+    .text("");
+    
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#irrigation_button_text")
+    .text("");
+    
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#industrial_button_text")
+    .text("");
+    
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#thermoelectric_button_text")
+    .text("");
+    
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#publicsupply_button_text")
+    .text("");
 
   if (toolTipTimer){
       clearTimeout(toolTipTimer); // stop ga for edge states
