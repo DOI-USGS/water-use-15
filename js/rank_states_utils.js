@@ -1,7 +1,12 @@
 
+var rankSvg = {
+    width: 1000,
+    height: 300
+};
+
 var svgStates = d3.select("#rank-states-interactive")
   .append("svg")
-  .attr('viewBox', '0 0 1000 300')
+  .attr('viewBox', '0 0 '+ rankSvg.width + " " + rankSvg.height)
   .attr('preserveAspectRatio', 'xMidYMid');
 
 var stateMap = svgStates.append('g')
@@ -43,7 +48,6 @@ var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "op
     })
       .classed('draggable','true') 
       .style("fill",categoryToColor("total"))
-      .style("stroke-dasharray",null)
       .attr('id', function(d) {
         return d.abrv + '-rank';
       })
@@ -90,29 +94,12 @@ var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "op
     .classed('closed-rank-bar', function(d){
       return !d.open;
     })
-    .style('fill', function(d){
-      if (!d.open){
-        return categoryToColor("total");
-      }
-    })
-    .on('mouseover', function(d){
-      if (d.open){
-        d3.select(this)
-          .style("stroke-dasharray",null)
-          .classed('chosen-rank-bar',true)
-          .style("fill", categoryToColor("total"));
-      }
-      })
-    .on('mouseout', function(d){
-      if (d.open){
-        d3.select(this)
-          .style("stroke-dasharray","4, 2")
-          .classed('chosen-rank-bar',false);
-        } 
-      });
+    .style('fill', categoryToColor("total"));
   
     function dragging(d) {
-      d3.select(this).attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
+      var thisShape = d3.select(this);
+      thisShape.attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
+      overRankBar(thisShape.node().getBoundingClientRect());
     }
 
     function dragdone(d) {
@@ -128,9 +115,28 @@ var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "op
           .attr('class','closed-rank-bar');
         d3.select(barchoice.node().parentNode).select('text')
           .classed('open-bar-name',false);
-        d3.select(this)
-          .transition().duration(600)
-            .attr('opacity', 0); 
+        d3.select(this).style('opacity', 0)
+          .attr('transform','scale(0)'); 
       }
+      overRankBar( d3.select(this).node().getBoundingClientRect()); // one last time in cast it overlapped two rectangles
     }
     
+function overRankBar(shapeBox){
+  
+  var openBars = d3.selectAll('.open-rank-bar').nodes();
+  for (var i = 0; i < openBars.length; i++) { 
+    var thisBar = openBars[i];
+    var barBox = thisBar.getBoundingClientRect();
+    //console.log('testing overlap on bar '+bbox.right+' vs '+x);
+    var isOverBar = !(barBox.right < shapeBox.left || 
+                barBox.left > shapeBox.right || 
+                barBox.bottom < shapeBox.top || 
+                barBox.top > shapeBox.bottom);
+    if (isOverBar){
+      d3.select(thisBar).classed('chosen-rank-bar',true);
+    } else {
+      d3.select(thisBar).classed('chosen-rank-bar',false);
+    }
+  }
+  
+}
