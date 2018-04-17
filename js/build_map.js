@@ -185,11 +185,9 @@ function loadInitialCounties() {
   // update the view once the county data is loaded
   
   function waitForCounties(error, results){
-    console.log(results);
     updateView(activeView);
   }
   
-  console.log('about to start county load');
   d3.queue()
     .defer(loadCountyBounds, activeView)
     .await(waitForCounties);

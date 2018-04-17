@@ -103,8 +103,6 @@ function updateCountySelectorOptions(countyData) {
             highlightCounty(thisCountySel);
             highlightCircle(thisCountyData, activeCategory);
           }
-          
-          console.log("this will also update the data in the category legend");
         });
         
   // alphabetize counties

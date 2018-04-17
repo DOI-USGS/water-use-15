@@ -51,7 +51,6 @@ function addStates(map, stateBounds) {
   var newView = getHash('view');
   if(newView === null) { newView = 'USA'; }
   if(newView !== 'USA') {
-    console.log("zooming view");
     updateView(newView, fireAnalytics = false);
   }
 }
@@ -86,7 +85,7 @@ function updateView(newView, fireAnalytics) {
    if(fireAnalytics === undefined) {
       scale = true;
    }
-  console.log("updating view");
+  
   // update the global variable that stores the current view
   oldView = activeView;
   activeView = newView;
