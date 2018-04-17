@@ -10,14 +10,6 @@ function addZoomOutButton(view) {
       
       // actually change the view
       updateView('USA');
-      
-      // change selector back to default
-      d3.select("body")
-        .select(".view-select")
-        .selectAll("option")
-        .property("selected", function(d){ 
-          return d.properties.STATE_ABBV === 'USA'; 
-        });
         
     });
   
@@ -37,7 +29,7 @@ function updateZoomOutButton(view) {
   }
 }
 
-function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
+function updateViewSelectorOptions(view, stateBounds) {
   
   var viewMenu = d3.select("body")
         .select(".view-select")
@@ -53,31 +45,64 @@ function updateViewSelectorOptions(view, stateBounds, countyCentroids) {
           unhighlightCounty();
           unhighlightCircle();
           
-          // filter to correct county data then update dropdowns
-          var stateCountyData = countyCentroids
-            .filter(function(d) { return d.STATE_ABBV === selectedView; });
-          updateCountySelectorOptions(stateCountyData);
-          
         });
   
   // add states as options
   var viewOptions = viewMenu.selectAll("option")
-    .data(stateBounds.features) // ALABAMA IS CURRENTLY MISSING
+        .data(stateBounds.features);
+  
+  // add new options
+  viewOptions
     .enter()
-    .append("option")
-      .property("value", function(d) { return d.properties.STATE_ABBV; })
-      .text(function(d) { return d.properties.STATE_NAME; });
-        
-  // change default selection if view is different from USA on load
-  if(view !== "USA") {
-    viewOptions.property("selected", function(d){ 
-        return d.properties.STATE_ABBV === view; 
-      });
-  }
+    .append("option");
+  
+  //update existing options with data (aka include the one that initially exists)
+  viewMenu.selectAll("option")
+    .property("value", function(d) { return d.properties.STATE_ABBV; })
+    .text(function(d) { return d.properties.STATE_NAME; });
+  
+  viewMenu
+    .insert("option", ":first-child")
+      .property("value", "USA")
+      .text("United States");
+     
+  // make sure default selection matches view (esp if different from USA on load)
+  updateStateSelector(view);
   
   // needed here in case initial view is not 'USA'
   updateCountySelectorDropdown(view);
 
+}
+
+function updateStateSelector(view) {
+  d3.select(".view-select")
+    .selectAll("option")
+    .property("selected", function(d,i) {
+      if(view === 'USA') {
+        return i === 0; // USA option was inserted as first, so 0 index
+      } else {
+        // skip over "USA" because d is undefined
+        if(i === 0) { 
+          return false;
+        } else {
+          return d.properties.STATE_ABBV === view; 
+        }
+      }
+    });
+    
+  // update the available options
+  if(view !== "USA") {
+    addCountyOptions(view);
+  }
+}
+
+function addCountyOptions(selectedView) {
+  //uses global variable, `countyCentroids`
+  
+  // filter to correct county data then update dropdowns
+  var stateCountyData = countyCentroids
+    .filter(function(d) { return d.STATE_ABBV === selectedView; });
+  updateCountySelectorOptions(stateCountyData);
 }
 
 function updateCountySelectorOptions(countyData) {
@@ -90,18 +115,22 @@ function updateCountySelectorOptions(countyData) {
           // start by resetting what is highlighted
           unhighlightCounty();
           unhighlightCircle();
+          hideToolTip();
           
           var menu = document.getElementById("county-menu");
           var thisCountyGEOID = menu.options[menu.selectedIndex].value;
           
           if(thisCountyGEOID != "Select County") {
-            
             var thisCountySel = d3.selectAll('.county')
                   .filter(function(d) { return d.properties.GEOID === thisCountyGEOID; });
             var thisCountyData = countyData.filter(function(d) { return d.GEOID === thisCountyGEOID; })[0];
             
             highlightCounty(thisCountySel);
             highlightCircle(thisCountyData, activeCategory);
+            showToolTip(thisCountyData, activeCategory);
+            
+            // set prevClickCounty as global var for next click
+            waterUseViz.prevClickCounty = thisCountyGEOID;
           }
         });
         
@@ -110,11 +139,16 @@ function updateCountySelectorOptions(countyData) {
   
   // bind data to options in county dropdown menu
   var countyOptions = countyMenu
-        .selectAll("option");
+        .selectAll("option")
+          .data(countyData);
+          
+  // remove old options
+  countyOptions
+    .exit()
+      .remove();
   
   // add new options
   countyOptions
-    .data(countyData)
     .enter()
     .append("option");
   
@@ -123,21 +157,12 @@ function updateCountySelectorOptions(countyData) {
     .property("value", function(d) { return d.GEOID; })
     .text(function(d) { return d.COUNTY; });
   
-  // remove old options
-  countyOptions
-    .exit()
-      .remove();
-      
   countyMenu
     .insert("option", ":first-child")
       .property("value", "Select County")
       .text("--Select County--");
-      
-  countyMenu.selectAll("option")
-    .property("selected", function(d,i) {
-      // select county was just inserted into the first spot (so index 0) above
-      return i === 0; 
-    });
+  resetCountySelector();
+  
 }
 
 function updateCountySelectorDropdown(view) {
@@ -149,4 +174,29 @@ function updateCountySelectorDropdown(view) {
   } else {
     countySelectorDiv.classed("hidden", false);
   }
+}
+
+function updateCountySelector(countyGeoid) {
+  
+  d3.select("body")
+    .select(".county-select")
+    .selectAll("option")
+      .property("selected", function(d,i) {
+        if(i === 0) { // skip over "--Select County--" because d is undefined
+          return false;
+        } else {
+          return d.GEOID === countyGeoid; 
+        }
+      });
+}
+
+function resetCountySelector() {
+    
+  d3.select("body")
+    .select(".county-select")
+    .selectAll("option")
+      .property("selected", function(d,i) {
+        // select county was just inserted into the first spot (so index 0) above
+        return i === 0; 
+      });
 }

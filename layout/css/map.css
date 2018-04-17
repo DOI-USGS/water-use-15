@@ -8,7 +8,16 @@
   stroke: rgb(180,180,180);
   stroke-linejoin: round;
   stroke-linecap: round;
+}
+
+.state-click-off {
   pointer-events: none;
+}
+
+.state-click-on {
+  fill: white;
+  fill-opacity: 0;
+  pointer-events: fill;
 }
 
 .county {
