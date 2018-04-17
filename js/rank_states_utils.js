@@ -22,12 +22,20 @@ stateMap.append('g')
 svgStates.append('g')
   .attr('id','ranked-states-bars');
   
-var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "open":false}, {"wu":180, "abrv":'MI', "open":true}, 
-    {"wu":210, "abrv":'ID', "open":true}, {"wu":260, "abrv":'TX', "open":false}, {"wu":310, "abrv":'CA', "open":false}];
+// Read state data and add it to figure
+d3.queue()
+  .defer(d3.json, "data/wu_state_data.json")
+  .await(rankEm);
+  
+function rankEm() {
 
-
-// add states
-  svgStates.select('#ranked-states-moved')
+  // arguments[0] is the error
+	var error = arguments[0];
+	if (error) throw error;
+	
+	var bardata = arguments[1];
+	
+	svgStates.select('#ranked-states-moved')
     .selectAll( 'use' )
     .data(bardata)
     .enter()
@@ -37,8 +45,8 @@ var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "op
     .attr('xlink:href', function(d) {
       return '#'+ d.abrv +'-lowres';
     });
-  
-  svgStates.select('#ranked-states-draggable')
+    
+    svgStates.select('#ranked-states-draggable')
     .selectAll( 'use' )
     .data(bardata)
     .enter()
@@ -59,6 +67,7 @@ var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "op
         .on("drag", dragging)
         .on("end", dragdone));
     
+  // add states
   
   var barGroups = svgStates.select('#ranked-states-bars')
     .selectAll('g')
@@ -68,8 +77,8 @@ var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "op
     .attr('transform', function(d, i){
       return 'translate(' + (500 + i *30) + "," + (280-d.wu) + ")";
     });
-  
-  barGroups.append('text')
+    
+    barGroups.append('text')
     .attr('y', function(d){
       return d.wu;
     })
@@ -119,9 +128,9 @@ var bardata = [{"wu":80, "abrv":'OK', "open": true}, {"wu":140, "abrv":'WI', "op
           .attr('transform','scale(0)'); 
       }
       overRankBar( d3.select(this).node().getBoundingClientRect()); // one last time in cast it overlapped two rectangles
-    }
-    
-function overRankBar(shapeBox){
+      d3.select(this).attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
+  }
+  function overRankBar(shapeBox){
   
   var openBars = d3.selectAll('.open-rank-bar').nodes();
   for (var i = 0; i < openBars.length; i++) { 
@@ -140,3 +149,9 @@ function overRankBar(shapeBox){
   }
   
 }
+}
+
+
+  
+
+    

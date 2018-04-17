@@ -12,6 +12,12 @@ function extractNames(stateBounds) {
 // Create the state polygons
 function addStates(map, stateBounds) {
 
+  // changes pointer events depending on mobile or desktop
+  var clickClass = "state-click-off"; // default to desktop
+  if(waterUseViz.mode === "mobile") {
+    clickClass = "state-click-on";
+  }
+  
   // add states
   map.select('#state-bounds-lowres')
     .selectAll( 'path' )
@@ -34,12 +40,14 @@ function addStates(map, stateBounds) {
     .enter()
     .append('use')
     .classed('state', true)
+    .classed(clickClass, true)
     .attr('id', function(d) {
       return d;
     })
     .attr('xlink:href', function(d) {
       return '#' + d + '-lowres';
-    });
+    })
+    .on('click', zoomToFromState);
 
   var nationBounds = buildPath.bounds(stateBounds);
   nationDims = {
@@ -56,15 +64,27 @@ function addStates(map, stateBounds) {
 }
 
 // on click
-function zoomToFromState(data) {
-
+function zoomToFromState(d, i, j, selection) {
+  
+    // In some cases use `.on("click", zoomToFromState)` which makes first two args
+    //  default to d (data), i (index), and j (parent data). If that's the case, we 
+    //  need to explicitly select `this` here.
+    // In other cases, we had to pass `d3.select(this)` in as an argument. I am not
+    //  quite sure why. But that's why the argument `selection` is added on. In those
+    //  cases, this function is called by `zoomToFromState(d,i,d3.select(this))`
+  
+  if(typeof selection === "undefined") {
+    selection = d3.select(this);
+  } 
+  
   // get the ID of the state that was clicked on (or NULL if it's not an ID).
   // could also use clickedState to set the URL, later
-  var clickedView = d3.select(this).attr('id'); // need this in order to use background
+  var clickedView = selection.attr('id'); // need this in order to use background
   
-  if( clickedView !== 'map-background' ) {
-    // id of selection is a county code, but need to extract the state abbreviation from it
-    clickedView = d3.select(this).data()[0].properties.STATE_ABBV;
+  if( clickedView !== 'map-background' && clickedView.length > 2 ) {
+    // only do this if the clicked thing is not a state or map background
+    // need to extract the state abbreviation from the clicked county
+    clickedView = selection.data()[0].properties.STATE_ABBV;
   }
   
   // determine the new view
@@ -90,8 +110,13 @@ function updateView(newView, fireAnalytics) {
   oldView = activeView;
   activeView = newView;
   
+  // set hash and set category selectors (will see on mobile)
   setHash('view', activeView);
-
+  if(d3.select(".view-select").selectAll("option").data().length > 1) {
+    // only update the selector if they've been added already
+    updateStateSelector(activeView);
+  } 
+  
   // determine the center point and scaling for the new view
   var x, y;
   if(activeView === 'USA') {
@@ -134,6 +159,9 @@ function updateView(newView, fireAnalytics) {
   hideCountyLines();
   deemphasizeCounty();
   resetState();
+  unhighlightCounty();
+  unhighlightCircle();
+  hideToolTip();
   
   // change the zoom button or county dropdown based on view
   updateZoomOutButton(activeView);
@@ -224,17 +252,17 @@ function showToolTip(d, category) {
     .style("left", (d3.event.pageX + 35) + "px")
     .style("top", (d3.event.pageY - 50) + "px");
   d3.select(".tooltip")
-    .html(d.properties.COUNTY + ", " + d.properties.STATE_ABBV + "<br/>" + 
-            "Population: " + d.properties.countypop + "<br/>" +
+    .html(d.COUNTY + ", " + d.STATE_ABBV + "<br/>" + 
+            "Population: " + d.countypop + "<br/>" +
             categoryToName(category) + ": " + 
-              d.properties[[category]] + " " + "MGD");
+              d[[category]] + " " + "MGD");
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
   }
   toolTipTimer = setTimeout(function(){
      gtag('event', 'hover', {
   'event_category': 'figure',
-  'event_label': d.properties.COUNTY + ", " + d.properties.STATE_ABBV + '; category=' + category + '; view=' + activeView});
+  'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView});
   }, toolTipDelay);
 }
 

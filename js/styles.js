@@ -39,6 +39,14 @@ function foregroundState(selection, scale) {
     .transition()
     .duration(500)
     .style("stroke-width",  2/scale); // scale stroke-width
+    
+  if(waterUseViz.mode === "mobile") {
+    // turn off state pointer events for this state so that counties can be chosen
+    selection
+      .classed("state-click-on", false)
+      .classed("state-click-off", true);
+  }
+  
 }
 
 function backgroundState(selection, scale) {
@@ -69,6 +77,13 @@ function resetState() {
     .transition()
     .duration(750)
     .style("stroke-width", 1); // use null to get back to CSS
+  
+  if(waterUseViz.mode === "mobile") {
+    // turn on state pointer events for all states so that counties cannot be chosen
+    d3.selectAll('.state')
+      .classed("state-click-on", true)
+      .classed("state-click-off", false);
+  }
 }
 
 // on mouseover

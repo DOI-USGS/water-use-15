@@ -177,6 +177,16 @@ process:
     processor: summarize_wu_data
     scripts: [scripts/process/summarize_wu_data.R]
   -
+    id: wu_state_data_json
+    location: cache/wu_state_data.json
+    mimetype: application/json
+    process_args:
+      drag_states: ["ID","OK","MI"]
+    depends:
+      rawdata: wu_data_15_simple
+    processor: state_wu_data
+    scripts: [scripts/process/state_wu_data.R]
+  -
     id: county_centroids_wu_tsv
     location: cache/county_centroids_wu.tsv
     mimetype: application/json
@@ -337,7 +347,7 @@ publish:
   -
     id: key_stories
     template: layout/templates/key_stories.mustache
-    depends: ["rank_states_utils", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "rank_states_plot"]
+    depends: ["rank_states_utils","wu_state_data_json", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "rank_states_plot"]
     context:
       sections: ["rank_states_utils", "national_pie"]
       pie_map_plot: "static_story_figure"
