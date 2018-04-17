@@ -161,7 +161,7 @@ function updateView(newView, fireAnalytics) {
   resetState();
   unhighlightCounty();
   unhighlightCircle();
-  hideToolTip();
+  clearLegendText();
   
   // change the zoom button or county dropdown based on view
   updateZoomOutButton(activeView);
@@ -243,7 +243,7 @@ function documentCategorySwitch(category, prevCategory, action) {
 var toolTipTimer = null;
 var toolTipDelay = 1000; //ms
 
-function showToolTip(d, category) {
+function updateLegendText(d, category) {
 
   waterUseViz.elements
     .buttonBox
@@ -285,7 +285,7 @@ function showToolTip(d, category) {
   }, toolTipDelay);
 }
 
-function hideToolTip() {
+function clearLegendText() {
 
   waterUseViz.elements
     .buttonBox
