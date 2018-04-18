@@ -114,6 +114,7 @@ function rankEm() {
     })
     .attr('width', scaleX.bandwidth())
     .style("stroke-dasharray","4, 2")
+    .style('stroke','rgb(190,190,190)')
     .classed('open-rank-bar', function(d){
       return d.open;
     })
@@ -135,17 +136,36 @@ function rankEm() {
           .transition().duration(600)
             .attr('transform','translate(0,0)'); 
       } else {
-        barchoice
-          .on('mouseover', null)
-          .on('mouseout', null)
-          .attr('class','closed-rank-bar');
-        d3.select(barchoice.node().parentNode).select('text')
-          .classed('open-bar-name',false);
-        d3.select(this).style('opacity', 0)
-          .attr('transform','scale(0)'); 
+        
+        var thisBarname = d3.select(barchoice.node().parentNode).select('text').text();
+        
+        if (thisBarname + '-rank' == d3.select(this).attr('id')){
+          // the guess is right
+           barchoice
+            .on('mouseover', null)
+            .on('mouseout', null)
+            .attr('class','closed-rank-bar');
+          d3.select(barchoice.node().parentNode).select('text')
+            .classed('open-bar-name',false);
+          d3.select(this).style('opacity', 0).attr('transform','scale(0)'); 
+          // one last time in cast it overlapped two rectangles
+          overRankBar(d3.select(this).node().getBoundingClientRect()); 
+          
+        } else {
+          barchoice.attr('class','open-rank-bar');
+          barchoice.transition().duration(600).ease(d3.easeLinear)
+            .style('stroke-dashoffset',"6")
+            .style('stroke', 'rgb(200, 65, 39)') // emphasize with a redorange stroke
+            .transition().duration(600)
+              .style('stroke','rgb(190,190,190)')
+              .style('stroke-dashoffset',"12"); // needs to be a multiple of stroke-dasharray to look smooth
+          barchoice.style('stroke-dashoffset',null); // resets to "0", which doesn't change the look
+          d3.select(this)
+          .transition().duration(600)
+            .attr('transform','translate(0,0)');  
+        }
       }
-      // one last time in cast it overlapped two rectangles
-      overRankBar( d3.select(this).node().getBoundingClientRect()); 
+      
       
       d3.select(this).attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
   }
