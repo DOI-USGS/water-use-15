@@ -267,15 +267,34 @@ function updateLegendText(d, category) {
 
 function clearLegendText() {
 
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#legend-title")
-    .text("Water Use");
-
-  waterUseViz.elements
-    .buttonBox
-    .selectAll('.category-amount')
-    .text("");
+  if(activeView === 'USA') {
+    console.log('activeView is USA, so setting category amounts');
+    
+    waterUseViz.elements
+      .buttonBox
+      .selectAll("#legend-title")
+      .text("U.S. Water Use");
+  
+    d3.json("data/wu_data_15_sum.json", 
+      function(error, wu_national_data) {
+      
+        waterUseViz.elements.buttonBox
+          .selectAll('.category-amount')
+          .data(wu_national_data, function(d) { return d.category; })
+          .text(function(d) { return d.wateruse; });
+      });
+  } else {
+    console.log('activeView is not USA, so not yet setting category amounts because this is just a test');
+    waterUseViz.elements
+      .buttonBox
+      .selectAll("#legend-title")
+      .text("Water Use");
+  
+    waterUseViz.elements
+      .buttonBox
+      .selectAll('.category-amount')
+      .text("");
+  }
 
   if (toolTipTimer){
       clearTimeout(toolTipTimer); // stop ga for edge states

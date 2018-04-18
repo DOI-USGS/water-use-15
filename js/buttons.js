@@ -26,8 +26,6 @@ function addButtons() {
     .attr('id', 'legend-subtitle')
     .text('(millions of gallons per day)');
   
-  clearLegendText();
-  
   // button rectangles
   buttons.append('rect')
     .attr('x', 0)
@@ -56,10 +54,12 @@ function addButtons() {
       return (d + "-button-text");
     })
     .style('font-weight', 'thick')
-    .attr('text-anchor', 'end');
+    .attr('text-anchor', 'end')
+    .each( function(d) { this.__data__ = {category: d, wateruse: NaN}; });
   
   // add styling to the buttons and text according to which is active
   updateButtons(activeCategory);
+  clearLegendText();
   
 }
 
@@ -167,6 +167,6 @@ function updateButtons(category) {
   
   waterUseViz.elements.buttonBox.selectAll('.button .category-amount')
     .classed('hidden', function(d) {
-      return d !== category;
-    })
+      return d.category !== category;
+    });
 }
