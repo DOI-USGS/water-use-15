@@ -8,7 +8,7 @@ process.state_wu_data <- function(viz) {
   # calculate national sums of each category
   wu_df_state <- dplyr::select(wu_df, STATE, total) %>%
     dplyr::group_by(STATE) %>%
-    dplyr::summarise(wu = round(sum(total))) %>%
+    dplyr::summarise(wu = signif(sum(total), digits = 6)) %>%
     dplyr::mutate(open = STATE %in% viz[["process_args"]][["drag_states"]])%>%
     dplyr::rename(abrv=STATE) %>% 
     dplyr::arrange(wu)

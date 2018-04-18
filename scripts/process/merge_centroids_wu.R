@@ -6,15 +6,19 @@ process.merge_centroids_wu <- function(viz) {
   
   # extract the centroid coordinates into a table with GEOID
   centroid_coords <- bind_cols(select(topo@data, GEOID), rename(as_data_frame(topo@coords), lon=coords.x1, lat=coords.x2))
-  
+
   # merge datasets and keep a minimal set of columns
   county_data <- topo@data %>%
     left_join(wu_data_15_simple, by=c('GEOID'='FIPS')) %>%
     select(GEOID, STATE_ABBV, COUNTY, countypop:industrial) %>% 
     rowwise() %>% 
     mutate(other = total - sum(thermoelectric, publicsupply, irrigation, industrial)) %>%
-    mutate(total = as.integer(round(total)))
-
+    mutate(total = signif(total, digits = 6),
+           thermoelectric = signif(thermoelectric, digits = 6),
+           irrigation = signif(irrigation, digits = 6),
+           publicsupply =  signif(publicsupply, digits = 6),
+           industrial = signif(industrial, digits = 6)) 
+  
   # add centroid coordinates to the WU data
   county_data <- county_data %>%
     left_join(centroid_coords, by='GEOID')
