@@ -115,7 +115,7 @@ function updateCountySelectorOptions(countyData) {
           // start by resetting what is highlighted
           unhighlightCounty();
           unhighlightCircle();
-          clearLegendText();
+          updateLegendTextToView();
           
           var menu = document.getElementById("county-menu");
           var thisCountyGEOID = menu.options[menu.selectedIndex].value;

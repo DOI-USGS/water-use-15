@@ -59,7 +59,7 @@ function addButtons() {
   
   // add styling to the buttons and text according to which is active
   updateButtons(activeCategory);
-  clearLegendText();
+  updateLegendTextToView();
   
 }
 

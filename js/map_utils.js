@@ -161,7 +161,7 @@ function updateView(newView, fireAnalytics) {
   resetState();
   unhighlightCounty();
   unhighlightCircle();
-  clearLegendText();
+  updateLegendTextToView();
   
   // change the zoom button or county dropdown based on view
   updateZoomOutButton(activeView);
@@ -265,7 +265,7 @@ function updateLegendText(d, category) {
   }, toolTipDelay);
 }
 
-function clearLegendText() {
+function updateLegendTextToView() {
 
   if(activeView === 'USA') {
     console.log('activeView is USA, so setting category amounts');
