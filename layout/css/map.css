@@ -66,7 +66,7 @@
 
 .wu-circle {
   pointer-events: none;
-  stroke-width: 0.1;
+  stroke-width: 2;
 }
 
 #wu-highlight {
