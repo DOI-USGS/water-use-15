@@ -18,14 +18,15 @@ function addButtons() {
     // legend title
   buttonBox.append('text')
     .classed('title', true)
-    .attr('id', 'legend-title')
-    .text("Water use");
+    .attr('id', 'legend-title');
   
   // legend subtitle
   buttonBox.append('text')
     .classed('title', true)
     .attr('id', 'legend-subtitle')
     .text('(millions of gallons per day)');
+  
+  clearLegendText();
   
   // button rectangles
   buttons.append('rect')
@@ -52,7 +53,7 @@ function addButtons() {
   buttons.append('text')
     .classed('category-amount', true)
     .attr('id', function(d){
-      return (d + "_button_text");
+      return (d + "-button-text");
     })
     .style('font-weight', 'thick')
     .attr('text-anchor', 'end');

@@ -252,29 +252,9 @@ function updateLegendText(d, category) {
 
   waterUseViz.elements
     .buttonBox
-    .selectAll("#total_button_text")
-    .text(d[["total"]]);
+    .selectAll("#" + category  + "-button-text")
+    .text(d[[category]]);
     
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#publicsupply_button_text")
-    .text(d[["publicsupply"]]);
-    
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#irrigation_button_text")
-    .text(d[["irrigation"]]);
-    
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#industrial_button_text")
-    .text(d[["industrial"]]);
-
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#thermoelectric_button_text")
-    .text(d[["thermoelectric"]]);
-
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
   }
@@ -294,27 +274,27 @@ function clearLegendText() {
 
   waterUseViz.elements
     .buttonBox
-    .selectAll("#total_button_text")
+    .selectAll("#total-button-text")
     .text("");
     
   waterUseViz.elements
     .buttonBox
-    .selectAll("#irrigation_button_text")
+    .selectAll("#irrigation-button-text")
     .text("");
     
   waterUseViz.elements
     .buttonBox
-    .selectAll("#industrial_button_text")
+    .selectAll("#industrial-button-text")
     .text("");
     
   waterUseViz.elements
     .buttonBox
-    .selectAll("#thermoelectric_button_text")
+    .selectAll("#thermoelectric-button-text")
     .text("");
     
   waterUseViz.elements
     .buttonBox
-    .selectAll("#publicsupply_button_text")
+    .selectAll("#publicsupply-button-text")
     .text("");
 
   if (toolTipTimer){
