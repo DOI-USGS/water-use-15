@@ -177,17 +177,15 @@ function updateView(newView, fireAnalytics) {
     var thisstate = d3.selectAll('.state')
       .filter(function(d) { return d === activeView; });
     
-    showCountyLines(statecounties);
+    showCountyLines(statecounties, scale = zoom_scale);
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom_scale);
     foregroundState(thisstate, scale = zoom_scale);
     
-    
   }
   var allcounties = d3.selectAll('.county');
   
-  allcounties.transition()
-    .duration(500) 
+  allcounties
     .style("stroke-width",  1/zoom_scale); // make all counties have scaled stroke-width
   
   // apply the transform (i.e., actually zoom in or out)
