@@ -115,7 +115,7 @@ function updateCountySelectorOptions(countyData) {
           // start by resetting what is highlighted
           unhighlightCounty();
           unhighlightCircle();
-          hideToolTip();
+          clearLegendText();
           
           var menu = document.getElementById("county-menu");
           var thisCountyGEOID = menu.options[menu.selectedIndex].value;
@@ -127,7 +127,7 @@ function updateCountySelectorOptions(countyData) {
             
             highlightCounty(thisCountySel);
             highlightCircle(thisCountyData, activeCategory);
-            showToolTip(thisCountyData, activeCategory);
+            updateLegendText(thisCountyData, activeCategory);
             
             // set prevClickCounty as global var for next click
             waterUseViz.prevClickCounty = thisCountyGEOID;

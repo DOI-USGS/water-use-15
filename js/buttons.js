@@ -15,17 +15,18 @@ function addButtons() {
       return d;
     });
     
-  // legend title
+    // legend title
   buttonBox.append('text')
     .classed('title', true)
-    .attr('id', 'legend-title')
-    .text('Water Use in XXX');
+    .attr('id', 'legend-title');
   
   // legend subtitle
   buttonBox.append('text')
     .classed('title', true)
     .attr('id', 'legend-subtitle')
     .text('(millions of gallons per day)');
+  
+  clearLegendText();
   
   // button rectangles
   buttons.append('rect')
@@ -51,8 +52,8 @@ function addButtons() {
   // button category use values
   buttons.append('text')
     .classed('category-amount', true)
-    .text(function(d){
-      return 'XX';
+    .attr('id', function(d){
+      return (d + "-button-text");
     })
     .style('font-weight', 'thick')
     .attr('text-anchor', 'end');

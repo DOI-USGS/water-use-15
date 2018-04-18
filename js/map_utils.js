@@ -161,7 +161,7 @@ function updateView(newView, fireAnalytics) {
   resetState();
   unhighlightCounty();
   unhighlightCircle();
-  hideToolTip();
+  clearLegendText();
   
   // change the zoom button or county dropdown based on view
   updateZoomOutButton(activeView);
@@ -242,18 +242,19 @@ function documentCategorySwitch(category, prevCategory, action) {
 
 var toolTipTimer = null;
 var toolTipDelay = 1000; //ms
-function showToolTip(d, category) {
 
-  // change tooltip
-  d3.select(".tooltip")
-    .classed("hidden", false)
-    .style("left", (d3.event.pageX + 35) + "px")
-    .style("top", (d3.event.pageY - 50) + "px");
-  d3.select(".tooltip")
-    .html(d.COUNTY + ", " + d.STATE_ABBV + "<br/>" + 
-            "Population: " + d.countypop + "<br/>" +
-            categoryToName(category) + ": " + 
-              d[[category]] + " " + "MGD");
+function updateLegendText(d, category) {
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#legend-title")
+    .text(d.COUNTY + ", " + d.STATE_ABBV);
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#" + category  + "-button-text")
+    .text(d[[category]]);
+    
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
   }
@@ -264,9 +265,18 @@ function showToolTip(d, category) {
   }, toolTipDelay);
 }
 
-function hideToolTip() {
-  d3.select(".tooltip")
-    .classed("hidden", true);
+function clearLegendText() {
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll("#legend-title")
+    .text("Water Use");
+
+  waterUseViz.elements
+    .buttonBox
+    .selectAll('.category-amount')
+    .text("");
+
   if (toolTipTimer){
       clearTimeout(toolTipTimer); // stop ga for edge states
     }

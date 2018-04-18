@@ -111,14 +111,14 @@ function displayCountyBounds(error, activeCountyData) {
       .on("mouseover", function(d) {
         highlightCounty(d3.select(this)); 
         highlightCircle(d.properties, activeCategory);
-        showToolTip(d.properties, activeCategory); 
+        updateLegendText(d.properties, activeCategory); 
         // OK to use global var activeCategory which only changes on click 
         // because people won't be able to hover on tooltips at the same time as hovering buttons
       })
       .on("mouseout", function(d) { 
         unhighlightCounty();
         unhighlightCircle();
-        hideToolTip();
+        clearLegendText();
       })
       .on('click', function(d,i,j) {
         
@@ -136,7 +136,7 @@ function displayCountyBounds(error, activeCountyData) {
             // hide on any zoom bc no county will be selected
             unhighlightCounty();
             unhighlightCircle();
-            hideToolTip(); 
+            clearLegendText(); 
           } else {
             updateCountySelector(thisCountyID);
           }          

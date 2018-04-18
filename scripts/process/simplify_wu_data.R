@@ -23,7 +23,7 @@ process.simplify_wu_data <- function(viz) {
     return(v)
   }))
   wu_df[, which_numeric_cols] <- fixed_numeric_data
-  
+ 
   # now select only the pertinent columns
   wu_df_sel <- wu_df[, c(columns_to_keep, columns_to_rename)]
   names(wu_df_sel) <- c(columns_to_keep, new_names)
