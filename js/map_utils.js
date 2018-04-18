@@ -274,27 +274,7 @@ function clearLegendText() {
 
   waterUseViz.elements
     .buttonBox
-    .selectAll("#total-button-text")
-    .text("");
-    
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#irrigation-button-text")
-    .text("");
-    
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#industrial-button-text")
-    .text("");
-    
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#thermoelectric-button-text")
-    .text("");
-    
-  waterUseViz.elements
-    .buttonBox
-    .selectAll("#publicsupply-button-text")
+    .selectAll('.category-amount')
     .text("");
 
   if (toolTipTimer){
