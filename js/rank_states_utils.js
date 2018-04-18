@@ -36,13 +36,12 @@ function rankEm() {
 	
 	var bardata = arguments[1];
 	
-	var barDomain = [];
-	for (var i = 0; i != bardata.length; ++i) barDomain.push(i);
-	
 	var scaleX = d3.scaleBand()
 	  .range([0, rankSvg.width])
 	  .paddingInner(0.1)
-	  .domain(barDomain);
+	  .domain(bardata.map(function(d,i){
+	    return i;
+	   }));
 	
 	var scaleY = d3.scaleLinear()
 	  .range([rankSvg.bottomMargin, rankSvg.height])
