@@ -1,7 +1,8 @@
 
 var rankSvg = {
     width: 1000,
-    height: 300
+    height: 300,
+    bottomMargin: 15
 };
 
 var svgStates = d3.select("#rank-states-interactive")
@@ -11,7 +12,7 @@ var svgStates = d3.select("#rank-states-interactive")
 
 var stateMap = svgStates.append('g')
   .attr('id','ranked-states-map')
-  .attr('transform',"translate(-20,-20)scale(0.4)");
+  .attr('transform',"translate(-10,-30)scale(0.4)");
 
 stateMap.append('g')
   .attr('id','ranked-states-moved');
@@ -35,14 +36,16 @@ function rankEm() {
 	
 	var bardata = arguments[1];
 	
-	var x = d3.scaleLinear()
+	var barDomain = [];
+	for (var i = 0; i != bardata.length; ++i) barDomain.push(i);
+	
+	var scaleX = d3.scaleBand()
 	  .range([0, rankSvg.width])
-	  .domain([0, bardata.length]);
+	  .paddingInner(0.1)
+	  .domain(barDomain);
 	
-	var barWidth = rankSvg.width / bardata.length * 0.92;
-	
-	var y = d3.scaleLinear()
-	  .range([20, rankSvg.height])
+	var scaleY = d3.scaleLinear()
+	  .range([rankSvg.bottomMargin, rankSvg.height])
 	  .domain([0, d3.max(bardata, function(d){
 	    return d.wu;
 	  })]);
@@ -87,14 +90,14 @@ function rankEm() {
     .enter()
     .append('g')
     .attr('transform', function(d, i){
-      return 'translate(' + x(i) + "," + (rankSvg.height - y(d.wu)) + ")";
+      return 'translate(' + scaleX(i) + "," + (rankSvg.height - scaleY(d.wu)) + ")";
     });
     
     barGroups.append('text')
     .attr('y', function(d){
-      return y(d.wu) - 20;
+      return scaleY(d.wu) - rankSvg.bottomMargin;
     })
-    .attr('x', barWidth/2)
+    .attr('x', scaleX.bandwidth()/2)
     .attr('text-anchor','middle')
     .attr('alignment-baseline','hanging')
     .classed('bar-name',true)
@@ -108,9 +111,9 @@ function rankEm() {
   
   barGroups.append('rect')
     .attr('height', function(d){
-      return y(d.wu) - 20;
+      return scaleY(d.wu) - rankSvg.bottomMargin;
     })
-    .attr('width', barWidth)
+    .attr('width', scaleX.bandwidth())
     .style("stroke-dasharray","4, 2")
     .classed('open-rank-bar', function(d){
       return d.open;
@@ -142,28 +145,29 @@ function rankEm() {
         d3.select(this).style('opacity', 0)
           .attr('transform','scale(0)'); 
       }
-      overRankBar( d3.select(this).node().getBoundingClientRect()); // one last time in cast it overlapped two rectangles
+      // one last time in cast it overlapped two rectangles
+      overRankBar( d3.select(this).node().getBoundingClientRect()); 
+      
       d3.select(this).attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
   }
   function overRankBar(shapeBox){
   
-  var openBars = d3.selectAll('.open-rank-bar').nodes();
-  for (var i = 0; i < openBars.length; i++) { 
-    var thisBar = openBars[i];
-    var barBox = thisBar.getBoundingClientRect();
-    //console.log('testing overlap on bar '+bbox.right+' vs '+x);
-    var isOverBar = !(barBox.right < shapeBox.left || 
+    var openBars = d3.selectAll('.open-rank-bar').nodes();
+    for (var i = 0; i < openBars.length; i++) { 
+      var thisBar = openBars[i];
+      var barBox = thisBar.getBoundingClientRect();
+    
+      var isOverBar = !(barBox.right < shapeBox.left || 
                 barBox.left > shapeBox.right || 
                 barBox.bottom < shapeBox.top || 
                 barBox.top > shapeBox.bottom);
-    if (isOverBar){
-      d3.select(thisBar).classed('chosen-rank-bar',true);
-    } else {
-      d3.select(thisBar).classed('chosen-rank-bar',false);
+      if (isOverBar){
+        d3.select(thisBar).classed('chosen-rank-bar',true);
+      } else {
+        d3.select(thisBar).classed('chosen-rank-bar',false);
+      }
     }
   }
-  
-}
 }
 
 
