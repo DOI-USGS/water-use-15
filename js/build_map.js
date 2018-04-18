@@ -33,7 +33,7 @@ var waterUseViz = {
 var activeView, activeCategory, prevCategory;
 var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
 var countyBoundsZoom = new Map();
-var categories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
+var categories = ["total", "thermoelectric", "irrigation","publicsupply", "industrial"];
 
 // Projection
 var projection = albersUsaTerritories()
