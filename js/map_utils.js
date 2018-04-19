@@ -265,6 +265,18 @@ function updateLegendText(d, category) {
   }, toolTipDelay);
 }
 
+var wu_national_data;
+
+// Read state data and add it to figure
+d3.json("data/wu_data_15_sum.json", function(error, data) {
+  
+  if (error) throw error;
+  
+  wu_national_data = data;
+  
+});
+
+
 function updateLegendTextToView() {
 
   if(activeView === 'USA') {
@@ -275,14 +287,11 @@ function updateLegendTextToView() {
       .selectAll("#legend-title")
       .text("U.S. Water Use");
   
-    d3.json("data/wu_data_15_sum.json", 
-      function(error, wu_national_data) {
-      
-        waterUseViz.elements.buttonBox
-          .selectAll('.category-amount')
-          .data(wu_national_data, function(d) { return d.category; })
-          .text(function(d) { return d.wateruse; });
-      });
+    waterUseViz.elements.buttonBox
+      .selectAll('.category-amount')
+      .data(wu_national_data, function(d) { return d.category; })
+      .text(function(d) { return d.wateruse; });
+
   } else {
     console.log('activeView is not USA, so not yet setting category amounts because this is just a test');
     waterUseViz.elements
