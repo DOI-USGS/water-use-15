@@ -35,63 +35,60 @@ var textArc = d3.arc()
     .outerRadius(radius*1.25)
     .innerRadius(radius*1.25);
   
-d3.json("data/wu_data_15_sum.json", function(error, wu_national_data) {
-  
-  var wu_national_no_total = wu_national_data
-        .filter(function(d) { return d.category !== "total"; });
-  
-  var slices = pie_g.selectAll(".slice")
-    .data(pie(wu_national_no_total))
-    .enter()
-    .append("g")
-      .attr("class", "slice");
-      
-  slices
-    .append("path")
-      .attr("d", path)
-      .attr("fill", function(d) { 
-        return categoryToColor(d.data.category); 
-      });
-        
-  var sliceLabels = pie_g.selectAll('.slice-label')
-        .data(pie(wu_national_no_total))
-        .enter()
-        .append('g')
-          .classed('slice-label', true);
-  
-  sliceLabels
-    .append("circle")
-      .classed('label-circle', true)
-      .attr('cx', function(d) { return lineStartArc.centroid(d)[0]; })
-      .attr('cy', function(d) { return lineStartArc.centroid(d)[1]; })
-      .attr('r', 2);
-    
-  sliceLabels
-    .append("line")
-      .classed('label-line', true)
-      .attr('x1', function(d, i) { return lineStartArc.centroid(d)[0]; })
-      .attr('y1', function(d, i) { return lineStartArc.centroid(d)[1]; })
-      .attr('x2', function(d, i) { return lineEndArc.centroid(d)[0]; })
-      .attr('y2', function(d, i) { return lineEndArc.centroid(d)[1]; });
-    
-  sliceLabels
-    .append("text")
-      .classed('label-text', true)
-      .attr("transform", function(d) { return "translate(" + textArc.centroid(d) + ")"; })
-      .attr("dy", "0.35em")
-      .attr("text-anchor", function(d) {
-        if( (textArc.centroid(d)[0] * 0.75) < path.centroid(d)[0] ) {
-          // label is more than 3/4 left of the pie center than the slice x centroid
-          // so essentially, only grabs labels way out on the left
-          return "end";
-        } else if ( (textArc.centroid(d)[0] * 0.75) > path.centroid(d)[0] ) {
-          // label is more than 3/4 right of the pie center than the slice x centroid
-          return "start";
-        } else {
-          // label is above or below pie center
-          return "middle";
-        }
-      })
-      .text(function(d) { return categoryToName(d.data.category); }); //+': '+d.data.wateruse; });
+var wu_national_no_total = wu_national_data
+      .filter(function(d) { return d.category !== "total"; });
 
-});
+var slices = pie_g.selectAll(".slice")
+  .data(pie(wu_national_no_total))
+  .enter()
+  .append("g")
+    .attr("class", "slice");
+    
+slices
+  .append("path")
+    .attr("d", path)
+    .attr("fill", function(d) { 
+      return categoryToColor(d.data.category); 
+    });
+      
+var sliceLabels = pie_g.selectAll('.slice-label')
+      .data(pie(wu_national_no_total))
+      .enter()
+      .append('g')
+        .classed('slice-label', true);
+
+sliceLabels
+  .append("circle")
+    .classed('label-circle', true)
+    .attr('cx', function(d) { return lineStartArc.centroid(d)[0]; })
+    .attr('cy', function(d) { return lineStartArc.centroid(d)[1]; })
+    .attr('r', 2);
+  
+sliceLabels
+  .append("line")
+    .classed('label-line', true)
+    .attr('x1', function(d, i) { return lineStartArc.centroid(d)[0]; })
+    .attr('y1', function(d, i) { return lineStartArc.centroid(d)[1]; })
+    .attr('x2', function(d, i) { return lineEndArc.centroid(d)[0]; })
+    .attr('y2', function(d, i) { return lineEndArc.centroid(d)[1]; });
+  
+sliceLabels
+  .append("text")
+    .classed('label-text', true)
+    .attr("transform", function(d) { return "translate(" + textArc.centroid(d) + ")"; })
+    .attr("dy", "0.35em")
+    .attr("text-anchor", function(d) {
+      if( (textArc.centroid(d)[0] * 0.75) < path.centroid(d)[0] ) {
+        // label is more than 3/4 left of the pie center than the slice x centroid
+        // so essentially, only grabs labels way out on the left
+        return "end";
+      } else if ( (textArc.centroid(d)[0] * 0.75) > path.centroid(d)[0] ) {
+        // label is more than 3/4 right of the pie center than the slice x centroid
+        return "start";
+      } else {
+        // label is above or below pie center
+        return "middle";
+      }
+    })
+    .text(function(d) { return categoryToName(d.data.category); }); //+': '+d.data.wateruse; });
+
