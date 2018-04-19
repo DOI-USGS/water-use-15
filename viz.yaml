@@ -184,6 +184,7 @@ process:
       drag_states: ["ID","OK","MI"]
     depends:
       rawdata: wu_data_15_simple
+      state_boundaries: state_boundaries_USA_topojson
     processor: state_wu_data
     scripts: [scripts/process/state_wu_data.R]
   -
