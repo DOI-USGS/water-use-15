@@ -71,8 +71,7 @@ function updateCircles(category) {
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
     .style("fill", categoryToColor(category))
-    .style("stroke", categoryToColor(category))
-    .style("stroke-width", "0.1");
+    .style("stroke", categoryToColor(category, stroke=true));
   
   // CIRCLES-AS-PATHS
   /*// grow circles to appropriate size
