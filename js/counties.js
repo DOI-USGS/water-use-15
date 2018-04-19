@@ -118,7 +118,7 @@ function displayCountyBounds(error, activeCountyData) {
       .on("mouseout", function(d) { 
         unhighlightCounty();
         unhighlightCircle();
-        clearLegendText();
+        updateLegendTextToView();
       })
       .on('click', function(d,i,j) {
         
@@ -136,7 +136,7 @@ function displayCountyBounds(error, activeCountyData) {
             // hide on any zoom bc no county will be selected
             unhighlightCounty();
             unhighlightCircle();
-            clearLegendText(); 
+            updateLegendTextToView(); 
           } else {
             updateCountySelector(thisCountyID);
           }          
