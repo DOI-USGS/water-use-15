@@ -46,7 +46,7 @@ function rankEm() {
 	var scaleY = d3.scaleLinear()
 	  .range([rankSvg.bottomMargin, rankSvg.height])
 	  .domain([0, d3.max(bardata, function(d){
-	    return d.wu;
+	    return d.total;
 	  })]);
 	
 	svgStates.select('#ranked-states-moved')
@@ -89,12 +89,12 @@ function rankEm() {
     .enter()
     .append('g')
     .attr('transform', function(d, i){
-      return 'translate(' + scaleX(i) + "," + (rankSvg.height - scaleY(d.wu)) + ")";
+      return 'translate(' + scaleX(i) + "," + (rankSvg.height - scaleY(d.total)) + ")";
     });
     
     barGroups.append('text')
     .attr('y', function(d){
-      return scaleY(d.wu) - rankSvg.bottomMargin;
+      return scaleY(d.total) - rankSvg.bottomMargin;
     })
     .attr('x', scaleX.bandwidth()/2)
     .attr('text-anchor','middle')
@@ -110,7 +110,7 @@ function rankEm() {
   
   barGroups.append('rect')
     .attr('height', function(d){
-      return scaleY(d.wu) - rankSvg.bottomMargin;
+      return scaleY(d.total) - rankSvg.bottomMargin;
     })
     .attr('width', scaleX.bandwidth())
     .style("stroke-dasharray","4, 2")
