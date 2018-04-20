@@ -92,22 +92,22 @@
     padding: 15px;
 }
 
-#key-stories{
+#wu-story{
   background:#fff;
   min-height: 100px;
   margin-top:20px;
 }
 
-#key-stories .viz-text{
+#wu-story .viz-text{
   padding:0;
 }
 
-#key-stories p{
+#wu-story p{
   padding-top: 10px; 
   padding-bottom: 10px;
 }
 
-#key-stories h2{
+#wu-story h2{
   margin-top:20px;
 }
 
