@@ -333,7 +333,7 @@ publish:
     relpath: "images/WU_stories_static.png"
   -
     id: wu-story
-    template: layout/templates/key_stories.mustache
+    template: layout/templates/wu_story.mustache
     depends: ["rank_states_utils","wu_state_data_json", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure"]
     context:
       sections: ["rank_states_utils", "national_pie"]
