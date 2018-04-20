@@ -142,11 +142,6 @@ fetch:
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
     remoteFilename: "usco2015v2.0-dataviz.xlsx"
-  -
-    id: description_text_md
-    location: data/description_text.yaml
-    reader: md
-    mimetype: text/yaml
     
 process:
   -
@@ -412,8 +407,7 @@ publish:
       embed: ["map","directions_text"]
   -
     id: directions_text
-    template: printall
+    template: layout/templates/directions_text.mustache
     publisher: section
-    depends: description_text_md
+    depends: 
     context:
-      text: description_text_md.directions_text-markdown
