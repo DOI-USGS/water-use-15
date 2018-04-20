@@ -1,3 +1,5 @@
+var mouseTimer;
+
 function addButtons() {
   var buttonBox = waterUseViz.elements.buttonBox = svg.append('g')
     .attr('id', 'button-container');
@@ -38,10 +40,13 @@ function addButtons() {
       updateCategory(d.toLowerCase(), activeCategory);
     })
     .on('mouseover', function(d){
+      clearTimeout(mouseTimer); // cancel last "mouseout" action before it does anything
       showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
     })
     .on('mouseout', function(d){
-      showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
+      mouseTimer = setTimeout(function() {
+        showCategory(activeCategory, d.toLowerCase(), action = 'mouseout'); 
+      }, 200);
     });
   
   // button category labels
