@@ -56,14 +56,6 @@
   opacity: 0;
 }
 
-.open-rank-bar {
-  fill-opacity: 0;
-}
-.closed-rank-bar, .chosen-rank-bar {
-  fill-opacity: 1;
-  stroke-width: 0;
-}
-
 .wu-circle {
   pointer-events: none;
   stroke-width: 2;
