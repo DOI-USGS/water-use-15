@@ -52,6 +52,13 @@
   font-size: 65%;
 }
 
+.rankem-title{
+  text-align: center;
+  fill: rgb(140,140,140);
+  font-size: 150%;
+  font-family: 'Shadows Into Light';
+}
+
 .open-bar-name {
   opacity: 0;
 }

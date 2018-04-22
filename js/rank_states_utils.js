@@ -10,13 +10,17 @@ var rankSvg = {
     droppedState: function() {
     },
     isOnRankBar: function(){
-    }
+    },
+    isDragged: false
 };
 
 var svgStates = d3.select("#rank-states-interactive")
   .append("svg")
   .attr('viewBox', '0 0 '+ rankSvg.width + " " + rankSvg.height)
   .attr('preserveAspectRatio', 'xMidYMid');
+svgStates.append('style')
+  .attr('type', "text/css")
+  .text("@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light)");
 
 var stateMap = svgStates.append('g')
   .attr('id','ranked-states-map')
@@ -31,6 +35,14 @@ stateMap.append('g')
 svgStates.append('g')
   .attr('id','ranked-states-bars');
   
+svgStates.append('g')
+  .attr('id','rank-directions')
+  .attr('transform',"translate("+(rankSvg.width * 0.6)+",30)")
+  .append('text')
+    .classed('rankem-title', true)
+    .attr('text-anchor','middle')
+    .text('Drag a state over its matching bar');
+
 // Read state data and add it to figure
 d3.queue()
   .defer(d3.json, "data/wu_state_data.json")
@@ -73,7 +85,7 @@ function rankEm() {
       return d.abrv +'-locked';
     });
     
-    svgStates.select('#ranked-states-draggable')
+  svgStates.select('#ranked-states-draggable')
     .selectAll( 'use' )
     .data(dragData)
     .enter()
@@ -107,12 +119,11 @@ function rankEm() {
     })
     .attr('x', scaleX.bandwidth()/2)
     .attr('text-anchor','middle')
-    .attr('alignment-baseline','hanging')
     .classed('bar-name',true)
     .classed('open-bar-name', function(d){
       return d.open;
     })
-    .attr('dy',"0.33em")
+    .attr('dy',"1em")
     .text(function(d){
       return d.abrv;
     });
@@ -136,33 +147,84 @@ rankSvg.updateStyles = function(){
   var allBars = svgStates.select('#ranked-states-bars').selectAll('rect');
   var lockedStates = svgStates.select('#ranked-states-locked').selectAll('.locked-state');
   var draggableStates = svgStates.select('#ranked-states-draggable').selectAll('.draggable-state');
+  var lockedBars = allBars.filter('.locked-rank-bar');
+  var openBars = allBars.filter('*:not(.locked-rank-bar)');
   
-  allBars.filter('.locked-rank-bar')
+  function clearHighlight(){
+    d3.selectAll('.highlight')
+        .classed('highlight', false);
+      rankSvg.updateStyles();  
+  }
+  
+  lockedBars
     .style('fill', categoryToColor('total'))
-    .style('stroke-width',0);
+    .style('stroke-width',0)
+    .on('mouseover',function(){
+      var state = d3.select(this).attr('id').split('-')[0];
+      d3.select('#'+state+'-locked').classed('highlight', true);
+      d3.select(this).classed('highlight', true);
+      rankSvg.updateStyles();
+    })
+    .on('mouseout',clearHighlight);
+  
     
-  allBars.filter('*:not(.locked-rank-bar)')
-    .style('fill', "none")
+  openBars
+    .style('fill', "rgba(255, 255, 255, 0.0)")
     .style('stroke',"rgb(190,190,190)")
-    .style("stroke-dasharray","4, 2");
+    .style('stroke-width', 1.5)
+    .style("stroke-dasharray","4, 2")
+    .on('mouseover',function(){
+      d3.select(this).classed('highlight', true);
+      rankSvg.updateStyles();
+    })
+    .on('mouseout',clearHighlight);
     
   lockedStates
     .style('fill',"rgb(220,220,220)")
     .style('stroke',"rgb(190,190,190)")
-    .style('stroke-width',4)
-    .style("stroke-dasharray","10, 10");
+    .style('stroke-width', 4)
+    .style("stroke-dasharray","10, 10")
+    .on('mouseover',function(){
+      d3.selectAll('.highlight')
+        .classed('highlight', false);
+      var state = d3.select(this).attr('id').split('-')[0];
+      d3.select('#'+state+'-bar').classed('highlight', true);
+      d3.select(this).classed('highlight', true);
+      rankSvg.updateStyles();
+    })
+    .on('mouseout',clearHighlight);
     
   draggableStates
     .style('fill',categoryToColor("total"));
+  
+  if (!rankSvg.isDragged){
+    lockedBars.filter('.highlight')
+      .style('fill',categoryToColor('total',true));
+      
+    lockedStates.filter('.highlight')
+      .raise()
+      .style("stroke-dasharray", null)
+      .style('fill',"rgba(220,220,220, 0.4)")
+      .style('stroke',categoryToColor('total',true));
+    
+    d3.select('#rank-directions').style('opacity',1);
+  }
+  openBars.filter('.highlight')
+  .style("stroke-dasharray", null)
+  .style('stroke-width', 0)
+  .style('fill',categoryToColor('total',true));  
 };
   
 rankSvg.draggingState = function (d) {
   var thisShape = d3.select(this);
+  rankSvg.isDragged = true;
   thisShape.attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
   rankSvg.isOnRankBar(thisShape.node().getBoundingClientRect());
+  d3.select('#rank-directions').style('opacity',0);
 };
 
 rankSvg.droppedState = function(d){
+  rankSvg.isDragged = false;
   var barchoice = d3.select('.chosen-rank-bar');
       
   if (barchoice.empty()){
@@ -180,6 +242,11 @@ rankSvg.droppedState = function(d){
         .attr('class',null)
         .transition().duration(600)
           .style('opacity', 0);
+      
+      // is this the last one? if so, remove the directions    
+      if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
+        d3.select('#rank-directions').select('text').remove();
+      }
 
     } else {
       d3.select(this)
@@ -188,9 +255,11 @@ rankSvg.droppedState = function(d){
       barchoice.attr('class',null);
       barchoice.transition().duration(600).ease(d3.easeLinear)
         .style('stroke-dashoffset',"6")
+        .style('stroke-width',2.0)
         .style('stroke', 'rgb(200, 65, 39)') // emphasize with a redorange stroke
         .transition().duration(600)
           .style('stroke','rgb(190,190,190)')
+          .style('stroke-width',1.5)
           .style('stroke-dashoffset',"12"); // needs to be a multiple of stroke-dasharray to look smooth
       barchoice.style('stroke-dashoffset',null); // resets to "0", which doesn't change the look
     }
@@ -210,10 +279,9 @@ rankSvg.isOnRankBar = function(shapeBox) {
               barBox.left > shapeBox.right || 
               barBox.bottom < shapeBox.top || 
               barBox.top > shapeBox.bottom);
-    if (isOverBar){
-      d3.select(thisBar).classed('chosen-rank-bar',true);
-    } else {
-      d3.select(thisBar).classed('chosen-rank-bar',null);
-    }
+     d3.select(thisBar)
+      .classed('chosen-rank-bar',isOverBar)
+      .classed('highlight',isOverBar);
   }
+  rankSvg.updateStyles();
 };
