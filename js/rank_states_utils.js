@@ -56,8 +56,13 @@ function rankEm() {
     .append('use')
     .style('stroke-dasharray',"10, 10")
     .classed('static-state', true)
+    .on('mouseover',mouseClosedState)
+    .on('mouseout',resetMouseStyles)
     .attr('xlink:href', function(d) {
       return '#'+ d.abrv +'-lowres';
+    })
+    .attr('id', function(d) {
+      return d.abrv +'-locked';
     });
     
     svgStates.select('#ranked-states-draggable')
@@ -121,7 +126,42 @@ function rankEm() {
     .classed('closed-rank-bar', function(d){
       return !d.open;
     })
-    .style('fill', categoryToColor("total"));
+    .attr('id',function(d){
+      return d.abrv+'-bar';
+    })
+    .style('fill', categoryToColor("total"))
+    .on('mouseover', mouseClosedBar)
+    .on('mouseout', resetMouseStyles);
+    
+    function mouseClosedState(){
+      var thisState = d3.select(this);
+      var stateName = thisState.attr('id').split('-')[0];
+      d3.select('#'+stateName+'-bar')
+        .style('stroke-width', 2);
+      thisState
+        .style('stroke',categoryToColor("total"))
+        .style("stroke-dasharray",null);
+    }
+    function mouseClosedBar(){
+      // if mobile, do nothing???
+      // to do: doesn't seem to work when you close a previously open bar (e.g., MI)
+      var thisBar = d3.select(this);
+      // don't give away the answer to open bars:
+      if (thisBar.classed('closed-rank-bar')){
+        var thisBarname = d3.select(thisBar.node().parentNode).select('text').text();
+        d3.select("#"+thisBarname+"-locked")
+          .style('stroke',categoryToColor("total"))
+          .style("stroke-dasharray",null);
+      }
+
+    }
+    function resetMouseStyles(){
+      d3.selectAll('.static-state')
+        .style('stroke',null)
+        .style("stroke-dasharray","10, 10");
+      d3.selectAll('.closed-rank-bar')
+        .style('stroke-width', 0);
+    }
   
     function dragging(d) {
       var thisShape = d3.select(this);
