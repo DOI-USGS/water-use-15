@@ -48,20 +48,17 @@
 }
 
 .bar-name {
-  text-align: center;
   font-size: 65%;
+}
+
+.rankem-title{
+  fill: rgb(140,140,140);
+  font-size: 150%;
+  font-family: 'Shadows Into Light';
 }
 
 .open-bar-name {
   opacity: 0;
-}
-
-.open-rank-bar {
-  fill-opacity: 0;
-}
-.closed-rank-bar, .chosen-rank-bar {
-  fill-opacity: 1;
-  stroke-width: 0;
 }
 
 .wu-circle {
