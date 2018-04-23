@@ -270,8 +270,7 @@ function updateLegendText(d, category) {
 function updateLegendTextToView() {
 
   if(activeView === 'USA') {
-    console.log('activeView is USA, so setting category amounts');
-    
+
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
@@ -283,11 +282,11 @@ function updateLegendTextToView() {
       .text(function(d) { return d.wateruse; });
 
   } else {
-    console.log('activeView is not USA, so not yet setting category amounts because this is just a test');
+
     
    var state_data = waterUseViz.stateData
       .filter(function(d) { 
-        return d.abrv === activeView; 
+        return d.abrv == activeView; 
     });
     
     waterUseViz.elements
@@ -296,10 +295,11 @@ function updateLegendTextToView() {
       .data(state_data)
       .text(function(d) { return d.STATE_NAME + " Water Use"; });
   
-    waterUseViz.elements
-      .buttonBox
+    waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
-      .text("");
+      .data(state_data[0].use, function(d) { return d.category; })
+      .text(function(d) { return d.wateruse; });
+      
   }
 
   if (toolTipTimer){
