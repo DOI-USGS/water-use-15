@@ -162,11 +162,6 @@ function updateView(newView, fireAnalytics) {
   unhighlightCounty();
   unhighlightCircle();
   updateLegendTextToView();
-  
-  // only reset stroke when zooming back out
-  if(activeView === "USA") {
-    resetCircleStroke();
-  }
 
   // change the zoom button or county dropdown based on view
   updateZoomOutButton(activeView);
@@ -189,6 +184,9 @@ function updateView(newView, fireAnalytics) {
     foregroundState(thisstate, scale = zoom_scale);
     scaleCircleStroke(wucircles, scale = zoom_scale);
     
+  } else {
+    // only reset stroke when zooming back out
+    resetCircleStroke();
   }
   
   var allcounties = d3.selectAll('.county');
