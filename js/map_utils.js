@@ -162,7 +162,7 @@ function updateView(newView, fireAnalytics) {
   unhighlightCounty();
   unhighlightCircle();
   updateLegendTextToView();
-  
+
   // change the zoom button or county dropdown based on view
   updateZoomOutButton(activeView);
   updateCountySelectorDropdown(activeView);
@@ -176,13 +176,19 @@ function updateView(newView, fireAnalytics) {
       .filter(function(d) { return d !== activeView; });
     var thisstate = d3.selectAll('.state')
       .filter(function(d) { return d === activeView; });
+    var wucircles = d3.selectAll('.wu-circle');
     
     showCountyLines(statecounties, scale = zoom_scale);
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom_scale);
     foregroundState(thisstate, scale = zoom_scale);
+    scaleCircleStroke(wucircles, scale = zoom_scale);
     
+  } else {
+    // only reset stroke when zooming back out
+    resetCircleStroke();
   }
+  
   var allcounties = d3.selectAll('.county');
   
   allcounties

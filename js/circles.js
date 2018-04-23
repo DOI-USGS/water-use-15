@@ -91,7 +91,6 @@ function highlightCircle(countyDatum, category) {
     .attr('cx', projectX([countyDatum.lon, countyDatum.lat]))
     .attr('cy', projectY([countyDatum.lon, countyDatum.lat]))
     .attr('r', scaleCircles(countyDatum[category]))
-    .style('stroke', categoryToColor(category))
     .style('fill', categoryToColor(category));
   
 }

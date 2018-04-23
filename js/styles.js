@@ -109,3 +109,15 @@ function unhighlightCounty() {
     .classed("highlighted-county", false);
 }
 
+function scaleCircleStroke(selection, scale) {
+  selection
+    .style("stroke-width", 2/scale+"px");
+}
+
+function resetCircleStroke() {
+  //resets stroke-width to whatever is coming from CSS
+  d3.selectAll('.wu-circle')
+    .transition()
+    .delay(500) // delay until > 1/2 way through zoom out
+    .style("stroke-width", null);
+}
