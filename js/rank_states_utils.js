@@ -5,6 +5,9 @@ var rankSvg = {
     bottomMargin: 15,
     updateStyles: function() {
     },
+    liftedState: function() {
+      
+    },
     draggingState: function() {
     },
     droppedState: function() {
@@ -42,6 +45,12 @@ svgStates.append('g')
     .classed('rankem-title', true)
     .attr('text-anchor','middle')
     .text('Drag a state over its matching bar');
+
+svgStates.append('g')
+  .attr('id','rank-data-text')
+  .attr('transform',"translate("+(rankSvg.width * 0.4)+","+(rankSvg.height * 0.42)+")")
+  .append('text')
+    .text(' ');
 
 // Read state data and add it to figure
 d3.queue()
@@ -99,6 +108,7 @@ function rankEm() {
     })
     .datum({x: 0, y: 0})
     .call(d3.drag()
+      .on("start", rankSvg.liftedState)
       .on("drag", rankSvg.draggingState)
       .on("end", rankSvg.droppedState));
     
@@ -153,17 +163,22 @@ rankSvg.updateStyles = function(){
   function clearHighlight(){
     d3.selectAll('.highlight')
         .classed('highlight', false);
+    d3.select("#rank-data-text").select('text')
+        .text(" ");    
       rankSvg.updateStyles();  
+      
   }
   
   lockedBars
     .style('fill', categoryToColor('total'))
-    .style('stroke-width',0)
+    .style('stroke-width', 0)
     .on('mouseover',function(){
       var state = d3.select(this).attr('id').split('-')[0];
       d3.select('#'+state+'-locked').classed('highlight', true);
       d3.select(this).classed('highlight', true);
       rankSvg.updateStyles();
+      d3.select("#rank-data-text").select('text')
+        .text(this.__data__.abrv+": "+this.__data__.wu);
     })
     .on('mouseout',clearHighlight);
   
@@ -175,6 +190,8 @@ rankSvg.updateStyles = function(){
     .style("stroke-dasharray","4, 2")
     .on('mouseover',function(){
       d3.select(this).classed('highlight', true);
+      d3.select("#rank-data-text").select('text')
+        .text(this.__data__.wu);
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
@@ -190,6 +207,8 @@ rankSvg.updateStyles = function(){
       var state = d3.select(this).attr('id').split('-')[0];
       d3.select('#'+state+'-bar').classed('highlight', true);
       d3.select(this).classed('highlight', true);
+      d3.select("#rank-data-text").select('text')
+        .text(this.__data__.abrv+": "+this.__data__.wu);
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
@@ -207,20 +226,24 @@ rankSvg.updateStyles = function(){
       .style('fill',"rgba(220,220,220, 0.4)")
       .style('stroke',categoryToColor('total',true));
     
-    d3.select('#rank-directions').style('opacity',1);
+    d3.select('#rank-directions')
+      .transition().duration(600).style('opacity',1);
   }
   openBars.filter('.highlight')
   .style("stroke-dasharray", null)
   .style('stroke-width', 0)
   .style('fill',categoryToColor('total',true));  
 };
-  
+
+rankSvg.liftedState = function(d){
+  d3.select('#rank-directions')
+    .transition().duration(600).style('opacity',0);
+};
 rankSvg.draggingState = function (d) {
   var thisShape = d3.select(this);
   rankSvg.isDragged = true;
   thisShape.attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
   rankSvg.isOnRankBar(thisShape.node().getBoundingClientRect());
-  d3.select('#rank-directions').style('opacity',0);
 };
 
 rankSvg.droppedState = function(d){
@@ -245,7 +268,8 @@ rankSvg.droppedState = function(d){
       
       // is this the last one? if so, remove the directions    
       if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
-        d3.select('#rank-directions').select('text').remove();
+        d3.select('#rank-directions')
+          .select('text').remove();
       }
 
     } else {
