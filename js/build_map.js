@@ -26,7 +26,9 @@ var waterUseViz = {
     //map: null,
     buttonBox: null
   },
-  stateAbrvs: []
+  stateAbrvs: [],
+  nationalData: {},
+  stateData: {}
 };
 
 // Globals not yet in waterUseViz
@@ -34,6 +36,21 @@ var activeView, activeCategory, prevCategory;
 var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
 var countyBoundsZoom = new Map();
 var categories = ["total", "thermoelectric", "irrigation","publicsupply", "industrial"];
+
+
+// Read national data and add it to figure
+d3.json("data/wu_data_15_sum.json", function(error, data) {
+  if (error) throw error;
+  waterUseViz.nationalData = data;
+  
+});
+
+// Read national data and add it to figure
+d3.json("data/wu_state_data.json", function(error, data) {
+  if (error) throw error;
+  waterUseViz.stateData = data;
+  
+});
 
 // Projection
 var projection = albersUsaTerritories()

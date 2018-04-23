@@ -23,18 +23,13 @@ stateMap.append('g')
 svgStates.append('g')
   .attr('id','ranked-states-bars');
   
-// Read state data and add it to figure
-d3.queue()
-  .defer(d3.json, "data/wu_state_data.json")
-  .await(rankEm);
-  
 function rankEm() {
 
   // arguments[0] is the error
 	var error = arguments[0];
 	if (error) throw error;
 	
-	var bardata = arguments[1];
+	var bardata = waterUseViz.stateData;
 	
 	var scaleX = d3.scaleBand()
 	  .range([0, rankSvg.width])

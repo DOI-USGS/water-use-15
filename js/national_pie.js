@@ -35,7 +35,7 @@ var textArc = d3.arc()
     .outerRadius(radius*1.25)
     .innerRadius(radius*1.25);
   
-var wu_national_no_total = wu_national_data
+var wu_national_no_total = waterUseViz.nationalData  
       .filter(function(d) { return d.category !== "total"; });
 
 var slices = pie_g.selectAll(".slice")
