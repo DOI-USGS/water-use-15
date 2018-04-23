@@ -141,7 +141,7 @@ fetch:
     reader: excel
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "usco2015v2.0-dataviz.xlsx"
+    remoteFilename: "usco2015v2.0_FINAL-dataviz.xlsx"
     
 process:
   -
