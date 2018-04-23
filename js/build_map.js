@@ -193,7 +193,7 @@ function fillMap() {
   d3.json("data/wu_state_data.json", function(error, data) {
     if (error) throw error;
     waterUseViz.stateData = data;
-    
+    rankEm();
   });
 }
 

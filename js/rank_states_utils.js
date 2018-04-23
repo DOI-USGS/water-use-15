@@ -1,190 +1,308 @@
-
-var rankSvg = {
-    width: 1000,
-    height: 300,
-    bottomMargin: 15
-};
-
-var svgStates = d3.select("#rank-states-interactive")
-  .append("svg")
-  .attr('viewBox', '0 0 '+ rankSvg.width + " " + rankSvg.height)
-  .attr('preserveAspectRatio', 'xMidYMid');
-
-var stateMap = svgStates.append('g')
-  .attr('id','ranked-states-map')
-  .attr('transform',"translate(-10,-30)scale(0.4)");
-
-stateMap.append('g')
-  .attr('id','ranked-states-moved');
-
-stateMap.append('g')
-  .attr('id','ranked-states-draggable');
-  
-svgStates.append('g')
-  .attr('id','ranked-states-bars');
-  
 function rankEm() {
+
+  var rankSvg = {
+      width: 1000,
+      height: 300,
+      bottomMargin: 15,
+      updateStyles: function() {
+      },
+      liftedState: function() {
+        
+      },
+      draggingState: function() {
+      },
+      droppedState: function() {
+      },
+      isOnRankBar: function(){
+      },
+      isDragged: false
+  };
+  
+  var svgStates = d3.select("#rank-states-interactive")
+    .append("svg")
+    .attr('viewBox', '0 0 '+ rankSvg.width + " " + rankSvg.height)
+    .attr('preserveAspectRatio', 'xMidYMid');
+  svgStates.append('style')
+    .attr('type', "text/css")
+    .text("@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light)");
+  
+  var stateMap = svgStates.append('g')
+    .attr('id','ranked-states-map')
+    .attr('transform',"translate(-10,-30)scale(0.4)");
+  
+  stateMap.append('g')
+    .attr('id','ranked-states-locked');
+  
+  stateMap.append('g')
+    .attr('id','ranked-states-draggable');
+    
+  svgStates.append('g')
+    .attr('id','ranked-states-bars');
+    
+  svgStates.append('g')
+    .attr('id','rank-directions')
+    .attr('transform',"translate("+(rankSvg.width * 0.6)+",30)")
+    .append('text')
+      .classed('rankem-title', true)
+      .attr('text-anchor','middle')
+      .text('Drag a state over its matching bar');
+  
+  svgStates.append('g')
+    .attr('id','rank-data-text')
+    .attr('transform',"translate("+(rankSvg.width * 0.4)+","+(rankSvg.height * 0.42)+")")
+    .append('text')
+      .text(' ');
+
 
   // arguments[0] is the error
 	var error = arguments[0];
 	if (error) throw error;
 	
-	var bardata = waterUseViz.stateData;
+	var barData = arguments[1];
+	var dragData = barData.filter(function(d) {
+	  return d.open;
+	});
 	
 	var scaleX = d3.scaleBand()
 	  .range([0, rankSvg.width])
 	  .paddingInner(0.1)
-	  .domain(bardata.map(function(d,i){
+	  .domain(barData.map(function(d,i){
 	    return i;
 	   }));
 	
 	var scaleY = d3.scaleLinear()
 	  .range([rankSvg.bottomMargin, rankSvg.height])
-	  .domain([0, d3.max(bardata, function(d){
-	    return d.total;
+	  .domain([0, d3.max(barData, function(d){
+	    return d.wu;
 	  })]);
 	
-	svgStates.select('#ranked-states-moved')
+	svgStates.select('#ranked-states-locked')
     .selectAll( 'use' )
-    .data(bardata)
+    .data(barData)
     .enter()
     .append('use')
-    .style('stroke-dasharray',"10, 10")
-    .classed('static-state', true)
+    .classed('locked-state', true)
     .attr('xlink:href', function(d) {
       return '#'+ d.abrv +'-lowres';
+    })
+    .attr('id', function(d) {
+      return d.abrv +'-locked';
     });
     
-    svgStates.select('#ranked-states-draggable')
+  svgStates.select('#ranked-states-draggable')
     .selectAll( 'use' )
-    .data(bardata)
+    .data(dragData)
     .enter()
     .append('use')
-    .filter(function(d){
-      return d.open;
+    .classed('draggable-state','true') 
+    .attr('id', function(d) {
+      return d.abrv + '-draggable';
     })
-      .classed('draggable','true') 
-      .style("fill",categoryToColor("total"))
-      .attr('id', function(d) {
-        return d.abrv + '-rank';
-      })
-      .attr('xlink:href', function(d) {
-        return '#'+ d.abrv +'-lowres';
-      })
-      .datum({x: 0, y: 0})
-      .call(d3.drag()
-        .on("drag", dragging)
-        .on("end", dragdone));
+    .attr('xlink:href', function(d) {
+      return '#'+ d.abrv +'-lowres';
+    })
+    .datum({x: 0, y: 0})
+    .call(d3.drag()
+      .on("start", rankSvg.liftedState)
+      .on("drag", rankSvg.draggingState)
+      .on("end", rankSvg.droppedState));
     
   // add states
   
   var barGroups = svgStates.select('#ranked-states-bars')
     .selectAll('g')
-    .data(bardata)
+    .data(barData)
     .enter()
     .append('g')
     .attr('transform', function(d, i){
-      return 'translate(' + scaleX(i) + "," + (rankSvg.height - scaleY(d.total)) + ")";
+      return 'translate(' + scaleX(i) + "," + (rankSvg.height - scaleY(d.wu)) + ")";
     });
     
     barGroups.append('text')
     .attr('y', function(d){
-      return scaleY(d.total) - rankSvg.bottomMargin;
+      return scaleY(d.wu) - rankSvg.bottomMargin;
     })
     .attr('x', scaleX.bandwidth()/2)
     .attr('text-anchor','middle')
-    .attr('alignment-baseline','hanging')
     .classed('bar-name',true)
     .classed('open-bar-name', function(d){
       return d.open;
     })
-    .attr('dy',"0.33em")
+    .attr('dy',"1em")
     .text(function(d){
       return d.abrv;
     });
   
   barGroups.append('rect')
     .attr('height', function(d){
-      return scaleY(d.total) - rankSvg.bottomMargin;
+      return scaleY(d.wu) - rankSvg.bottomMargin;
+    })
+    .attr('id', function(d){
+      return d.abrv+'-bar';
     })
     .attr('width', scaleX.bandwidth())
-    .style("stroke-dasharray","4, 2")
-    .style('stroke','rgb(190,190,190)')
-    .classed('open-rank-bar', function(d){
-      return d.open;
-    })
-    .classed('closed-rank-bar', function(d){
+    .classed('locked-rank-bar', function(d){
       return !d.open;
-    })
-    .style('fill', categoryToColor("total"));
-  
-    function dragging(d) {
-      var thisShape = d3.select(this);
-      thisShape.attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
-      overRankBar(thisShape.node().getBoundingClientRect());
-    }
-
-    function dragdone(d) {
-      var barchoice = d3.select('.chosen-rank-bar');
-      if (barchoice.empty()){
-        d3.select(this)
-          .transition().duration(600)
-            .attr('transform','translate(0,0)'); 
-      } else {
-        
-        var thisBarname = d3.select(barchoice.node().parentNode).select('text').text();
-        
-        if (thisBarname + '-rank' == d3.select(this).attr('id')){
-          // the guess is right
-           barchoice
-            .on('mouseover', null)
-            .on('mouseout', null)
-            .attr('class','closed-rank-bar');
-          d3.select(barchoice.node().parentNode).select('text')
-            .classed('open-bar-name',false);
-          d3.select(this).style('opacity', 0).attr('transform','scale(0)'); 
-          // one last time in cast it overlapped two rectangles
-          overRankBar(d3.select(this).node().getBoundingClientRect()); 
-          
-        } else {
-          barchoice.attr('class','open-rank-bar');
-          barchoice.transition().duration(600).ease(d3.easeLinear)
-            .style('stroke-dashoffset',"6")
-            .style('stroke', 'rgb(200, 65, 39)') // emphasize with a redorange stroke
-            .transition().duration(600)
-              .style('stroke','rgb(190,190,190)')
-              .style('stroke-dashoffset',"12"); // needs to be a multiple of stroke-dasharray to look smooth
-          barchoice.style('stroke-dashoffset',null); // resets to "0", which doesn't change the look
-          d3.select(this)
-          .transition().duration(600)
-            .attr('transform','translate(0,0)');  
-        }
-      }
-      
-      
-      d3.select(this).attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
-  }
-  function overRankBar(shapeBox){
-  
-    var openBars = d3.selectAll('.open-rank-bar').nodes();
-    for (var i = 0; i < openBars.length; i++) { 
-      var thisBar = openBars[i];
-      var barBox = thisBar.getBoundingClientRect();
+    });
     
-      var isOverBar = !(barBox.right < shapeBox.left || 
-                barBox.left > shapeBox.right || 
-                barBox.bottom < shapeBox.top || 
-                barBox.top > shapeBox.bottom);
-      if (isOverBar){
-        d3.select(thisBar).classed('chosen-rank-bar',true);
-      } else {
-        d3.select(thisBar).classed('chosen-rank-bar',false);
-      }
-    }
-  }
+    rankSvg.updateStyles();
 }
 
-
+rankSvg.updateStyles = function(){
+  var allBars = svgStates.select('#ranked-states-bars').selectAll('rect');
+  var lockedStates = svgStates.select('#ranked-states-locked').selectAll('.locked-state');
+  var draggableStates = svgStates.select('#ranked-states-draggable').selectAll('.draggable-state');
+  var lockedBars = allBars.filter('.locked-rank-bar');
+  var openBars = allBars.filter('*:not(.locked-rank-bar)');
   
-
+  function clearHighlight(){
+    d3.selectAll('.highlight')
+        .classed('highlight', false);
+    d3.select("#rank-data-text").select('text')
+        .text(" ");    
+      rankSvg.updateStyles();  
+      
+  }
+  
+  lockedBars
+    .style('fill', categoryToColor('total'))
+    .style('stroke-width', 0)
+    .on('mouseover',function(){
+      var state = d3.select(this).attr('id').split('-')[0];
+      d3.select('#'+state+'-locked').classed('highlight', true);
+      d3.select(this).classed('highlight', true);
+      rankSvg.updateStyles();
+      d3.select("#rank-data-text").select('text')
+        .text(this.data().abrv+": "+this.data().wu);
+    })
+    .on('mouseout',clearHighlight);
+  
     
+  openBars
+    .style('fill', "rgba(255, 255, 255, 0.0)")
+    .style('stroke',"rgb(190,190,190)")
+    .style('stroke-width', 1.5)
+    .style("stroke-dasharray","4, 2")
+    .on('mouseover',function(){
+      d3.select(this).classed('highlight', true);
+      d3.select("#rank-data-text").select('text')
+        .text(this.data().wu);
+      rankSvg.updateStyles();
+    })
+    .on('mouseout',clearHighlight);
+    
+  lockedStates
+    .style('fill',"rgb(220,220,220)")
+    .style('stroke',"rgb(190,190,190)")
+    .style('stroke-width', 4)
+    .style("stroke-dasharray","10, 10")
+    .on('mouseover',function(){
+      d3.selectAll('.highlight')
+        .classed('highlight', false);
+      var state = d3.select(this).attr('id').split('-')[0];
+      d3.select('#'+state+'-bar').classed('highlight', true);
+      d3.select(this).classed('highlight', true);
+      d3.select("#rank-data-text").select('text')
+        .text(this.data().abrv+": "+this.data().wu);
+      rankSvg.updateStyles();
+    })
+    .on('mouseout',clearHighlight);
+    
+  draggableStates
+    .style('fill',categoryToColor("total"));
+  
+  if (!rankSvg.isDragged){
+    lockedBars.filter('.highlight')
+      .style('fill',categoryToColor('total',true));
+      
+    lockedStates.filter('.highlight')
+      .raise()
+      .style("stroke-dasharray", null)
+      .style('fill',"rgba(220,220,220, 0.4)")
+      .style('stroke',categoryToColor('total',true));
+    
+    d3.select('#rank-directions')
+      .transition().duration(600).style('opacity',1);
+  }
+  openBars.filter('.highlight')
+  .style("stroke-dasharray", null)
+  .style('stroke-width', 0)
+  .style('fill',categoryToColor('total',true));  
+};
+
+rankSvg.liftedState = function(d){
+  d3.select('#rank-directions')
+    .transition().duration(600).style('opacity',0);
+};
+
+rankSvg.draggingState = function (d) {
+  var thisShape = d3.select(this);
+  rankSvg.isDragged = true;
+  thisShape.attr("transform", "translate(" + (d3.event.x) + "," + (d3.event.y) + ")");
+  rankSvg.isOnRankBar(thisShape.node().getBoundingClientRect());
+};
+
+rankSvg.droppedState = function(d){
+  rankSvg.isDragged = false;
+  var barchoice = d3.select('.chosen-rank-bar');
+      
+  if (barchoice.empty()){
+    d3.select(this)
+      .transition().duration(600)
+        .attr('transform','translate(0,0)'); 
+  } else {
+    var stateName = barchoice.attr('id').split('-')[0];
+    if (stateName === d3.select(this).attr('id').split('-')[0]){
+      // the guess is right
+      barchoice.attr('class','locked-rank-bar');
+      d3.select(barchoice.node().parentNode).select('text')
+        .classed('open-bar-name',false);
+      d3.select(this)
+        .attr('class',null)
+        .transition().duration(600)
+          .style('opacity', 0);
+      
+      // is this the last one? if so, remove the directions    
+      if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
+        d3.select('#rank-directions')
+          .select('text').remove();
+      }
+
+    } else {
+      d3.select(this)
+        .transition().duration(600)
+          .attr('transform','translate(0,0)'); 
+      barchoice.attr('class',null);
+      barchoice.transition().duration(600).ease(d3.easeLinear)
+        .style('stroke-dashoffset',"6")
+        .style('stroke-width',2.0)
+        .style('stroke', 'rgb(200, 65, 39)') // emphasize with a redorange stroke
+        .transition().duration(600)
+          .style('stroke','rgb(190,190,190)')
+          .style('stroke-width',1.5)
+          .style('stroke-dashoffset',"12"); // needs to be a multiple of stroke-dasharray to look smooth
+      barchoice.style('stroke-dashoffset',null); // resets to "0", which doesn't change the look
+    }
+  }
+  rankSvg.updateStyles();
+};
+
+rankSvg.isOnRankBar = function(shapeBox) {
+  var openBars = svgStates.select('#ranked-states-bars')
+    .selectAll('rect')
+    .filter('*:not(.locked-rank-bar)').nodes();
+      
+  for (var i = 0; i < openBars.length; i++) { 
+    var thisBar = openBars[i];
+    var barBox = thisBar.getBoundingClientRect();
+    
+    var isOverBar = !(barBox.right < shapeBox.left || 
+              barBox.left > shapeBox.right || 
+              barBox.bottom < shapeBox.top || 
+              barBox.top > shapeBox.bottom);
+     d3.select(thisBar)
+      .classed('chosen-rank-bar',isOverBar)
+      .classed('highlight',isOverBar);
+  }
+  rankSvg.updateStyles();
+};
