@@ -26,10 +26,14 @@ function addButtons() {
     .attr('id', 'legend-subtitle')
     .text('(millions of gallons per day)');
   
-  // button rectangles
+  // button rectangles for *style*
   buttons.append('rect')
-    .attr('x', 0)
-    .attr('y', 0)
+    .classed('filled-button', true);
+  
+  // button rectangles for *mouse events*
+  buttons.append('rect')
+    .classed('mouser-button', true)
+    .style('opacity','0')
     .on('click', function(d){
       updateCategory(d.toLowerCase(), activeCategory);
     })
@@ -92,9 +96,12 @@ function resizeButtons() {
     });
 
   // set x position, height, and width of colored rects
-  waterUseViz.elements.buttonBox.selectAll('.button rect')
+  waterUseViz.elements.buttonBox.selectAll('.button .filled-button')
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.bandwidth());
+  waterUseViz.elements.buttonBox.selectAll('.button .mouser-button')
+    .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
+    .attr('height', buttonY.padding(0).bandwidth() * 1.02); // seems to leave a small pad w/o multiplier 
   updateButtonWidths(activeCategory);
   
   // look up the active button for further reference
