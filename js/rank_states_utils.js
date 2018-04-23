@@ -40,10 +40,11 @@ function rankEm() {
     .on('mouseover',function(){
       var state = d3.select(this).attr('id').split('-')[0];
       d3.select('#'+state+'-locked').classed('highlight', true);
-      d3.select(this).classed('highlight', true);
+      var bar = d3.select(this)
+               .classed('highlight', true);
       rankSvg.updateStyles();
       d3.select("#rank-data-text").select('text')
-        .text(this.data().abrv+": "+this.data().wu);
+        .text(bar.datum().abrv+": "+ bar.datum().wu);
     })
     .on('mouseout',clearHighlight);
   
@@ -54,9 +55,10 @@ function rankEm() {
     .style('stroke-width', 1.5)
     .style("stroke-dasharray","4, 2")
     .on('mouseover',function(){
-      d3.select(this).classed('highlight', true);
+      var bar = d3.select(this)
+               .classed('highlight', true);
       d3.select("#rank-data-text").select('text')
-        .text(this.data().wu);
+        .text(bar.datum().wu);
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
@@ -70,10 +72,11 @@ function rankEm() {
       d3.selectAll('.highlight')
         .classed('highlight', false);
       var state = d3.select(this).attr('id').split('-')[0];
-      d3.select('#'+state+'-bar').classed('highlight', true);
+      var bar = d3.select('#'+state+'-bar')
+                .classed('highlight', true);
       d3.select(this).classed('highlight', true);
       d3.select("#rank-data-text").select('text')
-        .text(this.data().abrv+": "+this.data().wu);
+        .text(bar.datum().abrv+": "+bar.datum().wu);
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
