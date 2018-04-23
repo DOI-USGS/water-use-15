@@ -266,13 +266,18 @@ function updateLegendText(d, category) {
 }
 
 var wu_national_data;
-
-// Read state data and add it to figure
+// Read national data and add it to figure
 d3.json("data/wu_data_15_sum.json", function(error, data) {
-  
   if (error) throw error;
-  
   wu_national_data = data;
+  
+});
+
+var wu_state_data;
+// Read national data and add it to figure
+d3.json("data/wu_state_data.json", function(error, data) {
+  if (error) throw error;
+  wu_state_data = data;
   
 });
 
@@ -294,10 +299,17 @@ function updateLegendTextToView() {
 
   } else {
     console.log('activeView is not USA, so not yet setting category amounts because this is just a test');
+    
+   var state_data = wu_state_data
+      .filter(function(d) { 
+        return d.abrv === activeView; 
+    });
+    
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
-      .text("Water Use");
+      .data(state_data)
+      .text(function(d) { return d.STATE_NAME + " Water Use"; });
   
     waterUseViz.elements
       .buttonBox
