@@ -178,7 +178,7 @@ rankSvg.updateStyles = function(){
       d3.select(this).classed('highlight', true);
       rankSvg.updateStyles();
       d3.select("#rank-data-text").select('text')
-        .text(this.__data__.abrv+": "+this.__data__.wu);
+        .text(this.data().abrv+": "+this.data().wu);
     })
     .on('mouseout',clearHighlight);
   
@@ -191,7 +191,7 @@ rankSvg.updateStyles = function(){
     .on('mouseover',function(){
       d3.select(this).classed('highlight', true);
       d3.select("#rank-data-text").select('text')
-        .text(this.__data__.wu);
+        .text(this.data().wu);
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
@@ -208,7 +208,7 @@ rankSvg.updateStyles = function(){
       d3.select('#'+state+'-bar').classed('highlight', true);
       d3.select(this).classed('highlight', true);
       d3.select("#rank-data-text").select('text')
-        .text(this.__data__.abrv+": "+this.__data__.wu);
+        .text(this.data().abrv+": "+this.data().wu);
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
