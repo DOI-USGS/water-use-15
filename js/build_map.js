@@ -39,13 +39,6 @@ var categories = ["total", "thermoelectric", "irrigation","publicsupply", "indus
 
 
 // Read national data and add it to figure
-d3.json("data/wu_data_15_sum.json", function(error, data) {
-  if (error) throw error;
-  waterUseViz.nationalData = data;
-  
-});
-
-// Read national data and add it to figure
 d3.json("data/wu_state_data.json", function(error, data) {
   if (error) throw error;
   waterUseViz.stateData = data;
@@ -195,6 +188,14 @@ function fillMap() {
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   updateCounties('USA');
+  
+    // Read national data and add it to figure
+  d3.json("data/wu_data_15_sum.json", function(error, data) {
+    if (error) throw error;
+    waterUseViz.nationalData = data;
+    updateLegendTextToView();
+    loadPie();
+  });
 }
 
 function loadInitialCounties() {
