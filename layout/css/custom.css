@@ -111,6 +111,10 @@
   margin-top:20px;
 }
 
+.desktopFigure{
+  display: none;
+}
+
 #directions {
   padding-left: 20px;
   padding-right: 40px;
@@ -194,6 +198,14 @@
   }
   .mobile-UI-Container{
     display:none;
+  }
+  
+  .desktopFigure{
+    display: block;
+  }
+  
+  .mobileFigure{
+    display: none;
   }
 }
 
