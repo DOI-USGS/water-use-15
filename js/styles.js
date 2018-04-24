@@ -9,7 +9,12 @@ function categoryToName(category) {
   else { return "none"; }
 }
 
-function categoryToColor(category, stroke=false) {
+function categoryToColor(category, stroke) {
+  
+  if(stroke === undefined) {
+      scale = false;
+   }  
+  
   var opacityValue = 0.8;
   if(stroke) {
     opacityValue = 1;
