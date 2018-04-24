@@ -62,8 +62,8 @@ function addButtons() {
     .each( function(d) { this.__data__ = {category: d, wateruse: NaN}; });
   
   // add styling to the buttons and text according to which is active
+
   updateButtons(activeCategory);
-  updateLegendTextToView();
   
 }
 

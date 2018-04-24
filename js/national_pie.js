@@ -1,43 +1,41 @@
 // code to add a static pie chart of the national view
-
-var width = 480,
-    height = 350,
-    radius = Math.min(width, height) / 3;
-
-var piearea = d3.select(".side-by-side-figure")
-      .append("svg")
-        .attr('viewBox', '0 0 '+width+' '+height);
+function loadPie() {
+  var width = 480,
+      height = 350,
+      radius = Math.min(width, height) / 3;
   
-var pie_g = piearea
-      .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-var pie = d3.pie()
-    .value(function(d) { return d.wateruse; });
+  var piearea = d3.select(".side-by-side-left")
+        .append("svg")
+          .attr('viewBox', '0 0 '+width+' '+height);
     
-// for pie slices
-var path = d3.arc()
-    .outerRadius(radius)
-    .innerRadius(0);
-
-// for circles and inner most part of callout lines
-var lineStartArc = d3.arc()
-    .outerRadius(radius*0.8)
-    .innerRadius(radius*0.8);
-
-// for end of the callout lines
-var lineEndArc = d3.arc()
-    .outerRadius(radius*1.15)
-    .innerRadius(radius*1.15);
-
-// for pie slice text placement
-var textArc = d3.arc()
-    .outerRadius(radius*1.25)
-    .innerRadius(radius*1.25);
+  var pie_g = piearea
+        .append("g")
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
-d3.json("data/wu_data_15_sum.json", function(error, wu_national_data) {
+  var pie = d3.pie()
+      .value(function(d) { return d.wateruse; });
+      
+  // for pie slices
+  var path = d3.arc()
+      .outerRadius(radius)
+      .innerRadius(0);
   
-  var wu_national_no_total = wu_national_data
+  // for circles and inner most part of callout lines
+  var lineStartArc = d3.arc()
+      .outerRadius(radius*0.8)
+      .innerRadius(radius*0.8);
+  
+  // for end of the callout lines
+  var lineEndArc = d3.arc()
+      .outerRadius(radius*1.15)
+      .innerRadius(radius*1.15);
+  
+  // for pie slice text placement
+  var textArc = d3.arc()
+      .outerRadius(radius*1.25)
+      .innerRadius(radius*1.25);
+  
+  var wu_national_no_total = waterUseViz.nationalData  
         .filter(function(d) { return d.category !== "total"; });
   
   var slices = pie_g.selectAll(".slice")
@@ -93,5 +91,5 @@ d3.json("data/wu_data_15_sum.json", function(error, wu_national_data) {
         }
       })
       .text(function(d) { return categoryToName(d.data.category); }); //+': '+d.data.wateruse; });
-
-});
+  
+};

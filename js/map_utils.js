@@ -96,7 +96,7 @@ function zoomToFromState(d, i, j, selection) {
     // if they clicked on a different state, prepare to zoom in
     newView = clickedView;
   }
-
+  
   // zoom to the new view
   updateView(newView);
 }
@@ -117,43 +117,42 @@ function updateView(newView, fireAnalytics) {
     updateStateSelector(activeView);
   } 
   
-  // determine the center point and scaling for the new view
-  var x, y;
-  if(activeView === 'USA') {
-    x = waterUseViz.dims.map.width / 2;
-    y = waterUseViz.dims.map.height / 2;
-    zoom_scale = 1;
-  } else {
-    var stateGeom, centroid, x0, y0, x1, y1, stateDims;
-    
-    // find the state data we want to zoom to
-    stateGeom = stateBoundsUSA.features.filter(function(d) {
-      return d.properties.STATE_ABBV === activeView;
-    })[0];
-    
-    // find the center point to zoom to
-    centroid = buildPath.centroid(stateGeom);
-    x = centroid[0];
-    y = centroid[1];
-    
-    // find the maximum zoom (up to nation bounding box size) that keeps the
-    // whole state in view
-    [[x0,y0],[x1,y1]] = buildPath.bounds(stateGeom);
-    stateDims = {
-      width: 2 * d3.max([ x1 - x, x - x0]),
-      height: 2 * d3.max([ y1 - y, y - y0])
-    };
-    zoom_scale = d3.min([
-      nationDims.height/stateDims.height,
-      nationDims.width/stateDims.width]);
-  }
-
   // update the geospatial data for the upcoming resolution
   updateCounties(activeView);
   updateStates(activeView);
   
-  // set the styling: setting by adding or removing class, so d3 transitions not used
+  // ensure we have the zoom parameters (they're in the state zoom data) and apply the zoom
+  updateStateData(newView, function() {
+    applyZoomAndStyle(newView);
+  });
   
+  // record the change for analytics. don't need timeout for view change   
+  if(fireAnalytics) {
+    gtag('event', 'update view', {
+      'event_category': 'figure',
+      'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
+    });
+  }    
+}
+
+function applyZoomAndStyle(newView) {
+  // determine the center point and scaling for the new view
+  var zoom;
+  if(activeView === 'USA') {
+    zoom = {
+      x: waterUseViz.dims.map.width / 2,
+      y: waterUseViz.dims.map.height / 2,
+      s: 1
+    };
+  } else {
+    // find the state data we want to zoom to
+    var stateGeom = stateBoundsZoom.features.filter(function(d) {
+      return d.properties.STATE_ABBV === activeView;
+    })[0];
+    // the ZOOM property contains x, y, and s
+    zoom = stateGeom.properties.ZOOM;
+  }
+
   // reset counties each time a zoom changes
   // cannot go inside first if because panning to adjacent state won't reset
   hideCountyLines();
@@ -178,11 +177,11 @@ function updateView(newView, fireAnalytics) {
       .filter(function(d) { return d === activeView; });
     var wucircles = d3.selectAll('.wu-circle');
     
-    showCountyLines(statecounties, scale = zoom_scale);
+    showCountyLines(statecounties, scale = zoom.s);
     emphasizeCounty(statecounties);
-    backgroundState(otherstates, scale = zoom_scale);
-    foregroundState(thisstate, scale = zoom_scale);
-    scaleCircleStroke(wucircles, scale = zoom_scale);
+    backgroundState(otherstates, scale = zoom.s);
+    foregroundState(thisstate, scale = zoom.s);
+    scaleCircleStroke(wucircles, scale = zoom.s);
     
   } else {
     // only reset stroke when zooming back out
@@ -192,25 +191,16 @@ function updateView(newView, fireAnalytics) {
   var allcounties = d3.selectAll('.county');
   
   allcounties
-    .style("stroke-width",  1/zoom_scale); // make all counties have scaled stroke-width
+    .style("stroke-width",  1/zoom.s); // make all counties have scaled stroke-width
   
   // apply the transform (i.e., actually zoom in or out)
   map.transition()
     .duration(750)
     .attr('transform',
       "translate(" + waterUseViz.dims.map.width / 2 + "," + waterUseViz.dims.map.height / 2 + ")"+
-      "scale(" + zoom_scale + ")" +
-      "translate(" + (waterUseViz.dims.map.x0/zoom_scale - x) + "," + -y + ")");
-      
-  // record the change for analytics. don't need timeout for view change   
-  if(fireAnalytics) {
-    gtag('event', 'update view', {
-      'event_category': 'figure',
-      'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
-    });
-  }    
+      "scale(" + zoom.s + ")" +
+      "translate(" + (waterUseViz.dims.map.x0/zoom.s - zoom.x) + "," + -zoom.y + ")");
 }
-
 
 function updateCategory(category, prevCategory) {
   if(category === prevCategory) {
@@ -271,35 +261,41 @@ function updateLegendText(d, category) {
   }, toolTipDelay);
 }
 
+
+
 function updateLegendTextToView() {
 
   if(activeView === 'USA') {
-    console.log('activeView is USA, so setting category amounts');
-    
+
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
       .text("U.S. Water Use");
   
-    d3.json("data/wu_data_15_sum.json", 
-      function(error, wu_national_data) {
-      
-        waterUseViz.elements.buttonBox
-          .selectAll('.category-amount')
-          .data(wu_national_data, function(d) { return d.category; })
-          .text(function(d) { return d.wateruse; });
-      });
+    waterUseViz.elements.buttonBox
+      .selectAll('.category-amount')
+      .data(waterUseViz.nationalData, function(d) { return d.category; })
+      .text(function(d) { return d.fancynums; });
+
   } else {
-    console.log('activeView is not USA, so not yet setting category amounts because this is just a test');
+
+    
+   var state_data = waterUseViz.stateData
+      .filter(function(d) { 
+        return d.abrv === activeView; 
+    });
+    
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
-      .text("Water Use");
+      .data(state_data)
+      .text(function(d) { return d.STATE_NAME + " Water Use"; });
   
-    waterUseViz.elements
-      .buttonBox
+    waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
-      .text("");
+      .data(state_data[0].use, function(d) { return d.category; })
+      .text(function(d) { return d.wateruse; });
+      
   }
 
   if (toolTipTimer){
