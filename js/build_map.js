@@ -202,7 +202,7 @@ function fillMap() {
           'abrv': d.abrv,
           'STATE_NAME': d.STATE_NAME,
           'open': d.open,
-          'wu': d.use.filter(function(e) {return e.category === 'total';}).wateruse
+          'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse
         };
         barData.push(x);
       });
