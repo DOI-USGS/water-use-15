@@ -1,10 +1,10 @@
 // code to add a static pie chart of the national view
 function loadPie() {
-  var width = 1000,
-      height = 400,
+  var width = 480,
+      height = 350,
       radius = Math.min(width, height) / 3;
   
-  var piearea = d3.select("#national-pie")
+  var piearea = d3.select(".side-by-side-left")
         .append("svg")
           .attr('viewBox', '0 0 '+width+' '+height);
     
