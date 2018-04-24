@@ -224,18 +224,18 @@ function rankEm(barData) {
   labelTextGroup.append("text")
       .attr("id", "rank-state-text")
       .attr("x", rankSvg.width * 0.6)
-      .attr("y", rankSvg.height * 0.38);
+      .attr("y", rankSvg.height * 0.3);
   
   labelTextGroup.append("text")
       .attr("id", "rank-value-text")
       .attr("x", rankSvg.width * 0.6)
-      .attr("y", rankSvg.height * 0.38)
+      .attr("y", rankSvg.height * 0.3)
       .attr('dy', '1.2em');
   
   labelTextGroup.append("text")
       .attr("id", "rank-units-text")
       .attr("x", rankSvg.width * 0.6)
-      .attr("y", rankSvg.height * 0.38)
+      .attr("y", rankSvg.height * 0.3)
       .attr('dy', '3.4em')
       .attr("font-size", "12px")
       .text("million gallons per day");
