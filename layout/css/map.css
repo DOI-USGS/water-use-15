@@ -70,18 +70,22 @@
   opacity: 1;
 }
 
-.dragging {
-  cursor: move; /* was using grabbing, but that only works in Firefox*/
+.draggable-state {
+  /* indicate that the state can be clicked/moved
+      was using grabbing, but that only works in Firefox*/
+  cursor: pointer; 
 }
 
-.tooltip {
-	  position: absolute;
-  	padding: 5px 10px;
-  	background-color: white;
-  	border:1px solid rgb(190,190,190);
-  	border-radius: 3px;
-  	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  	line-height:1.5em;
+#rank-state-text,
+#rank-value-text {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#rank-state-text,
+#rank-value-text,
+#rank-units-text {
+	fill: rgb(70,70,70);
 }
 
 .hidden {
