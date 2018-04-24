@@ -285,7 +285,7 @@ function updateLegendTextToView() {
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
       .data(waterUseViz.nationalData, function(d) { return d.category; })
-      .text(function(d) { return d.wateruse; });
+      .text(function(d) { return d.fancynums; });
 
   } else {
 

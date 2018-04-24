@@ -18,9 +18,8 @@ process.summarize_wu_data <- function(viz) {
     select(-sum_cats)
 
   wu_df_national_transf <- tidyr::gather(wu_df_national, key = "category", value = "wateruse")
-  wu_df_national_transf$wateruse <- signif(wu_df_national_transf$wateruse, digits = 6)
-  
-  wu_df_national_transf$fancynums <- format(wu_df_national_transf$wateruse, big.mark=",", scientific=FALSE)
+
+  wu_df_national_transf$fancynums <- format(round(wu_df_national_transf$wateruse), big.mark=",", scientific=FALSE)
   
   
   jsonlite::write_json(wu_df_national_transf, viz[["location"]])
