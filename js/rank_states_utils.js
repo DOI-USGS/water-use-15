@@ -39,7 +39,7 @@ function rankEm(barData) {
       .attr("display", "block");
     
     allText.select("#rank-state-text")
-      .text(data.STATE_NAME+":");
+      .text(data.STATE_NAME);
     
     allText.select("#rank-value-text")
       .text(data.wu);
