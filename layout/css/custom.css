@@ -111,7 +111,7 @@
   margin-top:20px;
 }
 
-.desktopFigure{
+.desktop-figure{
   display: none;
 }
 
@@ -200,13 +200,35 @@
     display:none;
   }
   
-  .desktopFigure{
+  .side-by-side{
+    display:flex;
+    flex-direction:row;
+  }
+  
+  .side-by-side-left{
+    flex:2;
+  }
+  
+  .side-by-side-right{
+    flex:1;
+    position:relative;
+  }
+  
+  .pie-caption{
+    position:absolute;
+    margin:auto;
+    top:0; bottom:0; left:0; right:0;
+    height:80px;
+  }
+  
+  .desktop-figure{
     display: block;
   }
   
-  .mobileFigure{
+  .mobile-figure{
     display: none;
   }
+  
 }
 
 /* really large desktop screens*/
