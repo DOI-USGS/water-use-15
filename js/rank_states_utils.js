@@ -34,6 +34,18 @@ function rankEm() {
       
   }
   
+  barData = [];
+  
+  waterUseViz.stateData.forEach(function(d) {
+    var x = {
+      'abrv': d.abrv[0],
+      'STATE_NAME': d.STATE_NAME[0],
+      'open': d.open[0],
+      'wateruse': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse
+    };
+    barData.push(x);
+  });
+  
   lockedBars
     .style('fill', categoryToColor('total'))
     .style('stroke-width', 0)
@@ -215,8 +227,6 @@ function rankEm() {
     .append('text')
       .text(' ');
 
-	var barData = waterUseViz.stateData;
-	
 	var dragData = barData.filter(function(d) {
 	  return d.open;
 	});
