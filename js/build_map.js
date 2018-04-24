@@ -59,10 +59,10 @@ readHashes();
 // Create container
 var container = d3.select('body')
   .append('div')
-  .classed('svg-container', true);
+  .classed('main-svg', true);
 
 // Create SVG and map
-var svg = d3.select(".svg-container")
+var svg = d3.select(".main-svg")
   .append("svg")
   .attr('preserveAspectRatio', 'xMidYMid');
 

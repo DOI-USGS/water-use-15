@@ -4,7 +4,7 @@ function loadPie() {
       height = 350,
       radius = Math.min(width, height) / 3;
   
-  var piearea = d3.select(".side-by-side-left")
+  var piearea = d3.select(".side-by-side-figure")
         .append("svg")
           .attr('viewBox', '0 0 '+width+' '+height);
     
