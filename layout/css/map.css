@@ -70,8 +70,10 @@
   opacity: 1;
 }
 
-.dragging {
-  cursor: move; /* was using grabbing, but that only works in Firefox*/
+.draggable-state {
+  /* indicate that the state can be clicked/moved
+      was using grabbing, but that only works in Firefox*/
+  cursor: pointer; 
 }
 
 .tooltip {
