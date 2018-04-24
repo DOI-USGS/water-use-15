@@ -30,6 +30,8 @@ targets:
   us_states:
     command: state_sp()
   
+  # This county spatial data is from:
+  #     https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
   us_counties:
     command: reproject_census('data/cb_2017_us_county_5m.shp')
     
