@@ -13,11 +13,14 @@ process.summarize_wu_data <- function(viz) {
   total_i <- which(names(wu_df_national) == "total")
   
   wu_df_national <- wu_df_national %>% 
-    dplyr::mutate(sum_cats = rowSums(.[-total_i])) %>% 
-    dplyr::mutate(other = .[[total_i]] - sum_cats) %>% 
+    dplyr::mutate(sum_cats = rowSums(.[-total_i]), 
+                  other = .[[total_i]] - sum_cats) %>%
     select(-sum_cats)
-  
+
   wu_df_national_transf <- tidyr::gather(wu_df_national, key = "category", value = "wateruse")
+
+  wu_df_national_transf$fancynums <- format(round(wu_df_national_transf$wateruse), big.mark=",", scientific=FALSE)
+  
   
   jsonlite::write_json(wu_df_national_transf, viz[["location"]])
 }

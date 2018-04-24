@@ -26,14 +26,16 @@ var waterUseViz = {
     //map: null,
     buttonBox: null
   },
-  stateAbrvs: []
+  stateAbrvs: [], // created in extractNames()
+  nationalData: {},
+  stateData: {}
 };
 
 // Globals not yet in waterUseViz
 var activeView, activeCategory, prevCategory;
 var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
 var countyBoundsZoom = new Map();
-var categories = ["total", "thermoelectric", "publicsupply", "irrigation", "industrial"];
+var categories = ["total", "thermoelectric", "irrigation","publicsupply", "industrial"];
 
 // Projection
 var projection = albersUsaTerritories()
@@ -178,6 +180,35 @@ function fillMap() {
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   updateCounties('USA');
+  
+  // Read national data and add it to figure
+  d3.json("data/wu_data_15_sum.json", function(error, data) {
+    if (error) throw error;
+    waterUseViz.nationalData = data;
+    updateLegendTextToView();
+    loadPie();
+  });
+  
+  // Read state data and add it to figure
+  d3.json("data/wu_state_data.json", function(error, data) {
+    
+    if (error) throw error;
+    
+    waterUseViz.stateData = data;
+    var  barData = [];
+  
+    waterUseViz.stateData.forEach(function(d) {
+        var x = {
+          'abrv': d.abrv[0],
+          'STATE_NAME': d.STATE_NAME[0],
+          'open': d.open[0],
+          'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse
+        };
+        barData.push(x);
+      });
+
+    rankEm(barData);
+  });
 }
 
 function loadInitialCounties() {
