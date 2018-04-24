@@ -22,7 +22,7 @@ targets:
       - figures/national_pies.png
   
   plot_metadata:
-    command: c(I(7), I(4.3), I(500))
+    command: c(width = I(7), height = I(4.3), res = I(500))
   
   county_dots:
     command: get_dots('cache/county_centroids_wu.json')
