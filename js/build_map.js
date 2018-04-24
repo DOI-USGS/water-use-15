@@ -199,10 +199,10 @@ function fillMap() {
   
     waterUseViz.stateData.forEach(function(d) {
         var x = {
-          'abrv': d.abrv[0],
-          'STATE_NAME': d.STATE_NAME[0],
-          'open': d.open[0],
-          'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse
+          'abrv': d.abrv,
+          'STATE_NAME': d.STATE_NAME,
+          'open': d.open,
+          'wu': d.use.filter(function(e) {return e.category === 'total';}).wateruse
         };
         barData.push(x);
       });
