@@ -89,7 +89,9 @@ function rankEm(barData) {
     .on('mouseout',clearHighlight);
     
   draggableStates
-    .style('fill',categoryToColor("total"));
+    .style('fill',categoryToColor("total"))
+    .style('stroke',"transparent")
+    .style('stroke-width', 4);
   
   if (!rankSvg.isDragged){
     lockedBars.filter('.highlight')
