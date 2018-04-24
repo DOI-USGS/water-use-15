@@ -28,11 +28,22 @@ function rankEm(barData) {
   function clearHighlight(){
     d3.selectAll('.highlight')
         .classed('highlight', false);
-    d3.select("#rank-data-text").select('text')
-        .text(" ");    
-      rankSvg.updateStyles();  
+    d3.select("#rank-data-text")
+      .attr("display", "none");
+    rankSvg.updateStyles();  
       
   }
+  
+  var updateLabelText = function(data) {
+    var allText = d3.select("#rank-data-text")
+      .attr("display", "block");
+    
+    allText.select("#rank-state-text")
+      .text(data.STATE_NAME+":");
+    
+    allText.select("#rank-value-text")
+      .text(data.wu);
+  };
   
   lockedBars
     .style('fill', categoryToColor('total'))
@@ -43,8 +54,7 @@ function rankEm(barData) {
       var bar = d3.select(this)
                .classed('highlight', true);
       rankSvg.updateStyles();
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().abrv+": "+ bar.datum().wu);
+      updateLabelText(bar.datum());
     })
     .on('mouseout',clearHighlight);
   
@@ -57,8 +67,6 @@ function rankEm(barData) {
     .on('mouseover',function(){
       var bar = d3.select(this)
                .classed('highlight', true);
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().wu);
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
@@ -75,8 +83,7 @@ function rankEm(barData) {
       var bar = d3.select('#'+state+'-bar')
                 .classed('highlight', true);
       d3.select(this).classed('highlight', true);
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().abrv+": "+bar.datum().wu);
+      updateLabelText(bar.datum());
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
@@ -209,11 +216,29 @@ function rankEm(barData) {
       .attr('text-anchor','middle')
       .text('Drag a state over its matching bar');
   
-  svgStates.append('g')
+  var labelTextGroup = svgStates.append('g')
     .attr('id','rank-data-text')
-    .attr('transform',"translate("+(rankSvg.width * 0.4)+","+(rankSvg.height * 0.42)+")")
-    .append('text')
-      .text(' ');
+    .attr('text-anchor','middle')
+    .attr('display', 'none');
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-state-text")
+      .attr("x", rankSvg.width * 0.6)
+      .attr("y", rankSvg.height * 0.38);
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-value-text")
+      .attr("x", rankSvg.width * 0.6)
+      .attr("y", rankSvg.height * 0.38)
+      .attr('dy', '1.2em');
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-units-text")
+      .attr("x", rankSvg.width * 0.6)
+      .attr("y", rankSvg.height * 0.38)
+      .attr('dy', '3.4em')
+      .attr("font-size", "12px")
+      .text("million gallons per day");
 
 	var dragData = barData.filter(function(d) {
 	  return d.open;
