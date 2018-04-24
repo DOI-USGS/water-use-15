@@ -1,4 +1,4 @@
-function rankEm() {
+function rankEm(barData) {
 
   var rankSvg = {
       width: 1000,
@@ -33,18 +33,6 @@ function rankEm() {
       rankSvg.updateStyles();  
       
   }
-  
-  barData = [];
-  
-  waterUseViz.stateData.forEach(function(d) {
-    var x = {
-      'abrv': d.abrv[0],
-      'STATE_NAME': d.STATE_NAME[0],
-      'open': d.open[0],
-      'wateruse': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse
-    };
-    barData.push(x);
-  });
   
   lockedBars
     .style('fill', categoryToColor('total'))
@@ -241,7 +229,7 @@ function rankEm() {
 	var scaleY = d3.scaleLinear()
 	  .range([rankSvg.bottomMargin, rankSvg.height])
 	  .domain([0, d3.max(barData, function(d){
-	    return d.total.wateruse;
+	    return d.wu;
 	  })]);
 	
 	svgStates.select('#ranked-states-locked')

@@ -191,9 +191,23 @@ function fillMap() {
   
   // Read state data and add it to figure
   d3.json("data/wu_state_data.json", function(error, data) {
+    
     if (error) throw error;
+    
     waterUseViz.stateData = data;
-    rankEm();
+    var  barData = [];
+  
+  waterUseViz.stateData.forEach(function(d) {
+        var x = {
+          'abrv': d.abrv[0],
+          'STATE_NAME': d.STATE_NAME[0],
+          'open': d.open[0],
+          'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse
+        };
+        barData.push(x);
+      });
+
+    rankEm(barData);
   });
 }
 
