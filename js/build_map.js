@@ -26,7 +26,6 @@ var waterUseViz = {
     //map: null,
     buttonBox: null
   },
-  stateAbrvs: [],
   nationalData: {},
   stateData: {}
 };
@@ -197,7 +196,7 @@ function fillMap() {
     waterUseViz.stateData = data;
     var  barData = [];
   
-  waterUseViz.stateData.forEach(function(d) {
+    waterUseViz.stateData.forEach(function(d) {
         var x = {
           'abrv': d.abrv[0],
           'STATE_NAME': d.STATE_NAME[0],
