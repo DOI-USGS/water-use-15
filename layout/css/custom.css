@@ -111,6 +111,20 @@
   margin-top:20px;
 }
 
+.story-one,
+.story-two,
+.story-three{
+  margin-top:50px;
+}
+
+.story-three{
+  margin-bottom:40px;
+}
+
+.desktop-figure{
+  display: none;
+}
+
 #directions {
   padding-left: 20px;
   padding-right: 40px;
@@ -124,7 +138,6 @@
 }
 
 .key-story-plot{
-  min-height:200px;
   margin:10px 0;
 }
 
@@ -177,6 +190,16 @@
   pointer-events:none;
 }
 
+.extras{
+  background:rgb(240,240,240);
+  padding:10px;
+}
+
+#data-collection p,
+#references p{
+  font-size:.8em;
+}
+
 @media screen and (min-width:600px){
   .button text{
     font-size:1.3em;
@@ -195,6 +218,47 @@
   .mobile-UI-Container{
     display:none;
   }
+  
+  .side-by-side,
+  .extras{
+    display:flex;
+    flex-direction:row;
+  }
+  
+  .side-by-side-left{
+    flex:2;
+  }
+  
+  .side-by-side-right{
+    flex:1;
+    position:relative;
+  }
+  
+  .pie-caption{
+    position:absolute;
+    margin:auto;
+    top:0; bottom:0; left:0; right:0;
+    height:80px;
+  }
+  
+  .desktop-figure{
+    display: block;
+  }
+  
+  .mobile-figure{
+    display: none;
+  }
+  
+  #data-collection{
+    border-right:1px solid #000;
+    margin-right:10px;
+  }
+  
+  #data-collection,
+  #references{
+    flex:1;
+  }
+  
 }
 
 /* really large desktop screens*/
