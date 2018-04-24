@@ -30,5 +30,5 @@ process.state_wu_data <- function(viz) {
   totals <- sapply(state_data, function(x) x[["use"]]$wateruse[x[["use"]]$category == "total"])
   state_data <- state_data[order(totals, decreasing = FALSE)]
   
-  jsonlite::write_json(state_data, viz[["location"]] )
+  jsonlite::write_json(state_data, viz[["location"]], auto_unbox=TRUE)
 }

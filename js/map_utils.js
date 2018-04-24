@@ -292,7 +292,7 @@ function updateLegendTextToView() {
     
    var state_data = waterUseViz.stateData
       .filter(function(d) { 
-        return d.abrv == activeView; 
+        return d.abrv === activeView; 
     });
     
     waterUseViz.elements

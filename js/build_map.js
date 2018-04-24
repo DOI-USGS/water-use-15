@@ -26,6 +26,7 @@ var waterUseViz = {
     //map: null,
     buttonBox: null
   },
+  stateAbrvs: [], // created in extractNames()
   nationalData: {},
   stateData: {}
 };
