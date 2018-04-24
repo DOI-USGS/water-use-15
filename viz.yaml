@@ -14,9 +14,9 @@ info:
   required-packages:
     vizlab:
       repo: github
-      version: 0.3.2
+      version: 0.3.4
       name: USGS-VIZLAB/vizlab
-      ref: 6bcdf08319d00f73b0b54ecfb73d1de00837a2de
+      ref: c0889d88e9df47dbb763be2bf335c6de8d7b57fd
     aws.s3:
       repo: CRAN
       version: 0.3.3
