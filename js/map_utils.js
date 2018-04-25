@@ -100,13 +100,16 @@ function zoomToFromState(d, i, j, selection) {
   updateView(newView, fireAnalytics = true);
 }
 
-function getSessionId(){return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
-function getTimestamp(){ return new Date().getTime().toString()}
-
-function updateView(newView, fireAnalytics, timestamp = getTimestamp(), sessionId = getSessionId()) {
-   if(fireAnalytics === undefined) {
-      scale = true;
-   }
+function updateView(newView, fireAnalytics, timestamp, sessionId) {
+  if(fireAnalytics === undefined) {
+    fireAnalytics = true;
+  }
+  if(timestamp === undefined) {
+    timestamp = new Date().getTime().toString();
+  }
+  if(sessionId === undefined) {
+    sessionId = new Date().getTime() + '.' + Math.random().toString(36).substring(5);
+  }
   
   // update the global variable that stores the current view
   oldView = activeView;
