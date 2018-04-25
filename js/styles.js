@@ -56,7 +56,7 @@ function foregroundState(selection, scale) {
     .duration(500)
     .style("stroke-width",  2/scale); // scale stroke-width
     
-  if(waterUseViz.mode === "mobile") {
+  if(waterUseViz.interactionMode === "tap") {
     // turn off state pointer events for this state so that counties can be chosen
     selection
       .classed("state-click-on", false)
@@ -94,7 +94,7 @@ function resetState() {
     .duration(750)
     .style("stroke-width", 1); // use null to get back to CSS
   
-  if(waterUseViz.mode === "mobile") {
+  if(waterUseViz.viewport === "narrow") {
     // turn on state pointer events for all states so that counties cannot be chosen
     d3.selectAll('.state')
       .classed("state-click-on", true)

@@ -180,7 +180,7 @@ function fillMap() {
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   // and it doesn't need to be done at all for mobile
-  if(waterUseViz.mode !== 'mobile') {
+  if(waterUseViz.viewport !== 'narrow') {
     updateCounties('USA');
   } else {
     // set countyBoundsUSA to something small for which !countyBoundsUSA is false so that 
