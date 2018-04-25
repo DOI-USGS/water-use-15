@@ -346,24 +346,27 @@ publish:
     location: "images/WU_stories_static.jpg"
     mimetype: image/jpg
     export: true
-    title: "a static story"
-    alttext: "a static story"
+    title: "A national map with notes about areas of high water use"
+    alttext: >
+      High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
     relpath: "images/WU_stories_static.jpg"
   -
     id: static_story_figure_mobile_left
     location: "images/WU_stories_mobile_left.jpg"
     mimetype: image/jpg
     export: true
-    title: "a static mobile story"
-    alttext: "a static mobile story"
+    title: "Map of the western U.S. with notes about areas of high water use"
+    alttext:  >
+      Areas of high water use: Idaho (aquaculture), California (irrigation), Alaska (mining), & big cities (public supply)
     relpath: "images/WU_stories_mobile_left.jpg"
   -
     id: static_story_figure_mobile_right
     location: "images/WU_stories_mobile_right.jpg"
     mimetype: image/jpg
     export: true
-    title: "a static mobile story"
-    alttext: "a static mobile story"
+    title: "Map of the eastern U.S. with notes about areas of high water use"
+    alttext:  >
+      High water use: Illinois (steel production), the Northeast (power generation), Arkansas (irrigation), & Gulf Coast (industry)
     relpath: "images/WU_stories_mobile_right.jpg"
   -
     id: wu_story
