@@ -12,7 +12,7 @@ function categoryToName(category) {
 function categoryToColor(category, stroke) {
   
   if(stroke === undefined) {
-      scale = false;
+      stroke = false;
    }  
   
   var opacityValue = 0.8;
