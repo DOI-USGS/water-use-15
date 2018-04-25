@@ -223,6 +223,7 @@ publish:
       styles: "styles"
       buttons: buttons
       resize: resize
+      modernizr: modernizr
       map_utils: "map_utils"
       watermark_utils: "watermark_utils"
       map_circles: map_circles
@@ -240,7 +241,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
       sections: ["social", "mobile_map_ui", "map", "directions_text", "wu-story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb-facebook
@@ -306,6 +307,10 @@ publish:
   -
     id: dropdown_selector
     location: "js/dropdown_selector.js"
+    mimetype: application/javascript
+  -
+    id: modernizr
+    location: "js/modernizr_custom.js"
     mimetype: application/javascript
   -
     id: map_css
