@@ -191,19 +191,25 @@ function fillMap() {
   // Read national data and add it to figure
   d3.json("data/wu_data_15_sum.json", function(error, data) {
     if (error) throw error;
+    
+    // cache data for dotmap and update legend if we're in national view
     waterUseViz.nationalData = data;
-    updateLegendTextToView();
+    if(activeView === 'USA') updateLegendTextToView();
+
+    // create big pie figure (uses nationalData)
     loadPie();
   });
   
   // Read state data and add it to figure
   d3.json("data/wu_state_data.json", function(error, data) {
-    
     if (error) throw error;
     
+    // cache data for dotmap and update legend if we're in state view
     waterUseViz.stateData = data;
+    if(activeView !== 'USA') updateLegendTextToView();
+    
+    // format data for rankEm and create rankEm figure
     var  barData = [];
-  
     waterUseViz.stateData.forEach(function(d) {
         var x = {
           'abrv': d.abrv,
@@ -213,7 +219,6 @@ function fillMap() {
         };
         barData.push(x);
       });
-
     rankEm(barData);
   });
 }
