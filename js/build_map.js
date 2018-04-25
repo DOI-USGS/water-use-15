@@ -57,9 +57,7 @@ readHashes();
 /** Add major svg elements and then set their sizes **/
     
 // Create container
-var container = d3.select('body')
-  .append('div')
-  .classed('main-svg', true);
+var container = d3.select('body div.main-svg');
 
 // Create SVG and map
 var svg = d3.select(".main-svg")

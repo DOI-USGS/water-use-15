@@ -213,9 +213,9 @@ publish:
       custom_css: "custom_css"
       social: "social_section"
       socialCSS: "lib-social-media-css"
-      directions_text: "directions_text"
       header: "header_section"
       mobile_map_ui: "mobile_map_ui"
+      map_section: "map_section"
       wu_story: "wu_story"
       footer: "footer_section"
       hashes: "url_hashes"
@@ -229,7 +229,7 @@ publish:
       map_states: map_states
       map_counties: "map_counties"
       dropdown_selector: "dropdown_selector"
-      map: "build_map"
+      map_script: build_map
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
@@ -241,7 +241,7 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
-      sections: ["social", "mobile_map_ui", "map", "directions_text", "wu-story"] # adding header and footer here, doubled each on the page
+      sections: ["social", "mobile_map_ui", "map_section", "map_script", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb-facebook
         facebook: thumb-facebook
@@ -330,6 +330,12 @@ publish:
     context:
       title: "Water use in the U.S., 2015"
   -
+    id: map_section
+    template: layout/templates/map_section.mustache
+    publisher: section
+    depends: 
+    context:
+  -
     id: static_story_figure
     location: "images/WU_stories_static.jpg"
     mimetype: image/jpg
@@ -417,7 +423,6 @@ publish:
       map_counties: map_counties
       dropdown_selector: "dropdown_selector"
       map: build_map
-      directions_text: directions_text
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
@@ -428,13 +433,7 @@ publish:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
-      embed: ["map","directions_text"]
-  -
-    id: directions_text
-    template: layout/templates/directions_text.mustache
-    publisher: section
-    depends: 
-    context:
+      embed: ["map_section"]
   -
     id: thumb-facebook
     location: images/WU_stories_static_thumbs.png
