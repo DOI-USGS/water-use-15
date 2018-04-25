@@ -30,7 +30,7 @@ function loadCountyBounds(state, callback) {
       callback(null, countyBoundsUSA);
     }
   } else if(!countyBoundsZoom.has('USA')) {
-    d3.json("data/county_boundaries_zoom.json", function(error, allCountiesTopo) {
+    d3.json("data/county_boundaries_USA.json", function(error, allCountiesTopo) { //
       if(error) throw error;
       
       // extract the topojson to geojson and add data
