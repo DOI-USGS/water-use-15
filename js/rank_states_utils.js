@@ -28,11 +28,28 @@ function rankEm(barData) {
   function clearHighlight(){
     d3.selectAll('.highlight')
         .classed('highlight', false);
-    d3.select("#rank-data-text").select('text')
-        .text(" ");    
-      rankSvg.updateStyles();  
+    d3.select("#rank-data-text")
+      .attr("display", "none");
+    rankSvg.updateStyles();  
       
   }
+  
+  var updateLabelText = function(data, isOpen) {
+    
+    var allText = d3.select("#rank-data-text")
+      .attr("display", "block");
+    
+    if(isOpen) { 
+      allText.select("#rank-state-text")
+        .text("???");
+    } else {
+      allText.select("#rank-state-text")
+        .text(data.STATE_NAME);
+    }
+    
+    allText.select("#rank-value-text")
+      .text(data.wu);
+  };
   
   lockedBars
     .style('fill', categoryToColor('total'))
@@ -43,8 +60,7 @@ function rankEm(barData) {
       var bar = d3.select(this)
                .classed('highlight', true);
       rankSvg.updateStyles();
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().abrv+": "+ bar.datum().wu);
+      updateLabelText(bar.datum());
     })
     .on('mouseout',clearHighlight);
   
@@ -57,9 +73,8 @@ function rankEm(barData) {
     .on('mouseover',function(){
       var bar = d3.select(this)
                .classed('highlight', true);
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().wu);
       rankSvg.updateStyles();
+      updateLabelText(bar.datum(), isOpen=true);
     })
     .on('mouseout',clearHighlight);
     
@@ -75,14 +90,15 @@ function rankEm(barData) {
       var bar = d3.select('#'+state+'-bar')
                 .classed('highlight', true);
       d3.select(this).classed('highlight', true);
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().abrv+": "+bar.datum().wu);
+      updateLabelText(bar.datum());
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
     
   draggableStates
-    .style('fill',categoryToColor("total"));
+    .style('fill',categoryToColor("total"))
+    .style('stroke',"transparent")
+    .style('stroke-width', 4);
   
   if (!rankSvg.isDragged){
     lockedBars.filter('.highlight')
@@ -96,7 +112,13 @@ function rankEm(barData) {
     
     d3.select('#rank-directions')
       .transition().duration(600).style('opacity',1);
+  } else {
+    lockedBars
+      .on("mouseover", clearHighlight);
+    openBars
+      .on("mouseover", clearHighlight);
   }
+  
   openBars.filter('.highlight')
   .style("stroke-dasharray", null)
   .style('stroke-width', 0)
@@ -139,6 +161,11 @@ function rankEm(barData) {
         if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
           d3.select('#rank-directions')
             .select('text').remove();
+          d3.select('#rank-explanation').selectAll('text')
+            .transition()
+            .delay(600)
+            .duration(600)
+            .style('opacity',1);
         }
   
       } else {
@@ -209,11 +236,40 @@ function rankEm(barData) {
       .attr('text-anchor','middle')
       .text('Drag a state over its matching bar');
   
-  svgStates.append('g')
-    .attr('id','rank-data-text')
-    .attr('transform',"translate("+(rankSvg.width * 0.4)+","+(rankSvg.height * 0.42)+")")
+  // add message about Idaho to conclude.  
+  var rankMsg = svgStates.append('g')
+    .attr('id', 'rank-explanation')
+    .attr('transform',"translate("+(rankSvg.width * 0.6)+",25)");
+  rankMsg
     .append('text')
-      .text(' ');
+      .classed('rankem-explanation', true)
+      .style('opacity', 0)
+      .text('Were you surprised by Idaho? Though it has a small');
+  rankMsg
+    .append('text')
+      .classed('rankem-explanation', true)
+      .style('opacity', 0)
+      .attr('dy', '1.2em')
+      .text('population, Idaho has a large agricultural industry.');
+  
+  var labelTextGroup = svgStates.append('g')
+    .attr('id','rank-data-text')
+    .attr('transform',"translate("+(rankSvg.width * 0.6)+","+rankSvg.height * 0.3+")")
+    .attr('text-anchor','middle')
+    .attr('display', 'none');
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-state-text");
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-value-text")
+      .attr('dy', '1.2em');
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-units-text")
+      .attr('dy', '3.4em')
+      .attr("font-size", "12px")
+      .text("million gallons per day");
 
 	var dragData = barData.filter(function(d) {
 	  return d.open;
