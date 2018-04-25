@@ -13,7 +13,7 @@ function resize() {
    waterUseViz.interactionMode = 'tap';
   }
   catch (e) {
-   waterUseViz.interactionMode = 'click';
+   waterUseViz.interactionMode = 'hover';
   }
   
   // Calculate new dimensions with adaptations for ~desktop vs ~mobile
@@ -39,7 +39,7 @@ function resize() {
     waterUseViz.dims.buttonBox.width = waterUseViz.dims.map.width * 0.6;
     waterUseViz.dims.buttonBox.height = waterUseViz.dims.buttonBox.width * 0.5 *
       (waterUseViz.dims.buttonBox.heightDesktop / waterUseViz.dims.buttonBox.widthDesktop);
-    waterUseViz.dims.buttonBox.x0 = (waterUseViz.dims.map.width - waterUseViz.dims.buttonBox.width) / 2; // center within svg
+    waterUseViz.dims.buttonBox.x0 = (waterUseViz.dims.svg.width - waterUseViz.dims.buttonBox.width) / 2; // center within svg
     waterUseViz.dims.buttonBox.y0 = waterUseViz.dims.map.height * 1.02;
     // map fills the top part of the svg
     waterUseViz.dims.map.x0 = 0;

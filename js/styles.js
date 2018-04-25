@@ -94,7 +94,7 @@ function resetState() {
     .duration(750)
     .style("stroke-width", 1); // use null to get back to CSS
   
-  if(waterUseViz.viewport === "narrow") {
+  if(waterUseViz.interactionMode === "tap") {
     // turn on state pointer events for all states so that counties cannot be chosen
     d3.selectAll('.state')
       .classed("state-click-on", true)
