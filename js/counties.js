@@ -92,9 +92,15 @@ function cacheCountyBounds(state, callback) {
 function displayCountyBounds(error, activeCountyData) {
     if(error) throw error;
     
+    currentCountyBounds = map.select('#county-bounds').selectAll('.county');
+    
+    // return immediately if we already have the counties defined and we're zooming out
+    if(currentCountyBounds._groups[0].length > 3000 & activeCountyData === countyBoundsUSA) {
+      return;
+    }
+    
     // attach data
-    var countyBounds = map.select('#county-bounds')
-      .selectAll(".county")
+    var countyBounds = currentCountyBounds
       .data(activeCountyData, function(d) {
         return d.properties.GEOID;
       });

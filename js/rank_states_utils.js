@@ -1,8 +1,10 @@
 function rankEm(barData) {
 
   var rankSvg = {
-      width: 1000,
-      height: 300,
+      mobileWidth: 500,
+      mobileHeight: 600,
+      desktopWidth: 1000,
+      desktopHeight: 300,
       bottomMargin: 15,
       updateStyles: function() {
       },
@@ -24,15 +26,33 @@ function rankEm(barData) {
   var draggableStates = svgStates.select('#ranked-states-draggable').selectAll('.draggable-state');
   var lockedBars = allBars.filter('.locked-rank-bar');
   var openBars = allBars.filter('*:not(.locked-rank-bar)');
+  var lockedBarNames = svgStates.select('#ranked-states-bars').selectAll('text');
   
   function clearHighlight(){
     d3.selectAll('.highlight')
         .classed('highlight', false);
-    d3.select("#rank-data-text").select('text')
-        .text(" ");    
-      rankSvg.updateStyles();  
+    d3.select("#rank-data-text")
+      .attr("display", "none");
+    rankSvg.updateStyles();  
       
   }
+  
+  var updateLabelText = function(data, isOpen) {
+    
+    var allText = d3.select("#rank-data-text")
+      .attr("display", "block");
+    
+    if(isOpen) { 
+      allText.select("#rank-state-text")
+        .text("???");
+    } else {
+      allText.select("#rank-state-text")
+        .text(data.STATE_NAME);
+    }
+    
+    allText.select("#rank-value-text")
+      .text(data.wu);
+  };
   
   lockedBars
     .style('fill', categoryToColor('total'))
@@ -40,14 +60,25 @@ function rankEm(barData) {
     .on('mouseover',function(){
       var state = d3.select(this).attr('id').split('-')[0];
       d3.select('#'+state+'-locked').classed('highlight', true);
+      d3.select('#'+state+'-bar-name').classed('highlight', true);
       var bar = d3.select(this)
                .classed('highlight', true);
       rankSvg.updateStyles();
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().abrv+": "+ bar.datum().wu);
+      updateLabelText(bar.datum());
     })
     .on('mouseout',clearHighlight);
   
+  lockedBarNames
+    .style('font-weight', 'normal')
+    .on('mouseover',function(){
+      var state = d3.select(this).attr('id').split('-')[0];
+      d3.select('#'+state+'-locked').classed('highlight', true);
+      var bar = d3.select('#'+state+'-bar').classed('highlight', true);
+      d3.select(this).classed('highlight', true);
+      rankSvg.updateStyles();
+      updateLabelText(bar.datum());
+    })
+    .on('mouseout', clearHighlight);
     
   openBars
     .style('fill', "rgba(255, 255, 255, 0.0)")
@@ -56,10 +87,9 @@ function rankEm(barData) {
     .style("stroke-dasharray","4, 2")
     .on('mouseover',function(){
       var bar = d3.select(this)
-               .classed('highlight', true);
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().wu);
+             .classed('highlight', true);
       rankSvg.updateStyles();
+      updateLabelText(bar.datum(), isOpen=true);
     })
     .on('mouseout',clearHighlight);
     
@@ -75,14 +105,16 @@ function rankEm(barData) {
       var bar = d3.select('#'+state+'-bar')
                 .classed('highlight', true);
       d3.select(this).classed('highlight', true);
-      d3.select("#rank-data-text").select('text')
-        .text(bar.datum().abrv+": "+bar.datum().wu);
+      d3.select('#'+state+'-bar-name').classed('highlight', true);
+      updateLabelText(bar.datum());
       rankSvg.updateStyles();
     })
     .on('mouseout',clearHighlight);
     
   draggableStates
-    .style('fill',categoryToColor("total"));
+    .style('fill',categoryToColor("total"))
+    .style('stroke',"transparent")
+    .style('stroke-width', 4);
   
   if (!rankSvg.isDragged){
     lockedBars.filter('.highlight')
@@ -94,9 +126,18 @@ function rankEm(barData) {
       .style('fill',"rgba(220,220,220, 0.4)")
       .style('stroke',categoryToColor('total',true));
     
+    lockedBarNames.filter('.highlight')
+      .style('font-weight', "bold");
+    
     d3.select('#rank-directions')
       .transition().duration(600).style('opacity',1);
+  } else {
+    lockedBars
+      .on("mouseover", clearHighlight);
+    openBars
+      .on("mouseover", clearHighlight);
   }
+  
   openBars.filter('.highlight')
   .style("stroke-dasharray", null)
   .style('stroke-width', 0)
@@ -139,6 +180,11 @@ function rankEm(barData) {
         if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
           d3.select('#rank-directions')
             .select('text').remove();
+          d3.select('#rank-explanation').selectAll('text')
+            .transition()
+            .delay(600)
+            .duration(600)
+            .style('opacity',1);
         }
   
       } else {
@@ -179,18 +225,29 @@ function rankEm(barData) {
     }
     rankSvg.updateStyles();
   };
-  
+  var width = rankSvg.desktopWidth;
+  var height = rankSvg.desktopHeight;
+  if (waterUseViz.mode === 'mobile'){
+    width = rankSvg.mobileWidth;
+    height = rankSvg.mobileHeight;
+  }
   var svgStates = d3.select("#rank-states-interactive")
     .append("svg")
-    .attr('viewBox', '0 0 '+ rankSvg.width + " " + rankSvg.height)
+    .attr('viewBox', '0 0 '+ width + " " + height)
     .attr('preserveAspectRatio', 'xMidYMid');
   svgStates.append('style')
     .attr('type', "text/css")
     .text("@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light)");
   
-  var stateMap = svgStates.append('g')
-    .attr('id','ranked-states-map')
-    .attr('transform',"translate(-10,-30)scale(0.4)");
+  var stateMap = svgStates.append('g');
+  stateMap
+    .attr('id','ranked-states-map');
+  if (waterUseViz.mode === 'mobile'){
+    stateMap.attr('transform',"translate(120,210)scale(0.4)");
+  } else {
+    stateMap.attr('transform',"translate(-10,-30)scale(0.4)");
+  }
+    
   
   stateMap.append('g')
     .attr('id','ranked-states-locked');
@@ -200,37 +257,89 @@ function rankEm(barData) {
     
   svgStates.append('g')
     .attr('id','ranked-states-bars');
-    
+  
+  var helpY = 30;
+  var helpX = width * 0.6;
+  if (waterUseViz.mode === 'mobile'){
+    helpY = height - 50;
+    helpX = width * 0.55;
+  } 
+  
   svgStates.append('g')
     .attr('id','rank-directions')
-    .attr('transform',"translate("+(rankSvg.width * 0.6)+",30)")
+    .attr('transform',"translate("+helpX+","+helpY+")")
     .append('text')
       .classed('rankem-title', true)
       .attr('text-anchor','middle')
       .text('Drag a state over its matching bar');
   
-  svgStates.append('g')
-    .attr('id','rank-data-text')
-    .attr('transform',"translate("+(rankSvg.width * 0.4)+","+(rankSvg.height * 0.42)+")")
+  // add message about Idaho to conclude.  
+  var rankMsg = svgStates.append('g')
+    .attr('id', 'rank-explanation')
+    .attr('transform',"translate("+helpX+","+helpY+")");
+  rankMsg
     .append('text')
-      .text(' ');
+      .classed('rankem-explanation', true)
+      .style('opacity', 0)
+      .text('Were you surprised by Idaho? Though it has a small');
+  rankMsg
+    .append('text')
+      .classed('rankem-explanation', true)
+      .style('opacity', 0)
+      .attr('dy', '1.2em')
+      .text('population, Idaho has a large agricultural industry.');
+  
+  var labelTextGroup = svgStates.append('g')
+    .attr('id','rank-data-text')
+    .attr('text-anchor','middle')
+    .attr('display', 'none')
+    .attr('transform', ('translate('+width * 0.6+','+height * 0.3+")"));
+
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-state-text");
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-value-text")
+      .attr('dy', '1.2em');
+  
+  labelTextGroup.append("text")
+      .attr("id", "rank-units-text")
+      .attr('dy', '3.4em')
+      .attr("font-size", "12px")
+      .text("million gallons per day");
 
 	var dragData = barData.filter(function(d) {
 	  return d.open;
 	});
 	
 	var scaleX = d3.scaleBand()
-	  .range([0, rankSvg.width])
+	  .range([0, width])
 	  .paddingInner(0.1)
 	  .domain(barData.map(function(d,i){
 	    return i;
 	   }));
 	
 	var scaleY = d3.scaleLinear()
-	  .range([rankSvg.bottomMargin, rankSvg.height])
+	  .range([rankSvg.bottomMargin, height])
 	  .domain([0, d3.max(barData, function(d){
 	    return d.wu;
 	  })]);
+	
+	if (waterUseViz.mode === 'mobile'){
+	  scaleX = d3.scaleLinear()
+	    .range([0, width-30])
+	    .domain([0, d3.max(barData, function(d){
+	      return d.wu;
+	    })]);
+	   
+	   scaleY = d3.scaleBand()
+	    .range([height, 0])
+	    .paddingInner(0.1)
+	    .domain(barData.map(function(d,i){
+	      return i;
+	    }));
+	 }
 	
 	svgStates.select('#ranked-states-locked')
     .selectAll( 'use' )
@@ -269,37 +378,73 @@ function rankEm(barData) {
     .selectAll('g')
     .data(barData)
     .enter()
-    .append('g')
-    .attr('transform', function(d, i){
-      return 'translate(' + scaleX(i) + "," + (rankSvg.height - scaleY(d.wu)) + ")";
+    .append('g');
+  
+  if (waterUseViz.mode === 'mobile'){
+     barGroups.attr('transform', function(d, i){
+      return 'translate(25,' + scaleY(i) + ")";
     });
+  } else {
+    barGroups.attr('transform', function(d, i){
+      return 'translate(' + scaleX(i) + "," + (height - scaleY(d.wu)) + ")";
+    });
+  }
     
-    barGroups.append('text')
-    .attr('y', function(d){
-      return scaleY(d.wu) - rankSvg.bottomMargin;
+  var textBars = barGroups.append('text');
+  textBars
+    .attr('id', function(d) {
+      return d.abrv+'-bar-name';
     })
-    .attr('x', scaleX.bandwidth()/2)
-    .attr('text-anchor','middle')
     .classed('bar-name',true)
     .classed('open-bar-name', function(d){
       return d.open;
     })
-    .attr('dy',"1em")
     .text(function(d){
       return d.abrv;
     });
+    
+    if (waterUseViz.mode === 'mobile'){
+      textBars
+        .attr('y', scaleY.bandwidth()/2)
+        .attr('text-anchor','end')
+        .attr('dy',"0.33em")
+        .attr('dx',"-0.5em");
+    } else {
+      textBars
+        .attr('y', function(d){
+          return scaleY(d.wu) - rankSvg.bottomMargin;
+        })
+        .attr('dy',"1em")
+        .attr('x', scaleX.bandwidth()/2)
+        .attr('text-anchor','middle');
+    }
   
-  barGroups.append('rect')
-    .attr('height', function(d){
-      return scaleY(d.wu) - rankSvg.bottomMargin;
-    })
+  var rectBars = barGroups.append('rect');
+  rectBars
     .attr('id', function(d){
       return d.abrv+'-bar';
     })
-    .attr('width', scaleX.bandwidth())
     .classed('locked-rank-bar', function(d){
       return !d.open;
     });
+  
+  if (waterUseViz.mode === 'mobile'){
+    rectBars
+      .attr('height', scaleY.bandwidth())
+      .attr('x', 0)
+      .attr('width',  function(d){
+        return scaleX(d.wu);
+      });
+  } else {
+    rectBars
+      .attr('width', scaleX.bandwidth())
+      .attr('height', function(d){
+        return scaleY(d.wu) - rankSvg.bottomMargin;
+      })
+      .attr('width', scaleX.bandwidth());
+  }
+    
+    
     
     rankSvg.updateStyles();
 }

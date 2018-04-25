@@ -14,9 +14,9 @@ info:
   required-packages:
     vizlab:
       repo: github
-      version: 0.3.2
+      version: 0.3.4
       name: USGS-VIZLAB/vizlab
-      ref: 6bcdf08319d00f73b0b54ecfb73d1de00837a2de
+      ref: c0889d88e9df47dbb763be2bf335c6de8d7b57fd
     aws.s3:
       repo: CRAN
       version: 0.3.3
@@ -236,11 +236,16 @@ publish:
       county_boundaries_zoom: county_boundaries_zoom_topojson
       county_centroids_wu: "county_centroids_wu_tsv"
       wu_data_15_range:  "wu_data_15_range_json"
+      thumb-facebook: thumb-facebook
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
       sections: ["social", "mobile_map_ui", "map", "directions_text", "wu-story"] # adding header and footer here, doubled each on the page
+      thumbnails: 
+        twitter: thumb-facebook
+        facebook: thumb-facebook
+        main: thumb-facebook
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -430,3 +435,12 @@ publish:
     publisher: section
     depends: 
     context:
+  -
+    id: thumb-facebook
+    location: images/WU_stories_static_thumbs.png
+    publisher: thumbnail
+    mimetype: image/png
+    thumbType: ["facebook","twitter"]
+    title: "Facebook Thumbnail"
+    alttext: "Facebook Thumbnail"
+

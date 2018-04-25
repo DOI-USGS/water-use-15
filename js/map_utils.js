@@ -281,7 +281,6 @@ function updateLegendTextToView() {
       .text(function(d) { return d.fancynums; });
 
   } else {
-
     
    var state_data = waterUseViz.stateData
       .filter(function(d) { 

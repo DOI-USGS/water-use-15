@@ -3,6 +3,18 @@
   fill: transparent;
 }
 
+#rank-states-interactive text{
+  /* on mobile, clicking and holding the state for >1 sec caused fig text
+      to highlight and then when you tried to drag, you just selected more*/
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome and Opera */
+}
+
 .state {
   fill: transparent;
   stroke: rgb(180,180,180);
@@ -48,6 +60,7 @@
 }
 
 .bar-name {
+  fill: rgb(70,70,70);
   font-size: 65%;
 }
 
@@ -55,6 +68,13 @@
   fill: rgb(140,140,140);
   font-size: 150%;
   font-family: 'Shadows Into Light';
+}
+
+.rankem-explanation{
+  fill: rgb(140,140,140);
+  font-size: 125%;
+  font-family: 'Shadows Into Light';
+  text-anchor: middle;
 }
 
 .open-bar-name {
@@ -70,18 +90,22 @@
   opacity: 1;
 }
 
-.dragging {
-  cursor: move; /* was using grabbing, but that only works in Firefox*/
+.draggable-state {
+  /* indicate that the state can be clicked/moved
+      was using grabbing, but that only works in Firefox*/
+  cursor: pointer; 
 }
 
-.tooltip {
-	  position: absolute;
-  	padding: 5px 10px;
-  	background-color: white;
-  	border:1px solid rgb(190,190,190);
-  	border-radius: 3px;
-  	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  	line-height:1.5em;
+#rank-state-text,
+#rank-value-text {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#rank-state-text,
+#rank-value-text,
+#rank-units-text {
+	fill: rgb(70,70,70);
 }
 
 .hidden {

@@ -59,10 +59,10 @@ readHashes();
 // Create container
 var container = d3.select('body')
   .append('div')
-  .classed('svg-container', true);
+  .classed('main-svg', true);
 
 // Create SVG and map
-var svg = d3.select(".svg-container")
+var svg = d3.select(".main-svg")
   .append("svg")
   .attr('preserveAspectRatio', 'xMidYMid');
 
@@ -179,24 +179,37 @@ function fillMap() {
   
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
-  updateCounties('USA');
+  // and it doesn't need to be done at all for mobile
+  if(waterUseViz.mode !== 'mobile') {
+    updateCounties('USA');
+  } else {
+    // set countyBoundsUSA to something small for which !countyBoundsUSA is false so that 
+    // if and when the user zooms out from a state, updateCounties won't try to load the low-res data
+    countyBoundsUSA = true;
+  }
   
   // Read national data and add it to figure
   d3.json("data/wu_data_15_sum.json", function(error, data) {
     if (error) throw error;
+    
+    // cache data for dotmap and update legend if we're in national view
     waterUseViz.nationalData = data;
-    updateLegendTextToView();
+    if(activeView === 'USA') updateLegendTextToView();
+
+    // create big pie figure (uses nationalData)
     loadPie();
   });
   
   // Read state data and add it to figure
   d3.json("data/wu_state_data.json", function(error, data) {
-    
     if (error) throw error;
     
+    // cache data for dotmap and update legend if we're in state view
     waterUseViz.stateData = data;
+    if(activeView !== 'USA') updateLegendTextToView();
+    
+    // format data for rankEm and create rankEm figure
     var  barData = [];
-  
     waterUseViz.stateData.forEach(function(d) {
         var x = {
           'abrv': d.abrv,
@@ -206,7 +219,6 @@ function fillMap() {
         };
         barData.push(x);
       });
-
     rankEm(barData);
   });
 }
