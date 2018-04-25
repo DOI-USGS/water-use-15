@@ -83,6 +83,14 @@ function updateCircleCategory(category) {
 
 }
 
+function updateCircleSize(category) {
+  // makes circles the appropriate size
+  d3.selectAll("circle.wu-basic")
+    .transition().duration(600)
+    .attr("r", function(d) { return scaleCircles(d[[category]]); });
+
+}
+
 function highlightCircle(countyDatum, category) {
   
   // style a duplicated circle sitting on top of the active county's circle
