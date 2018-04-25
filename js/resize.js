@@ -2,12 +2,18 @@ function resize() {
   
   // Decide whether we're in mobile or desktop mode. Currently doing this by window width, but we could look to
   // https://www.w3schools.com/howto/howto_js_media_queries.asp for more device-specific solutions
-  if(window.innerWidth > 425) { // sufficiently wide desktop windows
+  if(Modernizr.mq('(min-width: 425px)')) { // sufficiently wide desktop windows
     waterUseViz.viewport = 'wide';
-    waterUseViz.interactionMode = 'click';
   } else { // most mobile devices (except iPads) plus narrow desktop windows
     waterUseViz.viewport = 'narrow';
-    waterUseViz.interactionMode = 'tap';
+  }
+  
+  try {
+   document.createEvent("TouchEvent");
+   waterUseViz.interactionMode = 'tap';
+  }
+  catch (e) {
+   waterUseViz.interactionMode = 'click';
   }
   
   // Calculate new dimensions with adaptations for ~desktop vs ~mobile
