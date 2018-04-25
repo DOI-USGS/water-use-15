@@ -48,6 +48,7 @@
 }
 
 .bar-name {
+  fill: rgb(70,70,70);
   font-size: 65%;
 }
 

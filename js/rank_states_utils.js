@@ -26,6 +26,7 @@ function rankEm(barData) {
   var draggableStates = svgStates.select('#ranked-states-draggable').selectAll('.draggable-state');
   var lockedBars = allBars.filter('.locked-rank-bar');
   var openBars = allBars.filter('*:not(.locked-rank-bar)');
+  var lockedBarNames = svgStates.select('#ranked-states-bars').selectAll('text');
   
   function clearHighlight(){
     d3.selectAll('.highlight')
@@ -59,6 +60,7 @@ function rankEm(barData) {
     .on('mouseover',function(){
       var state = d3.select(this).attr('id').split('-')[0];
       d3.select('#'+state+'-locked').classed('highlight', true);
+      d3.select('#'+state+'-bar-name').classed('highlight', true);
       var bar = d3.select(this)
                .classed('highlight', true);
       rankSvg.updateStyles();
@@ -66,6 +68,17 @@ function rankEm(barData) {
     })
     .on('mouseout',clearHighlight);
   
+  lockedBarNames
+    .style('font-weight', 'normal')
+    .on('mouseover',function(){
+      var state = d3.select(this).attr('id').split('-')[0];
+      d3.select('#'+state+'-locked').classed('highlight', true);
+      var bar = d3.select('#'+state+'-bar').classed('highlight', true);
+      d3.select(this).classed('highlight', true);
+      rankSvg.updateStyles();
+      updateLabelText(bar.datum());
+    })
+    .on('mouseout', clearHighlight);
     
   openBars
     .style('fill', "rgba(255, 255, 255, 0.0)")
@@ -74,7 +87,7 @@ function rankEm(barData) {
     .style("stroke-dasharray","4, 2")
     .on('mouseover',function(){
       var bar = d3.select(this)
-               .classed('highlight', true);
+             .classed('highlight', true);
       rankSvg.updateStyles();
       updateLabelText(bar.datum(), isOpen=true);
     })
@@ -92,6 +105,7 @@ function rankEm(barData) {
       var bar = d3.select('#'+state+'-bar')
                 .classed('highlight', true);
       d3.select(this).classed('highlight', true);
+      d3.select('#'+state+'-bar-name').classed('highlight', true);
       updateLabelText(bar.datum());
       rankSvg.updateStyles();
     })
@@ -111,6 +125,9 @@ function rankEm(barData) {
       .style("stroke-dasharray", null)
       .style('fill',"rgba(220,220,220, 0.4)")
       .style('stroke',categoryToColor('total',true));
+    
+    lockedBarNames.filter('.highlight')
+      .style('font-weight', "bold");
     
     d3.select('#rank-directions')
       .transition().duration(600).style('opacity',1);
@@ -375,6 +392,9 @@ function rankEm(barData) {
     
   var textBars = barGroups.append('text');
   textBars
+    .attr('id', function(d) {
+      return d.abrv+'-bar-name';
+    })
     .classed('bar-name',true)
     .classed('open-bar-name', function(d){
       return d.open;
