@@ -161,6 +161,11 @@ function rankEm(barData) {
         if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
           d3.select('#rank-directions')
             .select('text').remove();
+          d3.select('#rank-explanation').selectAll('text')
+            .transition()
+            .delay(600)
+            .duration(600)
+            .style('opacity',1);
         }
   
       } else {
@@ -230,6 +235,22 @@ function rankEm(barData) {
       .classed('rankem-title', true)
       .attr('text-anchor','middle')
       .text('Drag a state over its matching bar');
+  
+  // add message about Idaho to conclude.  
+  var rankMsg = svgStates.append('g')
+    .attr('id', 'rank-explanation')
+    .attr('transform',"translate("+(rankSvg.width * 0.6)+",25)");
+  rankMsg
+    .append('text')
+      .classed('rankem-explanation', true)
+      .style('opacity', 0)
+      .text('Were you surprised by Idaho? Though it has a small');
+  rankMsg
+    .append('text')
+      .classed('rankem-explanation', true)
+      .style('opacity', 0)
+      .attr('dy', '1.2em')
+      .text('population, Idaho has a large agricultural industry.');
   
   var labelTextGroup = svgStates.append('g')
     .attr('id','rank-data-text')
