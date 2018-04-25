@@ -171,7 +171,7 @@ function fillMap() {
   // CIRCLES-AS-PATHS
   /*var circlesPaths = prepareCirclePaths(categories, countyCentroids);
   addCircles(circlesPaths);*/
-  updateCircles(activeCategory);
+  updateCircleCategory(activeCategory);
   
   // manipulate dropdowns
   updateViewSelectorOptions(activeView, stateBoundsUSA);

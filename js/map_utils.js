@@ -217,7 +217,7 @@ function updateCategory(category, prevCategory) {
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
     updateButtons(category);
-    updateCircles(category);
+    updateCircleCategory(category);
     documentCategorySwitch(category, prevCategory, action);
   }
 } 
