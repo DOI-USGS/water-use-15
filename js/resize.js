@@ -2,14 +2,22 @@ function resize() {
   
   // Decide whether we're in mobile or desktop mode. Currently doing this by window width, but we could look to
   // https://www.w3schools.com/howto/howto_js_media_queries.asp for more device-specific solutions
-  if(window.innerWidth > 425) { // sufficiently wide desktop windows
-    waterUseViz.mode = 'desktop';
+  if(Modernizr.mq('(min-width: 425px)')) { // sufficiently wide desktop windows
+    waterUseViz.viewport = 'wide';
   } else { // most mobile devices (except iPads) plus narrow desktop windows
-    waterUseViz.mode = 'mobile';
+    waterUseViz.viewport = 'narrow';
+  }
+  
+  try {
+   document.createEvent("TouchEvent");
+   waterUseViz.interactionMode = 'tap';
+  }
+  catch (e) {
+   waterUseViz.interactionMode = 'hover';
   }
   
   // Calculate new dimensions with adaptations for ~desktop vs ~mobile
-  if(waterUseViz.mode === 'desktop') {
+  if(waterUseViz.viewport === 'wide') {
   
     // buttonBox is at the left and centered vertically
     waterUseViz.dims.buttonBox.width = waterUseViz.dims.buttonBox.widthDesktop;
@@ -25,7 +33,7 @@ function resize() {
     waterUseViz.dims.watermark.x0 = waterUseViz.dims.svg.width * 0.01;
     waterUseViz.dims.watermark.y0 = waterUseViz.dims.svg.height * 0.95;
     
-  } else if(waterUseViz.mode === 'mobile') {
+  } else if(waterUseViz.viewport === 'narrow') {
   
     // buttonBox sits below map with small vertical buffer between map and buttons
     waterUseViz.dims.buttonBox.width = waterUseViz.dims.map.width * 0.6;

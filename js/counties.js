@@ -130,7 +130,7 @@ function displayCountyBounds(error, activeCountyData) {
         
         // clicking a county on mobile has no affect on the 
         // view unless it's the same county as last time
-        if(waterUseViz.mode === "mobile") {
+        if(waterUseViz.interactionMode === "tap") {
           
           var prevCounty = waterUseViz.prevClickCounty;
           var thisCountyID = d3.select(this).attr("id");

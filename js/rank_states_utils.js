@@ -227,7 +227,7 @@ function rankEm(barData) {
   };
   var width = rankSvg.desktopWidth;
   var height = rankSvg.desktopHeight;
-  if (waterUseViz.mode === 'mobile'){
+  if (waterUseViz.viewport === 'narrow'){
     width = rankSvg.mobileWidth;
     height = rankSvg.mobileHeight;
   }
@@ -242,7 +242,7 @@ function rankEm(barData) {
   var stateMap = svgStates.append('g');
   stateMap
     .attr('id','ranked-states-map');
-  if (waterUseViz.mode === 'mobile'){
+  if (waterUseViz.viewport === 'narrow'){
     stateMap.attr('transform',"translate(120,210)scale(0.4)");
   } else {
     stateMap.attr('transform',"translate(-10,-30)scale(0.4)");
@@ -260,7 +260,7 @@ function rankEm(barData) {
   
   var helpY = 30;
   var helpX = width * 0.6;
-  if (waterUseViz.mode === 'mobile'){
+  if (waterUseViz.viewport === 'narrow'){
     helpY = height - 50;
     helpX = width * 0.55;
   } 
@@ -326,7 +326,7 @@ function rankEm(barData) {
 	    return d.wu;
 	  })]);
 	
-	if (waterUseViz.mode === 'mobile'){
+	if (waterUseViz.viewport === 'narrow'){
 	  scaleX = d3.scaleLinear()
 	    .range([0, width-30])
 	    .domain([0, d3.max(barData, function(d){
@@ -380,7 +380,7 @@ function rankEm(barData) {
     .enter()
     .append('g');
   
-  if (waterUseViz.mode === 'mobile'){
+  if (waterUseViz.viewport === 'narrow'){
      barGroups.attr('transform', function(d, i){
       return 'translate(25,' + scaleY(i) + ")";
     });
@@ -403,7 +403,7 @@ function rankEm(barData) {
       return d.abrv;
     });
     
-    if (waterUseViz.mode === 'mobile'){
+    if (waterUseViz.viewport === 'narrow'){
       textBars
         .attr('y', scaleY.bandwidth()/2)
         .attr('text-anchor','end')
@@ -428,7 +428,7 @@ function rankEm(barData) {
       return !d.open;
     });
   
-  if (waterUseViz.mode === 'mobile'){
+  if (waterUseViz.viewport === 'narrow'){
     rectBars
       .attr('height', scaleY.bandwidth())
       .attr('x', 0)

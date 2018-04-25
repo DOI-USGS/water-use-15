@@ -48,7 +48,7 @@ var buildPath = d3.geoPath()
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
-  .range([0, 15]);
+  .range([0, 10]);
   
 /** Get user view preferences **/
 
@@ -160,14 +160,12 @@ function fillMap() {
 	stateBoundsUSA = topojson.feature(arguments[1], arguments[1].objects.states);
 	countyCentroids = arguments[2];
 	
-  // set up scaling for circles
-  var rangeWateruse = arguments[3],
-      minWateruse = rangeWateruse[0],
-      maxWateruse = rangeWateruse[1];
+  // set up scaling for circles at national level
+  waterUseViz.nationalRange = arguments[3];
   
   // update circle scale with data
   scaleCircles = scaleCircles
-    .domain(rangeWateruse);
+    .domain(waterUseViz.nationalRange);
     
   // get state abreviations into waterUseViz.stateAbrvs for later use
   extractNames(stateBoundsUSA);  
@@ -185,7 +183,7 @@ function fillMap() {
   // CIRCLES-AS-PATHS
   /*var circlesPaths = prepareCirclePaths(categories, countyCentroids);
   addCircles(circlesPaths);*/
-  updateCircles(activeCategory);
+  updateCircleCategory(activeCategory);
   
   // manipulate dropdowns
   updateViewSelectorOptions(activeView, stateBoundsUSA);
@@ -194,7 +192,7 @@ function fillMap() {
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   // and it doesn't need to be done at all for mobile
-  if(waterUseViz.mode !== 'mobile') {
+  if(waterUseViz.interactionMode !== 'tap') {
     updateCounties('USA');
   } else {
     // set countyBoundsUSA to something small for which !countyBoundsUSA is false so that 
