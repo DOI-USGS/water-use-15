@@ -34,12 +34,18 @@ function rankEm(barData) {
       
   }
   
-  var updateLabelText = function(data) {
+  var updateLabelText = function(data, isOpen) {
+    
     var allText = d3.select("#rank-data-text")
       .attr("display", "block");
     
-    allText.select("#rank-state-text")
-      .text(data.STATE_NAME);
+    if(isOpen) { 
+      allText.select("#rank-state-text")
+        .text("???");
+    } else {
+      allText.select("#rank-state-text")
+        .text(data.STATE_NAME);
+    }
     
     allText.select("#rank-value-text")
       .text(data.wu);
@@ -68,6 +74,7 @@ function rankEm(barData) {
       var bar = d3.select(this)
                .classed('highlight', true);
       rankSvg.updateStyles();
+      updateLabelText(bar.datum(), isOpen=true);
     })
     .on('mouseout',clearHighlight);
     
