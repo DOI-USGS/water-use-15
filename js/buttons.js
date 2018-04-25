@@ -164,7 +164,7 @@ function updateButtons(category) {
       if(d === category) {
         return 'black';
       } else {
-        return '#A9A9A9';
+        return '#6A6A6A';
       }
     });
   
