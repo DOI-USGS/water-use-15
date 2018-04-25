@@ -418,7 +418,6 @@ function rankEm(barData) {
   } else {
     rectBars
       .attr('width', scaleX.bandwidth())
-      .attr('x', scaleX.bandwidth()/2)
       .attr('height', function(d){
         return scaleY(d.wu) - rankSvg.bottomMargin;
       })
