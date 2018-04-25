@@ -1,5 +1,4 @@
 /* Map Functions and Variables */
-
 // Bounding box coordinates for the nation, for scaling states
 var nationDims;
 var zoom_scale;
@@ -98,10 +97,13 @@ function zoomToFromState(d, i, j, selection) {
   }
   
   // zoom to the new view
-  updateView(newView);
+  updateView(newView, fireAnalytics = true);
 }
 
-function updateView(newView, fireAnalytics) {
+function getSessionId(){return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
+function getTimestamp(){ return new Date().getTime().toString()}
+
+function updateView(newView, fireAnalytics, timestamp = getTimestamp(), sessionId = getSessionId()) {
    if(fireAnalytics === undefined) {
       scale = true;
    }
@@ -130,8 +132,9 @@ function updateView(newView, fireAnalytics) {
   if(fireAnalytics) {
     gtag('event', 'update view', {
       'event_category': 'figure',
-      'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
-    });
+      'event_label': 'newView=' + newView + '; oldView=' + oldView + '; category=' + activeCategory,
+      'sessionId': sessionId,
+      'timestamp': timestamp});
   }    
 }
 
@@ -151,6 +154,18 @@ function applyZoomAndStyle(newView) {
     })[0];
     // the ZOOM property contains x, y, and s
     zoom = stateGeom.properties.ZOOM;
+  }
+  
+  // setup appropriate circle scaling (zoom.s === 1 for view === 'USA')
+  // multiple by zoom because you want the circles to shrink on zoom 
+  // so you increase the domain and the same radii value now
+  // corresponds to a smaller circle size
+  var newScaling = [waterUseViz.nationalRange[0]*zoom.s,
+                    waterUseViz.nationalRange[1]*zoom.s];
+  if(scaleCircles.domain() !== newScaling) {
+    // only change circle scale if it's different
+    scaleCircles.domain(newScaling);
+    updateCircleSize(activeCategory);
   }
 
   // reset counties each time a zoom changes
@@ -217,7 +232,7 @@ function updateCategory(category, prevCategory) {
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
     updateButtons(category);
-    updateCircles(category);
+    updateCircleCategory(category);
     documentCategorySwitch(category, prevCategory, action);
   }
 } 
