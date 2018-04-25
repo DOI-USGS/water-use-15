@@ -1,8 +1,10 @@
 function rankEm(barData) {
 
   var rankSvg = {
-      width: 1000,
-      height: 300,
+      mobileWidth: 500,
+      mobileHeight: 600,
+      desktopWidth: 1000,
+      desktopHeight: 300,
       bottomMargin: 15,
       updateStyles: function() {
       },
@@ -15,7 +17,8 @@ function rankEm(barData) {
       },
       isOnRankBar: function(){
       },
-      isDragged: false
+      isDragged: false,
+      mobile: false
   };
   
   rankSvg.updateStyles = function(){
@@ -206,18 +209,29 @@ function rankEm(barData) {
     }
     rankSvg.updateStyles();
   };
-  
+  var width = rankSvg.desktopWidth;
+  var height = rankSvg.desktopHeight;
+  if (rankSvg.mobile){
+    width = rankSvg.mobileWidth;
+    height = rankSvg.mobileHeight;
+  }
   var svgStates = d3.select("#rank-states-interactive")
     .append("svg")
-    .attr('viewBox', '0 0 '+ rankSvg.width + " " + rankSvg.height)
+    .attr('viewBox', '0 0 '+ width + " " + height)
     .attr('preserveAspectRatio', 'xMidYMid');
   svgStates.append('style')
     .attr('type', "text/css")
     .text("@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light)");
   
-  var stateMap = svgStates.append('g')
-    .attr('id','ranked-states-map')
-    .attr('transform',"translate(-10,-30)scale(0.4)");
+  var stateMap = svgStates.append('g');
+  stateMap
+    .attr('id','ranked-states-map');
+  if (rankSvg.mobile){
+    stateMap.attr('transform',"translate(120,210)scale(0.4)");
+  } else {
+    stateMap.attr('transform',"translate(-10,-30)scale(0.4)");
+  }
+    
   
   stateMap.append('g')
     .attr('id','ranked-states-locked');
@@ -227,10 +241,17 @@ function rankEm(barData) {
     
   svgStates.append('g')
     .attr('id','ranked-states-bars');
-    
+  
+  var helpY = 30;
+  var helpX = width * 0.6;
+  if (rankSvg.mobile){
+    helpY = height - 50;
+    helpX = width * 0.55;
+  } 
+  
   svgStates.append('g')
     .attr('id','rank-directions')
-    .attr('transform',"translate("+(rankSvg.width * 0.6)+",30)")
+    .attr('transform',"translate("+helpX+","+helpY+")")
     .append('text')
       .classed('rankem-title', true)
       .attr('text-anchor','middle')
@@ -256,7 +277,9 @@ function rankEm(barData) {
     .attr('id','rank-data-text')
     .attr('transform',"translate("+(rankSvg.width * 0.6)+","+rankSvg.height * 0.3+")")
     .attr('text-anchor','middle')
-    .attr('display', 'none');
+    .attr('display', 'none')
+    .attr('transform', ('translate('+width * 0.6+','+height * 0.3+")"));
+
   
   labelTextGroup.append("text")
       .attr("id", "rank-state-text");
@@ -276,17 +299,32 @@ function rankEm(barData) {
 	});
 	
 	var scaleX = d3.scaleBand()
-	  .range([0, rankSvg.width])
+	  .range([0, width])
 	  .paddingInner(0.1)
 	  .domain(barData.map(function(d,i){
 	    return i;
 	   }));
 	
 	var scaleY = d3.scaleLinear()
-	  .range([rankSvg.bottomMargin, rankSvg.height])
+	  .range([rankSvg.bottomMargin, height])
 	  .domain([0, d3.max(barData, function(d){
 	    return d.wu;
 	  })]);
+	
+	if (rankSvg.mobile){
+	  scaleX = d3.scaleLinear()
+	    .range([0, width-30])
+	    .domain([0, d3.max(barData, function(d){
+	      return d.wu;
+	    })]);
+	   
+	   scaleY = d3.scaleBand()
+	    .range([height, 0])
+	    .paddingInner(0.1)
+	    .domain(barData.map(function(d,i){
+	      return i;
+	    }));
+	 }
 	
 	svgStates.select('#ranked-states-locked')
     .selectAll( 'use' )
@@ -325,37 +363,71 @@ function rankEm(barData) {
     .selectAll('g')
     .data(barData)
     .enter()
-    .append('g')
-    .attr('transform', function(d, i){
-      return 'translate(' + scaleX(i) + "," + (rankSvg.height - scaleY(d.wu)) + ")";
+    .append('g');
+  
+  if (rankSvg.mobile){
+     barGroups.attr('transform', function(d, i){
+      return 'translate(25,' + scaleY(i) + ")";
     });
+  } else {
+    barGroups.attr('transform', function(d, i){
+      return 'translate(' + scaleX(i) + "," + (height - scaleY(d.wu)) + ")";
+    });
+  }
     
-    barGroups.append('text')
-    .attr('y', function(d){
-      return scaleY(d.wu) - rankSvg.bottomMargin;
-    })
-    .attr('x', scaleX.bandwidth()/2)
-    .attr('text-anchor','middle')
+  var textBars = barGroups.append('text');
+  textBars
     .classed('bar-name',true)
     .classed('open-bar-name', function(d){
       return d.open;
     })
-    .attr('dy',"1em")
     .text(function(d){
       return d.abrv;
     });
+    
+    if (rankSvg.mobile){
+      textBars
+        .attr('y', scaleY.bandwidth()/2)
+        .attr('text-anchor','end')
+        .attr('dy',"0.33em")
+        .attr('dx',"-0.5em");
+    } else {
+      textBars
+        .attr('y', function(d){
+          return scaleY(d.wu) - rankSvg.bottomMargin;
+        })
+        .attr('dy',"1em")
+        .attr('x', scaleX.bandwidth()/2)
+        .attr('text-anchor','middle');
+    }
   
-  barGroups.append('rect')
-    .attr('height', function(d){
-      return scaleY(d.wu) - rankSvg.bottomMargin;
-    })
+  var rectBars = barGroups.append('rect');
+  rectBars
     .attr('id', function(d){
       return d.abrv+'-bar';
     })
-    .attr('width', scaleX.bandwidth())
     .classed('locked-rank-bar', function(d){
       return !d.open;
     });
+  
+  if (rankSvg.mobile){
+    rectBars
+      .attr('height', scaleY.bandwidth())
+      .attr('x', 0)
+      .attr('width',  function(d){
+        return scaleX(d.wu);
+      });
+  } else {
+    rectBars
+      .attr('width', scaleX.bandwidth())
+      .attr('x', scaleX.bandwidth()/2)
+      .attr('height', function(d){
+        return scaleY(d.wu) - rankSvg.bottomMargin;
+      })
+      .attr('width', scaleX.bandwidth());
+  }
+    
+    
     
     rankSvg.updateStyles();
 }
