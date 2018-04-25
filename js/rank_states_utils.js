@@ -259,7 +259,7 @@ function rankEm(barData) {
   // add message about Idaho to conclude.  
   var rankMsg = svgStates.append('g')
     .attr('id', 'rank-explanation')
-    .attr('transform',"translate("+(rankSvg.width * 0.6)+",25)");
+    .attr('transform',"translate("+helpX+","+helpY+")");
   rankMsg
     .append('text')
       .classed('rankem-explanation', true)
@@ -274,7 +274,6 @@ function rankEm(barData) {
   
   var labelTextGroup = svgStates.append('g')
     .attr('id','rank-data-text')
-    .attr('transform',"translate("+(rankSvg.width * 0.6)+","+rankSvg.height * 0.3+")")
     .attr('text-anchor','middle')
     .attr('display', 'none')
     .attr('transform', ('translate('+width * 0.6+','+height * 0.3+")"));
