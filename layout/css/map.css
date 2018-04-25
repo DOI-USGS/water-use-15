@@ -3,6 +3,18 @@
   fill: transparent;
 }
 
+#rank-states-interactive text{
+  /* on mobile, clicking and holding the state for >1 sec caused fig text
+      to highlight and then when you tried to drag, you just selected more*/
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome and Opera */
+}
+
 .state {
   fill: transparent;
   stroke: rgb(180,180,180);
