@@ -9,8 +9,6 @@ function updateStateData(newView, callback) {
     if(map.select('#state-bounds-highres').empty()) {
       
       d3.json('data/state_boundaries_zoom.json', function(error, stateBoundsTopo) {
-        
-        
         stateBoundsZoom = topojson.feature(stateBoundsTopo, stateBoundsTopo.objects.states);
         // load the data and create the state boundaries in <use>
         d3.select('defs').append('g').attr('id', 'state-bounds-highres')
@@ -27,10 +25,10 @@ function updateStateData(newView, callback) {
         // do the update to highres data
         callback(null, 'highres');
       });
-      
+
     } else {
       // do the update to highres data
-    callback(null, 'highres');
+      callback(null, 'highres');
     }
     
   }

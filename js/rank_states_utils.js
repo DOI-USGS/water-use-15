@@ -17,8 +17,7 @@ function rankEm(barData) {
       },
       isOnRankBar: function(){
       },
-      isDragged: false,
-      mobile: false
+      isDragged: false
   };
   
   rankSvg.updateStyles = function(){
@@ -27,6 +26,7 @@ function rankEm(barData) {
   var draggableStates = svgStates.select('#ranked-states-draggable').selectAll('.draggable-state');
   var lockedBars = allBars.filter('.locked-rank-bar');
   var openBars = allBars.filter('*:not(.locked-rank-bar)');
+  var lockedBarNames = svgStates.select('#ranked-states-bars').selectAll('text');
   
   function clearHighlight(){
     d3.selectAll('.highlight')
@@ -60,6 +60,7 @@ function rankEm(barData) {
     .on('mouseover',function(){
       var state = d3.select(this).attr('id').split('-')[0];
       d3.select('#'+state+'-locked').classed('highlight', true);
+      d3.select('#'+state+'-bar-name').classed('highlight', true);
       var bar = d3.select(this)
                .classed('highlight', true);
       rankSvg.updateStyles();
@@ -67,6 +68,17 @@ function rankEm(barData) {
     })
     .on('mouseout',clearHighlight);
   
+  lockedBarNames
+    .style('font-weight', 'normal')
+    .on('mouseover',function(){
+      var state = d3.select(this).attr('id').split('-')[0];
+      d3.select('#'+state+'-locked').classed('highlight', true);
+      var bar = d3.select('#'+state+'-bar').classed('highlight', true);
+      d3.select(this).classed('highlight', true);
+      rankSvg.updateStyles();
+      updateLabelText(bar.datum());
+    })
+    .on('mouseout', clearHighlight);
     
   openBars
     .style('fill', "rgba(255, 255, 255, 0.0)")
@@ -75,7 +87,7 @@ function rankEm(barData) {
     .style("stroke-dasharray","4, 2")
     .on('mouseover',function(){
       var bar = d3.select(this)
-               .classed('highlight', true);
+             .classed('highlight', true);
       rankSvg.updateStyles();
       updateLabelText(bar.datum(), isOpen=true);
     })
@@ -93,6 +105,7 @@ function rankEm(barData) {
       var bar = d3.select('#'+state+'-bar')
                 .classed('highlight', true);
       d3.select(this).classed('highlight', true);
+      d3.select('#'+state+'-bar-name').classed('highlight', true);
       updateLabelText(bar.datum());
       rankSvg.updateStyles();
     })
@@ -112,6 +125,9 @@ function rankEm(barData) {
       .style("stroke-dasharray", null)
       .style('fill',"rgba(220,220,220, 0.4)")
       .style('stroke',categoryToColor('total',true));
+    
+    lockedBarNames.filter('.highlight')
+      .style('font-weight', "bold");
     
     d3.select('#rank-directions')
       .transition().duration(600).style('opacity',1);
@@ -211,7 +227,7 @@ function rankEm(barData) {
   };
   var width = rankSvg.desktopWidth;
   var height = rankSvg.desktopHeight;
-  if (rankSvg.mobile){
+  if (waterUseViz.mode === 'mobile'){
     width = rankSvg.mobileWidth;
     height = rankSvg.mobileHeight;
   }
@@ -226,7 +242,7 @@ function rankEm(barData) {
   var stateMap = svgStates.append('g');
   stateMap
     .attr('id','ranked-states-map');
-  if (rankSvg.mobile){
+  if (waterUseViz.mode === 'mobile'){
     stateMap.attr('transform',"translate(120,210)scale(0.4)");
   } else {
     stateMap.attr('transform',"translate(-10,-30)scale(0.4)");
@@ -244,7 +260,7 @@ function rankEm(barData) {
   
   var helpY = 30;
   var helpX = width * 0.6;
-  if (rankSvg.mobile){
+  if (waterUseViz.mode === 'mobile'){
     helpY = height - 50;
     helpX = width * 0.55;
   } 
@@ -260,7 +276,7 @@ function rankEm(barData) {
   // add message about Idaho to conclude.  
   var rankMsg = svgStates.append('g')
     .attr('id', 'rank-explanation')
-    .attr('transform',"translate("+(rankSvg.width * 0.6)+",25)");
+    .attr('transform',"translate("+helpX+","+helpY+")");
   rankMsg
     .append('text')
       .classed('rankem-explanation', true)
@@ -275,7 +291,6 @@ function rankEm(barData) {
   
   var labelTextGroup = svgStates.append('g')
     .attr('id','rank-data-text')
-    .attr('transform',"translate("+(rankSvg.width * 0.6)+","+rankSvg.height * 0.3+")")
     .attr('text-anchor','middle')
     .attr('display', 'none')
     .attr('transform', ('translate('+width * 0.6+','+height * 0.3+")"));
@@ -311,7 +326,7 @@ function rankEm(barData) {
 	    return d.wu;
 	  })]);
 	
-	if (rankSvg.mobile){
+	if (waterUseViz.mode === 'mobile'){
 	  scaleX = d3.scaleLinear()
 	    .range([0, width-30])
 	    .domain([0, d3.max(barData, function(d){
@@ -365,7 +380,7 @@ function rankEm(barData) {
     .enter()
     .append('g');
   
-  if (rankSvg.mobile){
+  if (waterUseViz.mode === 'mobile'){
      barGroups.attr('transform', function(d, i){
       return 'translate(25,' + scaleY(i) + ")";
     });
@@ -377,6 +392,9 @@ function rankEm(barData) {
     
   var textBars = barGroups.append('text');
   textBars
+    .attr('id', function(d) {
+      return d.abrv+'-bar-name';
+    })
     .classed('bar-name',true)
     .classed('open-bar-name', function(d){
       return d.open;
@@ -385,7 +403,7 @@ function rankEm(barData) {
       return d.abrv;
     });
     
-    if (rankSvg.mobile){
+    if (waterUseViz.mode === 'mobile'){
       textBars
         .attr('y', scaleY.bandwidth()/2)
         .attr('text-anchor','end')
@@ -410,7 +428,7 @@ function rankEm(barData) {
       return !d.open;
     });
   
-  if (rankSvg.mobile){
+  if (waterUseViz.mode === 'mobile'){
     rectBars
       .attr('height', scaleY.bandwidth())
       .attr('x', 0)
@@ -420,7 +438,6 @@ function rankEm(barData) {
   } else {
     rectBars
       .attr('width', scaleX.bandwidth())
-      .attr('x', scaleX.bandwidth()/2)
       .attr('height', function(d){
         return scaleY(d.wu) - rankSvg.bottomMargin;
       })
