@@ -133,7 +133,7 @@ function prepareMap() {
 function customizeCaption() {
   var captionText = 
     "Circle sizes represent rates of water use by county. ";
-  if(waterUseViz.mode === 'desktop') {
+  if(waterUseViz.interactionMode === 'hover') {
     captionText = captionText +
       "Hover over the map for details. Click a button to switch categories. " +
       "Click a state to zoom in, and click the same state to zoom out.";
