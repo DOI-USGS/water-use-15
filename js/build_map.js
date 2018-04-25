@@ -179,7 +179,14 @@ function fillMap() {
   
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
-  updateCounties('USA');
+  // and it doesn't need to be done at all for mobile
+  if(waterUseViz.mode !== 'mobile') {
+    updateCounties('USA');
+  } else {
+    // set countyBoundsUSA to something small for which !countyBoundsUSA is false so that 
+    // if and when the user zooms out from a state, updateCounties won't try to load the low-res data
+    countyBoundsUSA = true;
+  }
   
   // Read national data and add it to figure
   d3.json("data/wu_data_15_sum.json", function(error, data) {
