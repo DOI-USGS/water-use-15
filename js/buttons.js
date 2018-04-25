@@ -70,7 +70,7 @@ function addButtons() {
 function resizeButtons() {
   
    // reserve the top band for titles
-   titlesHeight = waterUseViz.dims.buttonBox.height * 0.2;
+   titlesHeight = waterUseViz.dims.buttonBox.height * 0.22;
   
   // recompute the button heights and positions for the new buttonBox width
   var buttonY = d3.scaleBand()
@@ -111,13 +111,9 @@ function resizeButtons() {
   waterUseViz.elements.buttonBox.selectAll('text.title')
     .attr('x', +activeButton.attr('x'));
   waterUseViz.elements.buttonBox.select('#legend-title')
-    .attr('y', function(d) {
-      return titlesHeight * 0.3;
-    });
+    .attr('dy', '1.2em');
   waterUseViz.elements.buttonBox.select('#legend-subtitle')
-    .attr('y', function(d) {
-      return titlesHeight * 0.8;
-    });
+    .attr('dy', '2.9em');
 
   // category labels and water use amounts are aligned relative to the width of the active (longest) button.
   // category labels are left aligned, nudged a little over from the rectangle's left edge.
