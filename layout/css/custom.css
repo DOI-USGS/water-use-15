@@ -226,11 +226,11 @@
   }
   
   .side-by-side-left{
-    flex:2;
+    width:70%;
   }
   
   .side-by-side-right{
-    flex:1;
+    width:30%;
     position:relative;
   }
   
