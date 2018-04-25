@@ -4,14 +4,14 @@ function resize() {
   // https://www.w3schools.com/howto/howto_js_media_queries.asp for more device-specific solutions
   if(window.innerWidth > 425) { // sufficiently wide desktop windows
     waterUseViz.viewport = 'wide';
-    waterUse.Viz.interactionMode = 'click';
+    waterUseViz.interactionMode = 'click';
   } else { // most mobile devices (except iPads) plus narrow desktop windows
     waterUseViz.viewport = 'narrow';
-    waterUse.Viz.interactionMode = 'tap';
+    waterUseViz.interactionMode = 'tap';
   }
   
   // Calculate new dimensions with adaptations for ~desktop vs ~mobile
-  if(waterUseViz.mode === 'wide') {
+  if(waterUseViz.viewport === 'wide') {
   
     // buttonBox is at the left and centered vertically
     waterUseViz.dims.buttonBox.width = waterUseViz.dims.buttonBox.widthDesktop;
@@ -27,7 +27,7 @@ function resize() {
     waterUseViz.dims.watermark.x0 = waterUseViz.dims.svg.width * 0.01;
     waterUseViz.dims.watermark.y0 = waterUseViz.dims.svg.height * 0.95;
     
-  } else if(waterUseViz.mode === 'narrow') {
+  } else if(waterUseViz.viewport === 'narrow') {
   
     // buttonBox sits below map with small vertical buffer between map and buttons
     waterUseViz.dims.buttonBox.width = waterUseViz.dims.map.width * 0.6;
