@@ -216,7 +216,7 @@ publish:
       directions_text: "directions_text"
       header: "header_section"
       mobile_map_ui: "mobile_map_ui"
-      wu-story: "wu-story"
+      wu_story: "wu_story"
       footer: "footer_section"
       hashes: "url_hashes"
       projection: "custom_projection"
@@ -354,7 +354,7 @@ publish:
     alttext: "a static mobile story"
     relpath: "images/WU_stories_mobile_right.jpg"
   -
-    id: wu-story
+    id: wu_story
     template: layout/templates/wu_story.mustache
     depends: ["rank_states_utils","wu_state_data_json", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "static_story_figure_mobile_left", "static_story_figure_mobile_right"]
     context:
