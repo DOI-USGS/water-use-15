@@ -8,20 +8,8 @@ function updateStateData(newView, callback) {
   } else {
     if(map.select('#state-bounds-highres').empty()) {
       
-      //d3.json('data/state_boundaries_zoom.json', function(error, stateBoundsTopo) {
-      d3.json('data/state_boundaries_USA.json', function(error, stateBoundsTopo) { //
+      d3.json('data/state_boundaries_zoom.json', function(error, stateBoundsTopo) {
         stateBoundsZoom = topojson.feature(stateBoundsTopo, stateBoundsTopo.objects.states);
-        // pull the zoom info from state_boundaries_zoom and attach it to the USA data, //
-        // which we're trying to use as the zoomed-in data //
-        d3.json('data/state_boundaries_zoom.json', function(error, stateBoundsTrueZoom) { //
-          var trueStateBoundsZoom = topojson.feature(stateBoundsTrueZoom, stateBoundsTrueZoom.objects.states); //
-          trueStateBoundsZoom.features.forEach(function(u) { //
-            var match = stateBoundsZoom.features.filter(function(z) { //
-              return z.properties.STATE_ABBV === u.properties.STATE_ABBV; //
-            })[0]; //
-            match.properties.ZOOM = u.properties.ZOOM; //
-          }); //
-        //
         // load the data and create the state boundaries in <use>
         d3.select('defs').append('g').attr('id', 'state-bounds-highres')
           .selectAll('path')
@@ -37,8 +25,7 @@ function updateStateData(newView, callback) {
         // do the update to highres data
         callback(null, 'highres');
       });
-      }); //
-      
+
     } else {
       // do the update to highres data
       callback(null, 'highres');
