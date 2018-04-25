@@ -13,7 +13,7 @@ function addStates(map, stateBounds) {
 
   // changes pointer events depending on mobile or desktop
   var clickClass = "state-click-off"; // default to desktop
-  if(waterUseViz.mode === "mobile") {
+  if(waterUseViz.interactionMode === "tap") {
     clickClass = "state-click-on";
   }
   
