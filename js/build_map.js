@@ -8,7 +8,7 @@ var waterUseViz = {
     },
     buttonBox: {
       widthDesktop: 250,
-      heightDesktop: 250,
+      heightDesktop: 275,
       width: null,
       height: null
     },
