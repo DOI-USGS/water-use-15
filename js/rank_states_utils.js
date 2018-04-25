@@ -339,7 +339,7 @@ function rankEm(barData) {
   
   if (rankSvg.mobile){
      barGroups.attr('transform', function(d, i){
-      return 'translate(20,' + scaleY(i) + ")";
+      return 'translate(25,' + scaleY(i) + ")";
     });
   } else {
     barGroups.attr('transform', function(d, i){
