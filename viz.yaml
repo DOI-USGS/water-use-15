@@ -230,7 +230,6 @@ publish:
       map_states: map_states
       map_counties: "map_counties"
       dropdown_selector: "dropdown_selector"
-      map_script: build_map
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
@@ -242,7 +241,7 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
-      sections: ["social", "mobile_map_ui", "map_section", "map_script", "wu_story"] # adding header and footer here, doubled each on the page
+      sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb-facebook
         facebook: thumb-facebook
@@ -339,7 +338,9 @@ publish:
     template: layout/templates/map_section.mustache
     publisher: section
     depends:
+      map_script: build_map
     context:
+      map_script: map_script
   -
     id: static_story_figure
     location: "images/WU_stories_static.jpg"
