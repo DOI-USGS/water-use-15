@@ -112,7 +112,13 @@ function rankEm(barData) {
     
     d3.select('#rank-directions')
       .transition().duration(600).style('opacity',1);
+  } else {
+    lockedBars
+      .on("mouseover", clearHighlight);
+    openBars
+      .on("mouseover", clearHighlight);
   }
+  
   openBars.filter('.highlight')
   .style("stroke-dasharray", null)
   .style('stroke-width', 0)
