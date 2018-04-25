@@ -1,5 +1,4 @@
 /* Map Functions and Variables */
-
 // Bounding box coordinates for the nation, for scaling states
 var nationDims;
 var zoom_scale;
@@ -98,10 +97,13 @@ function zoomToFromState(d, i, j, selection) {
   }
   
   // zoom to the new view
-  updateView(newView);
+  updateView(newView, fireAnalytics = true);
 }
 
-function updateView(newView, fireAnalytics) {
+function getSessionId(){return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
+function getTimestamp(){ return new Date().getTime().toString()}
+
+function updateView(newView, fireAnalytics, timestamp = getTimestamp(), sessionId = getSessionId()) {
    if(fireAnalytics === undefined) {
       scale = true;
    }
@@ -130,8 +132,9 @@ function updateView(newView, fireAnalytics) {
   if(fireAnalytics) {
     gtag('event', 'update view', {
       'event_category': 'figure',
-      'event_label': 'newView=' + newView + '; oldView=' +     oldView + '; category=' + activeCategory
-    });
+      'event_label': 'newView=' + newView + '; oldView=' + oldView + '; category=' + activeCategory,
+      'sessionId': sessionId,
+      'timestamp': timestamp});
   }    
 }
 
