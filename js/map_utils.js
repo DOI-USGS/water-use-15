@@ -155,6 +155,18 @@ function applyZoomAndStyle(newView) {
     // the ZOOM property contains x, y, and s
     zoom = stateGeom.properties.ZOOM;
   }
+  
+  // setup appropriate circle scaling (zoom.s === 1 for view === 'USA')
+  // multiple by zoom because you want the circles to shrink on zoom 
+  // so you increase the domain and the same radii value now
+  // corresponds to a smaller circle size
+  var newScaling = [waterUseViz.nationalRange[0]*zoom.s,
+                    waterUseViz.nationalRange[1]*zoom.s];
+  if(scaleCircles.domain() !== newScaling) {
+    // only change circle scale if it's different
+    scaleCircles.domain(newScaling);
+    updateCircleSize(activeCategory);
+  }
 
   // reset counties each time a zoom changes
   // cannot go inside first if because panning to adjacent state won't reset
@@ -220,7 +232,7 @@ function updateCategory(category, prevCategory) {
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
     updateButtons(category);
-    updateCircles(category);
+    updateCircleCategory(category);
     documentCategorySwitch(category, prevCategory, action);
   }
 } 

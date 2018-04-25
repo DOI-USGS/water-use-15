@@ -43,7 +43,7 @@ function addCircles(countyCentroids) {
     .attr("cx", function(d) { return projectX([d.lon, d.lat]); })
     .attr("cy", function(d) { return projectY([d.lon, d.lat]); })
     .attr("r", 0)
-    .style("fill", "transparent"); // start transparent & updateCircles will transition to color
+    .style("fill", "transparent"); // start transparent & updateCircleColor will transition to color
   
   // CIRCLES-AS-PATHS
   /*
@@ -53,7 +53,7 @@ function addCircles(countyCentroids) {
     .classed('wu-circle', true)
     .attr('id', 'wu-path')
     .style('stroke','none')
-    .style('fill', 'none'); // start transparent & updateCircles will transition to color
+    .style('fill', 'none'); // start transparent & updateCircleColor will transition to color
     */
     
   map.selectAll('g#wu-circles')
@@ -64,9 +64,9 @@ function addCircles(countyCentroids) {
   
 }
 
-function updateCircles(category) {
+function updateCircleCategory(category) {
   
-  // grow circles to appropriate size
+  // grow circles to appropriate size && changes color
   d3.selectAll("circle.wu-basic")
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
@@ -80,6 +80,14 @@ function updateCircles(category) {
     .attr("d", function(d) { return d[[category]]; })
     .style("stroke", categoryToColor(category))
     .style("fill", categoryToColor(category));*/
+
+}
+
+function updateCircleSize(category) {
+  // makes circles the appropriate size
+  d3.selectAll("circle.wu-basic")
+    .transition().duration(600)
+    .attr("r", function(d) { return scaleCircles(d[[category]]); });
 
 }
 
