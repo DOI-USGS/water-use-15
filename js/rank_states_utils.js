@@ -209,7 +209,7 @@ function rankEm(barData) {
   stateMap
     .attr('id','ranked-states-map');
   if (rankSvg.mobile){
-    stateMap.attr('transform',"translate(110,270)scale(0.4)");
+    stateMap.attr('transform',"translate(120,210)scale(0.4)");
   } else {
     stateMap.attr('transform',"translate(-10,-30)scale(0.4)");
   }
@@ -227,8 +227,8 @@ function rankEm(barData) {
   var helpY = 30;
   var helpX = width * 0.6;
   if (rankSvg.mobile){
-    helpY = 180;
-    helpX = width * 0.65;
+    helpY = height - 50;
+    helpX = width * 0.55;
   } 
   
   svgStates.append('g')
@@ -242,16 +242,9 @@ function rankEm(barData) {
   var labelTextGroup = svgStates.append('g')
     .attr('id','rank-data-text')
     .attr('text-anchor','middle')
-    .attr('display', 'none');
-  
-  if (rankSvg.mobile){
-    labelTextGroup
-      .attr('transform', ('translate('+width * 0.6+','+height * 0.4+")"));
-  } else {
-    labelTextGroup
-      .attr('transform', ('translate('+width * 0.6+','+height * 0.3+")"));
-  }
-    
+    .attr('display', 'none')
+    .attr('transform', ('translate('+width * 0.6+','+height * 0.3+")"));
+
   
   labelTextGroup.append("text")
       .attr("id", "rank-state-text");
