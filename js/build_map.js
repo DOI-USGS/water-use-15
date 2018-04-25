@@ -146,14 +146,12 @@ function fillMap() {
 	stateBoundsUSA = topojson.feature(arguments[1], arguments[1].objects.states);
 	countyCentroids = arguments[2];
 	
-  // set up scaling for circles
-  var rangeWateruse = arguments[3],
-      minWateruse = rangeWateruse[0],
-      maxWateruse = rangeWateruse[1];
+  // set up scaling for circles at national level
+  waterUseViz.nationalRange = arguments[3];
   
   // update circle scale with data
   scaleCircles = scaleCircles
-    .domain(rangeWateruse);
+    .domain(waterUseViz.nationalRange);
     
   // get state abreviations into waterUseViz.stateAbrvs for later use
   extractNames(stateBoundsUSA);  
