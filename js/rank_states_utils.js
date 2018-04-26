@@ -82,7 +82,7 @@ function rankEm(barData) {
     
   openBars
     .style('fill', "rgba(255, 255, 255, 0.0)")
-    .style('stroke',"rgb(190,190,190)")
+    .style('stroke',"rgb(198,198,198)")
     .style('stroke-width', 1.5)
     .style("stroke-dasharray","4, 2")
     .on('mouseover',function(){
@@ -94,8 +94,8 @@ function rankEm(barData) {
     .on('mouseout',clearHighlight);
     
   lockedStates
-    .style('fill',"rgb(220,220,220)")
-    .style('stroke',"rgb(190,190,190)")
+    .style('fill',"rgb(198,198,198)")
+    .style('stroke',"rgb(222,222,222)")
     .style('stroke-width', 4)
     .style("stroke-dasharray","10, 10")
     .on('mouseover',function(){

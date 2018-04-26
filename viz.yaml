@@ -213,10 +213,10 @@ publish:
       custom_css: "custom_css"
       social: "social_section"
       socialCSS: "lib-social-media-css"
-      directions_text: "directions_text"
       header: "header_section"
       mobile_map_ui: "mobile_map_ui"
-      wu-story: "wu-story"
+      map_section: "map_section"
+      wu_story: "wu_story"
       footer: "footer_section"
       hashes: "url_hashes"
       projection: "custom_projection"
@@ -230,7 +230,6 @@ publish:
       map_states: map_states
       map_counties: "map_counties"
       dropdown_selector: "dropdown_selector"
-      map: "build_map"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
@@ -242,7 +241,7 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
-      sections: ["social", "mobile_map_ui", "map", "directions_text", "wu-story"] # adding header and footer here, doubled each on the page
+      sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb-facebook
         facebook: thumb-facebook
@@ -335,31 +334,42 @@ publish:
     context:
       title: "Water use in the U.S., 2015"
   -
+    id: map_section
+    template: layout/templates/map_section.mustache
+    publisher: section
+    depends:
+      map_script: build_map
+    context:
+      map_script: map_script
+  -
     id: static_story_figure
     location: "images/WU_stories_static.jpg"
     mimetype: image/jpg
     export: true
-    title: "a static story"
-    alttext: "a static story"
+    title: "A national map with notes about areas of high water use"
+    alttext: >-
+      High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
     relpath: "images/WU_stories_static.jpg"
   -
     id: static_story_figure_mobile_left
     location: "images/WU_stories_mobile_left.jpg"
     mimetype: image/jpg
     export: true
-    title: "a static mobile story"
-    alttext: "a static mobile story"
+    title: "Map of the western U.S. with notes about areas of high water use"
+    alttext:  >-
+      Areas of high water use: Idaho (aquaculture), California (irrigation), Alaska (mining), & big cities (public supply)
     relpath: "images/WU_stories_mobile_left.jpg"
   -
     id: static_story_figure_mobile_right
     location: "images/WU_stories_mobile_right.jpg"
     mimetype: image/jpg
     export: true
-    title: "a static mobile story"
-    alttext: "a static mobile story"
+    title: "Map of the eastern U.S. with notes about areas of high water use"
+    alttext:  >-
+      High water use: Illinois (steel production), the Northeast (power generation), Arkansas (irrigation), & Gulf Coast (industry)
     relpath: "images/WU_stories_mobile_right.jpg"
   -
-    id: wu-story
+    id: wu_story
     template: layout/templates/wu_story.mustache
     depends: ["rank_states_utils","wu_state_data_json", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "static_story_figure_mobile_left", "static_story_figure_mobile_right"]
     context:
@@ -420,9 +430,8 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: map_counties
-      dropdown_selector: "dropdown_selector"
-      map: build_map
-      directions_text: directions_text
+      dropdown_selector: dropdown_selector
+      map_section: map_section
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
@@ -432,14 +441,8 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector"]
-      embed: ["map","directions_text"]
-  -
-    id: directions_text
-    template: layout/templates/directions_text.mustache
-    publisher: section
-    depends: 
-    context:
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
+      embed: ["map_section"]
   -
     id: thumb-facebook
     location: images/WU_stories_static_thumbs.png

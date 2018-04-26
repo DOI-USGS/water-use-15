@@ -8,7 +8,7 @@ var waterUseViz = {
     },
     buttonBox: {
       widthDesktop: 250,
-      heightDesktop: 250,
+      heightDesktop: 275,
       width: null,
       height: null
     },
@@ -57,9 +57,7 @@ readHashes();
 /** Add major svg elements and then set their sizes **/
     
 // Create container
-var container = d3.select('body')
-  .append('div')
-  .classed('main-svg', true);
+var container = d3.select('body div.main-svg');
 
 // Create SVG and map
 var svg = d3.select(".main-svg")
@@ -115,7 +113,6 @@ function readHashes() {
 function prepareMap() {
 
   /** Add map elements **/
-  
   // add placeholder groups for geographic boundaries and circles
   map.append('g').attr('id', 'county-bounds');
   map.append('g').attr('id', 'state-bounds');
@@ -124,15 +121,32 @@ function prepareMap() {
   but can be used in parts of the svg that are rendered (e.g., <use/>) */
   map.append('defs').append('g').attr('id', 'state-bounds-lowres');
   
-
-
   /** Initialize URL **/
-  
-  // Initialize page info
   setHash('view', activeView);
   setHash('category', activeCategory);
   
+  /** Update caption **/
+  customizeCaption();
 }
+
+// customize the caption according to the mode (mobile, desktop, etc.)
+function customizeCaption() {
+  var captionText = 
+    "Circle sizes represent rates of water use by county. ";
+  if(waterUseViz.interactionMode === 'tap') {
+    captionText = captionText +
+      "Tap in the legend to switch categories. " +
+      "Tap a state to zoom in, then tap a county for details.";
+  } else {
+    captionText = captionText +
+      "Hover over the map for details. Click a button to switch categories. " +
+      "Click a state to zoom in, and click the same state to zoom out.";
+  }
+  console.log(d3.select('#fig-caption'));
+  d3.select('#fig-caption p')
+    .text(captionText);
+}
+
 
 function fillMap() {
 
