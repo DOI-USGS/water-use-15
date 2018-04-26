@@ -207,9 +207,10 @@ function fillMap() {
     // cache data for dotmap and update legend if we're in national view
     waterUseViz.nationalData = data;
     if(activeView === 'USA') updateLegendTextToView();
-
+    var path = window.location.pathname;
     // create big pie figure (uses nationalData)
-    loadPie();
+    if(path === "/") loadPie();
+    
   });
   
   // Read state data and add it to figure
@@ -219,6 +220,7 @@ function fillMap() {
     // cache data for dotmap and update legend if we're in state view
     waterUseViz.stateData = data;
     if(activeView !== 'USA') updateLegendTextToView();
+    
     
     // format data for rankEm and create rankEm figure
     var  barData = [];
@@ -231,7 +233,8 @@ function fillMap() {
         };
         barData.push(x);
       });
-    rankEm(barData);
+    var path = window.location.pathname;
+    if(path === "/") rankEm(barData);
   });
 }
 
