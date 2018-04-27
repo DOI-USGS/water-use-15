@@ -8,13 +8,33 @@ function resize() {
     waterUseViz.viewport = 'narrow';
   }
   
-  try {
-   document.createEvent("TouchEvent");
-   waterUseViz.interactionMode = 'tap';
-  }
-  catch (e) {
+ var result = false;
+ 
+ if (window.PointerEvent && ('maxTouchPoints' in navigator)) {
+   // if Pointer Events are supported, just check maxTouchPoints
+   if (navigator.maxTouchPoints > 0) {
+     result = true;
+   }
+ } else {
+   // no Pointer Events...
+   if (window.matchMedia && window.matchMedia("(any-pointer:coarse)").matches) {
+     // check for any-pointer:coarse which mostly means touchscreen
+     result = true;
+   } else if (window.TouchEvent || ('ontouchstart' in window)) {
+     // last resort - check for exposed touch events API / event handler
+     result = true;
+   }
+ }
+ 
+ if(result === true){
+   if(Math.max(screen.width, screen.height) > 1024){
+     waterUseViz.interactionMode = 'hover';
+   }else{
+     waterUseViz.interactionMode = 'tap';
+   }
+ }else{
    waterUseViz.interactionMode = 'hover';
-  }
+ }
   
   // Calculate new dimensions with adaptations for ~desktop vs ~mobile
   if(waterUseViz.viewport === 'wide') {

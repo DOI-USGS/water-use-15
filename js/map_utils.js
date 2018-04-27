@@ -212,8 +212,14 @@ function applyZoomAndStyle(newView) {
     .style("stroke-width",  1/zoom.s); // make all counties have scaled stroke-width
   
   // apply the transform (i.e., actually zoom in or out)
+  var zoomTime;
+  if(waterUseViz.interactionMode === 'hover'){
+    zoomTime = 750;
+  } else {
+    zoomTime = 0;
+  }
   map.transition()
-    .duration(750)
+    .duration(zoomTime)
     .attr('transform',
       "translate(" + waterUseViz.dims.map.width / 2 + "," + waterUseViz.dims.map.height / 2 + ")"+
       "scale(" + zoom.s + ")" +

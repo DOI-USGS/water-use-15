@@ -73,6 +73,13 @@ function addCircles(circlesPaths) {
 function updateCircleCategory(category) {
   
   // grow circles to appropriate size && changes color
+  var transitionTime;
+  if(waterUseViz.interactionMode === 'hover'){
+    transitionTime = 1000;
+  } else {
+    transitionTime = 0;
+  }
+    
   /*
   d3.selectAll("circle.wu-basic")
     .transition().duration(1000)
@@ -84,7 +91,7 @@ function updateCircleCategory(category) {
   // CIRCLES-AS-PATHS
   // grow circles to appropriate size
   d3.select('#wu-path')
-    .transition().duration(1000)
+    .transition().duration(transitionTime)
     .attr("d", function(d) { 
       if(activeView == 'USA') {
         return d[[category]];
@@ -101,15 +108,25 @@ function updateCircleCategory(category) {
 
 function updateCircleSize(category, view) {
   // makes circles the appropriate size
+
+  var transitionTime;
+  if(waterUseViz.interactionMode === 'hover'){
+    transitionTime = 600;
+  } else {
+    transitionTime = 0;
+  }
+  
   /* 
   // CIRCLES-AS-CIRCLES
   d3.selectAll("circle.wu-basic")
-    .transition().duration(600)
+    .transition()
+    .duration(transitionTime)
     .attr("r", function(d) { return scaleCircles(d[[category]]); });
   */
+  
   // CIRCLES-AS-PATHS
   d3.select('#wu-path')
-    .transition().duration(600)
+    .transition().duration(transitionTime)
     .attr("d", function(d) { 
       if(view === 'USA') {
         // don't recalculate circle paths on zoom out, just reapply data attached
@@ -120,7 +137,6 @@ function updateCircleSize(category, view) {
         return createCirclePath(category, countyCentroids); 
       }
   });
- 
 }
 
 function highlightCircle(countyDatum, category) {
