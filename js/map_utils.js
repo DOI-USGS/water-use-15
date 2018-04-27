@@ -217,17 +217,16 @@ function applyZoomAndStyle(newView, doTransition) {
   
   allcounties
     .style("stroke-width",  1/zoom.s); // make all counties have scaled stroke-width
-  
-  var zoomDuration;
-  if(doTransition) {
-    zoomDuration = 750;
-  } else {
-    zoomDuration = 0;
-  }
-  
+
   // apply the transform (i.e., actually zoom in or out)
+  var zoomTime;
+  if(waterUseViz.interactionMode !== 'hover' || !doTransition){
+    zoomTime = 0;
+  } else {
+    zoomTime = 750;
+  }
   map.transition()
-    .duration(zoomDuration)
+    .duration(zoomTime)
     .attr('transform',
       "translate(" + waterUseViz.dims.map.width / 2 + "," + waterUseViz.dims.map.height / 2 + ")"+
       "scale(" + zoom.s + ")" +
