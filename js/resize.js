@@ -33,7 +33,6 @@ function resize() {
      waterUseViz.interactionMode = 'tap';
    }
  }else{
-   alert('hover');
    waterUseViz.interactionMode = 'hover';
  }
   
