@@ -85,7 +85,15 @@ function updateCircleCategory(category) {
   // grow circles to appropriate size
   d3.select('#wu-path')
     .transition().duration(1000)
-    .attr("d", function(d) { return d[[category]]; })
+    .attr("d", function(d) { 
+      if(activeView == 'USA') {
+        return d[[category]];
+      } else {
+        // recalculate the new circle path size for this new category
+        // updateCircleSize only updates the current category.
+        return createCirclePath(category, countyCentroids);
+      } 
+    })
     .style("stroke", categoryToColor(category))
     .style("fill", categoryToColor(category));
 
