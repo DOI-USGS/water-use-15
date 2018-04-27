@@ -433,6 +433,7 @@ publish:
       dropdown_selector: dropdown_selector
       modernizr: modernizr
       map_section: map_section
+      svg-injector-js: lib-svg-injector-js
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
@@ -440,7 +441,7 @@ publish:
       county_centroids_wu: county_centroids_wu_tsv
       wu_data_15_range:  wu_data_15_range_json
     context:
-      resources: ["lib_d3_js", "topojson", 
+      resources: ["lib_d3_js", "topojson", "svg-injector-js",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
       embed: ["map_section"]

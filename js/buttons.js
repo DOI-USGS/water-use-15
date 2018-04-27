@@ -100,7 +100,7 @@ function resizeButtons() {
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.bandwidth())
     .style('stroke', function(d){
-      return(categoryToColor(d));
+      return("rgba(" + getColor(d) + ")");
     })
     .style('stroke-width', 3);
     
@@ -147,10 +147,12 @@ function updateButtonWidths(category) {
 }
 
 function updateButtons(category) {
-  waterUseViz.elements.buttonBox.selectAll('.button rect')
+  waterUseViz.elements.buttonBox
+    .selectAll('.button rect')
     .style('fill', function(d) {
       if(d === category) {
-        return categoryToColor(d);
+        var col = "rgb(" + getColor(d) + ")";
+        return (col);
       } else {
         return 'transparent';
       }
@@ -159,7 +161,13 @@ function updateButtons(category) {
   waterUseViz.elements.buttonBox
     .selectAll(".button rect")
     .filter(".filled-button")
-    .style('opacity', 1);
+    .style('opacity', function(d){
+      if(d === category) {
+        return 1;
+      } else {
+        return 0.8;
+      }      
+    });
     
   updateButtonWidths(category);
   
