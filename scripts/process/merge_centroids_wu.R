@@ -13,11 +13,11 @@ process.merge_centroids_wu <- function(viz) {
     select(GEOID, STATE_ABBV, COUNTY, countypop:industrial) %>% 
     rowwise() %>% 
     mutate(other = total - sum(thermoelectric, publicsupply, irrigation, industrial)) %>%
-    mutate(total = signif(total, digits = 6),
-           thermoelectric = signif(thermoelectric, digits = 6),
-           irrigation = signif(irrigation, digits = 6),
-           publicsupply =  signif(publicsupply, digits = 6),
-           industrial = signif(industrial, digits = 6)) 
+    mutate(total = signif(total, digits = 3),
+           thermoelectric = signif(thermoelectric, digits = 3),
+           irrigation = signif(irrigation, digits = 3),
+           publicsupply =  signif(publicsupply, digits = 3),
+           industrial = signif(industrial, digits = 3)) 
   
   # add centroid coordinates to the WU data
   county_data <- county_data %>%
