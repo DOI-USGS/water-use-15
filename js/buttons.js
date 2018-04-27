@@ -98,7 +98,12 @@ function resizeButtons() {
   // set x position, height, and width of colored rects
   waterUseViz.elements.buttonBox.selectAll('.button .filled-button')
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
-    .attr('height', buttonY.bandwidth());
+    .attr('height', buttonY.bandwidth())
+    .style('stroke', function(d){
+      return(categoryToColor(d));
+    })
+    .style('stroke-width', 3);
+    
   waterUseViz.elements.buttonBox.selectAll('.button .mouser-button')
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.padding(0).bandwidth() * 1.02); // seems to leave a small pad w/o multiplier 
@@ -136,7 +141,7 @@ function updateButtonWidths(category) {
       if(d === category) {
         return waterUseViz.dims.buttonBox.width;
       } else {
-        return waterUseViz.dims.buttonBox.width * 0.8;
+        return waterUseViz.dims.buttonBox.width * 0.95;
       }
     });
 }
@@ -147,9 +152,15 @@ function updateButtons(category) {
       if(d === category) {
         return categoryToColor(d);
       } else {
-        return '#c6c6c6';
+        return 'transparent';
       }
     });
+    
+  waterUseViz.elements.buttonBox
+    .selectAll(".button rect")
+    .filter(".filled-button")
+    .style('opacity', 1);
+    
   updateButtonWidths(category);
   
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
