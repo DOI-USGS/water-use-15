@@ -28,7 +28,8 @@ var waterUseViz = {
   },
   stateAbrvs: [], // created in extractNames()
   nationalData: {},
-  stateData: {}
+  stateData: {},
+  isEmbed: (window.location.pathname === "/")
 };
 
 // Globals not yet in waterUseViz
@@ -207,9 +208,8 @@ function fillMap() {
     // cache data for dotmap and update legend if we're in national view
     waterUseViz.nationalData = data;
     if(activeView === 'USA') updateLegendTextToView();
-    var path = window.location.pathname;
     // create big pie figure (uses nationalData)
-    if(path === "/") loadPie();
+    if(waterUseViz.isEmbed) loadPie();
     
   });
   
@@ -233,8 +233,7 @@ function fillMap() {
         };
         barData.push(x);
       });
-    var path = window.location.pathname;
-    if(path === "/") rankEm(barData);
+    if(waterUseViz.isEmbed) rankEm(barData);
   });
 }
 
