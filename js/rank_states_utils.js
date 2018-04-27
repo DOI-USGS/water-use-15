@@ -96,18 +96,16 @@ function rankEm(barData) {
     .on('mouseout',clearHighlight);
   
   var lockedStateStyles = {
-    'stroke':"rgb(222,222,222)", 
     'strokeWidth': 4,
     'dasharray':"10, 10"
   };
   if (rankSvg.gameComplete){
-    lockedStateStyles.stroke = "rgb(222,222,222)", //categoryToColor("total", true);
     lockedStateStyles.strokeWidth = 2;
     lockedStateStyles.dasharray = null;
   }
   lockedStates
     .style('fill',"rgb(198,198,198)")
-    .style('stroke', lockedStateStyles.stroke)
+    .style('stroke', "rgb(222,222,222)")
     .style('stroke-width', lockedStateStyles.strokeWidth)
     .style("stroke-dasharray", lockedStateStyles.dasharray)
     .on('mouseover',function(){
