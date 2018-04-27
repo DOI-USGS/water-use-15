@@ -28,7 +28,14 @@ function addButtons() {
   
   // button rectangles for *style*
   buttons.append('rect')
-    .classed('filled-button', true);
+    .classed('filled-button', true)
+    .attr('width', function(d) {
+      if(d === activeCategory) {
+        return waterUseViz.dims.buttonBox.width;
+      } else {
+        return waterUseViz.dims.buttonBox.width * 0.95;
+      }
+    });
   
   // button rectangles for *mouse events*
   buttons.append('rect')
@@ -64,7 +71,7 @@ function addButtons() {
   // add styling to the buttons and text according to which is active
 
   updateButtons(activeCategory);
-  
+
 }
 
 function resizeButtons() {
@@ -104,10 +111,6 @@ function resizeButtons() {
     })
     .style('stroke-width', 3);
     
-  waterUseViz.elements.buttonBox.selectAll('.button .mouser-button')
-    .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
-    .attr('height', buttonY.padding(0).bandwidth() * 1.02); // seems to leave a small pad w/o multiplier 
-    
   waterUseViz.elements.buttonBox.selectAll('.button rect')
     .attr('width', function(d) {
       if(d === activeCategory) {
@@ -116,8 +119,12 @@ function resizeButtons() {
         return waterUseViz.dims.buttonBox.width * 0.95;
       }
     });
+    
+  waterUseViz.elements.buttonBox.selectAll('.button .mouser-button')
+    .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
+    .attr('height', buttonY.padding(0).bandwidth() * 1.02); // seems to leave a small pad w/o multiplier 
+    
 
-  
   // look up the active button for further reference
   var activeButton = d3.selectAll('.button rect').filter(function(d) { return d === activeCategory; });
   
@@ -179,8 +186,6 @@ function updateButtons(category) {
         return 0.8;
       }      
     });
-    
-  updateButtonWidths(category);
   
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
     .style('font-weight', function(d) {
