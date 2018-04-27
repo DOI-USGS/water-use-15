@@ -29,7 +29,7 @@ var waterUseViz = {
   stateAbrvs: [], // created in extractNames()
   nationalData: {},
   stateData: {},
-  isEmbed: (window.location.pathname === "/")
+  isNotEmbed: (window.location.pathname === "/")
 };
 
 // Globals not yet in waterUseViz
@@ -209,7 +209,7 @@ function fillMap() {
     waterUseViz.nationalData = data;
     if(activeView === 'USA') updateLegendTextToView();
     // create big pie figure (uses nationalData)
-    if(waterUseViz.isEmbed) loadPie();
+    if(waterUseViz.isNotEmbed) loadPie();
     
   });
   
@@ -233,7 +233,7 @@ function fillMap() {
         };
         barData.push(x);
       });
-    if(waterUseViz.isEmbed) rankEm(barData);
+    if(waterUseViz.isNotEmbed) rankEm(barData);
   });
 }
 
