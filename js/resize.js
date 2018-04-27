@@ -2,7 +2,7 @@ function resize() {
   
   // Decide whether we're in mobile or desktop mode. Currently doing this by window width, but we could look to
   // https://www.w3schools.com/howto/howto_js_media_queries.asp for more device-specific solutions
-  if(Modernizr.mq('(min-width: 425px)')) { // sufficiently wide desktop windows
+  if(Modernizr.mq('(min-width: 600px)')) { // sufficiently wide desktop windows
     waterUseViz.viewport = 'wide';
   } else { // most mobile devices (except iPads) plus narrow desktop windows
     waterUseViz.viewport = 'narrow';
