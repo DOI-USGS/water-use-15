@@ -27,7 +27,7 @@ function resize() {
  }
  
  if(result === true){
-   if(screen.width >= 768 && screen.height >= 1024){
+   if(Math.max(screen.width, screen.height) > 1024){
      waterUseViz.interactionMode = 'hover';
    }else{
      waterUseViz.interactionMode = 'tap';
