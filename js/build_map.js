@@ -29,7 +29,7 @@ var waterUseViz = {
   stateAbrvs: [], // created in extractNames()
   nationalData: {},
   stateData: {},
-  isNotEmbed: (window.location.pathname === "/")
+  isNotEmbed: !RegExp("html").test(window.location.pathname)
 };
 
 // Globals not yet in waterUseViz
