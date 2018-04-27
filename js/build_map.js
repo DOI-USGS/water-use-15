@@ -151,8 +151,8 @@ function customizeCaption() {
 
 function fillMap() {
 
-  // be ready to update the view in case someone flips to landscape
-  // d3 automatically zooms out when that happens
+  // be ready to update the view in case someone resizes the window when zoomed in
+  // d3 automatically zooms out when that happens so we need to get zoomed back in
   d3.select(window).on('resize', function(d) {
     resize();
     updateView(activeView, fireAnalytics = false, doTransition = false);
