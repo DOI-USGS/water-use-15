@@ -100,7 +100,7 @@ function resizeButtons() {
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.bandwidth())
     .style('stroke', function(d){
-      return("rgba(" + getColor(d) + ")");
+      return("rgb(" + getColor(d) + ")");
     })
     .style('stroke-width', 3);
     
