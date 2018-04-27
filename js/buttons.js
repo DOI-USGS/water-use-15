@@ -107,7 +107,16 @@ function resizeButtons() {
   waterUseViz.elements.buttonBox.selectAll('.button .mouser-button')
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.padding(0).bandwidth() * 1.02); // seems to leave a small pad w/o multiplier 
-  updateButtonWidths(activeCategory);
+    
+  waterUseViz.elements.buttonBox.selectAll('.button rect')
+    .attr('width', function(d) {
+      if(d === activeCategory) {
+        return waterUseViz.dims.buttonBox.width;
+      } else {
+        return waterUseViz.dims.buttonBox.width * 0.95;
+      }
+    });
+
   
   // look up the active button for further reference
   var activeButton = d3.selectAll('.button rect').filter(function(d) { return d === activeCategory; });
@@ -137,6 +146,8 @@ function resizeButtons() {
 
 function updateButtonWidths(category) {
   waterUseViz.elements.buttonBox.selectAll('.button rect')
+    .transition()
+    .duration(1000)
     .attr('width', function(d) {
       if(d === category) {
         return waterUseViz.dims.buttonBox.width;
