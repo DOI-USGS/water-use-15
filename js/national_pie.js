@@ -1,6 +1,6 @@
 // code to add a static pie chart of the national view
 function loadPie() {
-  var width = 480,
+  var width = 525,
       height = 350,
       radius = Math.min(width, height) / 3;
   
@@ -90,6 +90,10 @@ function loadPie() {
           return "middle";
         }
       })
-      .text(function(d) { return categoryToName(d.data.category); }); //+': '+d.data.wateruse; });
+      .text(function(d) { 
+        return categoryToName(d.data.category)+' ('+
+                Math.round((d.data.wateruse / wu_total[0].wateruse * 100))
+                +'%)'; 
+      }); 
   
 };
