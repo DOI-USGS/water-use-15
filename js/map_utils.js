@@ -100,9 +100,12 @@ function zoomToFromState(d, i, j, selection) {
   updateView(newView, fireAnalytics = true);
 }
 
-function updateView(newView, fireAnalytics, timestamp, sessionId) {
-  if(fireAnalytics === undefined) {
+function updateView(newView, fireAnalytics, doTransition, timestamp, sessionId) {
+  if(fireAnalytics === undefined) { 
     fireAnalytics = true;
+  }
+  if(doTransition === undefined) {
+    doTransition = true;
   }
   if(timestamp === undefined) {
     timestamp = new Date().getTime().toString();
@@ -128,7 +131,7 @@ function updateView(newView, fireAnalytics, timestamp, sessionId) {
   
   // ensure we have the zoom parameters (they're in the state zoom data) and apply the zoom
   updateStateData(newView, function() {
-    applyZoomAndStyle(newView);
+    applyZoomAndStyle(newView, doTransition);
   });
   
   // record the change for analytics. don't need timeout for view change   
@@ -141,7 +144,11 @@ function updateView(newView, fireAnalytics, timestamp, sessionId) {
   }    
 }
 
-function applyZoomAndStyle(newView) {
+function applyZoomAndStyle(newView, doTransition) {
+  if(doTransition === undefined) {
+    doTransition = true;
+  }
+  
   // determine the center point and scaling for the new view
   var zoom;
   if(activeView === 'USA') {
@@ -210,13 +217,13 @@ function applyZoomAndStyle(newView) {
   
   allcounties
     .style("stroke-width",  1/zoom.s); // make all counties have scaled stroke-width
-  
+
   // apply the transform (i.e., actually zoom in or out)
   var zoomTime;
-  if(waterUseViz.interactionMode === 'hover'){
-    zoomTime = 750;
-  } else {
+  if(waterUseViz.interactionMode !== 'hover' || !doTransition){
     zoomTime = 0;
+  } else {
+    zoomTime = 750;
   }
   map.transition()
     .duration(zoomTime)

@@ -151,6 +151,13 @@ function customizeCaption() {
 
 function fillMap() {
 
+  // be ready to update the view in case someone resizes the window when zoomed in
+  // d3 automatically zooms out when that happens so we need to get zoomed back in
+  d3.select(window).on('resize', function(d) {
+    resize();
+    updateView(activeView, fireAnalytics = false, doTransition = false);
+  }); 
+
   // arguments[0] is the error
 	var error = arguments[0];
 	if (error) throw error;
