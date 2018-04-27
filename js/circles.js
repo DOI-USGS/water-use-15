@@ -1,5 +1,5 @@
 // CIRCLES-AS-PATHS
-/*function prepareCirclePaths(categories, countyCentroids) {
+function prepareCirclePaths(categories, countyCentroids) {
   
   // uses globals scaleCircles, projectX, projectY
   
@@ -27,12 +27,13 @@
 
 }
 function addCircles(circlesPaths) {
-*/
-function addCircles(countyCentroids) {
+
+//function addCircles(countyCentroids) {
   
   // uses globals map
   
   // CIRCLES-AS-CIRCLES
+  /*
   map.selectAll('g#wu-circles').selectAll('.wu-circle')
     .data(countyCentroids)
     .enter()
@@ -44,9 +45,9 @@ function addCircles(countyCentroids) {
     .attr("cy", function(d) { return projectY([d.lon, d.lat]); })
     .attr("r", 0)
     .style("fill", "transparent"); // start transparent & updateCircleColor will transition to color
+  */
   
   // CIRCLES-AS-PATHS
-  /*
   map.selectAll('g#wu-circles')
     .datum(circlesPaths)
     .append('path')
@@ -54,7 +55,6 @@ function addCircles(countyCentroids) {
     .attr('id', 'wu-path')
     .style('stroke','none')
     .style('fill', 'none'); // start transparent & updateCircleColor will transition to color
-    */
     
   map.selectAll('g#wu-circles')
     .append('circle')
@@ -67,27 +67,36 @@ function addCircles(countyCentroids) {
 function updateCircleCategory(category) {
   
   // grow circles to appropriate size && changes color
+  /*
   d3.selectAll("circle.wu-basic")
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
     .style("fill", categoryToColor(category))
     .style("stroke", categoryToColor(category, stroke=true));
+  */
   
   // CIRCLES-AS-PATHS
-  /*// grow circles to appropriate size
+  // grow circles to appropriate size
   d3.select('#wu-path')
     .transition().duration(1000)
     .attr("d", function(d) { return d[[category]]; })
     .style("stroke", categoryToColor(category))
-    .style("fill", categoryToColor(category));*/
+    .style("fill", categoryToColor(category));
 
 }
 
 function updateCircleSize(category) {
   // makes circles the appropriate size
+  /* 
+  // CIRCLES-AS-CIRCLES
   d3.selectAll("circle.wu-basic")
     .transition().duration(600)
     .attr("r", function(d) { return scaleCircles(d[[category]]); });
+  */
+  // CIRCLES-AS-PATHS
+  d3.selectAll("#wu-path")
+    .transition().duration(600)
+    .attr("d", function(d) { return d[[category]]; });
 
 }
 
