@@ -67,11 +67,31 @@ function addCircles(countyCentroids) {
 function updateCircleCategory(category) {
   
   // grow circles to appropriate size && changes color
-  d3.selectAll("circle.wu-basic")
-    .transition().duration(1000)
+  var transitionTime;
+  if(waterUseViz.interactionMode === 'hover'){
+    transitionTime = 1000;
+  } else {
+    transitionTime = 0;
+  }
+  var circleWuBasic = d3.selectAll("circle.wu-basic").transition()
+    .duration(transitionTime)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
     .style("fill", categoryToColor(category))
     .style("stroke", categoryToColor(category, stroke=true));
+    
+  //if(waterUseViz.interactionMode === 'hover'){
+  // d3.selectAll("circle.wu-basic")
+  //  .transition().duration(1000)
+  //  .attr("r", function(d) { return scaleCircles(d[[category]]); })
+  //  .style("fill", categoryToColor(category))
+  //  .style("stroke", categoryToColor(category, stroke=true)); 
+  //}else{
+  //  d3.selectAll("circle.wu-basic")
+  //  .attr("r", function(d) { return scaleCircles(d[[category]]); })
+  //  .style("fill", categoryToColor(category))
+  //  .style("stroke", categoryToColor(category, stroke=true)); 
+  //}
+  
   
   // CIRCLES-AS-PATHS
   /*// grow circles to appropriate size
@@ -85,10 +105,17 @@ function updateCircleCategory(category) {
 
 function updateCircleSize(category) {
   // makes circles the appropriate size
+  var transitionTime;
+  if(waterUseViz.interactionMode === 'hover'){
+    transitionTime = 600;
+  } else {
+    transitionTime = 0;
+  }
+  
   d3.selectAll("circle.wu-basic")
-    .transition().duration(600)
+    .transition()
+    .duration(transitionTime)
     .attr("r", function(d) { return scaleCircles(d[[category]]); });
-
 }
 
 function highlightCircle(countyDatum, category) {
