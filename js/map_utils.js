@@ -288,7 +288,7 @@ function updateLegendTextToView() {
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
-      .text("U.S. Water Use");
+      .text("U.S. Water Withdrawals");
   
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
@@ -306,7 +306,7 @@ function updateLegendTextToView() {
       .buttonBox
       .selectAll("#legend-title")
       .data(state_data)
-      .text(function(d) { return d.STATE_NAME + " Water Use"; });
+      .text(function(d) { return d.STATE_NAME + " Water Withdrawals"; });
   
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
