@@ -1,4 +1,9 @@
 
+svg {
+  /* needed to stop IE from letting zoom show circles everywhere */
+  overflow:hidden;
+}
+
 #map-background {
   fill: transparent;
 }
