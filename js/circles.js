@@ -91,7 +91,7 @@ function updateCircleCategory(category) {
 
 }
 
-function updateCircleSize(category) {
+function updateCircleSize(category, view) {
   // makes circles the appropriate size
   /* 
   // CIRCLES-AS-CIRCLES
@@ -102,7 +102,16 @@ function updateCircleSize(category) {
   // CIRCLES-AS-PATHS
   d3.selectAll("#wu-path")
   .transition().duration(600)
-    .attr("d", function(d) { return d[[category]]; });
+  .attr("d", function(d) { 
+    if(view === 'USA') {
+      // don't recalculate circle paths on zoom out, just reapply data attached
+      return d[[category]]; 
+    } else {
+      // when zooming in, data attached won't change but values of radius will
+      // based on new domain for scaleCircles (applied in createCirclePath)
+      return createCirclePath(category, countyCentroids); 
+    }
+  });
  
 }
 
