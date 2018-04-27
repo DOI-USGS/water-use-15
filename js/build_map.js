@@ -180,10 +180,10 @@ function fillMap() {
   
   // add the circles
   // CIRCLES-AS-CIRCLES
-  addCircles(countyCentroids);
+  //addCircles(countyCentroids);
   // CIRCLES-AS-PATHS
-  /*var circlesPaths = prepareCirclePaths(categories, countyCentroids);
-  addCircles(circlesPaths);*/
+  var circlesPaths = prepareCirclePaths(categories, countyCentroids);
+  addCircles(circlesPaths);
   updateCircleCategory(activeCategory);
   
   // manipulate dropdowns

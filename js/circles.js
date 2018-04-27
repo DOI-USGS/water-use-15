@@ -1,38 +1,45 @@
 // CIRCLES-AS-PATHS
-/*function prepareCirclePaths(categories, countyCentroids) {
+function createCirclePath(cat, centroidData) {
+  // create an array of 1-circle paths of the form 'Mx y a r r 0 1 1 0 0.01',
+  // where x is the leftmost point (cx - r), y is cy, and r is radius
+  var pathArray = [];
+  centroidData.forEach(function(d) {
+    var radius = scaleCircles(d[[cat]]);
+    var path = 'M' + (projectX([d.lon, d.lat]) - radius) + ' ' + 
+      projectY([d.lon, d.lat]) +
+      ' a ' + radius + ' ' + radius +
+      ' 0 1 1 0 0.01z';
+    pathArray.push(path);
+  });
+
+  // concatenate into a single string for all circles in the category
+  var fullPath = pathArray.join(sep=' ');
+  
+  return fullPath;
+}
+
+function prepareCirclePaths(categories, centroidData) {
   
   // uses globals scaleCircles, projectX, projectY
   
   // create an object literal of many-circle paths, one per category
   var catPaths = {};
   categories.forEach(function(cat) {
-    // create an array of 1-circle paths of the form 'Mx y a r r 0 1 1 0 0.01',
-    // where x is the leftmost point (cx - r), y is cy, and r is radius
-    var pathArray = [];
-    countyCentroids.forEach(function(d) {
-      var radius = scaleCircles(d[[cat]]);
-      var path = 'M' + (projectX([d.lon, d.lat]) - radius) + ' ' + projectY([d.lon, d.lat]) +
-        ' a ' + radius + ' ' + radius +
-        ' 0 1 1 0 0.01z';
-      pathArray.push(path);
-    });
-  
-    // concatenate into a single string for all circles in the category
-    var fullPath = pathArray.join(sep=' ');
-    
-    catPaths[[cat]] = fullPath;
+    catPaths[[cat]] = createCirclePath(cat, centroidData);
   });
   
   return catPaths;
 
 }
+
 function addCircles(circlesPaths) {
-*/
-function addCircles(countyCentroids) {
+
+//function addCircles(countyCentroids) {
   
   // uses globals map
   
   // CIRCLES-AS-CIRCLES
+  /*
   map.selectAll('g#wu-circles').selectAll('.wu-circle')
     .data(countyCentroids)
     .enter()
@@ -44,9 +51,9 @@ function addCircles(countyCentroids) {
     .attr("cy", function(d) { return projectY([d.lon, d.lat]); })
     .attr("r", 0)
     .style("fill", "transparent"); // start transparent & updateCircleColor will transition to color
+  */
   
   // CIRCLES-AS-PATHS
-  /*
   map.selectAll('g#wu-circles')
     .datum(circlesPaths)
     .append('path')
@@ -54,7 +61,6 @@ function addCircles(countyCentroids) {
     .attr('id', 'wu-path')
     .style('stroke','none')
     .style('fill', 'none'); // start transparent & updateCircleColor will transition to color
-    */
     
   map.selectAll('g#wu-circles')
     .append('circle')
@@ -67,28 +73,54 @@ function addCircles(countyCentroids) {
 function updateCircleCategory(category) {
   
   // grow circles to appropriate size && changes color
+  /*
   d3.selectAll("circle.wu-basic")
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
     .style("fill", categoryToColor(category))
     .style("stroke", categoryToColor(category, stroke=true));
+  */
   
   // CIRCLES-AS-PATHS
-  /*// grow circles to appropriate size
+  // grow circles to appropriate size
   d3.select('#wu-path')
     .transition().duration(1000)
-    .attr("d", function(d) { return d[[category]]; })
+    .attr("d", function(d) { 
+      if(activeView == 'USA') {
+        return d[[category]];
+      } else {
+        // recalculate the new circle path size for this new category
+        // updateCircleSize only updates the current category.
+        return createCirclePath(category, countyCentroids);
+      } 
+    })
     .style("stroke", categoryToColor(category))
-    .style("fill", categoryToColor(category));*/
+    .style("fill", categoryToColor(category));
 
 }
 
-function updateCircleSize(category) {
+function updateCircleSize(category, view) {
   // makes circles the appropriate size
+  /* 
+  // CIRCLES-AS-CIRCLES
   d3.selectAll("circle.wu-basic")
     .transition().duration(600)
     .attr("r", function(d) { return scaleCircles(d[[category]]); });
-
+  */
+  // CIRCLES-AS-PATHS
+  d3.select('#wu-path')
+    .transition().duration(600)
+    .attr("d", function(d) { 
+      if(view === 'USA') {
+        // don't recalculate circle paths on zoom out, just reapply data attached
+        return d[[category]]; 
+      } else {
+        // when zooming in, data attached won't change but values of radius will
+        // based on new domain for scaleCircles (applied in createCirclePath)
+        return createCirclePath(category, countyCentroids); 
+      }
+  });
+ 
 }
 
 function highlightCircle(countyDatum, category) {
