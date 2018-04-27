@@ -27,7 +27,7 @@ function rankEm(barData) {
   var draggableStates = svgStates.select('#ranked-states-draggable').selectAll('.draggable-state');
   var lockedBars = allBars.filter('.locked-rank-bar');
   var openBars = allBars.filter('*:not(.locked-rank-bar)');
-  var lockedBarNames = svgStates.select('#ranked-states-bars').selectAll('text');
+  var lockedBarNames = svgStates.select('#ranked-states-bars').selectAll('text').filter('*:not(.open-bar-name)');
   
   function clearHighlight(){
     d3.selectAll('.highlight')
