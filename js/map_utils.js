@@ -324,7 +324,7 @@ function updateLegendTextToView() {
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
       .data(state_data[0].use, function(d) { return d.category; })
-      .text(function(d) { return d.wateruse; });
+      .text(function(d) { return d.fancynums; });
       
   }
 

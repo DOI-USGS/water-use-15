@@ -52,7 +52,7 @@ function rankEm(barData) {
     }
     
     allText.select("#rank-value-text")
-      .text(data.wu);
+      .text(data.fancynums);
   };
   
   lockedBars
