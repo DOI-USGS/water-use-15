@@ -55,7 +55,7 @@ svg {
 
 .highlighted-county {
   stroke: rgb(200,200,200);
-  fill: rgb(240,240,240);
+  fill: rgb(180,180,180);
 } 
 
 .static-state {
