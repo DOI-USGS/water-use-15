@@ -38,14 +38,6 @@ function resize() {
    waterUseViz.interactionMode = 'hover';
  }
   
-  //try {
-  // document.createEvent("TouchEvent");
-  // waterUseViz.interactionMode = 'tap';
-  //}
-  //catch (e) {
-  // waterUseViz.interactionMode = 'hover';
-  //}
-  
   // Calculate new dimensions with adaptations for ~desktop vs ~mobile
   if(waterUseViz.viewport === 'wide') {
   
