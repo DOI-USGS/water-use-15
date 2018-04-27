@@ -1,31 +1,37 @@
 // CIRCLES-AS-PATHS
-function prepareCirclePaths(categories, countyCentroids) {
+function createCirclePath(cat, centroidData) {
+  // create an array of 1-circle paths of the form 'Mx y a r r 0 1 1 0 0.01',
+  // where x is the leftmost point (cx - r), y is cy, and r is radius
+  var pathArray = [];
+  centroidData.forEach(function(d) {
+    var radius = scaleCircles(d[[cat]]);
+    var path = 'M' + (projectX([d.lon, d.lat]) - radius) + ' ' + 
+      projectY([d.lon, d.lat]) +
+      ' a ' + radius + ' ' + radius +
+      ' 0 1 1 0 0.01z';
+    pathArray.push(path);
+  });
+
+  // concatenate into a single string for all circles in the category
+  var fullPath = pathArray.join(sep=' ');
+  
+  return fullPath;
+}
+
+function prepareCirclePaths(categories, centroidData) {
   
   // uses globals scaleCircles, projectX, projectY
   
   // create an object literal of many-circle paths, one per category
   var catPaths = {};
   categories.forEach(function(cat) {
-    // create an array of 1-circle paths of the form 'Mx y a r r 0 1 1 0 0.01',
-    // where x is the leftmost point (cx - r), y is cy, and r is radius
-    var pathArray = [];
-    countyCentroids.forEach(function(d) {
-      var radius = scaleCircles(d[[cat]]);
-      var path = 'M' + (projectX([d.lon, d.lat]) - radius) + ' ' + projectY([d.lon, d.lat]) +
-        ' a ' + radius + ' ' + radius +
-        ' 0 1 1 0 0.01z';
-      pathArray.push(path);
-    });
-  
-    // concatenate into a single string for all circles in the category
-    var fullPath = pathArray.join(sep=' ');
-    
-    catPaths[[cat]] = fullPath;
+    catPaths[[cat]] = createCirclePath(cat, centroidData);
   });
   
   return catPaths;
 
 }
+
 function addCircles(circlesPaths) {
 
 //function addCircles(countyCentroids) {
@@ -95,9 +101,9 @@ function updateCircleSize(category) {
   */
   // CIRCLES-AS-PATHS
   d3.selectAll("#wu-path")
-    .transition().duration(600)
+  .transition().duration(600)
     .attr("d", function(d) { return d[[category]]; });
-
+ 
 }
 
 function highlightCircle(countyDatum, category) {
