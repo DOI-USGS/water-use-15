@@ -27,8 +27,12 @@ function resize() {
  }
  
  if(result === true){
-   alert('touch');
-   waterUseViz.interactionMode = 'tap';
+   debugger
+   if(screen.width >= 768 && screen.height >= 1024){
+     waterUseViz.interactionMode = 'hover';
+   }else{
+     waterUseViz.interactionMode = 'tap';
+   }
  }else{
    alert('hover');
    waterUseViz.interactionMode = 'hover';
