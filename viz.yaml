@@ -176,7 +176,7 @@ process:
     location: cache/wu_state_data.json
     mimetype: application/json
     process_args:
-      drag_states: ["ID","OK","MI"]
+      drag_states: ["ID","AZ","MI"]
     depends:
       rawdata: wu_data_15_simple
       state_boundaries: state_boundaries_USA_topojson

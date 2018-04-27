@@ -17,7 +17,8 @@ function rankEm(barData) {
       },
       isOnRankBar: function(){
       },
-      isDragged: false
+      isDragged: false,
+      gameComplete: false
   };
   
   rankSvg.updateStyles = function(){
@@ -83,6 +84,7 @@ function rankEm(barData) {
   openBars
     .style('fill', "rgba(255, 255, 255, 0.0)")
     .style('stroke',"rgb(198,198,198)")
+    .style('pointer-events', 'fill')
     .style('stroke-width', 1.5)
     .style("stroke-dasharray","4, 2")
     .on('mouseover',function(){
@@ -92,12 +94,22 @@ function rankEm(barData) {
       updateLabelText(bar.datum(), isOpen=true);
     })
     .on('mouseout',clearHighlight);
-    
+  
+  var lockedStateStyles = {
+    'stroke':"rgb(222,222,222)", 
+    'strokeWidth': 4,
+    'dasharray':"10, 10"
+  };
+  if (rankSvg.gameComplete){
+    lockedStateStyles.stroke = "rgb(222,222,222)", //categoryToColor("total", true);
+    lockedStateStyles.strokeWidth = 2;
+    lockedStateStyles.dasharray = null;
+  }
   lockedStates
     .style('fill',"rgb(198,198,198)")
-    .style('stroke',"rgb(222,222,222)")
-    .style('stroke-width', 4)
-    .style("stroke-dasharray","10, 10")
+    .style('stroke', lockedStateStyles.stroke)
+    .style('stroke-width', lockedStateStyles.strokeWidth)
+    .style("stroke-dasharray", lockedStateStyles.dasharray)
     .on('mouseover',function(){
       d3.selectAll('.highlight')
         .classed('highlight', false);
@@ -123,12 +135,13 @@ function rankEm(barData) {
     lockedStates.filter('.highlight')
       .raise()
       .style("stroke-dasharray", null)
+      .style('stroke-width',4)
       .style('fill',"rgba(220,220,220, 0.4)")
       .style('stroke',categoryToColor('total',true));
     
     lockedBarNames.filter('.highlight')
       .style('font-weight', "bold");
-    
+      
     d3.select('#rank-directions')
       .transition().duration(600).style('opacity',1);
   } else {
@@ -136,6 +149,9 @@ function rankEm(barData) {
       .on("mouseover", clearHighlight);
     openBars
       .on("mouseover", clearHighlight);
+    
+    d3.select("#rank-data-text")
+      .attr("display", "none");
   }
   
   openBars.filter('.highlight')
@@ -143,8 +159,10 @@ function rankEm(barData) {
   .style('stroke-width', 0)
   .style('fill',categoryToColor('total',true));  
 };
-
+  
   rankSvg.liftedState = function(d){
+    d3.selectAll('.highlight')
+        .classed('highlight', false);
     d3.select('#rank-directions')
       .transition().duration(600).style('opacity',0);
   };
@@ -185,6 +203,7 @@ function rankEm(barData) {
             .delay(600)
             .duration(600)
             .style('opacity',1);
+          rankSvg.gameComplete = true;
         }
   
       } else {
