@@ -168,7 +168,7 @@ function applyZoomAndStyle(newView) {
   if(scaleCircles.domain() !== newScaling) {
     // only change circle scale if it's different
     scaleCircles.domain(newScaling);
-    updateCircleSize(activeCategory);
+    updateCircleSize(activeCategory, activeView);
   }
 
   // reset counties each time a zoom changes
