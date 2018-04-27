@@ -431,6 +431,7 @@ publish:
       map_states: map_states
       map_counties: map_counties
       dropdown_selector: dropdown_selector
+      modernizr: modernizr
       map_section: map_section
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
