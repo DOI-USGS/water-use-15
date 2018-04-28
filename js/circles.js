@@ -12,11 +12,9 @@ function createCirclePath(cat, centroidData, splitIndex) {
       projectY([d.lon, d.lat]) +
       ' a ' + radius + ' ' + radius +
       ' 0 1 1 0 0.01z';
-    if( cat !== "total" || //skip split for non-total
-        (splitIndex === 0 && i < splitThreshold) || // first half 
+    if( (splitIndex === 0 && i < splitThreshold) || // first half 
         (splitIndex === 1 && i >= splitThreshold)) { // second half
-      // split paths total into two
-      pathArray.push(path);
+          pathArray.push(path);
     }
   });
 
@@ -35,12 +33,8 @@ function prepareCirclePaths(categories, centroidData) {
   var catPaths = {},
       catPaths2 = {};
   categories.forEach(function(cat) {
-    if(cat === "total") {
-      catPaths[["total"]] = createCirclePath(cat, centroidData, 0);
-      catPaths2[["total"]] = createCirclePath(cat, centroidData, 1);
-    } else {
-      catPaths[[cat]] = createCirclePath(cat, centroidData);
-    }
+    catPaths[[cat]] = createCirclePath(cat, centroidData, 0);
+    catPaths2[[cat]] = createCirclePath(cat, centroidData, 1);
   });
   
   return [catPaths, catPaths2];
@@ -111,7 +105,7 @@ function updateCircleCategory(category) {
       } else {
         // recalculate the new circle path size for this new category
         // updateCircleSize only updates the current category.
-        // for total, worry about first or second chunk
+        // use i to be first or second chunk
         return createCirclePath(category, countyCentroids, i);
       } 
     })
@@ -129,7 +123,7 @@ function updateCircleSize(category, view) {
     .attr("r", function(d) { return scaleCircles(d[[category]]); });
   */
   // CIRCLES-AS-PATHS
-  d3.select('#wu-path')
+  d3.selectAll('.wu-path')
     .transition().duration(600)
     .attr("d", function(d, i) { 
       if(view === 'USA') {
@@ -138,6 +132,7 @@ function updateCircleSize(category, view) {
       } else {
         // when zooming in, data attached won't change but values of radius will
         // based on new domain for scaleCircles (applied in createCirclePath)
+        // use i to be first or second chunk
         return createCirclePath(category, countyCentroids, i); 
       }
   });
