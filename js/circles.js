@@ -140,15 +140,9 @@ function updateCircleSize(category, view) {
   */
   
   // CIRCLES-AS-PATHS
-<<<<<<< HEAD
-  d3.selectAll('.wu-path')
-    .transition().duration(600)
-    .attr("d", function(d, i) { 
-=======
-  d3.select('#wu-path')
+  d3.select('.wu-path')
     .transition().duration(transitionTime)
-    .attr("d", function(d) { 
->>>>>>> 77c14cae2392b37c0e1441a653963714470d41eb
+    .attr("d", function(d, i) { 
       if(view === 'USA') {
         // don't recalculate circle paths on zoom out, just reapply data attached
         return d[[category]]; 
