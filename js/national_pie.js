@@ -37,6 +37,8 @@ function loadPie() {
   
   var wu_national_no_total = waterUseViz.nationalData  
         .filter(function(d) { return d.category !== "total"; });
+  var wu_national_total = waterUseViz.nationalData  
+        .filter(function(d) { return d.category === "total"; });
   
   var slices = pie_g.selectAll(".slice")
     .data(pie(wu_national_no_total))
@@ -92,7 +94,7 @@ function loadPie() {
       })
       .text(function(d) { 
         return categoryToName(d.data.category)+' ('+
-                Math.round((d.data.wateruse / wu_total[0].wateruse * 100))
+                Math.round((d.data.wateruse / wu_national_total[0].wateruse * 100))
                 +'%)'; 
       }); 
   
