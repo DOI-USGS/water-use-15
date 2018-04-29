@@ -30,7 +30,13 @@ function loadCountyBounds(state, callback) {
       callback(null, countyBoundsUSA);
     }
   } else if(!countyBoundsZoom.has('USA')) {
-    var mungeAndCacheCounties = function(error, allCountiesTopo) {
+    var countyJson;
+    if(waterUseViz.interactionMode === 'tap') {
+      countyJson = "data/county_boundaries_mobile.json";
+    } else {
+      countyJson = "data/county_boundaries_zoom.json";
+    }
+    d3.json(countyJson, function(error, allCountiesTopo) {
       if(error) throw error;
       
       // extract the topojson to geojson and add data
@@ -41,12 +47,7 @@ function loadCountyBounds(state, callback) {
       countyBoundsZoom.set('USA', allCountiesGeo);
       
       cacheCountyBounds(state, callback);
-    };
-    if(waterUseViz.interactionMode === 'tap') {
-      d3.json("data/county_boundaries_mobile.json", mungeAndCacheCounties);
-    } else {
-      d3.json("data/county_boundaries_zoom.json", mungeAndCacheCounties);
-    }
+    });
   } else {
     cacheCountyBounds(state, callback);
   }
