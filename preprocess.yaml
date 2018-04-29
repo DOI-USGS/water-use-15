@@ -93,6 +93,13 @@ targets:
       simplify=I(1e-7), quantize=I(1e7),
       county_dict_file='cache/pre_county_dictionary.json', script_file='scripts/preprocess/process_counties.sh')
   
+  cache/pre_state_boundaries_mobile.json:
+    depends: scripts/preprocess/custom_projection.js
+    command: process_counties_to_states(
+      outfile=target_name, objects=I('states'), quantize=I(1e8), zoom_dims=I(TRUE),
+      county_topojson='cache/pre_county_boundaries_mobile.json',
+      state_dict_file='cache/pre_state_dictionary.json', script_file = 'scripts/preprocess/process_counties_to_states.js') 
+  
   cache/pre_county_centroids_USA.json:
     command: process_compute_centroids(
       outfile=target_name, spdat=county_boundaries_census_sp,
@@ -106,11 +113,17 @@ targets:
   SB_county_boundaries_zoom_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_zoom.json", I("county_boundaries_zoom.json"))
   
+  SB_county_boundaries_mobile_json:
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_county_boundaries_mobile.json", I("county_boundaries_mobile.json"))
+  
   SB_state_boundaries_USA_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_USA.json", I("state_boundaries_USA.json"))
   
   SB_state_boundaries_zoom_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_zoom.json", I("state_boundaries_zoom.json"))
+  
+  SB_state_boundaries_mobile_json:
+    command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_state_boundaries_mobile.json", I("state_boundaries_mobile.json"))
   
   SB_all_boundaries_USA_json:
     command: push_SB_object(I("5ab154b1e4b081f61ab26420"), "cache/pre_all_boundaries_USA.json", I("all_boundaries_USA.json"))
@@ -127,8 +140,10 @@ targets:
     depends:
       - SB_county_boundaries_USA_json
       - SB_county_boundaries_zoom_json
+      - SB_county_boundaries_mobile_json
       - SB_state_boundaries_USA_json
       - SB_state_boundaries_zoom_json
+      - SB_state_boundaries_mobile_json
       - SB_all_boundaries_USA_json
       - SB_all_boundaries_zoom_json
       - SB_county_centroids_json
