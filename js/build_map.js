@@ -28,7 +28,8 @@ var waterUseViz = {
   },
   stateAbrvs: [], // created in extractNames()
   nationalData: {},
-  stateData: {}
+  stateData: {},
+  isEmbed: RegExp("embed-water-use-15").test(window.location.pathname)
 };
 
 // Globals not yet in waterUseViz
@@ -158,6 +159,13 @@ function customizeCaption() {
 
 function fillMap() {
 
+  // be ready to update the view in case someone resizes the window when zoomed in
+  // d3 automatically zooms out when that happens so we need to get zoomed back in
+  d3.select(window).on('resize', function(d) {
+    resize();
+    updateView(activeView, fireAnalytics = false, doTransition = false);
+  }); 
+
   // arguments[0] is the error
 	var error = arguments[0];
 	if (error) throw error;
@@ -187,10 +195,10 @@ function fillMap() {
   
   // add the circles
   // CIRCLES-AS-CIRCLES
-  addCircles(countyCentroids);
+  //addCircles(countyCentroids);
   // CIRCLES-AS-PATHS
-  /*var circlesPaths = prepareCirclePaths(categories, countyCentroids);
-  addCircles(circlesPaths);*/
+  var circlesPaths = prepareCirclePaths(categories, countyCentroids);
+  addCircles(circlesPaths);
   updateCircleCategory(activeCategory);
   
   // manipulate dropdowns
@@ -215,9 +223,9 @@ function fillMap() {
     // cache data for dotmap and update legend if we're in national view
     waterUseViz.nationalData = data;
     if(activeView === 'USA') updateLegendTextToView();
-
     // create big pie figure (uses nationalData)
-    loadPie();
+    if(!waterUseViz.isEmbed) loadPie();
+    
   });
   
   // Read state data and add it to figure
@@ -228,6 +236,7 @@ function fillMap() {
     waterUseViz.stateData = data;
     if(activeView !== 'USA') updateLegendTextToView();
     
+    
     // format data for rankEm and create rankEm figure
     var  barData = [];
     waterUseViz.stateData.forEach(function(d) {
@@ -235,11 +244,12 @@ function fillMap() {
           'abrv': d.abrv,
           'STATE_NAME': d.STATE_NAME,
           'open': d.open,
-          'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse
+          'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse,
+          'fancynums': d.use.filter(function(e) {return e.category === 'total';})[0].fancynums
         };
         barData.push(x);
       });
-    rankEm(barData);
+    if(!waterUseViz.isEmbed) rankEm(barData);
   });
 }
 

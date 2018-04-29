@@ -176,7 +176,7 @@ process:
     location: cache/wu_state_data.json
     mimetype: application/json
     process_args:
-      drag_states: ["ID","OK","MI"]
+      drag_states: ["ID","AZ","MI"]
     depends:
       rawdata: wu_data_15_simple
       state_boundaries: state_boundaries_USA_topojson
@@ -431,6 +431,7 @@ publish:
       map_states: map_states
       map_counties: map_counties
       dropdown_selector: dropdown_selector
+      modernizr: modernizr
       map_section: map_section
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
