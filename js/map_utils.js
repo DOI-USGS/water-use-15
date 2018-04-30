@@ -103,11 +103,13 @@ function zoomToFromState(d, i, j, selection) {
 function getTimestamp() {return new Date().getTime().toString()}
 function getSessionId() {return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
 
-function updateView(newView, fireAnalytics) {
-  if(fireAnalytics === undefined) {
+function updateView(newView, fireAnalytics, doTransition) {
+  if(fireAnalytics === undefined) { 
     fireAnalytics = true;
   }
-  
+  if(doTransition === undefined) {
+    doTransition = true;
+  }
   // update the global variable that stores the current view
   oldView = activeView;
   activeView = newView;
@@ -125,7 +127,7 @@ function updateView(newView, fireAnalytics) {
   
   // ensure we have the zoom parameters (they're in the state zoom data) and apply the zoom
   updateStateData(newView, function() {
-    applyZoomAndStyle(newView);
+    applyZoomAndStyle(newView, doTransition);
   });
   
   // record the change for analytics. don't need timeout for view change   
@@ -140,7 +142,11 @@ function updateView(newView, fireAnalytics) {
   }    
 }
 
-function applyZoomAndStyle(newView) {
+function applyZoomAndStyle(newView, doTransition) {
+  if(doTransition === undefined) {
+    doTransition = true;
+  }
+  
   // determine the center point and scaling for the new view
   var zoom;
   if(activeView === 'USA') {
@@ -167,7 +173,7 @@ function applyZoomAndStyle(newView) {
   if(scaleCircles.domain() !== newScaling) {
     // only change circle scale if it's different
     scaleCircles.domain(newScaling);
-    updateCircleSize(activeCategory);
+    updateCircleSize(activeCategory, activeView);
   }
 
   // reset counties each time a zoom changes
@@ -198,21 +204,27 @@ function applyZoomAndStyle(newView) {
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom.s);
     foregroundState(thisstate, scale = zoom.s);
-    scaleCircleStroke(wucircles, scale = zoom.s);
+    //scaleCircleStroke(wucircles, scale = zoom.s);
     
   } else {
     // only reset stroke when zooming back out
-    resetCircleStroke();
+    //resetCircleStroke();
   }
   
   var allcounties = d3.selectAll('.county');
   
   allcounties
     .style("stroke-width",  1/zoom.s); // make all counties have scaled stroke-width
-  
+
   // apply the transform (i.e., actually zoom in or out)
+  var zoomTime;
+  if(waterUseViz.interactionMode !== 'hover' || !doTransition){
+    zoomTime = 0;
+  } else {
+    zoomTime = 750;
+  }
   map.transition()
-    .duration(750)
+    .duration(zoomTime)
     .attr('transform',
       "translate(" + waterUseViz.dims.map.width / 2 + "," + waterUseViz.dims.map.height / 2 + ")"+
       "scale(" + zoom.s + ")" +
@@ -319,7 +331,7 @@ function updateLegendTextToView() {
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
       .data(state_data[0].use, function(d) { return d.category; })
-      .text(function(d) { return d.wateruse; });
+      .text(function(d) { return d.fancynums; });
       
   }
 
