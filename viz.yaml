@@ -246,6 +246,8 @@ publish:
       map_states: map_states
       map_counties: "map_counties"
       dropdown_selector: "dropdown_selector"
+      national_pie: "national_pie"
+      rank_states_utils: "rank_states_utils"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -258,7 +260,8 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr",
+                  "national_pie", "rank_states_utils"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb-facebook
