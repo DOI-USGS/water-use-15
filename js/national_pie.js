@@ -50,7 +50,7 @@ function loadPie() {
     .append("path")
       .attr("d", path)
       .attr("fill", function(d) { 
-        return categoryToColor(d.data.category); 
+        return categoryToColor(d.data.category, 0.8); 
       });
         
   var sliceLabels = pie_g.selectAll('.slice-label')

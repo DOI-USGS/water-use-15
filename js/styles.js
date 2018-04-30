@@ -19,20 +19,15 @@ function getColor(category){
     else { return "none"; }
 }
 
-function categoryToColor(category, stroke) {
-  
-  if(stroke === undefined) {
-      stroke = false;
-   }  
-  
-  var opacityValue = 0.8;
-  if(stroke) {
-    opacityValue = 1;
-  }
+function categoryToColor(category, alpha) {
   
   var colors = getColor(category);
   
-  return ("rgba(" + colors + "," + opacityValue + ")");
+  if(alpha === undefined) {
+     return ("rgb(" + colors + ")");
+   } else {
+     return ("rgba(" + colors + "," + alpha + ")");
+   }
 
 }
 

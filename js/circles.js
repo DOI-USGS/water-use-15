@@ -102,7 +102,7 @@ function updateCircleCategory(category) {
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
     //.style("stroke", categoryToColor(category))
-    .style("fill", categoryToColor(category));
+    .style("fill", categoryToColor(category, 0.8));
   
   // CIRCLES-AS-PATHS
   /*
@@ -119,8 +119,8 @@ function updateCircleCategory(category) {
         return createCirclePath(category, countyCentroids, i);
       } 
     })
-    .style("stroke", categoryToColor(category))
-    .style("fill", categoryToColor(category));
+    .style("stroke", categoryToColor(category, 0.8))
+    .style("fill", categoryToColor(category, 0.8));
   */
 
 }
@@ -167,7 +167,7 @@ function highlightCircle(countyDatum, category) {
     .attr('cx', projectX([countyDatum.lon, countyDatum.lat]))
     .attr('cy', projectY([countyDatum.lon, countyDatum.lat]))
     .attr('r', scaleCircles(countyDatum[category]))
-    .style('fill', categoryToColor(category));
+    .style('fill', categoryToColor(category, 0.8));
   
 }
 
