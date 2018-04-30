@@ -103,7 +103,7 @@ function resizeButtons() {
     .style('stroke', function(d){
       return(categoryToColor(d, 1));
     })
-    .style('stroke-width', 3);
+    .style('stroke-width', 1);
     
   waterUseViz.elements.buttonBox.selectAll('.button rect')
     .attr('width', waterUseViz.dims.buttonBox.width);
