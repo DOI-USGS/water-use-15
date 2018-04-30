@@ -6,6 +6,7 @@ packages:
   - dplyr
   - tibble
   - sbtools
+  - maptools
 
 sources:
   - scripts/preprocess/fetch_url.R
@@ -37,17 +38,20 @@ targets:
   
   county_boundaries_census_sp:
     command: read_shp_zip('cache/pre_county_boundaries_census.zip')
+  
+  county_boundaries_scaled_sp:
+    command: scale_shifted_shps(county_boundaries_census_sp)
     
   cache/pre_county_dictionary.json:
-    command: process_county_dictionary(target_name, county_boundaries_census_sp)
+    command: process_county_dictionary(target_name, county_boundaries_scaled_sp)
     
   cache/pre_state_dictionary.json:
-    command: process_state_dictionary(target_name, county_boundaries_census_sp)
+    command: process_state_dictionary(target_name, county_boundaries_scaled_sp)
   
   # simplify closer to 1e-1 and quantize closer to 1e1 make smaller files
   cache/pre_county_boundaries_USA.json:
     command: process_counties(
-      outfile=target_name, county_sp=county_boundaries_census_sp,
+      outfile=target_name, county_sp=county_boundaries_scaled_sp,
       simplify=I(1e-6), quantize=I(1e6),
       county_dict_file='cache/pre_county_dictionary.json', script_file='scripts/preprocess/process_counties.sh')
   
@@ -68,7 +72,7 @@ targets:
   # simplify closer to 1e-20 and quantize closer to 1e20 make higher resolution boundaries (bigger files)  
   cache/pre_county_boundaries_zoom.json:
     command: process_counties(
-      outfile=target_name, county_sp=county_boundaries_census_sp,
+      outfile=target_name, county_sp=county_boundaries_scaled_sp,
       simplify=I(1e-8), quantize=I(1e8),
       county_dict_file='cache/pre_county_dictionary.json', script_file='scripts/preprocess/process_counties.sh')
 
@@ -89,7 +93,7 @@ targets:
   # simplify somewhere between USA and zoom top optimize for mobile
   cache/pre_county_boundaries_mobile.json:
     command: process_counties(
-      outfile=target_name, county_sp=county_boundaries_census_sp,
+      outfile=target_name, county_sp=county_boundaries_scaled_sp,
       simplify=I(1e-7), quantize=I(1e7),
       county_dict_file='cache/pre_county_dictionary.json', script_file='scripts/preprocess/process_counties.sh')
   
@@ -102,7 +106,7 @@ targets:
   
   cache/pre_county_centroids_USA.json:
     command: process_compute_centroids(
-      outfile=target_name, spdat=county_boundaries_census_sp,
+      outfile=target_name, spdat=county_boundaries_scaled_sp,
       county_dict_file='cache/pre_county_dictionary.json')
   
   # --- publish --- #

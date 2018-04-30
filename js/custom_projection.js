@@ -101,7 +101,7 @@ function albersUsaTerritories() {
     lower48.scale(_);
     alaska.scale(_ * 0.35);
     hawaii.scale(_);
-    puertoRico.scale(_ * 3);
+    puertoRico.scale(_);
     return albersUsa.translate(lower48.translate());
   };
 
