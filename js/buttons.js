@@ -29,13 +29,7 @@ function addButtons() {
   // button rectangles for *style*
   buttons.append('rect')
     .classed('filled-button', true)
-    .attr('width', function(d) {
-      if(d === activeCategory) {
-        return waterUseViz.dims.buttonBox.width;
-      } else {
-        return waterUseViz.dims.buttonBox.width * 0.95;
-      }
-    });
+    .attr('width', waterUseViz.dims.buttonBox.width);
   
   // button rectangles for *mouse events*
   buttons.append('rect')
@@ -170,7 +164,7 @@ function updateButtons(category) {
     .style('fill', function(d) {
       var col = categoryToColor(d,0);
       if(d === category) {
-        col = categoryToColor(d);
+        col = categoryToColor(d,1);
       }
       return (col);
     });
