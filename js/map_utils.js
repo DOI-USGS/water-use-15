@@ -100,15 +100,12 @@ function zoomToFromState(d, i, j, selection) {
   updateView(newView, fireAnalytics = true);
 }
 
-function updateView(newView, fireAnalytics, timestamp, sessionId) {
+function getTimestamp() {return new Date().getTime().toString()}
+function getSessionId() {return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
+
+function updateView(newView, fireAnalytics) {
   if(fireAnalytics === undefined) {
     fireAnalytics = true;
-  }
-  if(timestamp === undefined) {
-    timestamp = new Date().getTime().toString();
-  }
-  if(sessionId === undefined) {
-    sessionId = new Date().getTime() + '.' + Math.random().toString(36).substring(5);
   }
   
   // update the global variable that stores the current view
@@ -133,6 +130,8 @@ function updateView(newView, fireAnalytics, timestamp, sessionId) {
   
   // record the change for analytics. don't need timeout for view change   
   if(fireAnalytics) {
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
     gtag('event', 'update view', {
       'event_category': 'figure',
       'event_label': 'newView=' + newView + '; oldView=' + oldView + '; category=' + activeCategory,
@@ -247,9 +246,13 @@ function documentCategorySwitch(category, prevCategory, action) {
     clearTimeout(updateCategoryTimer);
   }
   updateCategoryTimer = setTimeout(function(){
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
     gtag('event', action + ' update category', {
       'event_category': 'figure',
-      'event_label': category + '; from='+ prevCategory + '; view=' + activeView
+      'event_label': category + '; from='+ prevCategory + '; view=' + activeView,
+      'sessionId': sessionId,
+      'timestamp': timestamp
     });
   }, updateCategoryDelay);
 }
@@ -273,9 +276,14 @@ function updateLegendText(d, category) {
     clearTimeout(toolTipTimer);
   }
   toolTipTimer = setTimeout(function(){
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
      gtag('event', 'hover', {
-  'event_category': 'figure',
-  'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView});
+          'event_category': 'figure',
+           'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView,
+            'sessionId': sessionId,
+            'timestamp': timestamp
+     });
   }, toolTipDelay);
 }
 
