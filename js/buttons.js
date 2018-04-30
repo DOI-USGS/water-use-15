@@ -24,7 +24,7 @@ function addButtons() {
   buttonBox.append('text')
     .classed('title', true)
     .attr('id', 'legend-subtitle')
-    .text('(millions of gallons per day)');
+    .text('(million gallons per day)');
   
   // button rectangles for *style*
   buttons.append('rect')

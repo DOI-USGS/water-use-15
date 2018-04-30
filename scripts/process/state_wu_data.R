@@ -13,12 +13,17 @@ process.state_wu_data <- function(viz) {
     
     wu_df_state <- wu_df %>%
       dplyr::filter(STATE == state) %>%
-      dplyr::summarise(total = signif(sum(total), digits = 6),
-                       thermoelectric = signif(sum(thermoelectric), digits = 6),
-                       publicsupply = signif(sum(publicsupply), digits = 6),
-                       irrigation = signif(sum(irrigation), digits = 6),
-                       industrial = signif(sum(industrial), digits = 6)) %>%
-      tidyr::gather(category, wateruse)
+      dplyr::summarise(total = signif(sum(total), digits = 3),
+                       thermoelectric = signif(sum(thermoelectric), digits = 3),
+                       publicsupply = signif(sum(publicsupply), digits = 3),
+                       irrigation = signif(sum(irrigation), digits = 3),
+                       industrial = signif(sum(industrial), digits = 3)) %>%
+      tidyr::gather(category, wateruse) %>%
+      mutate(fancynums = ifelse(wateruse>2,
+                                format(round(wateruse), big.mark=",", scientific=FALSE),
+                                format(wateruse, big.mark=",", scientific=FALSE)))
+    
+    wu_df_state$fancynums <- gsub(" ","",wu_df_state$fancynums)
     
     state_data[[i]] <- list(abrv = state,
                            open = state %in% viz[["process_args"]][["drag_states"]],
