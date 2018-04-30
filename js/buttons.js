@@ -101,7 +101,7 @@ function resizeButtons() {
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.bandwidth())
     .style('stroke', function(d){
-      return("rgb(" + getColor(d) + ")");
+      return(categoryToColor(d, 1));
     })
     .style('stroke-width', 3);
     
@@ -153,14 +153,15 @@ function updateButtonWidths(category) {
 }
 
 function updateButtons(category) {
+  
   waterUseViz.elements.buttonBox
-    .selectAll('.button rect')
+    .selectAll('.button .filled-button')
     .style('fill', function(d) {
       var col = categoryToColor(d,0);
       if(d === category) {
         col = categoryToColor(d,1);
       }
-      return (col);
+      return(col);
     });
     
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
