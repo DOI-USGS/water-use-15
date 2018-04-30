@@ -60,6 +60,7 @@ function addCircles(countyCentroids) {
     .attr("cx", function(d) { return projectX([d.lon, d.lat]); })
     .attr("cy", function(d) { return projectY([d.lon, d.lat]); })
     .attr("r", 0)
+    .style("stroke", "none")
     .style("fill", "transparent"); // start transparent & updateCircleColor will transition to color
   
   // CIRCLES-AS-PATHS
@@ -100,7 +101,7 @@ function updateCircleCategory(category) {
   d3.selectAll("circle.wu-basic")
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
-    .style("stroke", categoryToColor(category))
+    //.style("stroke", categoryToColor(category))
     .style("fill", categoryToColor(category));
   
   // CIRCLES-AS-PATHS
