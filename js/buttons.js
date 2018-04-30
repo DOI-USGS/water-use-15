@@ -161,7 +161,7 @@ function updateButtons(category) {
       if(d === category) {
         col = categoryToColor(d,1);
       }
-      return(col);
+      return col;
     });
     
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
