@@ -90,19 +90,18 @@ var tooltipDiv = d3.select("body").append("div")
   .classed("tooltip hidden", true);
 
 // Read data and add to map
+var dataQueue = d3.queue();
 if(waterUseViz.interactionMode === 'tap') {
-  d3.queue()
-    .defer(d3.json, "data/state_boundaries_mobile.json")
-    .defer(d3.tsv, "data/county_centroids_wu.tsv")
-    .defer(d3.json, "data/wu_data_15_range.json")
-    .await(fillMap);
+  dataQueue.defer(d3.json, "data/state_boundaries_mobile.json");
 } else {
-  d3.queue()
-    .defer(d3.json, "data/state_boundaries_USA.json")
-    .defer(d3.tsv, "data/county_centroids_wu.tsv")
-    .defer(d3.json, "data/wu_data_15_range.json")
-    .await(fillMap);
+  dataQueue.defer(d3.json, "data/state_boundaries_USA.json");
 }
+dataQueue
+  .defer(d3.tsv, "data/county_centroids_wu.tsv")
+  .defer(d3.json, "data/wu_data_15_range.json")
+  .defer(d3.json, "data/wu_data_15_sum.json")
+  .defer(d3.json, "data/wu_state_data.json")
+  .await(fillMap);
 
 /** Functions **/
 
@@ -179,6 +178,12 @@ function fillMap() {
   // set up scaling for circles at national level
   waterUseViz.nationalRange = arguments[3];
   
+  // cache data for dotmap and update legend if we're in national view
+  waterUseViz.nationalData = arguments[4];
+  
+  // cache data for dotmap and update legend if we're in state view
+  waterUseViz.stateData = arguments[5];
+  
   // update circle scale with data
   scaleCircles = scaleCircles
     .domain(waterUseViz.nationalRange);
@@ -205,6 +210,9 @@ function fillMap() {
   updateViewSelectorOptions(activeView, stateBoundsUSA);
   addZoomOutButton(activeView);
   
+  // update the legend values and text
+  updateLegendTextToView();
+  
   // load county data, add and update county polygons.
   // it's OK if it's not done right away; it should be loaded by the time anyone tries to hover!
   // and it doesn't need to be done at all for mobile
@@ -215,42 +223,26 @@ function fillMap() {
     // if and when the user zooms out from a state, updateCounties won't try to load the low-res data
     countyBoundsUSA = true;
   }
-  
-  // Read national data and add it to figure
-  d3.json("data/wu_data_15_sum.json", function(error, data) {
-    if (error) throw error;
     
-    // cache data for dotmap and update legend if we're in national view
-    waterUseViz.nationalData = data;
-    if(activeView === 'USA') updateLegendTextToView();
-    // create big pie figure (uses nationalData)
-    if(!waterUseViz.isEmbed) loadPie();
-    
+  // format data for rankEm
+  var  barData = [];
+  waterUseViz.stateData.forEach(function(d) {
+      var x = {
+        'abrv': d.abrv,
+        'STATE_NAME': d.STATE_NAME,
+        'open': d.open,
+        'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse,
+        'fancynums': d.use.filter(function(e) {return e.category === 'total';})[0].fancynums
+      };
+      barData.push(x);
   });
   
-  // Read state data and add it to figure
-  d3.json("data/wu_state_data.json", function(error, data) {
-    if (error) throw error;
-    
-    // cache data for dotmap and update legend if we're in state view
-    waterUseViz.stateData = data;
-    if(activeView !== 'USA') updateLegendTextToView();
-    
-    
-    // format data for rankEm and create rankEm figure
-    var  barData = [];
-    waterUseViz.stateData.forEach(function(d) {
-        var x = {
-          'abrv': d.abrv,
-          'STATE_NAME': d.STATE_NAME,
-          'open': d.open,
-          'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse,
-          'fancynums': d.use.filter(function(e) {return e.category === 'total';})[0].fancynums
-        };
-        barData.push(x);
-      });
-    if(!waterUseViz.isEmbed) rankEm(barData);
-  });
+  // create big pie figure (uses waterUseViz.nationalData)
+  if(!waterUseViz.isEmbed) loadPie();
+  
+  // create rankEm figure  
+  if(!waterUseViz.isEmbed) rankEm(barData);
+
 }
 
 function loadInitialCounties() {
