@@ -9,25 +9,24 @@ function categoryToName(category) {
   else { return "none"; }
 }
 
-function getColor(category){
-   if (category === "total") { return "38, 140, 178"; }
-    else if (category === "thermoelectric") { return "237, 201, 72"; }
-    else if (category === "publicsupply") { return "118, 183, 178"; }
-    else if (category === "irrigation") { return "89, 161, 79"; }
-    else if (category === "industrial") { return "225, 87, 89"; }
-    else if (category === "other") { return "169, 169, 169"; }
-    else { return "none"; }
-}
+
 
 function categoryToColor(category, alpha) {
   
-  var colors = getColor(category);
-  
+  var colors = "none";
+     
+  if (category === "total") { colors = "38, 140, 178"; }
+    else if (category === "thermoelectric") { colors = "237, 201, 72"; }
+    else if (category === "publicsupply") { colors = "118, 183, 178"; }
+    else if (category === "irrigation") { colors = "89, 161, 79"; }
+    else if (category === "industrial") { colors = "225, 87, 89"; }
+    else if (category === "other") { colors = "169, 169, 169"; }
+
   if(alpha === undefined) {
      return ("rgb(" + colors + ")");
-   } else {
+  } else {
      return ("rgba(" + colors + "," + alpha + ")");
-   }
+  }
 
 }
 
