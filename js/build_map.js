@@ -90,23 +90,18 @@ var tooltipDiv = d3.select("body").append("div")
   .classed("tooltip hidden", true);
 
 // Read data and add to map
+var dataQueue = d3.queue();
 if(waterUseViz.interactionMode === 'tap') {
-  d3.queue()
-    .defer(d3.json, "data/state_boundaries_mobile.json")
-    .defer(d3.tsv, "data/county_centroids_wu.tsv")
-    .defer(d3.json, "data/wu_data_15_range.json")
-    .defer(d3.json, "data/wu_data_15_sum.json")
-    .defer(d3.json, "data/wu_state_data.json")
-    .await(fillMap);
+  dataQueue.defer(d3.json, "data/state_boundaries_mobile.json");
 } else {
-  d3.queue()
-    .defer(d3.json, "data/state_boundaries_USA.json")
-    .defer(d3.tsv, "data/county_centroids_wu.tsv")
-    .defer(d3.json, "data/wu_data_15_range.json")
-    .defer(d3.json, "data/wu_data_15_sum.json")
-    .defer(d3.json, "data/wu_state_data.json")
-    .await(fillMap);
+  dataQueue.defer(d3.json, "data/state_boundaries_USA.json");
 }
+dataQueue
+  .defer(d3.tsv, "data/county_centroids_wu.tsv")
+  .defer(d3.json, "data/wu_data_15_range.json")
+  .defer(d3.json, "data/wu_data_15_sum.json")
+  .defer(d3.json, "data/wu_state_data.json")
+  .await(fillMap);
 
 /** Functions **/
 
