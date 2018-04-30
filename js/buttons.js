@@ -175,17 +175,6 @@ function updateButtons(category) {
       return (col);
     });
     
-  waterUseViz.elements.buttonBox
-    .selectAll(".button rect")
-    .filter(".filled-button")
-    .style('opacity', function(d){
-      if(d === category) {
-        return 1;
-      } else {
-        return 0.8;
-      }      
-    });
-  
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
     .style('font-weight', function(d) {
       if(d === category) {
