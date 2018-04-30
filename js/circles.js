@@ -111,7 +111,7 @@ function updateCircleCategory(category) {
   // CIRCLES-AS-PATHS
   
   // grow circles to appropriate size
-  d3.select('.wu-path')
+  d3.selectAll('.wu-path')
     .transition().duration(transitionTime)
     .attr("d", function(d, i) { 
       if(activeView == 'USA') {
@@ -149,7 +149,7 @@ function updateCircleSize(category, view) {
   
   // CIRCLES-AS-PATHS
    
-  d3.select('.wu-path')
+  d3.selectAll('.wu-path')
     .transition().duration(transitionTime)
     .attr("d", function(d, i) { 
       if(view === 'USA') {
