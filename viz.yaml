@@ -392,9 +392,10 @@ publish:
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: ["rank_states_utils","wu_state_data_json", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "static_story_figure_mobile_left", "static_story_figure_mobile_right"]
+    depends: ["styles", "static_story_figure", 
+              "static_story_figure_mobile_left", 
+              "static_story_figure_mobile_right"]
     context:
-      sections: ["rank_states_utils", "national_pie"]
       pie_map_plot: "static_story_figure"
       mobile_left_pie_plot: "static_story_figure_mobile_left"
       mobile_right_pie_plot: "static_story_figure_mobile_right"
