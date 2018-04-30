@@ -114,6 +114,7 @@ function unhighlightCounty() {
     .classed("highlighted-county", false);
 }
 
+/*
 function scaleCircleStroke(selection, scale) {
   selection
     .style("stroke-width", 2/scale+"px");
@@ -126,3 +127,4 @@ function resetCircleStroke() {
     .delay(500) // delay until > 1/2 way through zoom out
     .style("stroke-width", null);
 }
+*/

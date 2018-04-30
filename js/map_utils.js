@@ -206,11 +206,11 @@ function applyZoomAndStyle(newView, doTransition) {
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom.s);
     foregroundState(thisstate, scale = zoom.s);
-    scaleCircleStroke(wucircles, scale = zoom.s);
+    //scaleCircleStroke(wucircles, scale = zoom.s);
     
   } else {
     // only reset stroke when zooming back out
-    resetCircleStroke();
+    //resetCircleStroke();
   }
   
   var allcounties = d3.selectAll('.county');
