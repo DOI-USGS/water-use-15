@@ -123,7 +123,7 @@ function updateCircleCategory(category) {
         return createCirclePath(category, countyCentroids, i);
       } 
     })
-    .style("stroke", categoryToColor(category))
+    //.style("stroke", categoryToColor(category))
     .style("fill", categoryToColor(category));
   
 
