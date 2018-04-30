@@ -247,7 +247,9 @@ function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
     updateButtons(category);
     updateCircleCategory(category);
-    documentCategorySwitch(category, prevCategory, action);
+    if(action !== "mouseout") {
+      documentCategorySwitch(category, prevCategory, action);
+    }
   }
 } 
 
@@ -287,6 +289,7 @@ function updateLegendText(d, category) {
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
   }
+  
   toolTipTimer = setTimeout(function(){
     var sessionId = getSessionId();
     var timestamp = getTimestamp();
