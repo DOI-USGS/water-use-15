@@ -1,5 +1,5 @@
 // CIRCLES-AS-PATHS
-/*
+
 function createCirclePath(cat, centroidData, splitIndex) {
   // create an array of 1-circle paths of the form 'Mx y a r r 0 1 1 0 0.01',
   // where x is the leftmost point (cx - r), y is cy, and r is radius
@@ -43,13 +43,14 @@ function prepareCirclePaths(categories, centroidData) {
 }
 
 function addCircles(circlesPaths) {
-*/
 
-function addCircles(countyCentroids) {
+
+//function addCircles(countyCentroids) {
   
   // uses globals map
   
   // CIRCLES-AS-CIRCLES
+  /*
   map.selectAll('g#wu-circles').selectAll('.wu-circle')
     .data(countyCentroids)
     .enter()
@@ -62,9 +63,10 @@ function addCircles(countyCentroids) {
     .attr("r", 0)
     .style("stroke", "none")
     .style("fill", "transparent"); // start transparent & updateCircleColor will transition to color
+  */
   
   // CIRCLES-AS-PATHS
-  /*
+  
   map.selectAll('g#wu-circles')
     .selectAll('.wu-path')
     .data(circlesPaths)
@@ -77,7 +79,7 @@ function addCircles(countyCentroids) {
     })
     .style('stroke','none')
     .style('fill', 'none'); // start transparent & updateCircleColor will transition to color
-  */
+  
 
   map.selectAll('g#wu-circles')
     .append('circle')
@@ -98,16 +100,18 @@ function updateCircleCategory(category) {
   }
     
   // CIRCLES-AS-CIRCLES
+  /*
   d3.selectAll("circle.wu-basic")
     .transition().duration(1000)
     .attr("r", function(d) { return scaleCircles(d[[category]]); })
     //.style("stroke", categoryToColor(category))
     .style("fill", categoryToColor(category));
+  */
   
   // CIRCLES-AS-PATHS
-  /*
+  
   // grow circles to appropriate size
-  d3.select('.wu-path')
+  d3.selectAll('.wu-path')
     .transition().duration(transitionTime)
     .attr("d", function(d, i) { 
       if(activeView == 'USA') {
@@ -119,9 +123,9 @@ function updateCircleCategory(category) {
         return createCirclePath(category, countyCentroids, i);
       } 
     })
-    .style("stroke", categoryToColor(category))
+    //.style("stroke", categoryToColor(category))
     .style("fill", categoryToColor(category));
-  */
+  
 
 }
 
@@ -136,14 +140,16 @@ function updateCircleSize(category, view) {
   }
   
   // CIRCLES-AS-CIRCLES
+  /*
   d3.selectAll("circle.wu-basic")
     .transition()
     .duration(transitionTime)
     .attr("r", function(d) { return scaleCircles(d[[category]]); });
+  */
   
   // CIRCLES-AS-PATHS
-  /* 
-  d3.select('.wu-path')
+   
+  d3.selectAll('.wu-path')
     .transition().duration(transitionTime)
     .attr("d", function(d, i) { 
       if(view === 'USA') {
@@ -156,7 +162,7 @@ function updateCircleSize(category, view) {
         return createCirclePath(category, countyCentroids, i); 
       }
   });
-  */
+  
 }
 
 function highlightCircle(countyDatum, category) {
