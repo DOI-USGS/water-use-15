@@ -24,8 +24,10 @@ read_shp_zip <- function(zipfile) {
   return(data_out)  
 }
 
+#' @param sp the full spatial object to be altered, w/ STATEFP attribute
 #' @param fips a character vector of fips to be scaled
 #' @param scale a scale factor to apply to fips
+#' @return an `sp` similar to the input, but with the specified fips scaled according to `scale` parameter
 scale_shifted_shps <- function(sp, fips, scale){
   
   toshift_sp <- sp[sp@data$STATEFP %in% fips, ]
