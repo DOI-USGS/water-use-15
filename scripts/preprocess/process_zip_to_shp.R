@@ -24,15 +24,17 @@ read_shp_zip <- function(zipfile) {
   return(data_out)  
 }
 
-scale_shifted_shps <- function(sp, PR_scale = 3){
+#' @param fips a character vector of fips to be scaled
+#' @param scale a scale factor to apply to fips
+scale_shifted_shps <- function(sp, fips, scale){
   
-  pr_sp <- sp[(sp@data$STATEFP %in% c('72','78')), ]
-  pr_cent <- rgeos::gCentroid(pr_sp, byid=F)@coords
-  pr_scale <- max(apply(bbox(pr_sp), 1, diff)) * PR_scale
-  obj <- maptools::elide(pr_sp, scale=pr_scale, center=pr_cent, bb = bbox(pr_sp))
+  toshift_sp <- sp[sp@data$STATEFP %in% fips, ]
+  toshift_cent <- rgeos::gCentroid(toshift_sp, byid=F)@coords
+  toshift_scale <- max(apply(bbox(toshift_sp), 1, diff)) * scale
+  obj <- maptools::elide(toshift_sp, scale=toshift_scale, center=toshift_cent, bb = bbox(toshift_sp))
   new_cent <- rgeos::gCentroid(obj, byid=FALSE)@coords
-  obj <- maptools::elide(obj, shift=c(pr_cent-new_cent))
+  obj <- maptools::elide(obj, shift=c(toshift_cent-new_cent))
   proj4string(obj) <- proj4string(sp)
-  sp_out <- rbind(sp[!(sp@data$STATEFP %in% c('72','78')), ], obj)
+  sp_out <- rbind(sp[!(sp@data$STATEFP %in% fips), ], obj)
   return(sp_out)
 }
