@@ -106,13 +106,7 @@ function resizeButtons() {
     .style('stroke-width', 3);
     
   waterUseViz.elements.buttonBox.selectAll('.button rect')
-    .attr('width', function(d) {
-      if(d === activeCategory) {
-        return waterUseViz.dims.buttonBox.width;
-      } else {
-        return waterUseViz.dims.buttonBox.width * 0.95;
-      }
-    });
+    .attr('width', waterUseViz.dims.buttonBox.width);
     
   waterUseViz.elements.buttonBox.selectAll('.button .mouser-button')
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
