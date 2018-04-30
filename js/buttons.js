@@ -168,12 +168,11 @@ function updateButtons(category) {
   waterUseViz.elements.buttonBox
     .selectAll('.button rect')
     .style('fill', function(d) {
+      var col = categoryToColor(d,0);
       if(d === category) {
-        var col = "rgb(" + getColor(d) + ")";
-        return (col);
-      } else {
-        return 'transparent';
+        col = categoryToColor(d);
       }
+      return (col);
     });
     
   waterUseViz.elements.buttonBox
