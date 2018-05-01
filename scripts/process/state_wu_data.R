@@ -13,15 +13,15 @@ process.state_wu_data <- function(viz) {
     
     wu_df_state <- wu_df %>%
       dplyr::filter(STATE == state) %>%
-      dplyr::summarise(total = signif(sum(total), digits = 3),
-                       thermoelectric = signif(sum(thermoelectric), digits = 3),
-                       publicsupply = signif(sum(publicsupply), digits = 3),
-                       irrigation = signif(sum(irrigation), digits = 3),
-                       industrial = signif(sum(industrial), digits = 3)) %>%
+      dplyr::summarise(total = sum(total),
+                       thermoelectric = sum(thermoelectric),
+                       publicsupply = sum(publicsupply),
+                       irrigation = sum(irrigation),
+                       industrial = sum(industrial)) %>%
       tidyr::gather(category, wateruse) %>%
       mutate(fancynums = ifelse(wateruse>2,
                                 format(round(wateruse), big.mark=",", scientific=FALSE),
-                                format(wateruse, big.mark=",", scientific=FALSE)))
+                                format(signif(wateruse, digits = 6), big.mark=",", scientific=FALSE)))
     
     wu_df_state$fancynums <- gsub(" ","",wu_df_state$fancynums)
     
