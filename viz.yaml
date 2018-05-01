@@ -112,6 +112,14 @@ fetch:
     remoteItemId: "5ab154b1e4b081f61ab26420"
     remoteFilename: "state_boundaries_zoom.json"
   -
+    id: state_boundaries_mobile_topojson
+    location: cache/state_boundaries_mobile.json
+    reader: json
+    mimetype: application/json
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "state_boundaries_mobile.json"
+  -
     id: county_boundaries_USA_topojson
     location: cache/county_boundaries_USA.json
     reader: json
@@ -127,6 +135,14 @@ fetch:
     fetcher: sciencebase
     remoteItemId: "5ab154b1e4b081f61ab26420"
     remoteFilename: "county_boundaries_zoom.json"
+  -
+    id: county_boundaries_mobile_topojson
+    location: cache/county_boundaries_mobile.json
+    reader: json
+    mimetype: application/json
+    fetcher: sciencebase
+    remoteItemId: "5ab154b1e4b081f61ab26420"
+    remoteFilename: "county_boundaries_mobile.json"
   -
     id: county_centroids_topojson
     location: cache/county_centroids_USA.json
@@ -230,17 +246,22 @@ publish:
       map_states: map_states
       map_counties: "map_counties"
       dropdown_selector: "dropdown_selector"
+      national_pie: "national_pie"
+      rank_states_utils: "rank_states_utils"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
+      state_boundaries_mobile: state_boundaries_mobile_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
       county_boundaries_zoom: county_boundaries_zoom_topojson
+      county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: "county_centroids_wu_tsv"
       wu_data_15_range:  "wu_data_15_range_json"
       thumb-facebook: thumb-facebook
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr",
+                  "national_pie", "rank_states_utils"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb-facebook
@@ -371,9 +392,10 @@ publish:
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: ["rank_states_utils","wu_state_data_json", "national_pie", "wu_data_15_sum_json", "styles", "static_story_figure", "static_story_figure_mobile_left", "static_story_figure_mobile_right"]
+    depends: ["styles", "static_story_figure", 
+              "static_story_figure_mobile_left", 
+              "static_story_figure_mobile_right"]
     context:
-      sections: ["rank_states_utils", "national_pie"]
       pie_map_plot: "static_story_figure"
       mobile_left_pie_plot: "static_story_figure_mobile_left"
       mobile_right_pie_plot: "static_story_figure_mobile_right"
@@ -435,8 +457,10 @@ publish:
       map_section: map_section
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
+      state_boundaries_mobile: state_boundaries_mobile_topojson
       county_boundaries_USA: county_boundaries_USA_topojson
       county_boundaries_zoom: county_boundaries_zoom_topojson
+      county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: county_centroids_wu_tsv
       wu_data_15_range:  wu_data_15_range_json
     context:

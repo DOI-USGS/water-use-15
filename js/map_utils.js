@@ -206,11 +206,11 @@ function applyZoomAndStyle(newView, doTransition) {
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom.s);
     foregroundState(thisstate, scale = zoom.s);
-    scaleCircleStroke(wucircles, scale = zoom.s);
+    //scaleCircleStroke(wucircles, scale = zoom.s);
     
   } else {
     // only reset stroke when zooming back out
-    resetCircleStroke();
+    //resetCircleStroke();
   }
   
   var allcounties = d3.selectAll('.county');
@@ -301,7 +301,7 @@ function updateLegendTextToView() {
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
-      .text("U.S. Water Use");
+      .text("U.S. Water Withdrawals");
   
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
@@ -319,12 +319,12 @@ function updateLegendTextToView() {
       .buttonBox
       .selectAll("#legend-title")
       .data(state_data)
-      .text(function(d) { return d.STATE_NAME + " Water Use"; });
+      .text(function(d) { return d.STATE_NAME + " Water Withdrawals"; });
   
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
       .data(state_data[0].use, function(d) { return d.category; })
-      .text(function(d) { return d.wateruse; });
+      .text(function(d) { return d.fancynums; });
       
   }
 

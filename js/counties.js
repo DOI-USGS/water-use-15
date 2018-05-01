@@ -30,7 +30,13 @@ function loadCountyBounds(state, callback) {
       callback(null, countyBoundsUSA);
     }
   } else if(!countyBoundsZoom.has('USA')) {
-    d3.json("data/county_boundaries_zoom.json", function(error, allCountiesTopo) {
+    var countyJson;
+    if(waterUseViz.interactionMode === 'tap') {
+      countyJson = "data/county_boundaries_mobile.json";
+    } else {
+      countyJson = "data/county_boundaries_zoom.json";
+    }
+    d3.json(countyJson, function(error, allCountiesTopo) {
       if(error) throw error;
       
       // extract the topojson to geojson and add data

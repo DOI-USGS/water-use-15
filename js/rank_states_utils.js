@@ -52,7 +52,7 @@ function rankEm(barData) {
     }
     
     allText.select("#rank-value-text")
-      .text(data.wu);
+      .text(data.fancynums);
   };
   
   lockedBars
@@ -288,7 +288,7 @@ function rankEm(barData) {
     .append('text')
       .classed('rankem-title', true)
       .attr('text-anchor','middle')
-      .text('Drag a state over its matching bar');
+      .text('Drag a blue state over its matching bar');
   
   // add message about Idaho to conclude.  
   var rankMsg = svgStates.append('g')
