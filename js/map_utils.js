@@ -100,20 +100,16 @@ function zoomToFromState(d, i, j, selection) {
   updateView(newView, fireAnalytics = true);
 }
 
-function updateView(newView, fireAnalytics, doTransition, timestamp, sessionId) {
+function getTimestamp() {return new Date().getTime().toString()}
+function getSessionId() {return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
+
+function updateView(newView, fireAnalytics, doTransition) {
   if(fireAnalytics === undefined) { 
     fireAnalytics = true;
   }
   if(doTransition === undefined) {
     doTransition = true;
   }
-  if(timestamp === undefined) {
-    timestamp = new Date().getTime().toString();
-  }
-  if(sessionId === undefined) {
-    sessionId = new Date().getTime() + '.' + Math.random().toString(36).substring(5);
-  }
-  
   // update the global variable that stores the current view
   oldView = activeView;
   activeView = newView;
@@ -136,6 +132,8 @@ function updateView(newView, fireAnalytics, doTransition, timestamp, sessionId) 
   
   // record the change for analytics. don't need timeout for view change   
   if(fireAnalytics) {
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
     gtag('event', 'update view', {
       'event_category': 'figure',
       'event_label': 'newView=' + newView + '; oldView=' + oldView + '; category=' + activeCategory,
@@ -249,7 +247,9 @@ function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
     updateButtons(category);
     updateCircleCategory(category);
-    documentCategorySwitch(category, prevCategory, action);
+    if(action !== "mouseout") {
+      documentCategorySwitch(category, prevCategory, action);
+    }
   }
 } 
 
@@ -260,9 +260,13 @@ function documentCategorySwitch(category, prevCategory, action) {
     clearTimeout(updateCategoryTimer);
   }
   updateCategoryTimer = setTimeout(function(){
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
     gtag('event', action + ' update category', {
       'event_category': 'figure',
-      'event_label': category + '; from='+ prevCategory + '; view=' + activeView
+      'event_label': category + '; from='+ prevCategory + '; view=' + activeView,
+      'sessionId': sessionId,
+      'timestamp': timestamp
     });
   }, updateCategoryDelay);
 }
@@ -285,10 +289,16 @@ function updateLegendText(d, category) {
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
   }
+  
   toolTipTimer = setTimeout(function(){
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
      gtag('event', 'hover', {
-  'event_category': 'figure',
-  'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView});
+          'event_category': 'figure',
+           'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView,
+            'sessionId': sessionId,
+            'timestamp': timestamp
+     });
   }, toolTipDelay);
 }
 
