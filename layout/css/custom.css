@@ -161,12 +161,16 @@
 
 #button-background{
   fill:white;
-  opacity:0.5;
+  opacity:0.7;
   pointer-events:none;
 }
 
 .button rect:hover{
   opacity:1;
+}
+
+.button rect{		
+  fill:white;			
 }
 
 /* mobile */
