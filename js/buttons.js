@@ -36,7 +36,7 @@ function addButtons() {
     .classed('mouser-button', true)
     .style('opacity','0')
     .style('stroke-width',1.5)
-    .attr('pointer-events','all')
+    .style('pointer-events','all')
     .on('click', function(d){
       updateCategory(d.toLowerCase(), activeCategory);
     })
