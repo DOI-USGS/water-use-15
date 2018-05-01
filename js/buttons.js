@@ -35,6 +35,7 @@ function addButtons() {
   buttons.append('rect')
     .classed('mouser-button', true)
     .style('opacity','0')
+    .attr('pointer-events','all')
     .on('click', function(d){
       updateCategory(d.toLowerCase(), activeCategory);
     })
@@ -101,9 +102,9 @@ function resizeButtons() {
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.bandwidth())
     .style('stroke', function(d){
-      return(categoryToColor(d, 1));
+      return(categoryToColor(d, 0.8));
     })
-    .style('stroke-width', 1);
+    .style('stroke-width', 1.5);
     
   waterUseViz.elements.buttonBox.selectAll('.button rect')
     .attr('width', waterUseViz.dims.buttonBox.width);
@@ -112,6 +113,9 @@ function resizeButtons() {
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.padding(0).bandwidth() * 1.02); // seems to leave a small pad w/o multiplier 
     
+    // If we do go with transistions,
+    // this will screw them up:
+    updateButtonWidths(activeCategory);
 
   // look up the active button for further reference
   var activeButton = d3.selectAll('.button rect').filter(function(d) { return d === activeCategory; });
@@ -141,8 +145,8 @@ function resizeButtons() {
 
 function updateButtonWidths(category) {
   waterUseViz.elements.buttonBox.selectAll('.button rect')
-    .transition()
-    .duration(1000)
+    //.transition()
+    //.duration(1000)
     .attr('width', function(d) {
       if(d === category) {
         return waterUseViz.dims.buttonBox.width;
@@ -159,10 +163,12 @@ function updateButtons(category) {
     .style('fill', function(d) {
       var col = categoryToColor(d,0);
       if(d === category) {
-        col = categoryToColor(d,1);
+        col = categoryToColor(d,0.8);
       }
       return col;
     });
+    
+
     
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
     .style('font-weight', function(d) {
