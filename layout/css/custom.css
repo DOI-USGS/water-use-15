@@ -169,11 +169,6 @@
   opacity:1;
 }
 
-.button rect{
-  fill:white;
-  opacity:0.8;
-}
-
 /* mobile */
 .button text{
   font-size:2em;

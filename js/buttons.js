@@ -28,7 +28,8 @@ function addButtons() {
   
   // button rectangles for *style*
   buttons.append('rect')
-    .classed('filled-button', true);
+    .classed('filled-button', true)
+    .attr('width', waterUseViz.dims.buttonBox.width);
   
   // button rectangles for *mouse events*
   buttons.append('rect')
@@ -64,7 +65,7 @@ function addButtons() {
   // add styling to the buttons and text according to which is active
 
   updateButtons(activeCategory);
-  
+
 }
 
 function resizeButtons() {
@@ -98,12 +99,20 @@ function resizeButtons() {
   // set x position, height, and width of colored rects
   waterUseViz.elements.buttonBox.selectAll('.button .filled-button')
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
-    .attr('height', buttonY.bandwidth());
+    .attr('height', buttonY.bandwidth())
+    .style('stroke', function(d){
+      return(categoryToColor(d, 1));
+    })
+    .style('stroke-width', 1);
+    
+  waterUseViz.elements.buttonBox.selectAll('.button rect')
+    .attr('width', waterUseViz.dims.buttonBox.width);
+    
   waterUseViz.elements.buttonBox.selectAll('.button .mouser-button')
     .attr('x', waterUseViz.dims.buttonBox.width * 0.05)
     .attr('height', buttonY.padding(0).bandwidth() * 1.02); // seems to leave a small pad w/o multiplier 
-  updateButtonWidths(activeCategory);
-  
+    
+
   // look up the active button for further reference
   var activeButton = d3.selectAll('.button rect').filter(function(d) { return d === activeCategory; });
   
@@ -132,26 +141,29 @@ function resizeButtons() {
 
 function updateButtonWidths(category) {
   waterUseViz.elements.buttonBox.selectAll('.button rect')
+    .transition()
+    .duration(1000)
     .attr('width', function(d) {
       if(d === category) {
         return waterUseViz.dims.buttonBox.width;
       } else {
-        return waterUseViz.dims.buttonBox.width * 0.8;
+        return waterUseViz.dims.buttonBox.width * 0.95;
       }
     });
 }
 
 function updateButtons(category) {
-  waterUseViz.elements.buttonBox.selectAll('.button rect')
-    .style('fill', function(d) {
-      if(d === category) {
-        return categoryToColor(d);
-      } else {
-        return '#c6c6c6';
-      }
-    });
-  updateButtonWidths(category);
   
+  waterUseViz.elements.buttonBox
+    .selectAll('.button .filled-button')
+    .style('fill', function(d) {
+      var col = categoryToColor(d,0);
+      if(d === category) {
+        col = categoryToColor(d,1);
+      }
+      return col;
+    });
+    
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
     .style('font-weight', function(d) {
       if(d === category) {
