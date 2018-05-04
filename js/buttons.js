@@ -73,7 +73,7 @@ function addButtons() {
 function resizeButtons() {
   
    // reserve the top band for titles
-   titlesHeight = waterUseViz.dims.buttonBox.height * 0.22;
+   titlesHeight = waterUseViz.dims.buttonBox.titlesHeight;
   
   // recompute the button heights and positions for the new buttonBox width
   var buttonY = d3.scaleBand()
