@@ -133,12 +133,12 @@ function resizeButtons() {
   // category labels are left aligned, nudged a little over from the rectangle's left edge.
   // category water use amounts are right aligned, nudged a little over from the rectangle's right edge.
   waterUseViz.elements.buttonBox.selectAll('.button .category-label')
-    .attr('x', +activeButton.attr('x') + activeButton.attr('width') * 0.02)
+    .attr('x', +activeButton.attr('x') + activeButton.attr('width') * 0.03)
     .attr('y', function(d) {
       return buttonY.bandwidth()/2;
     });
   waterUseViz.elements.buttonBox.selectAll('.button .category-amount')
-    .attr('x', waterUseViz.dims.buttonBox.width * 0.05 + activeButton.attr('width') * 0.98)
+    .attr('x', waterUseViz.dims.buttonBox.width * 0.05 + activeButton.attr('width') * 0.97)
     .attr('y', function(d) {
       return buttonY.bandwidth()/2;
     });
