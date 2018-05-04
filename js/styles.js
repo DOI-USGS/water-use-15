@@ -9,24 +9,25 @@ function categoryToName(category) {
   else { return "none"; }
 }
 
-function categoryToColor(category, stroke) {
+
+
+function categoryToColor(category, alpha) {
   
-  if(stroke === undefined) {
-      stroke = false;
-   }  
-  
-  var opacityValue = 0.8;
-  if(stroke) {
-    opacityValue = 1;
+  var colors = "none";
+     
+  if (category === "total") { colors = "38, 140, 178"; }
+    else if (category === "thermoelectric") { colors = "237, 201, 72"; }
+    else if (category === "publicsupply") { colors = "118, 183, 178"; }
+    else if (category === "irrigation") { colors = "89, 161, 79"; }
+    else if (category === "industrial") { colors = "225, 87, 89"; }
+    else if (category === "other") { colors = "169, 169, 169"; }
+
+  if(alpha === undefined) {
+     return ("rgb(" + colors + ")");
+  } else {
+     return ("rgba(" + colors + "," + alpha + ")");
   }
-  
-  if (category === "total") { return "rgba(38, 140, 178, "+opacityValue+")"; }
-  else if (category === "thermoelectric") { return "rgba(237, 201, 72, "+opacityValue+")"; }
-  else if (category === "publicsupply") { return "rgba(118, 183, 178, "+opacityValue+")"; }
-  else if (category === "irrigation") { return "rgba(89, 161, 79, "+opacityValue+")"; }
-  else if (category === "industrial") { return "rgba(225, 87, 89, "+opacityValue+")"; }
-  else if (category === "other") { return "rgba(169, 169, 169, "+opacityValue+")"; }
-  else { return "none"; }
+
 }
 
 // on zoom in

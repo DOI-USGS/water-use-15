@@ -57,10 +57,10 @@ function resize() {
   
     // buttonBox sits below map with small vertical buffer between map and buttons
     waterUseViz.dims.buttonBox.width = waterUseViz.dims.map.width * 0.6;
-    waterUseViz.dims.buttonBox.height = waterUseViz.dims.buttonBox.width * 0.5 *
+    waterUseViz.dims.buttonBox.height = waterUseViz.dims.buttonBox.width * 0.6 *
       (waterUseViz.dims.buttonBox.heightDesktop / waterUseViz.dims.buttonBox.widthDesktop);
     waterUseViz.dims.buttonBox.x0 = (waterUseViz.dims.map.width - waterUseViz.dims.buttonBox.width) / 2; // center within svg
-    waterUseViz.dims.buttonBox.y0 = waterUseViz.dims.map.height * 1.02;
+    waterUseViz.dims.buttonBox.y0 = waterUseViz.dims.map.height * 0.90;
     // map fills the top part of the svg
     waterUseViz.dims.map.x0 = 0;
     // svg is [map]
