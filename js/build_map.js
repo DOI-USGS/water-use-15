@@ -10,7 +10,8 @@ var waterUseViz = {
       widthDesktop: 250,
       heightDesktop: 275,
       width: null,
-      height: null
+      height: null,
+      titlesHeight: null
     },
     svg: {
       width: null,
