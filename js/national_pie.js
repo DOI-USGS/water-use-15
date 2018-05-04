@@ -1,6 +1,6 @@
 // code to add a static pie chart of the national view
 function loadPie() {
-  var width = 480,
+  var width = 525,
       height = 350,
       radius = Math.min(width, height) / 3;
   
@@ -37,6 +37,8 @@ function loadPie() {
   
   var wu_national_no_total = waterUseViz.nationalData  
         .filter(function(d) { return d.category !== "total"; });
+  var wu_national_total = waterUseViz.nationalData  
+        .filter(function(d) { return d.category === "total"; });
   
   var slices = pie_g.selectAll(".slice")
     .data(pie(wu_national_no_total))
@@ -48,7 +50,7 @@ function loadPie() {
     .append("path")
       .attr("d", path)
       .attr("fill", function(d) { 
-        return categoryToColor(d.data.category); 
+        return categoryToColor(d.data.category, 0.8); 
       });
         
   var sliceLabels = pie_g.selectAll('.slice-label')
@@ -90,6 +92,10 @@ function loadPie() {
           return "middle";
         }
       })
-      .text(function(d) { return categoryToName(d.data.category); }); //+': '+d.data.wateruse; });
+      .text(function(d) { 
+        return categoryToName(d.data.category)+' ('+
+                Math.round((d.data.wateruse / wu_national_total[0].wateruse * 100))
+                +'%)'; 
+      }); 
   
 };

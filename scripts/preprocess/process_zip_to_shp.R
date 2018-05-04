@@ -24,3 +24,15 @@ read_shp_zip <- function(zipfile) {
   return(data_out)  
 }
 
+scale_shifted_shps <- function(sp, PR_scale = 3){
+  
+  pr_sp <- sp[(sp@data$STATEFP %in% c('72','78')), ]
+  pr_cent <- rgeos::gCentroid(pr_sp, byid=F)@coords
+  pr_scale <- max(apply(bbox(pr_sp), 1, diff)) * PR_scale
+  obj <- maptools::elide(pr_sp, scale=pr_scale, center=pr_cent, bb = bbox(pr_sp))
+  new_cent <- rgeos::gCentroid(obj, byid=FALSE)@coords
+  obj <- maptools::elide(obj, shift=c(pr_cent-new_cent))
+  proj4string(obj) <- proj4string(sp)
+  sp_out <- rbind(sp[!(sp@data$STATEFP %in% c('72','78')), ], obj)
+  return(sp_out)
+}

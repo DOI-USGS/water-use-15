@@ -1,4 +1,9 @@
 
+svg {
+  /* needed to stop IE from letting zoom show circles everywhere */
+  overflow:hidden;
+}
+
 #map-background {
   fill: transparent;
 }
@@ -17,7 +22,7 @@
 
 .state {
   fill: transparent;
-  stroke: rgb(180,180,180);
+  stroke: rgb(147,147,147);
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -50,7 +55,7 @@
 
 .highlighted-county {
   stroke: rgb(200,200,200);
-  fill: rgb(240,240,240);
+  fill: rgb(180,180,180);
 } 
 
 .static-state {
@@ -113,8 +118,8 @@
 }
 
 .watermark {
-  fill: #DCDCDC;
-  stroke: #c6c6c6;
+  fill: #8e8e8e;
+  stroke: #717171;
   stroke-width:0.5;
   opacity: 0.8;
 }

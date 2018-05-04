@@ -100,17 +100,16 @@ function zoomToFromState(d, i, j, selection) {
   updateView(newView, fireAnalytics = true);
 }
 
-function updateView(newView, fireAnalytics, timestamp, sessionId) {
-  if(fireAnalytics === undefined) {
+function getTimestamp() {return new Date().getTime().toString()}
+function getSessionId() {return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
+
+function updateView(newView, fireAnalytics, doTransition) {
+  if(fireAnalytics === undefined) { 
     fireAnalytics = true;
   }
-  if(timestamp === undefined) {
-    timestamp = new Date().getTime().toString();
+  if(doTransition === undefined) {
+    doTransition = true;
   }
-  if(sessionId === undefined) {
-    sessionId = new Date().getTime() + '.' + Math.random().toString(36).substring(5);
-  }
-  
   // update the global variable that stores the current view
   oldView = activeView;
   activeView = newView;
@@ -128,11 +127,13 @@ function updateView(newView, fireAnalytics, timestamp, sessionId) {
   
   // ensure we have the zoom parameters (they're in the state zoom data) and apply the zoom
   updateStateData(newView, function() {
-    applyZoomAndStyle(newView);
+    applyZoomAndStyle(newView, doTransition);
   });
   
   // record the change for analytics. don't need timeout for view change   
   if(fireAnalytics) {
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
     gtag('event', 'update view', {
       'event_category': 'figure',
       'event_label': 'newView=' + newView + '; oldView=' + oldView + '; category=' + activeCategory,
@@ -141,7 +142,11 @@ function updateView(newView, fireAnalytics, timestamp, sessionId) {
   }    
 }
 
-function applyZoomAndStyle(newView) {
+function applyZoomAndStyle(newView, doTransition) {
+  if(doTransition === undefined) {
+    doTransition = true;
+  }
+  
   // determine the center point and scaling for the new view
   var zoom;
   if(activeView === 'USA') {
@@ -168,7 +173,7 @@ function applyZoomAndStyle(newView) {
   if(scaleCircles.domain() !== newScaling) {
     // only change circle scale if it's different
     scaleCircles.domain(newScaling);
-    updateCircleSize(activeCategory);
+    updateCircleSize(activeCategory, activeView);
   }
 
   // reset counties each time a zoom changes
@@ -199,21 +204,27 @@ function applyZoomAndStyle(newView) {
     emphasizeCounty(statecounties);
     backgroundState(otherstates, scale = zoom.s);
     foregroundState(thisstate, scale = zoom.s);
-    scaleCircleStroke(wucircles, scale = zoom.s);
+    //scaleCircleStroke(wucircles, scale = zoom.s);
     
   } else {
     // only reset stroke when zooming back out
-    resetCircleStroke();
+    //resetCircleStroke();
   }
   
   var allcounties = d3.selectAll('.county');
   
   allcounties
     .style("stroke-width",  1/zoom.s); // make all counties have scaled stroke-width
-  
+
   // apply the transform (i.e., actually zoom in or out)
+  var zoomTime;
+  if(waterUseViz.interactionMode !== 'hover' || !doTransition){
+    zoomTime = 0;
+  } else {
+    zoomTime = 750;
+  }
   map.transition()
-    .duration(750)
+    .duration(zoomTime)
     .attr('transform',
       "translate(" + waterUseViz.dims.map.width / 2 + "," + waterUseViz.dims.map.height / 2 + ")"+
       "scale(" + zoom.s + ")" +
@@ -235,8 +246,11 @@ function updateCategory(category, prevCategory) {
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
     updateButtons(category);
+    updateButtonWidths(category);
     updateCircleCategory(category);
-    documentCategorySwitch(category, prevCategory, action);
+    if(action !== "mouseout") {
+      documentCategorySwitch(category, prevCategory, action);
+    }
   }
 } 
 
@@ -247,9 +261,13 @@ function documentCategorySwitch(category, prevCategory, action) {
     clearTimeout(updateCategoryTimer);
   }
   updateCategoryTimer = setTimeout(function(){
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
     gtag('event', action + ' update category', {
       'event_category': 'figure',
-      'event_label': category + '; from='+ prevCategory + '; view=' + activeView
+      'event_label': category + '; from='+ prevCategory + '; view=' + activeView,
+      'sessionId': sessionId,
+      'timestamp': timestamp
     });
   }, updateCategoryDelay);
 }
@@ -272,10 +290,16 @@ function updateLegendText(d, category) {
   if(toolTipTimer){
     clearTimeout(toolTipTimer);
   }
+  
   toolTipTimer = setTimeout(function(){
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
      gtag('event', 'hover', {
-  'event_category': 'figure',
-  'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView});
+          'event_category': 'figure',
+           'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView,
+            'sessionId': sessionId,
+            'timestamp': timestamp
+     });
   }, toolTipDelay);
 }
 
@@ -288,7 +312,7 @@ function updateLegendTextToView() {
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
-      .text("U.S. Water Use");
+      .text("U.S. Water Withdrawals");
   
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
@@ -306,12 +330,12 @@ function updateLegendTextToView() {
       .buttonBox
       .selectAll("#legend-title")
       .data(state_data)
-      .text(function(d) { return d.STATE_NAME + " Water Use"; });
+      .text(function(d) { return d.STATE_NAME + " Water Withdrawals"; });
   
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
       .data(state_data[0].use, function(d) { return d.category; })
-      .text(function(d) { return d.wateruse; });
+      .text(function(d) { return d.fancynums; });
       
   }
 
