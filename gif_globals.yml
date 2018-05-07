@@ -1,0 +1,13 @@
+packages:
+  - gdata
+
+sources:
+  - scripts/gifs/data_utils.R
+  
+targets:
+  
+  plot_metadata:
+    command: c(I(7), I(5), I(300))
+  
+  proj_data:
+    command: get_proj_sheet(I("http://stateplane.ret3.net/COUNTYSPC.XLS"))
