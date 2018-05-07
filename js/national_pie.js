@@ -4,6 +4,23 @@ function loadPie() {
       height = 350,
       radius = Math.min(width, height) / 3;
   
+  var wu_national_no_total = waterUseViz.nationalData  
+        .filter(function(d) { return d.category !== "total"; });
+  var wu_national_total = waterUseViz.nationalData  
+        .filter(function(d) { return d.category === "total"; });
+  var wu_total = wu_national_total[0].wateruse;
+  
+  wu_national_no_total.forEach(function(d) {
+    d.wuperc = Math.round((d.wateruse / wu_total * 100));
+  });
+  
+  // calculate rotation to get irrigation balanced on top
+  // calculate where thermo needs to start (how far from zero)
+  // then convert from percent to radians
+  var thermo_percent = wu_national_no_total[[0]].wuperc,
+      irrigation_percent = wu_national_no_total[[2]].wuperc;
+  var rotate_value = (100 - (irrigation_percent/2 + thermo_percent )) * Math.PI / 50;
+  
   var piearea = d3.select(".side-by-side-figure")
         .append("svg")
           .attr('viewBox', '0 0 '+width+' '+height);
@@ -17,28 +34,31 @@ function loadPie() {
       
   // for pie slices
   var path = d3.arc()
+      .startAngle(function(d) { return d.startAngle + rotate_value; })
+      .endAngle(function(d) { return d.endAngle + rotate_value; })
       .outerRadius(radius)
       .innerRadius(0);
   
   // for circles and inner most part of callout lines
   var lineStartArc = d3.arc()
+      .startAngle(function(d) { return d.startAngle + rotate_value; })
+      .endAngle(function(d) { return d.endAngle + rotate_value; })
       .outerRadius(radius*0.8)
       .innerRadius(radius*0.8);
   
   // for end of the callout lines
   var lineEndArc = d3.arc()
+      .startAngle(function(d) { return d.startAngle + rotate_value; })
+      .endAngle(function(d) { return d.endAngle + rotate_value; })
       .outerRadius(radius*1.15)
       .innerRadius(radius*1.15);
   
   // for pie slice text placement
   var textArc = d3.arc()
+      .startAngle(function(d) { return d.startAngle + rotate_value; })
+      .endAngle(function(d) { return d.endAngle + rotate_value; })
       .outerRadius(radius*1.25)
       .innerRadius(radius*1.25);
-  
-  var wu_national_no_total = waterUseViz.nationalData  
-        .filter(function(d) { return d.category !== "total"; });
-  var wu_national_total = waterUseViz.nationalData  
-        .filter(function(d) { return d.category === "total"; });
   
   var slices = pie_g.selectAll(".slice")
     .data(pie(wu_national_no_total))
@@ -93,9 +113,7 @@ function loadPie() {
         }
       })
       .text(function(d) { 
-        return categoryToName(d.data.category)+' ('+
-                Math.round((d.data.wateruse / wu_national_total[0].wateruse * 100))
-                +'%)'; 
+        return categoryToName(d.data.category)+' ('+d.data.wuperc+'%)'; 
       }); 
   
-};
+}
