@@ -1,5 +1,45 @@
 // code to add a static pie chart of the national view
 function loadPie() {
+    
+  function textAngle(d){
+		var rot_rad = (d.startAngle - d.endAngle)/2 + rotate_value;
+		return rot_rad * 180 / Math.PI - 90;
+	}
+	
+	function textTransform(d) {
+	  var text_placement = textArc.centroid(d);
+	      text_rot = 0;
+	  console.log(text_placement);
+    switch(d.data.category){
+      case "industrial":
+      case "other":
+        text_rot = textAngle(d);
+        break;
+      case "thermoelectric":
+      case "irrigation":
+        text_placement = [text_placement[0]*0.65,text_placement[1]*0.65];
+        break;
+      default:
+        break;
+    }
+    return "translate("+text_placement+")" + "rotate("+text_rot+")";
+	}
+	
+	function textPosition(cat) {
+	  var text_anchor = "end";
+    switch(cat){
+      case "thermoelectric":
+        text_anchor = "start";
+        break;
+      case "irrigation":
+        text_anchor = "middle";
+        break;
+      default:
+        break;
+    }
+    return text_anchor;
+	}
+	
   var width = 525,
       height = 350,
       radius = Math.min(width, height) / 3;
@@ -43,8 +83,8 @@ function loadPie() {
   var textArc = d3.arc()
       .startAngle(function(d) { return d.startAngle + rotate_value; })
       .endAngle(function(d) { return d.endAngle + rotate_value; })
-      .outerRadius(radius*1.25)
-      .innerRadius(radius*1.25);
+      .outerRadius(radius*0.95)
+      .innerRadius(radius*0.95);
   
   var slices = pie_g.selectAll(".slice")
     .data(pie(wu_national_no_total))
@@ -68,23 +108,29 @@ function loadPie() {
   sliceLabels
     .append("text")
       .classed('label-text', true)
-      .attr("transform", function(d) { return "translate(" + textArc.centroid(d) + ")"; })
+      .attr("transform", function(d) { return textTransform(d); })
       .attr("dy", "0.35em")
-      .attr("text-anchor", function(d) {
-        if( (textArc.centroid(d)[0] * 0.75) < path.centroid(d)[0] ) {
-          // label is more than 3/4 left of the pie center than the slice x centroid
-          // so essentially, only grabs labels way out on the left
-          return "end";
-        } else if ( (textArc.centroid(d)[0] * 0.75) > path.centroid(d)[0] ) {
-          // label is more than 3/4 right of the pie center than the slice x centroid
-          return "start";
-        } else {
-          // label is above or below pie center
-          return "middle";
-        }
-      })
+      .attr("text-anchor", function(d) { return textPosition(d.data.category); })
       .text(function(d) { 
-        return categoryToName(d.data.category)+' ('+d.data.wuperc+'%)'; 
+        if(d.data.category === "other") {
+          return d.data.wuperc+"%"; //other will have percent as main text
+        } else {
+          return categoryToName(d.data.category);
+        } 
+      }); 
+  
+  sliceLabels
+    .append("text")
+      .classed('label-text', true)
+      .attr("transform", function(d) { return textTransform(d); })
+      .attr("dy", "1.5em")
+      .attr("text-anchor", function(d) { return textPosition(d.data.category); })
+      .text(function(d) { 
+        if(d.data.category === "other") {
+          return ""; //other will have percent as main text
+        } else {
+          return d.data.wuperc+"%";
+        }   
       }); 
   
 }
