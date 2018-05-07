@@ -122,20 +122,20 @@ function rankEm(barData) {
     .on('mouseout',clearHighlight);
     
   draggableStates
-    .style('fill',categoryToColor("total"))
+    .style('fill',categoryToColor("total", 0.8))
     .style('stroke',"transparent")
     .style('stroke-width', 4);
   
   if (!rankSvg.isDragged){
     lockedBars.filter('.highlight')
-      .style('fill',categoryToColor('total',true));
+      .style('fill',categoryToColor('total',1));
       
     lockedStates.filter('.highlight')
       .raise()
       .style("stroke-dasharray", null)
       .style('stroke-width',4)
       .style('fill',"rgba(220,220,220, 0.4)")
-      .style('stroke',categoryToColor('total',true));
+      .style('stroke',categoryToColor('total',1));
     
     lockedBarNames.filter('.highlight')
       .style('font-weight', "bold");
@@ -155,7 +155,7 @@ function rankEm(barData) {
   openBars.filter('.highlight')
   .style("stroke-dasharray", null)
   .style('stroke-width', 0)
-  .style('fill',categoryToColor('total',true));  
+  .style('fill',categoryToColor('total',1));  
 };
   
   rankSvg.liftedState = function(d){

@@ -10,7 +10,8 @@ var waterUseViz = {
       widthDesktop: 250,
       heightDesktop: 275,
       width: null,
-      height: null
+      height: null,
+      titlesHeight: null
     },
     svg: {
       width: null,
@@ -140,7 +141,7 @@ function prepareMap() {
 // customize the caption according to the mode (mobile, desktop, etc.)
 function customizeCaption() {
   var captionText = 
-    "Circle sizes represent rates of water use by county. ";
+    "Circle sizes represent rates of water withdrawals by county. ";
   if(waterUseViz.interactionMode === 'tap') {
     captionText = captionText +
       "Tap in the legend to switch categories. " +
