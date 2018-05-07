@@ -39,20 +39,6 @@ function loadPie() {
       .outerRadius(radius)
       .innerRadius(0);
   
-  // for circles and inner most part of callout lines
-  var lineStartArc = d3.arc()
-      .startAngle(function(d) { return d.startAngle + rotate_value; })
-      .endAngle(function(d) { return d.endAngle + rotate_value; })
-      .outerRadius(radius*0.8)
-      .innerRadius(radius*0.8);
-  
-  // for end of the callout lines
-  var lineEndArc = d3.arc()
-      .startAngle(function(d) { return d.startAngle + rotate_value; })
-      .endAngle(function(d) { return d.endAngle + rotate_value; })
-      .outerRadius(radius*1.15)
-      .innerRadius(radius*1.15);
-  
   // for pie slice text placement
   var textArc = d3.arc()
       .startAngle(function(d) { return d.startAngle + rotate_value; })
@@ -78,21 +64,6 @@ function loadPie() {
         .enter()
         .append('g')
           .classed('slice-label', true);
-  
-  sliceLabels
-    .append("circle")
-      .classed('label-circle', true)
-      .attr('cx', function(d) { return lineStartArc.centroid(d)[0]; })
-      .attr('cy', function(d) { return lineStartArc.centroid(d)[1]; })
-      .attr('r', 2);
-    
-  sliceLabels
-    .append("line")
-      .classed('label-line', true)
-      .attr('x1', function(d, i) { return lineStartArc.centroid(d)[0]; })
-      .attr('y1', function(d, i) { return lineStartArc.centroid(d)[1]; })
-      .attr('x2', function(d, i) { return lineEndArc.centroid(d)[0]; })
-      .attr('y2', function(d, i) { return lineEndArc.centroid(d)[1]; });
     
   sliceLabels
     .append("text")
