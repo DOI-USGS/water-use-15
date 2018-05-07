@@ -216,6 +216,12 @@ function rankEm(barData) {
             .duration(600)
             .style('opacity',1);
           rankSvg.gameComplete = true;
+          gtag('event', 'finished state ranking' , {
+          'event_category': 'figure',
+          'event_label': draggedState,
+          'sessionId': sessionId,
+          'timestamp': timestamp
+        });
         }
   
       } else {
