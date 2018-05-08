@@ -57,8 +57,19 @@ geomcoll_to_poly <- function(sfg){
   }
 }
 
+linepoint_to_poly <- function(sfg){
+  # assumes lat/lon units
+  dtol <- 0.01
+  
+  # coerce into polygon
+  sfg_poly <- st_buffer(sfg, dtol)
+  
+  #simplify "rounded" polygon
+  st_simplify(sfg_poly, dTolerance = dtol/2)
+}
 
-rescale_write_shps <- function(filename_out, topojson_filename, ..., scale){
+
+rescale_write_shps <- function(filename_out, topojson_filename, ..., scale, quantize, coerce_dropped = FALSE){
   shps <- topojson_read(topojson_filename) %>% 
     st_as_sf() %>% 
     st_make_valid() 
@@ -81,7 +92,18 @@ rescale_write_shps <- function(filename_out, topojson_filename, ..., scale){
     }
   }
   
-  message('WARNING...dropping ', sum(drop_counties),' counties that were simplified to points or lines')
+  if (sum(drop_counties) > 0){
+    if (coerce_dropped){
+      message('coercing ', sum(drop_counties),' counties that were simplified to points or lines into polygons')
+      for (j in which(drop_counties)){
+        sfc_objects[[j]] <- linepoint_to_poly(sfg)
+      }
+      drop_counties[drop_counties] <- FALSE
+    } else {
+      message('WARNING...dropping ', sum(drop_counties),' counties that were simplified to points or lines')
+    }
+  }
+  
  
   sp_shp <- as_Spatial(sfc_objects[!drop_counties])
   st_geometry(shps) <- NULL
@@ -89,7 +111,6 @@ rescale_write_shps <- function(filename_out, topojson_filename, ..., scale){
   row.names(data_in) <- row.names(sp_shp)
   spdf_shp <- SpatialPolygonsDataFrame(sp_shp, data = data_in)
   
- 
   shifted_shps <- scale_shifted_shps(spdf_shp, ..., scale = scale)
   
   shifted_shps@data <- shifted_shps@data  %>%
@@ -98,9 +119,17 @@ rescale_write_shps <- function(filename_out, topojson_filename, ..., scale){
   
   tmp <- tempdir()
   geo_raw <- file.path(tmp, 'county_boundaries_raw.geojson')
+  topo_simple <- file.path(tmp, 'county_boundaries_simple.json')
   
   writeOGR(shifted_shps, geo_raw, layer = "geojson", driver = "GeoJSON", check_exists=FALSE)
+  if (topojson_filename == 'target/data/county_boundaries_zoom.json'){
+    browser()  
+  } else {
+    message(topojson_filename)
+  }
+  
   system(sprintf('echo Topojsonifying...
-    geo2topo counties=%s -o %s', geo_raw, filename_out))
+    geo2topo counties=%s -o %s
+    topoquantize %s %s -o %s', geo_raw, topo_simple, quantize, topo_simple, filename_out))
   
 }
