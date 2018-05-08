@@ -6,9 +6,12 @@ function loadPie() {
 		return rot_rad * 180 / Math.PI - 90;
 	}
 	
-	function textTransform(d) {
+	function textTransform(d, outside) {
 	  var text_placement = textArc.centroid(d);
 	      text_rot = 0;
+	  if(outside) { 
+	    text_placement = textOutsideArc.centroid(d);
+    } 
     switch(d.data.category){
       case "industrial":
         text_placement = [text_placement[0]*1.05,text_placement[1]*0.97];
@@ -59,7 +62,8 @@ function loadPie() {
 	
   var width = 525,
       height = 350,
-      radius = Math.min(width, height) / 3;
+      radius = Math.min(width, height) / 3,
+      other_cats = ["Domestic", "Livestock", "Aquaculture", "Mining"];
   
   var wu_national_no_total = waterUseViz.nationalData  
         .filter(function(d) { return d.category !== "total"; });
@@ -103,6 +107,14 @@ function loadPie() {
       .outerRadius(radius*0.95)
       .innerRadius(radius*0.95);
   
+  // for pie slice text placement that is on the outside of the circle
+  // multiply by 2, so that textOutsideArc.centroid(d) is at the edge of the pie.
+  var textOutsideArc = d3.arc()
+      .startAngle(function(d) { return d.startAngle + rotate_value; })
+      .endAngle(function(d) { return d.endAngle + rotate_value; })
+      .outerRadius(radius*2.1)
+      .innerRadius(0);
+  
   var slices = pie_g.selectAll(".slice")
     .data(pie(wu_national_no_total))
     .enter()
@@ -120,6 +132,7 @@ function loadPie() {
         .data(pie(wu_national_no_total))
         .enter()
         .append('g')
+          .attr('id', function(d) { return 'label-'+d.data.category; })
           .classed('slice-label', true);
     
   sliceLabels
@@ -150,5 +163,20 @@ function loadPie() {
           return d.data.wuperc+"%";
         }   
       }); 
+  
+  pie_g.select("#label-other")
+    .selectAll('.additional-label')
+    .data(other_cats)
+    .enter()
+    .append('text')
+      .classed('label-text', true)
+      .classed('additional-label', true)
+      .attr('font-size', '9px')
+      .attr("transform", function(d) {
+        var parent_data = d3.select(this.parentNode).datum();
+        return textTransform(parent_data, outside = true);
+      })
+      .attr('dy', function(d,i) { return (1*i-1.5)+"em"; })
+      .text(function(d) { return d; });
   
 }
