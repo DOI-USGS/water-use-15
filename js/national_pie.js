@@ -1,8 +1,30 @@
 // code to add a static pie chart of the national view
 function loadPie() {
-    
+  
+  function orderPieCategories(cat) {
+    var orderNum;
+    switch(cat) {
+      case "thermoelectric":
+        orderNum = 5;
+        break;
+      case "publicsupply":
+        orderNum = 4;
+        break;
+      case "irrigation":
+        orderNum = 1;
+        break;
+      case "industrial":
+        orderNum = 3;
+        break;
+      case "other":
+        orderNum = 2;
+        break;
+    }
+    return orderNum;
+  }
+  
   function textAngle(d){
-		var rot_rad = (d.startAngle + d.endAngle)/2 + rotate_value;
+    var rot_rad = (d.startAngle + d.endAngle)/2 + rotate_value;
 		return rot_rad * 180 / Math.PI - 90;
 	}
 	
@@ -14,7 +36,7 @@ function loadPie() {
     } 
     switch(d.data.category){
       case "industrial":
-        text_placement = [text_placement[0]*1.05,text_placement[1]*0.97];
+        text_placement = [text_placement[0],text_placement[1]*0.45];
         text_rot = textAngle(d);
         break;
       case "other":
@@ -65,8 +87,9 @@ function loadPie() {
       radius = Math.min(width, height) / 3,
       other_cats = ["Domestic", "Livestock", "Aquaculture", "Mining"];
   
-  var wu_national_no_total = waterUseViz.nationalData  
+  var wu_national_no_total = waterUseViz.nationalData
         .filter(function(d) { return d.category !== "total"; });
+  wu_national_no_total.forEach(function(d) { d.orderNum = +orderPieCategories(d.category); });
   var wu_national_total = waterUseViz.nationalData  
         .filter(function(d) { return d.category === "total"; });
   var wu_total = wu_national_total[0].wateruse;
@@ -76,11 +99,9 @@ function loadPie() {
   });
   
   // calculate rotation to get irrigation balanced on top
-  // calculate where thermo needs to start (how far from zero)
   // then convert from percent to radians
-  var thermo_percent = wu_national_no_total[[0]].wuperc,
-      irrigation_percent = wu_national_no_total[[2]].wuperc;
-  var rotate_value = (100 - (irrigation_percent/2 + thermo_percent )) * Math.PI / 50;
+  var irrigation_percent = wu_national_no_total[[2]].wuperc;
+  var rotate_value = (100 - irrigation_percent/2) * Math.PI / 50;
   
   var piearea = d3.select(".side-by-side-figure")
         .append("svg")
@@ -91,7 +112,8 @@ function loadPie() {
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
   var pie = d3.pie()
-      .value(function(d) { return d.wateruse; });
+      .value(function(d) { return d.wateruse; })
+      .sort(function(a,b) { return d3.ascending(a.orderNum, b.orderNum); });
       
   // for pie slices
   var path = d3.arc()
