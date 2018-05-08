@@ -43,8 +43,11 @@ function loadPie() {
 	}
 	
 	function textSize(cat) {
-	  var text_size = "12px";
+	  var text_size = "14px";
 	  switch(cat){
+      case "publicsupply":
+        text_size = "12px";
+        break;
       case "industrial":
         text_size = "10px";
         break;
