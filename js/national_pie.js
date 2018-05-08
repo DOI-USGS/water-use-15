@@ -144,6 +144,18 @@ function loadPie() {
       .text(function(d) { 
         if(d.data.category === "other") {
           return d.data.wuperc+"%"; //other will have percent as main text
+        } if(d.data.category === "publicsupply") {
+          // put "Public" on the line above "Supply"
+          var name_split = categoryToName(d.data.category).split(/\s+/);
+          d3.select(this.parentNode)
+            .append('text')
+              .classed('label-text', true)
+              .attr("transform", function(d) { return textTransform(d); })
+              .attr("text-anchor", function(d) { return textPosition(d.data.category); })
+              .attr("font-size", function(d) { return textSize(d.data.category); })
+              .attr('dy', '-1em')
+              .text(name_split[0]);
+          return name_split[1];
         } else {
           return categoryToName(d.data.category);
         } 
