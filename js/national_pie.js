@@ -26,6 +26,9 @@ function loadPie() {
       case "irrigation":
         text_placement = [text_placement[0]*0.65,text_placement[1]*0.65];
         break;
+      case "publicsupply":
+        text_placement = [text_placement[0]*0.8,text_placement[1]*0.8];
+        break;
       default:
         break;
     }
@@ -33,11 +36,11 @@ function loadPie() {
 	}
 	
 	function textPosition(cat) {
-	  var text_anchor = "end";
+	  var text_anchor = "middle";
     switch(cat){
-      case "thermoelectric":
-      case "irrigation":
-        text_anchor = "middle";
+      case "industrial":
+      case "other":
+        text_anchor = "end";
         break;
       default:
         break;
@@ -48,9 +51,6 @@ function loadPie() {
 	function textSize(cat) {
 	  var text_size = "14px";
 	  switch(cat){
-      case "publicsupply":
-        text_size = "12px";
-        break;
       case "industrial":
         text_size = "10px";
         break;
