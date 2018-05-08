@@ -36,14 +36,21 @@ scale_shifted_shps <- function(sp, ..., scale){
     stop(args, ' was not valid')
   }
   values <- args[[1]]
-  toshift_sp <- sp[sp@data[[field]] %in% values, ]
-  toshift_cent <- rgeos::gCentroid(toshift_sp, byid=F)@coords
-  toshift_scale <- max(apply(bbox(toshift_sp), 1, diff)) * scale
-  obj <- maptools::elide(toshift_sp, scale=toshift_scale, center=toshift_cent, bb = bbox(toshift_sp))
-  new_cent <- rgeos::gCentroid(obj, byid=FALSE)@coords
-  obj <- maptools::elide(obj, shift=c(toshift_cent-new_cent))
-  proj4string(obj) <- proj4string(sp)
-  sp_out <- rbind(sp[!(sp@data[[field]] %in% values), ], obj)
+  if (length(values) != length(scale)){
+    stop('number of values in ',field,' must equal the length of scale')
+  }
+  for (i in 1:length(values)){
+    toshift_sp <- sp[sp@data[[field]] == values[i], ]
+    toshift_cent <- rgeos::gCentroid(toshift_sp, byid=F)@coords
+    toshift_scale <- max(apply(bbox(toshift_sp), 1, diff)) * scale[i]
+    obj <- maptools::elide(toshift_sp, scale=toshift_scale, center=toshift_cent, bb = bbox(toshift_sp))
+    new_cent <- rgeos::gCentroid(obj, byid=FALSE)@coords
+    obj <- maptools::elide(obj, shift=c(toshift_cent-new_cent))
+    proj4string(obj) <- proj4string(sp)
+    sp_out <- rbind(sp[!(sp@data[[field]] == values[i]), ], obj)
+    sp <- sp_out
+  }
+  
   return(sp_out)
 }
 
