@@ -2,7 +2,7 @@
 function loadPie() {
     
   function textAngle(d){
-		var rot_rad = (d.startAngle - d.endAngle)/2 + rotate_value;
+		var rot_rad = (d.startAngle + d.endAngle)/2 + rotate_value;
 		return rot_rad * 180 / Math.PI - 90;
 	}
 	
