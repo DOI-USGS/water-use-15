@@ -6,8 +6,7 @@ process_counties <- function(outfile, county_sp, simplify, quantize, county_dict
   county_dict <- jsonlite::fromJSON(county_dict_file)
   county_sp@data <- county_sp@data %>%
     mutate(GEOID=as.character(GEOID)) %>%
-    left_join(county_dict, by='GEOID') %>%
-    select(GEOID, STATE_ABBV, COUNTY_LONG)
+    left_join(county_dict, by='GEOID')
   
   # define some file names
   tmp <- tempdir()
