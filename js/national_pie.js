@@ -40,6 +40,18 @@ function loadPie() {
     return text_anchor;
 	}
 	
+	function textSize(cat) {
+	  var text_size = "12px";
+	  switch(cat){
+      case "industrial":
+        text_size = "10px";
+        break;
+      default:
+        break;
+    }
+    return text_size;
+	}
+	
   var width = 525,
       height = 350,
       radius = Math.min(width, height) / 3;
@@ -111,6 +123,7 @@ function loadPie() {
       .attr("transform", function(d) { return textTransform(d); })
       .attr("dy", "0.35em")
       .attr("text-anchor", function(d) { return textPosition(d.data.category); })
+      .attr("font-size", function(d) { return textSize(d.data.category); })
       .text(function(d) { 
         if(d.data.category === "other") {
           return d.data.wuperc+"%"; //other will have percent as main text
@@ -125,6 +138,7 @@ function loadPie() {
       .attr("transform", function(d) { return textTransform(d); })
       .attr("dy", "1.5em")
       .attr("text-anchor", function(d) { return textPosition(d.data.category); })
+      .attr("font-size", function(d) { return textSize(d.data.category); })
       .text(function(d) { 
         if(d.data.category === "other") {
           return ""; //other will have percent as main text
