@@ -129,11 +129,6 @@ rescale_write_shps <- function(filename_out, topojson_filename, ..., scale, quan
   topo_simple <- file.path(tmp, 'county_boundaries_simple.json')
   
   writeOGR(shifted_shps, geo_raw, layer = "geojson", driver = "GeoJSON", check_exists=FALSE)
-  if (topojson_filename == 'target/data/county_boundaries_zoom.json'){
-    browser()  
-  } else {
-    message(topojson_filename)
-  }
   
   system(sprintf('echo Topojsonifying...
     geo2topo counties=%s -o %s
