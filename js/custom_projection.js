@@ -78,7 +78,7 @@ function albersUsaTerritories() {
 
     return (y >= 0.120 && y < 0.234 && x >= -0.425 && x < -0.214 ? alaska
         : y >= 0.166 && y < 0.234 && x >= -0.214 && x < -0.115 ? hawaii
-        : y >= 0.130 && y < 0.190 && x >= 0.270 && x < 0.410 ? puertoRico
+        : y >= 0.110 && y < 0.190 && x >= 0.243 && x < 0.510 ? puertoRico
         : lower48).invert(coordinates);
 
   };
@@ -176,8 +176,8 @@ function albersUsaTerritories() {
         .stream(pointStream);
 
     puertoRicoPoint = puertoRico
-        .translate([x + 0.340 * k, y + 0.170 * k])
-        .clipExtent([[x + 0.270 * k + epsilon, y + 0.130 * k + epsilon],[x + 0.410 * k - epsilon, y + 0.190 * k - epsilon]])
+        .translate([x + 0.350 * k, y + 0.140 * k])
+        .clipExtent([[x + 0.243 * k + epsilon, y + 0.110 * k + epsilon],[x + 0.510 * k - epsilon, y + 0.190 * k - epsilon]])
         .stream(pointStream);
 
 
