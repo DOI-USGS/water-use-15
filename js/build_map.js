@@ -10,7 +10,8 @@ var waterUseViz = {
       widthDesktop: 250,
       heightDesktop: 275,
       width: null,
-      height: null
+      height: null,
+      titlesHeight: null
     },
     svg: {
       width: null,
@@ -140,7 +141,7 @@ function prepareMap() {
 // customize the caption according to the mode (mobile, desktop, etc.)
 function customizeCaption() {
   var captionText = 
-    "Circle sizes represent rates of water use by county. ";
+    "Circle sizes represent rates of water withdrawals by county. ";
   if(waterUseViz.interactionMode === 'tap') {
     captionText = captionText +
       "Tap in the legend to switch categories. " +
@@ -200,10 +201,10 @@ function fillMap() {
   
   // add the circles
   // CIRCLES-AS-CIRCLES
-  addCircles(countyCentroids);
+  /*addCircles(countyCentroids);*/
   // CIRCLES-AS-PATHS
-  /*var circlesPaths = prepareCirclePaths(categories, countyCentroids);
-  addCircles(circlesPaths);*/
+  var circlesPaths = prepareCirclePaths(categories, countyCentroids);
+  addCircles(circlesPaths);
   updateCircleCategory(activeCategory);
   
   // manipulate dropdowns

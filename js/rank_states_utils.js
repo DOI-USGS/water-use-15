@@ -122,20 +122,20 @@ function rankEm(barData) {
     .on('mouseout',clearHighlight);
     
   draggableStates
-    .style('fill',categoryToColor("total"))
+    .style('fill',categoryToColor("total", 0.8))
     .style('stroke',"transparent")
     .style('stroke-width', 4);
   
   if (!rankSvg.isDragged){
     lockedBars.filter('.highlight')
-      .style('fill',categoryToColor('total',true));
+      .style('fill',categoryToColor('total',1));
       
     lockedStates.filter('.highlight')
       .raise()
       .style("stroke-dasharray", null)
       .style('stroke-width',4)
       .style('fill',"rgba(220,220,220, 0.4)")
-      .style('stroke',categoryToColor('total',true));
+      .style('stroke',categoryToColor('total',1));
     
     lockedBarNames.filter('.highlight')
       .style('font-weight', "bold");
@@ -155,7 +155,7 @@ function rankEm(barData) {
   openBars.filter('.highlight')
   .style("stroke-dasharray", null)
   .style('stroke-width', 0)
-  .style('fill',categoryToColor('total',true));  
+  .style('fill',categoryToColor('total',1));  
 };
   
   rankSvg.liftedState = function(d){
@@ -175,14 +175,23 @@ function rankEm(barData) {
   rankSvg.droppedState = function(d){
     rankSvg.isDragged = false;
     var barchoice = d3.select('.chosen-rank-bar');
-        
+    var sessionId = getSessionId();
+    var timestamp = getTimestamp();
+    var draggedState = d3.select(this).attr('id').split('-')[0];
     if (barchoice.empty()){
       d3.select(this)
         .transition().duration(600)
           .attr('transform','translate(0,0)'); 
+      
+      gtag('event', 'dropped state off bars' , {
+          'event_category': 'figure',
+          'event_label': draggedState,
+          'sessionId': sessionId,
+          'timestamp': timestamp
+      });
     } else {
       var stateName = barchoice.attr('id').split('-')[0];
-      if (stateName === d3.select(this).attr('id').split('-')[0]){
+      if (stateName === draggedState){
         // the guess is right
         barchoice.attr('class','locked-rank-bar');
         d3.select(barchoice.node().parentNode).select('text')
@@ -191,7 +200,12 @@ function rankEm(barData) {
           .attr('class',null)
           .transition().duration(600)
             .style('opacity', 0);
-        
+        gtag('event', 'dropped state correctly' , {
+          'event_category': 'figure',
+          'event_label': draggedState,
+          'sessionId': sessionId,
+          'timestamp': timestamp
+        });
         // is this the last one? if so, remove the directions    
         if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
           d3.select('#rank-directions')
@@ -202,6 +216,12 @@ function rankEm(barData) {
             .duration(600)
             .style('opacity',1);
           rankSvg.gameComplete = true;
+          gtag('event', 'finished state ranking' , {
+          'event_category': 'figure',
+          'event_label': draggedState,
+          'sessionId': sessionId,
+          'timestamp': timestamp
+        });
         }
   
       } else {
@@ -218,6 +238,12 @@ function rankEm(barData) {
             .style('stroke-width',1.5)
             .style('stroke-dashoffset',"12"); // needs to be a multiple of stroke-dasharray to look smooth
         barchoice.style('stroke-dashoffset',null); // resets to "0", which doesn't change the look
+        gtag('event', 'dropped state wrong' , {
+          'event_category': 'figure',
+          'event_label': draggedState + ' on ' + stateName,
+          'sessionId': sessionId,
+          'timestamp': timestamp
+        });
       }
     }
     rankSvg.updateStyles();
