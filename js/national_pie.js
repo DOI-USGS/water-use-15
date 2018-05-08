@@ -9,13 +9,17 @@ function loadPie() {
 	function textTransform(d) {
 	  var text_placement = textArc.centroid(d);
 	      text_rot = 0;
-	  console.log(text_placement);
     switch(d.data.category){
       case "industrial":
+        text_placement = [text_placement[0]*1.05,text_placement[1]*0.97];
+        text_rot = textAngle(d);
+        break;
       case "other":
         text_rot = textAngle(d);
         break;
       case "thermoelectric":
+        text_placement = [text_placement[0]*0.55,text_placement[1]*0.65];
+        break;
       case "irrigation":
         text_placement = [text_placement[0]*0.65,text_placement[1]*0.65];
         break;
@@ -29,8 +33,6 @@ function loadPie() {
 	  var text_anchor = "end";
     switch(cat){
       case "thermoelectric":
-        text_anchor = "start";
-        break;
       case "irrigation":
         text_anchor = "middle";
         break;
@@ -121,7 +123,6 @@ function loadPie() {
     .append("text")
       .classed('label-text', true)
       .attr("transform", function(d) { return textTransform(d); })
-      .attr("dy", "0.35em")
       .attr("text-anchor", function(d) { return textPosition(d.data.category); })
       .attr("font-size", function(d) { return textSize(d.data.category); })
       .text(function(d) { 
@@ -135,8 +136,8 @@ function loadPie() {
   sliceLabels
     .append("text")
       .classed('label-text', true)
+      .attr("dy", "1.2em")
       .attr("transform", function(d) { return textTransform(d); })
-      .attr("dy", "1.5em")
       .attr("text-anchor", function(d) { return textPosition(d.data.category); })
       .attr("font-size", function(d) { return textSize(d.data.category); })
       .text(function(d) { 
