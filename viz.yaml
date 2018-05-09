@@ -69,6 +69,22 @@ info:
       name: Alison Appling
       email: aappling@usgs.gov
       affiliation: U.S. Geological Survey
+    -
+      name: Marty Wernimont
+      email: mwernimont@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: Jordan Read
+      email: jread@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: Laura DeCicco
+      email: ldecicco@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: David Watkins
+      email: wwatkins@usgs.gov
+      affiliation: U.S. Geological Survey
 
 parameter:
   -
