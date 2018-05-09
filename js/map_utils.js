@@ -246,6 +246,7 @@ function updateCategory(category, prevCategory) {
 function showCategory(category, prevCategory, action) {
   if(prevCategory !== category) {
     updateButtons(category);
+    updateButtonWidths(category);
     updateCircleCategory(category);
     if(action !== "mouseout") {
       documentCategorySwitch(category, prevCategory, action);
