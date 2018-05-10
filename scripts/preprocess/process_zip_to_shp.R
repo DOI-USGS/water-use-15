@@ -35,6 +35,9 @@ scale_shifted_shps <- function(sp, ..., scale){
   if (length(field) != 1){
     stop(args, ' was not valid')
   }
+  # we can specify a single "field" name that is an attribute of the spatial data (e.g., STATEFP)
+  # that "field" can have multiple values (e.g, "02" and "71") that we'll apply "scale" to. 
+  # here we test that the length of "scale" is equal to the length of the values:
   values <- args[[1]]
   if (length(values) != length(scale)){
     stop('number of values in ',field,' must equal the length of scale')
