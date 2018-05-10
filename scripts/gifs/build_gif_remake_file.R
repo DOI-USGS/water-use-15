@@ -59,7 +59,7 @@ step6 <- create_task_step(
 step7 <- create_task_step(
   step_name = 'water_use',
   target = function(task_name, step_name, ...) {
-    sprintf('gifs/%s_%s.gif', task_name, step_name)
+    sprintf('gifs/%s_%s.gif.ind', task_name, step_name)
   },
   
   command = function(target_name, task_name, ...) {
@@ -71,7 +71,7 @@ step7 <- create_task_step(
 )
 
 task_plan <- create_task_plan(task_config$id, list(step1, step2, step3, step4, step5, step6, step7),
-                              final_steps='water_use', ind_dir='gifs/log')
+                              final_steps='water_use', ind_dir='gifs', add_complete=FALSE)
 task_makefile <- create_task_makefile(
   task_plan, makefile='state_gifs.yml',
   sources = c('scripts/gifs/map_utils.R','scripts/gifs/data_utils.R','scripts/gifs/draw_utils.R'),

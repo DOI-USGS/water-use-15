@@ -107,7 +107,7 @@ calc_frame_filenames <- function(frames, ...){
   return(filenames)
 }
 
-build_wu_gif <- function(state_sp, county_sp, dots_sp, state_totals, state_layout, watermark_file, gif_filename, frames = 10, ...){
+build_wu_gif <- function(state_sp, county_sp, dots_sp, state_totals, state_layout, watermark_file, ind_file, frames = 10, ...){
   
   frame_filenames <- calc_frame_filenames(frames, ...)
   
@@ -164,11 +164,12 @@ build_wu_gif <- function(state_sp, county_sp, dots_sp, state_totals, state_layou
     
   }
   
+  gif_filename <- as_data_file(ind_file)
+  
   system(paste0("convert -loop 0 -delay 15 ", paste(file.path(temp_dir, frame_filenames), collapse = " "), " ", gif_filename))
   
   system(sprintf('gifsicle -b %s %s --colors 256', gif_filename, gifsicle_out))
-  browser()
-  gd_put(remote_ind = paste0(gif_filename, '.ind'), local_source = gif_filename, config_file = 'gifs/gd_config.yml')
+  gd_put(remote_ind = ind_file, local_source = gif_filename, config_file = 'gifs/gd_config.yml')
 }
 
 categories <- function(){
