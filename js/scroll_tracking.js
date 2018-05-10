@@ -31,7 +31,6 @@ window.onload = function() {
       var currentElement = document.getElementById(currentId);
       
       if(isPastViewport(currentElement) && !scrolledTo[currentId]) {
-        console.log(currentId);
   		  scrollEventTrigger(currentId);
   		  scrolledTo[currentId] = true;
   	  }
