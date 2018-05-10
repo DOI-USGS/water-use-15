@@ -14,8 +14,8 @@ window.onload = function() {
     var timestamp = getTimestamp();
     
     function scrollEventTrigger(id) {
-      gtag('event', 'scrolled' , {
-          'event_category': 'figure',
+      gtag('event', 'scroll' , {
+          'event_category': 'scroll',
           'event_label': 'scrolled to ' + id,
           'sessionId': sessionId,
           'timestamp': timestamp
