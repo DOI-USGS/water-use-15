@@ -19,6 +19,7 @@ packages:
   - dplyr
   - mapdata
   - jsonlite
+  - scipiper
 
 sources:
   - scripts/gifs/map_utils.R

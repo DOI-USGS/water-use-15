@@ -70,7 +70,6 @@ step7 <- create_task_step(
   }
 )
 
-
 task_plan <- create_task_plan(task_config$id, list(step1, step2, step3, step4, step5, step6, step7),
                               final_steps='water_use', ind_dir='gifs/log')
 task_makefile <- create_task_makefile(
@@ -78,4 +77,4 @@ task_makefile <- create_task_makefile(
   sources = c('scripts/gifs/map_utils.R','scripts/gifs/data_utils.R','scripts/gifs/draw_utils.R'),
   include = 'gif_globals.yml',
   file_extensions=c('ind'), 
-  packages=c('sp','maps','maptools','rgeos','readr','stringr','dataRetrieval','lubridate','dplyr','mapdata','jsonlite'))
+  packages=c('sp','maps','maptools','rgeos','readr','stringr','dataRetrieval','lubridate','dplyr','mapdata','jsonlite','scipiper'))
