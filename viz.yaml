@@ -14,7 +14,7 @@ info:
   required-packages:
     vizlab:
       repo: github
-      version: 0.3.4
+      version: 0.3.5
       name: USGS-VIZLAB/vizlab
       ref: c0889d88e9df47dbb763be2bf335c6de8d7b57fd
     aws.s3:
@@ -256,6 +256,7 @@ publish:
       buttons: buttons
       resize: resize
       modernizr: modernizr
+      lazy_loader: lazy_loader
       map_utils: "map_utils"
       watermark_utils: "watermark_utils"
       map_circles: map_circles
@@ -279,7 +280,7 @@ publish:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr",
-                  "national_pie", "rank_states_utils", "scroll_tracking"]
+                  "lazy_loader", "national_pie", "rank_states_utils", "scroll_tracking"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb-facebook
@@ -351,6 +352,10 @@ publish:
     location: "js/modernizr_custom.js"
     mimetype: application/javascript
   -
+    id: lazy_loader
+    location: "js/lazy_loading.js"
+    mimetype: application/javascript
+  -
     id: scroll_tracking
     location: "js/scroll_tracking.js"
     mimetype: application/javascript
@@ -412,12 +417,23 @@ publish:
       High water use: Illinois (steel production), the Northeast (power generation), Arkansas (irrigation), & Gulf Coast (industry)
     relpath: "images/WU_stories_mobile_right.jpg"
   -
+    id: placeholder
+    location: "images/placeholder.gif"
+    mimetype: image/gif
+    title: "A national map with notes about areas of high water use"
+    alttext: >-
+      High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
+    relpath: "images/placeholder.gif"
+    data-src: "images/WU_stories_static.jpg"
+    class: "lazy"
+  -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: ["styles", "static_story_figure", 
+    depends: ["styles", "placeholder", "static_story_figure", 
               "static_story_figure_mobile_left", 
               "static_story_figure_mobile_right"]
     context:
+      placeholder: "placeholder"
       pie_map_plot: "static_story_figure"
       mobile_left_pie_plot: "static_story_figure_mobile_left"
       mobile_right_pie_plot: "static_story_figure_mobile_right"

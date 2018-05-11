@@ -3,6 +3,10 @@
   margin:0;
 }
 
+.lazy{
+	opacity:0;
+}
+
 .mobile-UI-Container{
   display:flex;
   flex-direction:row;
