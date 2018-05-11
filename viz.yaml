@@ -420,8 +420,9 @@ publish:
     id: placeholder
     location: "images/placeholder.gif"
     mimetype: image/gif
-    title: "Place Holder gif for lazy loading images"
-    alttext: "Place Holder gif for lazy loading images"
+    title: "A national map with notes about areas of high water use"
+    alttext: >-
+      High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
     relpath: "images/placeholder.gif"
     data-src: "images/WU_stories_static.jpg"
     class: "lazy"
