@@ -19,9 +19,9 @@ sources:
 targets:
   all: 
     depends: 
-      - figures/thumb_landing.png
-      - figures/thumb_facebook.png
-      - figures/thumb_twitter.png
+      - images/thumb_landing.png
+      - images/thumb_facebook.png
+      - images/thumb_twitter.png
  
   plot_metadata_landing:
     command: list(width = I(400), height = I(400), res = I(300),
@@ -58,11 +58,11 @@ targets:
   us_dots:
     command: shift_centroids(county_dots)
   
-  figures/thumb_landing.png:
+  images/thumb_landing.png:
     command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_landing, target_name, watermark_file)
 
-  figures/thumb_facebook.png:
+  images/thumb_facebook.png:
     command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_facebook, target_name, watermark_file)
 
-  figures/thumb_twitter.png:
+  images/thumb_twitter.png:
     command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_twitter, target_name, watermark_file)
