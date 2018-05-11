@@ -273,7 +273,9 @@ publish:
       county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: "county_centroids_wu_tsv"
       wu_data_15_range:  "wu_data_15_range_json"
-      thumb-facebook: thumb-facebook
+      thumb_facebook: thumb_facebook
+      thumb_twitter: thumb_twitter
+      thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
@@ -282,9 +284,9 @@ publish:
                   "national_pie", "rank_states_utils", "scroll_tracking"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
-        twitter: thumb-facebook
-        facebook: thumb-facebook
-        main: thumb-facebook
+        twitter: thumb_twitter
+        facebook: thumb_facebook
+        main: thumb_landing
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -492,11 +494,27 @@ publish:
                   "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
       embed: ["map_section"]
   -
-    id: thumb-facebook
-    location: images/WU_stories_static_thumbs.png
+    id: thumb_facebook
     publisher: thumbnail
+    location: images/thumb_facebook.png
+    relpath: images/thumb_facebook.png
     mimetype: image/png
-    thumbType: ["facebook","twitter"]
     title: "Facebook Thumbnail"
     alttext: "Facebook Thumbnail"
+  -
+    id: thumb_twitter
+    publisher: thumbnail
+    location: images/thumb_twitter.png
+    relpath: images/thumb_twitter.png
+    mimetype: image/png
+    title: "Twitter Thumbnail"
+    alttext: "Twitter Thumbnail"
+  -
+    id: thumb_landing
+    publisher: thumbnail
+    location: images/thumb_landing.png
+    relpath: images/thumb_landing.png
+    mimetype: image/png
+    title: "Landing Page Thumbnail"
+    alttext: "Landing Page Thumbnail"
 
