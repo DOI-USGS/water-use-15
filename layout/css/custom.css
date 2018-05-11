@@ -7,6 +7,7 @@
 	opacity:0;
 }
 
+
 .mobile-UI-Container{
   display:flex;
   flex-direction:row;
@@ -125,10 +126,6 @@
   margin-bottom:40px;
 }
 
-.desktop-figure{
-  display: none;
-}
-
 #directions {
   padding-left: 20px;
   padding-right: 40px;
@@ -234,14 +231,6 @@
     margin:auto;
     top:0; bottom:0; left:0; right:0;
     height:80px;
-  }
-  
-  .desktop-figure{
-    display: block;
-  }
-  
-  .mobile-figure{
-    display: none;
   }
   
   #data-collection{
