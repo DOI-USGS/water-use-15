@@ -151,7 +151,7 @@ function customizeCaption() {
       "Hover over the map for details. Click a button to switch categories. " +
       "Click a state to zoom in, and click the same state to zoom out.";
   }
-  console.log(d3.select('#fig-caption'));
+  
   d3.select('#fig-caption p')
     .text(captionText);
 }
