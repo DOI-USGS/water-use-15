@@ -1,0 +1,68 @@
+packages:
+  - sp
+  - maps
+  - maptools
+  - rgeos 
+  - stringr
+  - dataRetrieval
+  - lubridate
+  - dplyr
+  - mapdata
+  - jsonlite
+  - geojsonio
+
+sources:
+  - scripts/piemap/map_utils.R
+  - scripts/piemap/data_utils.R
+  - scripts/piemap/draw_utils.R
+  
+targets:
+  all: 
+    depends: 
+      - figures/thumb_landing.png
+      - figures/thumb_facebook.png
+      - figures/thumb_twitter.png
+ 
+  plot_metadata_landing:
+    command: list(width = I(400), height = I(400), res = I(300),
+                  bg = I("#eaedef"), stateborder = I("white"),
+                  countyborder = I(NA), countyfill = I("white"),
+                  stateborderwidth = I(1))
+ 
+  plot_metadata_facebook:
+    command: list(width = I(1560), height = I(820), res = I(300), 
+                  bg = I("#eaedef"), stateborder = I("#a3a5a7"),
+                  countyborder = I(NA), countyfill = I("white"),
+                  stateborderwidth = I(1.5))
+  
+  plot_metadata_twitter:
+    command: list(width = I(560), height = I(300), res = I(300), 
+                  bg = I("#eaedef"), stateborder = I("white"),
+                  countyborder = I(NA), countyfill = I("white"),
+                  stateborderwidth = I(1))
+ 
+  watermark_file:
+    command: c("images/usgs_logo_black.png")
+  
+  county_dots:
+    command: get_dots('cache/county_centroids_wu.json')
+    
+  us_states:
+    command: state_sp()
+  
+  # This county spatial data is from:
+  #     https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
+  us_counties:
+    command: reproject_census('data/cb_2017_us_county_5m.shp')
+    
+  us_dots:
+    command: shift_centroids(county_dots)
+  
+  figures/thumb_landing.png:
+    command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_landing, target_name, watermark_file)
+
+  figures/thumb_facebook.png:
+    command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_facebook, target_name, watermark_file)
+
+  figures/thumb_twitter.png:
+    command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_twitter, target_name, watermark_file)
