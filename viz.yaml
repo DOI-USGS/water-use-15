@@ -399,23 +399,14 @@ publish:
       High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
     relpath: "images/WU_stories_static.jpg"
   -
-    id: static_story_figure_mobile_left
-    location: "images/WU_stories_mobile_left.jpg"
+    id: static_story_figure_mobile
+    location: "images/WU_stories_static_mobile.jpg"
     mimetype: image/jpg
     export: true
     title: "Map of the western U.S. with notes about areas of high water use"
     alttext:  >-
       Areas of high water use: Idaho (aquaculture), California (irrigation), Alaska (mining), & big cities (public supply)
     relpath: "images/WU_stories_mobile_left.jpg"
-  -
-    id: static_story_figure_mobile_right
-    location: "images/WU_stories_mobile_right.jpg"
-    mimetype: image/jpg
-    export: true
-    title: "Map of the eastern U.S. with notes about areas of high water use"
-    alttext:  >-
-      High water use: Illinois (steel production), the Northeast (power generation), Arkansas (irrigation), & Gulf Coast (industry)
-    relpath: "images/WU_stories_mobile_right.jpg"
   -
     id: placeholder
     location: "images/placeholder.gif"
@@ -429,14 +420,11 @@ publish:
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: ["styles", "placeholder", "static_story_figure", 
-              "static_story_figure_mobile_left", 
-              "static_story_figure_mobile_right"]
+    depends: ["styles", "placeholder", "static_story_figure", "static_story_figure_mobile"]
     context:
       placeholder: "placeholder"
       pie_map_plot: "static_story_figure"
-      mobile_left_pie_plot: "static_story_figure_mobile_left"
-      mobile_right_pie_plot: "static_story_figure_mobile_right"
+      mobile_pie_map_plot: "static_story_figure_mobile"
     publisher: section
   -
     id: mobile_map_ui
