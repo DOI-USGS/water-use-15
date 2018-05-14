@@ -8,16 +8,21 @@ make_arc <- function(x0, y0, r, from_angle, to_angle){
 }
 
 
-plot_national_pies <- function(us_states, us_counties, us_dots, metadata, filename){
-  png(filename, width = metadata[1], height = metadata[2], res=metadata[3], units = 'in')
-  par(mai=c(0,0,0,0), omi=c(0,0,0,0)) #, xaxs = 'i', yaxs = 'i'
+plot_national_pies <- function(us_states, us_counties, us_dots, metadata, filename, watermark_file = NULL){
   
-  plot(us_states, col = NA, border = "grey50", lwd = 0.2)
-
-  plot(us_counties, col = "grey90", border = "grey94", lwd = 0.5, add = TRUE)
+  if(is.null(metadata$units)) { metadata$units <- "px" }
+  
+  png(filename, width = metadata$width, height = metadata$height, res=metadata$res, units = metadata$units)
+  par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = metadata$bg) #, xaxs = 'i', yaxs = 'i'
+  
+  plot(us_states, col = NA, border = metadata$stateborder, lwd = metadata$stateborderwidth)
+  
+  plot(us_counties, col = metadata$countyfill, border = metadata$countyborder, lwd = 0.5, add = TRUE)
   
   # don't plot state/terr border if it is a shifted state
-  plot(us_states[!names(us_states) %in% c('PR','AK','HI')], col = NA, border = "white", lwd = 0.8, add = TRUE)
+  # plot(us_states[!names(us_states) %in% c('PR','AK','HI')], col = NA, border = metadata$bg, lwd = 0.8, add = TRUE)
+  
+  if(!is.null(watermark_file)) { add_watermark(watermark_file) }
   
   dot_to_pie(us_dots)
   
@@ -89,4 +94,28 @@ plot_slice <- function(x,y,r,angle_from, angle_to, cat, col = NULL){
           border = NA,
           col = fill_col(col))
   lines(segments$x, segments$y, lwd=0.4, col = col)
+}
+
+add_watermark <- function(watermark_file, ...){
+  # --- watermark ---
+  watermark_frac <- 0.15 # fraction of the width of the figure
+  watermark_bump_frac <- 0.01
+  coord_space <- par()$usr
+  
+  watermark_alpha <- 0.4
+  d <- png::readPNG(watermark_file)
+  
+  which_image <- d[,,4] != 0 # transparency
+  d[which_image] <- watermark_alpha
+  
+  coord_width <- coord_space[2]-coord_space[1]
+  coord_height <- coord_space[4]-coord_space[3]
+  watermark_width <- dim(d)[2]
+  img_scale <- coord_width*watermark_frac/watermark_width
+  
+  x1 <- coord_space[2]-coord_width*watermark_bump_frac
+  y1 <- coord_space[3]+coord_height*watermark_bump_frac
+  
+  rasterImage(d, x1-ncol(d)*img_scale, y1, x1, y1+nrow(d)*img_scale)
+  
 }

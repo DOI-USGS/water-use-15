@@ -22,7 +22,10 @@ targets:
       - figures/national_pies.png
   
   plot_metadata:
-    command: c(width = I(7), height = I(4.3), res = I(500))
+    command: list(width = I(7), height = I(4.3), res = I(500), units = I("in"), 
+                  bg = I("white"), stateborder = I("grey50"),
+                  countyborder = I("grey94"), countyfill = I("grey90"),
+                  stateborderwidth = I(0.2))
   
   county_dots:
     command: get_dots('cache/county_centroids_wu.json')
