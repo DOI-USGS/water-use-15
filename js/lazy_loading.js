@@ -8,16 +8,21 @@ registerListener('resize', lazyLoad);
 
 function setLazy(){
     lazy = document.getElementsByClassName('lazy');
-    console.log('Found ' + lazy.length + ' lazy images');
 } 
+
 function lazyLoad(){
     for(var i=0; i<lazy.length; i++){
         if(isInViewport(lazy[i])){
-          console.log(lazy[i]);
     			lazy[i].style.transition="opacity 2s";
     			lazy[i].style.opacity= 1;
             if (lazy[i].getAttribute('data-src')){
-                lazy[i].src = lazy[i].getAttribute('data-src');
+                //Check to see if the browser allows the picture element
+                if(lazy[i].getAttribute('srcset')){
+                  lazy[i].setAttribute('srcset', lazy[i].getAttribute('data-src'));
+                //If not it loaded the backup image and needs to switch the src not the srcset
+                }else{
+                  lazy[i].src = lazy[i].getAttribute('data-src');
+                }
                 lazy[i].removeAttribute('data-src');
             }
         }
@@ -25,9 +30,11 @@ function lazyLoad(){
     
     cleanLazy();
 }
+
 function cleanLazy(){
     lazy = Array.prototype.filter.call(lazy, function(l){ return l.getAttribute('data-src');});
 }
+
 function isInViewport(el){
     var rect = el.getBoundingClientRect();
     
@@ -38,6 +45,7 @@ function isInViewport(el){
         rect.left <= (window.innerWidth || document.documentElement.clientWidth)
      );
 }
+
 function registerListener(event, func) {
     if (window.addEventListener) {
         window.addEventListener(event, func);
