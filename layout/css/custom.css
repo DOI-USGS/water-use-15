@@ -7,6 +7,16 @@
 	opacity:0;
 }
 
+#national-static-pie-mobile-content{
+  display:none;
+}
+
+.readMore{
+  text-align: center;
+  color:#003366;
+  cursor:pointer;
+  
+}
 
 .mobile-UI-Container{
   display:flex;
@@ -193,6 +203,11 @@
 }
 
 @media screen and (min-width:600px){
+  
+  #national-static-pie-mobile-container{
+    display:none;
+  }
+  
   .button text{
     font-size:1.3em;
     dominant-baseline:central;

@@ -262,7 +262,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: "map_counties"
-      dropdown_selector: "dropdown_selector"
+      mobile_ui: "mobile_ui"
       national_pie: "national_pie"
       rank_states_utils: "rank_states_utils"
       scroll_tracking: "scroll_tracking"
@@ -281,7 +281,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr",
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr",
                   "lazy_loader", "national_pie", "rank_states_utils", "scroll_tracking"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
@@ -346,8 +346,8 @@ publish:
     location: "js/counties.js"
     mimetype: application/javascript
   -
-    id: dropdown_selector
-    location: "js/dropdown_selector.js"
+    id: mobile_ui
+    location: "js/mobile_ui.js"
     mimetype: application/javascript
   -
     id: modernizr
@@ -480,7 +480,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: map_counties
-      dropdown_selector: dropdown_selector
+      mobile_ui: mobile_ui
       modernizr: modernizr
       map_section: map_section
       state_boundaries_USA: state_boundaries_USA_topojson
@@ -495,7 +495,7 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr"]
       embed: ["map_section"]
   -
     id: thumb_facebook
