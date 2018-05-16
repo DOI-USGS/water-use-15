@@ -208,10 +208,10 @@ window.addEventListener('load', function(event){
   expandInteract.onclick = function(){
     if(contentToShow.style.display === "block"){
       contentToShow.style.display="none";
-      expandInteract.innerHTML = 'Expand to read more'
+      expandInteract.innerHTML = 'Read More'
     }else{
       contentToShow.style.display="block";
-      expandInteract.innerHTML = 'Click to hide'
+      expandInteract.innerHTML = 'Hide'
     }
     
   };
