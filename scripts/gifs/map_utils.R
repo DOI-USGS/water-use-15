@@ -33,7 +33,6 @@ get_proj <- function(proj_data, state_name){
 get_shifts <- function(){
   list(AK = list(scale = 0.47, shift = c(90,-465), rotate = -50),
        HI = list(scale = 1.5, shift = c(520, -110), rotate = -35),
-       #VI = list(scale = 3.5, shift = c(-130, 90), rotate=20),
        PR = list(scale = 3.5, shift = c(-130, 90), rotate=20))
 }
 
@@ -41,33 +40,29 @@ get_moves <- function(){
   list(
     AK = to_sp("world", "USA:alaska"),
     HI = to_sp("world", "USA:hawaii"),
-    #VI = to_sp("world2Hires", "Puerto Rico"),
     PR = to_sp("world2Hires", "Puerto Rico")
   )
 }
 
-reproject_census <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"){
-  
-  layer <- strsplit(basename(filename), split = '[.]')[[1]][1]
-  states.in <- rgdal::readOGR(dirname(filename), layer) %>% 
-    spTransform(CRS(proj.string)) %>% 
-    gBuffer(byid = TRUE, width=0)
-  
-  moves <- get_moves()
-  code.map <- c(AK = "02", HI = "15", PR = "72")
+shifted_topojson <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"){
+  states <- topojson_read(filename)
+  proj4string(states) <- CRS("+proj=longlat +datum=WGS84")
+  states_proj <- spTransform(states, CRS(proj.string))
   shifts <- get_shifts()
-  states.out <- subset(states.in, !STATEFP %in% c(names(code.map), 'VI'))
+  moves <- get_moves()
+  code.map <- list(AK = "AK", HI = "HI", PR = c("PR","VI"))
+  shift_abbr <- code.map %>% unlist %>% unname
+  states_out <- subset(states_proj, !STATE_ABBV %in% shift_abbr)
   
   for(region in names(code.map)){
-    to_shift <- subset(states.in, STATEFP == code.map[[region]])
+    to_shift <- subset(states_proj, STATE_ABBV %in% code.map[[region]])
     shifted <- do.call(shift_sp, append(list(sp = to_shift, 
-                                   ref = moves[[region]],
-                                   proj.string = proj4string(states.out),
-                                   row.names = row.names(to_shift)), shifts[[region]]))
-    states.out <- rbind(shifted, states.out, makeUniqueIDs = TRUE)
+                                             ref = moves[[region]],
+                                             proj.string = proj4string(states_out),
+                                             row.names = row.names(to_shift)), shifts[[region]]))
+    states_out <- rbind(shifted, states_out, makeUniqueIDs = TRUE)
   }
-  
-  return(states.out)
+  return(states_out)
 }
 
 #' create the sp object 
@@ -103,27 +98,6 @@ shift_centroids <- function(centroids, proj.string = "+proj=laea +lat_0=45 +lon_
   for (region in names(shifts)){
     sites.tmp <- subset(centroids, state %in% region)
     
-    sites.tmp <- do.call(shift_sp, c(sp = sites.tmp, ref = stuff_to_move[[region]], 
-                                     shifts[[region]]))
-    sites.out <- rbind(sites.out, sites.tmp)
-  }
-  return(sites.out)
-}
-
-sites_sp <- function(site_nos){
-  sites <- readNWISsite(site_nos) %>% filter(!is.na(dec_lat_va))
-  code.map <- c(AK = "02", HI = "15", PR = "72")
-  
-  shifts <- get_shifts()
-  
-  stuff_to_move <- get_moves()
-  
-  sites.out <- sites %>% filter(!state_cd %in% code.map) %>% 
-    points_sp()
-  
-  for (region in names(code.map)){
-    sites.tmp <- sites %>% filter(state_cd %in% code.map[[region]]) %>% 
-      points_sp()
     sites.tmp <- do.call(shift_sp, c(sp = sites.tmp, ref = stuff_to_move[[region]], 
                                      shifts[[region]]))
     sites.out <- rbind(sites.out, sites.tmp)

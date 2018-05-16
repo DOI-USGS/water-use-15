@@ -16,8 +16,7 @@ get_state_dots <- function(json_file, data_file, proj.string="+proj=longlat +dat
     this_dot <- centroids[[j]]
     coord <- this_dot$coordinates
     state_abb <- this_dot$properties$STATE_ABBV
-    
-    if (state_totals$state_abrv %in% c(state_abb, "national")){
+    if (state_totals$state_abrv %in% c(state_abb, "US")){
       pt_coords[j, ] <- c(coord[[1]][1], coord[[2]][1])
     }
     
@@ -35,6 +34,21 @@ get_state_dots <- function(json_file, data_file, proj.string="+proj=longlat +dat
   return(points)
 }
 
+
+get_us_totals <- function(json_file){
+
+  us_totals <- read_json(json_file)
+  totals_out <- data.frame(total = NA_character_, thermoelectric = NA_character_, 
+                           publicsupply = NA_character_, irrigation = NA_character_, industrial = NA_character_,
+                           other = NA_character_, state_abrv = 'US', state_name = "U.S.")
+  
+  for (i in 1:length(us_totals)){
+    cat <- us_totals[[i]]$category
+    char_num <- us_totals[[i]]$fancynums
+    totals_out[[cat]] <- strsplit(char_num,'[.]')[[1]][1] # don't include decimal 
+  }
+  return(totals_out)
+}
 get_state_totals <- function(json_file, state_name){
   
   state_totals <- read_json(json_file)
