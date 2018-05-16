@@ -27,14 +27,14 @@ targets:
       - gifs/US_water_use.gif.ind
   
   plot_metadata:
-    command: c(I(7), I(5), I(300))
+    command: c(I(6.5), I(5.2), I(300))
   
   # proj: "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"
   us_states:
     command: state_sp()
     
   county_dots:
-    command: get_state_dots('cache/county_centroids_USA.json', 
+    command: get_national_dots('cache/county_centroids_USA.json', 
       proj.string = I("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"),
       'cache/county_centroids_wu.tsv', state_totals = state_totals) #???
     
@@ -48,14 +48,9 @@ targets:
     command: get_us_totals('cache/wu_data_15_sum.json')
 
   plot_layout:
-    command: get_state_layout(us_states, plot_metadata)
-
-#  US_county_dots:
-#    command: get_state_dots('cache/county_centroids_USA.json', 
-#      'cache/county_centroids_wu.tsv',
-#      proj, state_totals)
+    command: get_national_layout(us_states, plot_metadata)
 
   gifs/US_water_use.gif.ind:
     command: build_wu_gif(us_states, us_counties, us_county_dots, state_totals, plot_layout, 
       'images/usgs_logo_black.png', 
-      target_name, frames = I(5), I('pie'), I('irrigation'), I('thermoelectric'), I('publicsupply'))
+      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'))

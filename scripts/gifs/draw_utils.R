@@ -1,3 +1,28 @@
+get_national_layout <- function(sp, plot_metadata){
+  
+  state_bb <- bbox(sp)
+  
+  layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
+                     map = list(xlim = c(NA_integer_, NA_integer_), ylim = c(NA_integer_, NA_integer_)),
+                     legend = list(xpct = NA_integer_, ypct = NA_integer_, box_h = 0.055, y_bump = 0.015,
+                                   title_pos = 'top', title = 'U.S. Water Withdrawals'))
+  aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
+  aspect_fig <- plot_metadata[1]/plot_metadata[2]
+  map_ratio <- aspect_map / aspect_fig
+  y_remain <- 0.80 # 
+  map_span <- diff(state_bb[c(2,4)])/y_remain
+  y2 <- state_bb[4]
+  y1 <- y2 - map_span
+  layout_out$map$ylim <- c(y1, y2)
+  layout_out$map$xlim <- NULL
+  layout_out$legend$xpct <- 0.67 # percentage relative to left for the left edge of the legend
+  layout_out$legend$ypct <- 0.015 # percentage relative to bottom for the bottom of the legend
+  layout_out$legend$box_h <- 0.041
+  layout_out$legend$y_bump <- 0.008
+  layout_out$legend$title_pos <- 'national'
+  return(layout_out)
+}
+
 
 get_state_layout <- function(sp, plot_metadata){
   
@@ -78,11 +103,17 @@ plot_national_pies <- function(us_states, us_counties, us_dots, metadata, waterm
 
 plot_dot_map <- function(state_sp, county_sp, watermark_file, layout){
   
+  if (length(unique(names(state_sp))) > 1){ # is national
+    par(mai=c(0,0,0,0), omi=c(0,0,0,0)) #, xaxs = 'i', yaxs = 'i'
+    plot(state_sp, col = NA, border = NA, lwd = 1.2, xlim = layout$map$xlim, ylim = layout$map$ylim) 
+    plot(county_sp, col = '#eaedef', border = "grey75", lwd=0.25, add = TRUE)
+    plot(state_sp, col = NA, border = "grey65", lwd = 1, add = TRUE)
+  } else {
+    par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = '#eaedef') #, xaxs = 'i', yaxs = 'i'
+    plot(county_sp, col = "white", border = "grey60", lwd=0.75, xlim = layout$map$xlim, ylim = layout$map$ylim) 
+    plot(state_sp, col = NA, border = "grey50", lwd = 1.2, add = TRUE)
+  }
   
-  par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = '#eaedef') #, xaxs = 'i', yaxs = 'i'
-  
-  plot(county_sp, col = "white", border = "grey60", lwd=0.75, xlim = layout$map$xlim, ylim = layout$map$ylim) 
-  plot(state_sp, col = NA, border = "grey50", lwd = 1.2, add = TRUE)
   add_watermark(watermark_file, layout)
 }
 
@@ -116,6 +147,7 @@ build_wu_gif <- function(state_sp, county_sp, dots_sp, state_totals, state_layou
   
   gifsicle_out <- c('')
   temp_dir <- tempdir()
+  message(temp_dir)
   frame_num <- 0
   legend_cats <- legend_categories()
   for (filename in frame_filenames){
@@ -286,6 +318,9 @@ add_legend <- function(categories, state_totals, frame = rep(1, length(categorie
   } else if (this_legend$title_pos == 'left'){
     text(x = coord_space[1]+plot_width*0.45, y = strt_y-box_h, labels = simpleCap(this_legend$title), cex = 1.4)
     text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = "(water withdrawals, million gallons per day)", cex = 0.7)
+  } else if (this_legend$title_pos == 'national'){
+    text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = simpleCap(this_legend$title), cex = 1.4)
+    text(x = coord_space[1]+plot_width*0.45, y = strt_y-3*box_h, labels = "(water withdrawals, million gallons per day)", cex = 0.7)
   } else {
     stop(this_legend$title_pos, ' not supported')
   }
@@ -379,7 +414,7 @@ add_watermark <- function(watermark_file, layout, ...){
   
   rasterImage(d, x1, y1, x1+ncol(d)*img_scale, y1+nrow(d)*img_scale)
   
-  if (layout$legend$title_pos == 'left'){
+  if (layout$legend$title_pos == 'left' || layout$legend$title_pos == 'national'){
     text(coord_space[1]+diff(coord_space[c(1,2)])*0.40, y1+coord_height*watermark_bump_frac, 'https://owi.usgs.gov/vizlab/water-use-15/', cex = 0.8, col = 'grey50')
   } else{
     text(coord_space[2], y1+coord_height*watermark_bump_frac, 'https://owi.usgs.gov/vizlab/water-use-15/', pos = 2, cex = 0.8, col = 'grey50')
