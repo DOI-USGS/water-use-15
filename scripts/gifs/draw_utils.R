@@ -9,15 +9,16 @@ get_national_layout <- function(sp, plot_metadata){
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
   aspect_fig <- plot_metadata[1]/plot_metadata[2]
   map_ratio <- aspect_map / aspect_fig
-  y_remain <- 0.80 # 
+  y_remain <- 0.76 # 
   map_span <- diff(state_bb[c(2,4)])/y_remain
+  sp_width <- diff(state_bb[c(1,3)])
   y2 <- state_bb[4]
   y1 <- y2 - map_span
   layout_out$map$ylim <- c(y1, y2)
-  layout_out$map$xlim <- NULL
+  layout_out$map$xlim <- c(state_bb[1]-0.01*sp_width, state_bb[3]+0.01*sp_width)
   layout_out$legend$xpct <- 0.67 # percentage relative to left for the left edge of the legend
   layout_out$legend$ypct <- 0.015 # percentage relative to bottom for the bottom of the legend
-  layout_out$legend$box_h <- 0.041
+  layout_out$legend$box_h <- 0.043
   layout_out$legend$y_bump <- 0.008
   layout_out$legend$title_pos <- 'national'
   return(layout_out)
@@ -104,9 +105,9 @@ plot_national_pies <- function(us_states, us_counties, us_dots, metadata, waterm
 plot_dot_map <- function(state_sp, county_sp, watermark_file, layout){
   
   if (length(unique(names(state_sp))) > 1){ # is national
-    par(mai=c(0,0,0,0), omi=c(0,0,0,0)) #, xaxs = 'i', yaxs = 'i'
+    par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i') 
     plot(state_sp, col = NA, border = NA, lwd = 1.2, xlim = layout$map$xlim, ylim = layout$map$ylim) 
-    plot(county_sp, col = '#eaedef', border = "grey75", lwd=0.25, add = TRUE)
+    plot(county_sp, col = '#eaedef', border = "grey80", lwd=0.2, add = TRUE)
     plot(state_sp, col = NA, border = "grey65", lwd = 1, add = TRUE)
   } else {
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = '#eaedef') #, xaxs = 'i', yaxs = 'i'

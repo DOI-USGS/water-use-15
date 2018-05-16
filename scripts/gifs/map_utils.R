@@ -46,6 +46,27 @@ get_moves <- function(){
   )
 }
 
+shifted_topojson <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"){
+  states <- topojson_read(filename)
+  proj4string(states) <- CRS("+proj=longlat +datum=WGS84")
+  states_proj <- spTransform(states, CRS(proj.string))
+  shifts <- get_shifts()
+  moves <- get_moves()
+  code.map <- list(AK = "AK", HI = "HI", PR = c("PR","VI"))
+  shift_abbr <- code.map %>% unlist %>% unname
+  states_out <- subset(states_proj, !STATE_ABBV %in% shift_abbr)
+  
+  for(region in names(code.map)){
+    to_shift <- subset(states_proj, STATE_ABBV %in% code.map[[region]])
+    shifted <- do.call(shift_sp, append(list(sp = to_shift, 
+                                             ref = moves[[region]],
+                                             proj.string = proj4string(states_out),
+                                             row.names = row.names(to_shift)), shifts[[region]]))
+    states_out <- rbind(shifted, states_out, makeUniqueIDs = TRUE)
+  }
+  return(states_out)
+}
+  
 reproject_census <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"){
   
   layer <- strsplit(basename(filename), split = '[.]')[[1]][1]
