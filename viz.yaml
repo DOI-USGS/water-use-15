@@ -457,9 +457,19 @@ publish:
     id: footer_section
     template: layout/templates/footer.mustache
     publisher: section
-    depends: [lib-footer-css, "placeholder"]
+    depends:
+      logo: lib-vizlab-logo
+      usgsLogo: lib-usgs-logo
+      github-logo: lib-github-logo
+      css: lib-footer-css
+      placeholder: placeholder
     context:
       placeholder: placeholder
+      logo: logo
+      usgsLogo: usgsLogo
+      github-url:
+      github-logo: github-logo
+      resources: [ "css" ]
   -
     id: social_section
     template: vertical-social-media-template
