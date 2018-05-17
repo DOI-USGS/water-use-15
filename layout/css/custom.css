@@ -102,19 +102,15 @@
 }
 
 .viz-text ul {
-    padding-left: 20px;
-    min-height: 20px;
-    padding: 15px;
+  padding-left: 20px;
+  min-height: 20px;
+  padding: 15px;
 }
 
 #wu-story{
   background:#fff;
   min-height: 100px;
   margin-top:20px;
-}
-
-#wu-story .viz-text{
-  padding:0;
 }
 
 #wu-story p{
@@ -145,15 +141,20 @@
   padding-right: 40px;
 }
 
-#fig-caption p{
+.caption p{
   font-size:0.9em;
   font-style: italic;
-  text-align: left;
+  text-align: center;
   color: rgb(137,137,137);
+  line-height:1.5em;
+  margin-top:20px;
+  text-decoration:none;
 }
 
+.full-width,
 .key-story-plot{
-  margin:10px 0;
+  margin:10px auto;
+  padding:0 10px;
 }
 
 .key-story-plot img{
@@ -245,9 +246,14 @@
     position: relative;
   }
   
-  .pie-caption{
+  .caption p{
+    text-align: left;
+  }
+  
+  #pie-caption{
     position:absolute;
     margin:auto;
+    padding:0 0;
     top:0; bottom:0; left:0; right:0;
     height:80px;
   }
@@ -262,6 +268,20 @@
     flex:1;
   }
   
+}
+
+/* large screen definition as in main vizlab */
+@media screen and (min-width: 1024px){
+  .viz-text{
+    width:600;
+    margin:20px auto 0 auto;
+  } 
+  
+  .full-width,
+  .key-story-plot{
+    width:960px;
+    margin:10px auto;
+  }
 }
 
 /* really large desktop screens*/
