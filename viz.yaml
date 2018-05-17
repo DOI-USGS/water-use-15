@@ -430,8 +430,8 @@ publish:
     alttext: "Water Use Thubnail"
     relpath: "images/water_use_thumb.png"
   -
-    id: hurricane_maria
-    location: "images/hurricane_marie.png"
+    id: hurricane_maria_thumb
+    location: "images/hurricane_maria.png"
     mimetype: image/png
     title: "Hurricane Maria Thumbnail"
     alttext: "Hurricane Maria Thumbnail"
