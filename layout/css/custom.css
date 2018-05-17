@@ -273,7 +273,7 @@
 /* large screen definition as in main vizlab */
 @media screen and (min-width: 1024px){
   .viz-text{
-    width:600;
+    width:960px;
     margin:20px auto 0 auto;
   } 
   
