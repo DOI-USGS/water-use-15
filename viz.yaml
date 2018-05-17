@@ -373,7 +373,6 @@ publish:
     id: selectArrows
     location: images/selectArrows.svg
     mimetype: image/svg
-    inline: true
     title: "Select Arrows"
     alttext: "Select Input Custom Arrows"
   -
@@ -420,6 +419,20 @@ publish:
     data-src: "images/WU_stories_static.jpg"
     class: "lazy"
   -
+    id: water_use_thumb
+    location: "images/water_use_thumb.png"
+    mimetype: image/png
+    title: "Water Use Thubnail"
+    alttext: "Water Use Thubnail"
+    relpath: "images/water_use_thumb.png"
+  -
+    id: hurricane_maria_thumb
+    location: "images/hurricane_maria.png"
+    mimetype: image/png
+    title: "Hurricane Maria Thumbnail"
+    alttext: "Hurricane Maria Thumbnail"
+    relpath: "images/hurricane_marie.png"
+  -
     id: wu_story
     template: layout/templates/wu_story.mustache
     depends: ["styles", "placeholder", "static_story_figure", "static_story_figure_mobile"]
@@ -438,20 +451,25 @@ publish:
       selectArrows: selectArrows
   -
     id: footer_section
-    template: footer-template
-    publisher: footer
-    depends: lib-footer-css
-    github-url: https://github.com/USGS-VIZLAB/water-use-15
-    blogsInFooter: FALSE
-    vizzies:
-      - name: Visualizing water use by region and time
-        org: USGS-VIZLAB
-        repo: water-use
-        alt: Water use viz thumb
-      - name: Visualizing Hurricane Maria
-        org: USGS-VIZLAB
-        repo: hurricane-maria
-        alt: hurricane maria viz thumb
+    template: layout/templates/footer.mustache
+    publisher: section
+    depends:
+      logo: lib-vizlab-logo
+      usgsLogo: lib-usgs-logo
+      github-logo: lib-github-logo
+      css: lib-footer-css
+      placeholder: placeholder
+      water_use_thumb: "water_use_thumb"
+      hurricane_maria_thumb: "hurricane_maria_thumb"
+    context:
+      placeholder: placeholder
+      logo: logo
+      usgsLogo: usgsLogo
+      github-url:
+      github-logo: github-logo
+      resources: [ "css" ]
+      water_use_thumb: "water_use_thumb"
+      hurricane_maria_thumb: "hurricane_maria_thumb"
   -
     id: social_section
     template: vertical-social-media-template
