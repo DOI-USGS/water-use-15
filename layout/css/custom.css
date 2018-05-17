@@ -136,6 +136,10 @@
   margin-bottom:40px;
 }
 
+.side-by-side-left{
+  padding:0 40px 0 10px;
+}
+
 #directions {
   padding-left: 20px;
   padding-right: 40px;
@@ -233,12 +237,12 @@
   }
   
   .side-by-side-left{
-    width:70%;
+    width: 50%;
   }
   
   .side-by-side-right{
-    width:30%;
-    position:relative;
+    width: 40%;
+    position: relative;
   }
   
   .pie-caption{
