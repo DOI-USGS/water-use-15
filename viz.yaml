@@ -278,16 +278,12 @@ publish:
       thumb_twitter: thumb_twitter
       thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
-      water_use_thumb: "water_use_thumb"
-      hurricane_maria: "hurricane_maria"
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr",
                   "lazy_loader", "national_pie", "rank_states_utils", "scroll_tracking"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
-      water_use_thumb: "water_use_thumb"
-      hurricane_maria: "hurricane_maria"
       thumbnails: 
         twitter: thumb_twitter
         facebook: thumb_facebook
@@ -377,7 +373,6 @@ publish:
     id: selectArrows
     location: images/selectArrows.svg
     mimetype: image/svg
-    inline: true
     title: "Select Arrows"
     alttext: "Select Input Custom Arrows"
   -
@@ -431,8 +426,8 @@ publish:
     alttext: "Water Use Thubnail"
     relpath: "images/water_use_thumb.png"
   -
-    id: hurricane_maria
-    location: "images/hurricane_marie.png"
+    id: hurricane_maria_thumb
+    location: "images/hurricane_maria.png"
     mimetype: image/png
     title: "Hurricane Maria Thumbnail"
     alttext: "Hurricane Maria Thumbnail"
@@ -458,9 +453,23 @@ publish:
     id: footer_section
     template: layout/templates/footer.mustache
     publisher: section
-    depends: [lib-footer-css, "placeholder"]
+    depends:
+      logo: lib-vizlab-logo
+      usgsLogo: lib-usgs-logo
+      github-logo: lib-github-logo
+      css: lib-footer-css
+      placeholder: placeholder
+      water_use_thumb: "water_use_thumb"
+      hurricane_maria_thumb: "hurricane_maria_thumb"
     context:
       placeholder: placeholder
+      logo: logo
+      usgsLogo: usgsLogo
+      github-url:
+      github-logo: github-logo
+      resources: [ "css" ]
+      water_use_thumb: "water_use_thumb"
+      hurricane_maria_thumb: "hurricane_maria_thumb"
   -
     id: social_section
     template: vertical-social-media-template
