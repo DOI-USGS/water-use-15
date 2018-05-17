@@ -431,7 +431,7 @@ publish:
     mimetype: image/png
     title: "Hurricane Maria Thumbnail"
     alttext: "Hurricane Maria Thumbnail"
-    relpath: "images/hurricane_marie.png"
+    relpath: "images/hurricane_maria.png"
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
