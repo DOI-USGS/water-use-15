@@ -377,7 +377,6 @@ publish:
     id: selectArrows
     location: images/selectArrows.svg
     mimetype: image/svg
-    inline: true
     title: "Select Arrows"
     alttext: "Select Input Custom Arrows"
   -
