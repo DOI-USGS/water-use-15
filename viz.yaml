@@ -9,7 +9,7 @@ info:
     Data visualization of water use.
   keywords:
   audience:
-  url:
+  url: https://owi.usgs.gov/vizlab/water-use-15
   thumbnail:
   required-packages:
     vizlab:
