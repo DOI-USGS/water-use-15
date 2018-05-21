@@ -36,7 +36,7 @@ targets:
                   stateborderwidth = I(1.5))
   
   plot_metadata_twitter:
-    command: list(width = I(560), height = I(300), res = I(300), 
+    command: list(width = I(560), height = I(280), res = I(300), 
                   bg = I("#eaedef"), stateborder = I("white"),
                   countyborder = I(NA), countyfill = I("white"),
                   stateborderwidth = I(1))
