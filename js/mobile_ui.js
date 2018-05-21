@@ -200,3 +200,21 @@ function resetCountySelector() {
         return i === 0; 
       });
 }
+
+//Expand National Pie Mapp mobile text
+window.addEventListener('load', function(event){
+  var expandInteract = document.getElementById('national-static-pie-mobile-interact');
+  var contentToShow = document.getElementById('national-static-pie-mobile-content');
+  expandInteract.onclick = function(){
+    if(contentToShow.style.display === "block"){
+      contentToShow.style.display="none";
+      expandInteract.innerHTML = 'Read More'
+    }else{
+      contentToShow.style.display="block";
+      expandInteract.innerHTML = 'Hide'
+    }
+    
+  };
+});
+
+

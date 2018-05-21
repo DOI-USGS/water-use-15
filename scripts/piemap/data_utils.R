@@ -1,8 +1,9 @@
-get_dots <- function(json_file, proj.string="+proj=longlat +datum=WGS84", state_name = NULL){
+get_dots <- function(json_file, data_file, proj.string="+proj=longlat +datum=WGS84", state_name = NULL){
   
-  data <- read_json(json_file)$objects$centroids$geometries
+  centroids <- read_json(json_file)$objects$centroids$geometries
+  centroid_meta <- read_tsv(data_file)
   
-  NA_out <- rep(NA, length(data))
+  NA_out <- rep(NA, length(centroids))
   
   pt_coords <- matrix(data = c(NA_out, NA_out), ncol = 2)
   
@@ -10,18 +11,19 @@ get_dots <- function(json_file, proj.string="+proj=longlat +datum=WGS84", state_
                          publicsupply = NA_out, irrigation = NA_out, industrial = NA_out)
   
   
-  for (j in seq_len(length(data))){
-    this_dot <- data[[j]]
+  for (j in seq_len(length(centroids))){
+    this_dot <- centroids[[j]]
     coord <- this_dot$coordinates
     state_abb <- this_dot$properties$STATE_ABBV
     
     if (is.null(state_name) || state_abb == state_name){
       pt_coords[j, ] <- c(coord[[1]][1], coord[[2]][1])
     }
-    dot_data[j, ] <- this_dot$properties[names(dot_data)]
+    this_meta <- filter(centroid_meta, GEOID == this_dot$properties$GEOID)[names(dot_data)]
+    dot_data[j, ] <- this_meta
   }
   
-  dot_data$state <- sapply(data, function(x) x$properties$STATE_ABBV)
+  dot_data$state <- sapply(centroids, function(x) x$properties$STATE_ABBV)
   
   points <- pt_coords[!is.na(pt_coords[, 1]), ] %>% 
     sp::SpatialPoints(proj4string = CRS("+proj=longlat +datum=WGS84")) %>% 
