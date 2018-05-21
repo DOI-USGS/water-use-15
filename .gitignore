@@ -11,3 +11,4 @@ vizlab/
 .remake/
 remake.yaml
 .httr-oauth
+gifs/*.gif

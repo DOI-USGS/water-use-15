@@ -3,6 +3,21 @@
   margin:0;
 }
 
+.lazy{
+	opacity:0;
+}
+
+#national-static-pie-mobile-content{
+  display:none;
+}
+
+.readMore{
+  text-align: center;
+  color:#003366;
+  cursor:pointer;
+  
+}
+
 .mobile-UI-Container{
   display:flex;
   flex-direction:row;
@@ -121,10 +136,6 @@
   margin-bottom:40px;
 }
 
-.desktop-figure{
-  display: none;
-}
-
 #directions {
   padding-left: 20px;
   padding-right: 40px;
@@ -147,15 +158,7 @@
 
 .label-text {
   alignment-baseline: middle;
-  font-size: 12px;
   font-family: arial,helvetica,"sans-serif";
-  fill: #393939;
-}
-.label-line {
-  stroke-width: 1;
-  stroke: #393939;
-}
-.label-circle{
   fill: #393939;
 }
 
@@ -200,6 +203,11 @@
 }
 
 @media screen and (min-width:600px){
+  
+  #national-static-pie-mobile-container{
+    display:none;
+  }
+  
   .button text{
     font-size:1.3em;
     dominant-baseline:central;
@@ -238,14 +246,6 @@
     margin:auto;
     top:0; bottom:0; left:0; right:0;
     height:80px;
-  }
-  
-  .desktop-figure{
-    display: block;
-  }
-  
-  .mobile-figure{
-    display: none;
   }
   
   #data-collection{

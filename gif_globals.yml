@@ -1,0 +1,17 @@
+packages:
+  - gdata
+  - scipiper
+
+sources:
+  - scripts/gifs/data_utils.R
+  
+targets:
+  
+  plot_metadata:
+    command: c(I(7), I(5), I(300))
+  
+  proj_data:
+    command: get_proj_sheet(I("http://stateplane.ret3.net/COUNTYSPC.XLS"))
+    
+  gifs/gd_config.yml:
+    command: gd_config(config_file=target_name, folder=I("18yOyIh7I-H0NQnbq1YeBB_FC9a7Ad6r4"))

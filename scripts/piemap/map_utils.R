@@ -38,7 +38,7 @@ reproject_census <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_
   moves <- get_moves()
   code.map <- c(AK = "02", HI = "15", PR = "72")
   shifts <- get_shifts()
-  states.out <- subset(states.in, !STATEFP %in% c(names(code.map), 'VI'))
+  states.out <- subset(states.in, !STATEFP %in% c(code.map, VI = "78"))
   
   for(region in names(code.map)){
     to_shift <- subset(states.in, STATEFP == code.map[[region]])

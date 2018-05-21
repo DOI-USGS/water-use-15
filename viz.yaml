@@ -9,12 +9,12 @@ info:
     Data visualization of water use.
   keywords:
   audience:
-  url:
+  url: https://owi.usgs.gov/vizlab/water-use-15
   thumbnail:
   required-packages:
     vizlab:
       repo: github
-      version: 0.3.4
+      version: 0.3.5
       name: USGS-VIZLAB/vizlab
       ref: c0889d88e9df47dbb763be2bf335c6de8d7b57fd
     aws.s3:
@@ -68,6 +68,22 @@ info:
     -
       name: Alison Appling
       email: aappling@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: Marty Wernimont
+      email: mwernimont@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: Jordan Read
+      email: jread@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: Laura DeCicco
+      email: ldecicco@usgs.gov
+      affiliation: U.S. Geological Survey
+    -
+      name: David Watkins
+      email: wwatkins@usgs.gov
       affiliation: U.S. Geological Survey
 
 parameter:
@@ -201,7 +217,7 @@ process:
   -
     id: county_centroids_wu_tsv
     location: cache/county_centroids_wu.tsv
-    mimetype: application/json
+    mimetype: text/tab-separated-values
     process_args:
       layer: centroids
     depends:
@@ -240,14 +256,16 @@ publish:
       buttons: buttons
       resize: resize
       modernizr: modernizr
+      lazy_loader: lazy_loader
       map_utils: "map_utils"
       watermark_utils: "watermark_utils"
       map_circles: map_circles
       map_states: map_states
       map_counties: "map_counties"
-      dropdown_selector: "dropdown_selector"
+      mobile_ui: "mobile_ui"
       national_pie: "national_pie"
       rank_states_utils: "rank_states_utils"
+      scroll_tracking: "scroll_tracking"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -256,18 +274,20 @@ publish:
       county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: "county_centroids_wu_tsv"
       wu_data_15_range:  "wu_data_15_range_json"
-      thumb-facebook: thumb-facebook
+      thumb_facebook: thumb_facebook
+      thumb_twitter: thumb_twitter
+      thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
       resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr",
-                  "national_pie", "rank_states_utils"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr",
+                  "lazy_loader", "national_pie", "rank_states_utils", "scroll_tracking"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
-        twitter: thumb-facebook
-        facebook: thumb-facebook
-        main: thumb-facebook
+        twitter: thumb_twitter
+        facebook: thumb_facebook
+        main: thumb_landing
   -
     id: topojson
     location: "js/topojson.v1.min.js"
@@ -326,12 +346,20 @@ publish:
     location: "js/counties.js"
     mimetype: application/javascript
   -
-    id: dropdown_selector
-    location: "js/dropdown_selector.js"
+    id: mobile_ui
+    location: "js/mobile_ui.js"
     mimetype: application/javascript
   -
     id: modernizr
     location: "js/modernizr_custom.js"
+    mimetype: application/javascript
+  -
+    id: lazy_loader
+    location: "js/lazy_loading.js"
+    mimetype: application/javascript
+  -
+    id: scroll_tracking
+    location: "js/scroll_tracking.js"
     mimetype: application/javascript
   -
     id: map_css
@@ -345,7 +373,6 @@ publish:
     id: selectArrows
     location: images/selectArrows.svg
     mimetype: image/svg
-    inline: true
     title: "Select Arrows"
     alttext: "Select Input Custom Arrows"
   -
@@ -373,8 +400,8 @@ publish:
       High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
     relpath: "images/WU_stories_static.jpg"
   -
-    id: static_story_figure_mobile_left
-    location: "images/WU_stories_mobile_left.jpg"
+    id: static_story_figure_mobile
+    location: "images/WU_stories_static_mobile.jpg"
     mimetype: image/jpg
     export: true
     title: "Map of the western U.S. with notes about areas of high water use"
@@ -382,24 +409,37 @@ publish:
       Areas of high water use: Idaho (aquaculture), California (irrigation), Alaska (mining), & big cities (public supply)
     relpath: "images/WU_stories_mobile_left.jpg"
   -
-    id: static_story_figure_mobile_right
-    location: "images/WU_stories_mobile_right.jpg"
-    mimetype: image/jpg
-    export: true
-    title: "Map of the eastern U.S. with notes about areas of high water use"
-    alttext:  >-
-      High water use: Illinois (steel production), the Northeast (power generation), Arkansas (irrigation), & Gulf Coast (industry)
-    relpath: "images/WU_stories_mobile_right.jpg"
+    id: placeholder
+    location: "images/placeholder.gif"
+    mimetype: image/gif
+    title: "A national map with notes about areas of high water use"
+    alttext: >-
+      High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
+    relpath: "images/placeholder.gif"
+    data-src: "images/WU_stories_static.jpg"
+    class: "lazy"
+  -
+    id: water_use_thumb
+    location: "images/water_use_thumb.png"
+    mimetype: image/png
+    title: "Water Use Thubnail"
+    alttext: "Water Use Thubnail"
+    relpath: "images/water_use_thumb.png"
+  -
+    id: hurricane_maria_thumb
+    location: "images/hurricane_maria.png"
+    mimetype: image/png
+    title: "Hurricane Maria Thumbnail"
+    alttext: "Hurricane Maria Thumbnail"
+    relpath: "images/hurricane_maria.png"
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: ["styles", "static_story_figure", 
-              "static_story_figure_mobile_left", 
-              "static_story_figure_mobile_right"]
+    depends: ["styles", "placeholder", "static_story_figure", "static_story_figure_mobile"]
     context:
+      placeholder: "placeholder"
       pie_map_plot: "static_story_figure"
-      mobile_left_pie_plot: "static_story_figure_mobile_left"
-      mobile_right_pie_plot: "static_story_figure_mobile_right"
+      mobile_pie_map_plot: "static_story_figure_mobile"
     publisher: section
   -
     id: mobile_map_ui
@@ -411,20 +451,25 @@ publish:
       selectArrows: selectArrows
   -
     id: footer_section
-    template: footer-template
-    publisher: footer
-    depends: lib-footer-css
-    github-url: https://github.com/USGS-VIZLAB/water-use-15
-    blogsInFooter: FALSE
-    vizzies:
-      - name: Visualizing water use by region and time
-        org: USGS-VIZLAB
-        repo: water-use
-        alt: Water use viz thumb
-      - name: Visualizing Hurricane Maria
-        org: USGS-VIZLAB
-        repo: hurricane-maria
-        alt: hurricane maria viz thumb
+    template: layout/templates/footer.mustache
+    publisher: section
+    depends:
+      logo: lib-vizlab-logo
+      usgsLogo: lib-usgs-logo
+      github-logo: lib-github-logo
+      css: lib-footer-css
+      placeholder: placeholder
+      water_use_thumb: "water_use_thumb"
+      hurricane_maria_thumb: "hurricane_maria_thumb"
+    context:
+      placeholder: placeholder
+      logo: logo
+      usgsLogo: usgsLogo
+      github-url:
+      github-logo: github-logo
+      resources: [ "css" ]
+      water_use_thumb: "water_use_thumb"
+      hurricane_maria_thumb: "hurricane_maria_thumb"
   -
     id: social_section
     template: vertical-social-media-template
@@ -453,7 +498,7 @@ publish:
       map_circles: map_circles
       map_states: map_states
       map_counties: map_counties
-      dropdown_selector: dropdown_selector
+      mobile_ui: mobile_ui
       modernizr: modernizr
       map_section: map_section
       state_boundaries_USA: state_boundaries_USA_topojson
@@ -468,14 +513,30 @@ publish:
     context:
       resources: ["lib_d3_js", "topojson", 
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "dropdown_selector", "modernizr"]
+                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr"]
       embed: ["map_section"]
   -
-    id: thumb-facebook
-    location: images/WU_stories_static_thumbs.png
+    id: thumb_facebook
     publisher: thumbnail
+    location: images/thumb_facebook.png
+    relpath: images/thumb_facebook.png
     mimetype: image/png
-    thumbType: ["facebook","twitter"]
     title: "Facebook Thumbnail"
     alttext: "Facebook Thumbnail"
+  -
+    id: thumb_twitter
+    publisher: thumbnail
+    location: images/thumb_twitter.png
+    relpath: images/thumb_twitter.png
+    mimetype: image/png
+    title: "Twitter Thumbnail"
+    alttext: "Twitter Thumbnail"
+  -
+    id: thumb_landing
+    publisher: thumbnail
+    location: images/thumb_landing.png
+    relpath: images/thumb_landing.png
+    mimetype: image/png
+    title: "Landing Page Thumbnail"
+    alttext: "Landing Page Thumbnail"
 
