@@ -12,3 +12,4 @@ vizlab/
 remake.yaml
 .httr-oauth
 gifs/*.gif
+*.DS_Store
