@@ -32,20 +32,24 @@ function addButtons() {
     .attr('width', waterUseViz.dims.buttonBox.width);
   
   // button rectangles for *mouse events*
-  buttons.append('rect')
+  var mouser = buttons.append('rect')
     .classed('mouser-button', true)
     .style('opacity','0')
     .style('stroke-width',1.5)
     .style('pointer-events','all')
     .on('click', function(d){
       updateCategory(d.toLowerCase(), activeCategory);
-    })
-    .on('mouseover', function(d){
-      showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
-    })
-    .on('mouseout', function(d){
-      showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
     });
+  
+  if(waterUseViz.interactionMode === "hover") {
+    mouser
+      .on('mouseover', function(d){
+        showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+      })
+      .on('mouseout', function(d){
+        showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
+      });
+  }
   
   // button category labels
   buttons.append('text')

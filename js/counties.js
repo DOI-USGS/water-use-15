@@ -112,7 +112,7 @@ function displayCountyBounds(error, activeCountyData) {
       });
     
     // enter
-    countyBounds
+    var countyMouser = countyBounds
       .enter()
       .append("path")
       .classed('county', true) // by default, county bounds not seen
@@ -120,18 +120,6 @@ function displayCountyBounds(error, activeCountyData) {
         return d.properties.GEOID;
       })
       .attr('d', buildPath)
-      .on("mouseover", function(d) {
-        highlightCounty(d3.select(this)); 
-        highlightCircle(d.properties, activeCategory);
-        updateLegendText(d.properties, activeCategory); 
-        // OK to use global var activeCategory which only changes on click 
-        // because people won't be able to hover on tooltips at the same time as hovering buttons
-      })
-      .on("mouseout", function(d) { 
-        unhighlightCounty();
-        unhighlightCircle();
-        updateLegendTextToView();
-      })
       .on('click', function(d,i,j) {
         
         // clicking a county on mobile has no affect on the 
@@ -159,6 +147,22 @@ function displayCountyBounds(error, activeCountyData) {
           zoomToFromState(d,i,j, d3.select(this));
         }
       });
+    
+    if(waterUseViz.interactionMode === "hover") {
+      countyMouser
+        .on("mouseover", function(d) {
+          highlightCounty(d3.select(this)); 
+          highlightCircle(d.properties, activeCategory);
+          updateLegendText(d.properties, activeCategory); 
+          // OK to use global var activeCategory which only changes on click 
+          // because people won't be able to hover on tooltips at the same time as hovering buttons
+        })
+        .on("mouseout", function(d) { 
+          unhighlightCounty();
+          unhighlightCircle();
+          updateLegendTextToView();
+        });
+    }
     
     // update
     countyBounds
