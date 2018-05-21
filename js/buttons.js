@@ -41,10 +41,14 @@ function addButtons() {
       updateCategory(d.toLowerCase(), activeCategory);
     })
     .on('mouseover', function(d){
-      showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+      if(waterUseViz.interactionMode === "tap") {
+        showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+      }
     })
     .on('mouseout', function(d){
-      showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
+      if(waterUseViz.interactionMode === "tap") {
+        showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
+      }
     });
   
   // button category labels

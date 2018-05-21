@@ -121,16 +121,20 @@ function displayCountyBounds(error, activeCountyData) {
       })
       .attr('d', buildPath)
       .on("mouseover", function(d) {
-        highlightCounty(d3.select(this)); 
-        highlightCircle(d.properties, activeCategory);
-        updateLegendText(d.properties, activeCategory); 
+        if(waterUseViz.interactionMode === "tap") {
+          highlightCounty(d3.select(this)); 
+          highlightCircle(d.properties, activeCategory);
+          updateLegendText(d.properties, activeCategory); 
+        }
         // OK to use global var activeCategory which only changes on click 
         // because people won't be able to hover on tooltips at the same time as hovering buttons
       })
       .on("mouseout", function(d) { 
-        unhighlightCounty();
-        unhighlightCircle();
-        updateLegendTextToView();
+        if(waterUseViz.interactionMode === "tap") {
+          unhighlightCounty();
+          unhighlightCircle();
+          updateLegendTextToView();
+        }
       })
       .on('click', function(d,i,j) {
         
