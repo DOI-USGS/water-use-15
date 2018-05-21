@@ -10,6 +10,7 @@ packages:
   - mapdata
   - jsonlite
   - geojsonio
+  - readr
 
 sources:
   - scripts/piemap/map_utils.R
@@ -45,7 +46,7 @@ targets:
     command: c("images/usgs_logo_black.png")
   
   county_dots:
-    command: get_dots('cache/county_centroids_wu.json')
+    command: get_dots('cache/county_centroids_USA.json', 'cache/county_centroids_wu.tsv')
     
   us_states:
     command: state_sp()

@@ -10,6 +10,7 @@ packages:
   - mapdata
   - jsonlite
   - geojsonio
+  - readr
 
 sources:
   - scripts/piemap/map_utils.R
@@ -28,7 +29,7 @@ targets:
                   stateborderwidth = I(0.2))
   
   county_dots:
-    command: get_dots('cache/county_centroids_wu.json')
+    command: get_dots('cache/county_centroids_USA.json', 'cache/county_centroids_wu.tsv')
     
   us_states:
     command: state_sp()

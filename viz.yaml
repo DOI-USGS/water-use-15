@@ -217,7 +217,7 @@ process:
   -
     id: county_centroids_wu_tsv
     location: cache/county_centroids_wu.tsv
-    mimetype: application/json
+    mimetype: text/tab-separated-values
     process_args:
       layer: centroids
     depends:
