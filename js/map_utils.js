@@ -240,7 +240,7 @@ function updateCategory(category, prevCategory) {
   
   // update page info
   setHash('category', category);
-  documentCategorySwitch(category, prevCategory, action = "click");
+  showCategory(category, prevCategory, action = "click");
 }
 
 function showCategory(category, prevCategory, action) {
