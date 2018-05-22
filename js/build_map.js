@@ -152,7 +152,7 @@ function customizeCaption() {
       "Click a state to zoom in, and click the same state to zoom out.";
   }
   
-  d3.select('#fig-caption p')
+  d3.select('#map-caption p')
     .text(captionText);
 }
 

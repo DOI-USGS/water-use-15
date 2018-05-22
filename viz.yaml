@@ -274,6 +274,7 @@ publish:
       county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: "county_centroids_wu_tsv"
       wu_data_15_range:  "wu_data_15_range_json"
+      wu_data_15_sum_json: wu_data_15_sum_json
       thumb_facebook: thumb_facebook
       thumb_twitter: thumb_twitter
       thumb_landing: thumb_landing
@@ -509,6 +510,7 @@ publish:
       county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: county_centroids_wu_tsv
       wu_data_15_range:  wu_data_15_range_json
+      wu_data_15_sum_json: wu_data_15_sum_json
       wu_state_data_json: wu_state_data_json
     context:
       resources: ["lib_d3_js", "topojson", 
