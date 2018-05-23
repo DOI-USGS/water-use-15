@@ -231,27 +231,25 @@ function applyZoomAndStyle(newView, doTransition) {
       "translate(" + (waterUseViz.dims.map.x0/zoom.s - zoom.x) + "," + -zoom.y + ")");
 }
 
-function updateCategory(category, prevCategory) {
+function updateCategory(category, prevCategory, action) {
   if(category === prevCategory) {
+    // don't do anything if you click/hover on current category
     return;
   }
+  
   // update the globals about category view status
   activeCategory = category;
   
   // update page info
   setHash('category', category);
-  showCategory(category, prevCategory, action = "click");
-}
-
-function showCategory(category, prevCategory, action) {
-  if(prevCategory !== category) {
-    updateButtons(category);
-    updateButtonWidths(category);
-    updateCircleCategory(category);
-    if(action !== "mouseout") {
-      documentCategorySwitch(category, prevCategory, action);
-    }
-  }
+  
+  // change buttons and map circles
+  updateButtons(category);
+  updateButtonWidths(category);
+  updateCircleCategory(category);
+  
+  // fire analytics event
+  documentCategorySwitch(category, prevCategory, action);
 } 
 
 var updateCategoryTimer = null;

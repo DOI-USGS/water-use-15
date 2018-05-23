@@ -42,12 +42,12 @@ function addButtons() {
     // no mouseout needed since mousing over changes the category
     mouser
       .on('mouseover', function(d){
-        showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+        updateCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
       }); 
   } else if (waterUseViz.interactionMode === "tap") {
     mouser
       .on('click', function(d){
-        showCategory(d.toLowerCase(), activeCategory, action = 'click');
+        updateCategory(d.toLowerCase(), activeCategory, action = 'click');
       });
   }
   
