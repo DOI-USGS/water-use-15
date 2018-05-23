@@ -91,18 +91,29 @@ var tooltipDiv = d3.select("body").append("div")
   .classed("tooltip hidden", true);
 
 // Read data and add to map
-var dataQueue = d3.queue();
+var stateDataFile;
 if(waterUseViz.interactionMode === 'tap') {
-  dataQueue.defer(d3.json, "data/state_boundaries_mobile.json");
+  stateDataFile = "data/state_boundaries_mobile.json";
 } else {
-  dataQueue.defer(d3.json, "data/state_boundaries_USA.json");
+  stateDataFile = "data/state_boundaries_USA.json";
 }
-dataQueue
-  .defer(d3.tsv, "data/county_centroids_wu.tsv")
-  .defer(d3.json, "data/wu_data_15_range.json")
-  .defer(d3.json, "data/wu_data_15_sum.json")
-  .defer(d3.json, "data/wu_state_data.json")
-  .await(fillMap);
+
+d3.json(stateDataFile, function(error, data1) {
+	if (error) throw error;
+  d3.tsv("data/county_centroids_wu.tsv", function(error, data2) {
+	  if (error) throw error;
+    d3.json("data/wu_data_15_range.json", function(error, data3) {
+	    if (error) throw error;
+      d3.json("data/wu_data_15_sum.json", function(error, data4) {
+	      if (error) throw error;
+        d3.json("data/wu_state_data.json", function(error, data5) {
+	        if (error) throw error;
+          fillMap(data1, data2, data3, data4, data5);
+        });
+      });
+    });
+  });
+});
 
 /** Functions **/
 
@@ -157,7 +168,7 @@ function customizeCaption() {
 }
 
 
-function fillMap() {
+function fillMap(data1, data2, data3, data4, data5) {
 
   // be ready to update the view in case someone resizes the window when zoomed in
   // d3 automatically zooms out when that happens so we need to get zoomed back in
@@ -166,24 +177,18 @@ function fillMap() {
     updateView(activeView, fireAnalytics = false, doTransition = false);
   }); 
 
-  // arguments[0] is the error
-	var error = arguments[0];
-	if (error) throw error;
-
-	// the rest of the indices of arguments are all the other arguments passed in -
-	// so in this case, all of the results from q.await. Immediately convert to
-	// geojson so we have that converted data available globally.
-	stateBoundsUSA = topojson.feature(arguments[1], arguments[1].objects.states);
-	countyCentroids = arguments[2];
+	// Immediately convert to geojson so we have that converted data available globally.
+	stateBoundsUSA = topojson.feature(data1, data1.objects.states);
+	countyCentroids = data2;
 	
   // set up scaling for circles at national level
-  waterUseViz.nationalRange = arguments[3];
+  waterUseViz.nationalRange = data3;
   
   // cache data for dotmap and update legend if we're in national view
-  waterUseViz.nationalData = arguments[4];
+  waterUseViz.nationalData = data4;
   
   // cache data for dotmap and update legend if we're in state view
-  waterUseViz.stateData = arguments[5];
+  waterUseViz.stateData = data5;
   
   // update circle scale with data
   scaleCircles = scaleCircles
