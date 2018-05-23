@@ -22,7 +22,7 @@ plot_national_pies <- function(us_states, us_counties, us_dots, metadata, filena
   # don't plot state/terr border if it is a shifted state
   # plot(us_states[!names(us_states) %in% c('PR','AK','HI')], col = NA, border = metadata$bg, lwd = 0.8, add = TRUE)
   
-  if(!is.null(watermark_file)) { add_watermark(watermark_file) }
+  if(!is.null(watermark_file)) { add_watermark(watermark_file, metadata$watermark_bump_frac) }
   
   dot_to_pie(us_dots)
   
@@ -96,10 +96,12 @@ plot_slice <- function(x,y,r,angle_from, angle_to, cat, col = NULL){
   lines(segments$x, segments$y, lwd=0.4, col = col)
 }
 
-add_watermark <- function(watermark_file, ...){
+add_watermark <- function(watermark_file, watermark_bump_frac, ...){
   # --- watermark ---
   watermark_frac <- 0.15 # fraction of the width of the figure
-  watermark_bump_frac <- 0.01
+  if(is.null(watermark_bump_frac)) { 
+    watermark_bump_frac <- 0.01
+  }
   coord_space <- par()$usr
   
   watermark_alpha <- 0.4

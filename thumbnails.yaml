@@ -40,7 +40,7 @@ targets:
     command: list(width = I(560), height = I(280), res = I(300), 
                   bg = I("#eaedef"), stateborder = I("white"),
                   countyborder = I(NA), countyfill = I("white"),
-                  stateborderwidth = I(1))
+                  stateborderwidth = I(1), watermark_bump_frac = I(0.03))
  
   watermark_file:
     command: c("images/usgs_logo_black.png")
