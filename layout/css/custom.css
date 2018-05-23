@@ -118,8 +118,12 @@
   padding-bottom: 10px;
 }
 
-#wu-story h2{
-  margin-top:20px;
+h2{
+  font-size:1.17em;
+}
+
+h3{
+  font-size:1em;
 }
 
 .story-one,
