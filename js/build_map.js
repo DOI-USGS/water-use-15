@@ -73,6 +73,7 @@ var mapBackground = map.append("rect")
   .attr("id", "map-background")
   .on('click', zoomToFromState);
 
+detectDevice(); // sets waterUseViz.interactiveMode
 addButtons(); // sets waterUseViz.elements.buttonBox
 
 var watermark = addWatermark();
