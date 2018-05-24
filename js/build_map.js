@@ -99,16 +99,32 @@ if(waterUseViz.interactionMode === 'tap') {
 }
 
 d3.json(stateDataFile, function(error, stateBoundsRaw) {
+	
 	if (error) throw error;
+  
   d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
+	  
 	  if (error) throw error;
+    
     d3.json("data/wu_data_15_range.json", function(error, waterUseRange) {
+	    
 	    if (error) throw error;
+	    // set up scaling for circles at national level
+      waterUseViz.nationalRange = waterUseRange;
+      
       d3.json("data/wu_data_15_sum.json", function(error, waterUseNational) {
+	      
 	      if (error) throw error;
+        // cache data for dotmap and update legend if we're in national view
+        waterUseViz.nationalData = waterUseNational;
+        
         d3.json("data/wu_state_data.json", function(error, waterUseState) {
+	        
 	        if (error) throw error;
-          fillMap(stateBoundsRaw, countyCentroids, waterUseRange, waterUseNational, waterUseState);
+          // cache data for dotmap
+          waterUseViz.stateData = waterUseState;
+          fillMap(stateBoundsRaw, countyCentroids);
+          
         });
       });
     });
@@ -168,7 +184,7 @@ function customizeCaption() {
 }
 
 
-function fillMap(stateBoundsRaw, countyCentroidData, waterUseRange, waterUseNational, waterUseState) {
+function fillMap(stateBoundsRaw, countyCentroidData) {
 
   // be ready to update the view in case someone resizes the window when zoomed in
   // d3 automatically zooms out when that happens so we need to get zoomed back in
@@ -180,15 +196,6 @@ function fillMap(stateBoundsRaw, countyCentroidData, waterUseRange, waterUseNati
 	// Immediately convert to geojson so we have that converted data available globally.
 	stateBoundsUSA = topojson.feature(stateBoundsRaw, stateBoundsRaw.objects.states);
 	countyCentroids = countyCentroidData; // had to name arg differently, otherwise error loading boundary data...
-	
-  // set up scaling for circles at national level
-  waterUseViz.nationalRange = waterUseRange;
-  
-  // cache data for dotmap and update legend if we're in national view
-  waterUseViz.nationalData = waterUseNational;
-  
-  // cache data for dotmap and update legend if we're in state view
-  waterUseViz.stateData = waterUseState;
   
   // update circle scale with data
   scaleCircles = scaleCircles
