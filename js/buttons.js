@@ -36,18 +36,18 @@ function addButtons() {
     .classed('mouser-button', true)
     .style('opacity','0')
     .style('stroke-width',1.5)
-    .style('pointer-events','all')
-    .on('click', function(d){
-      updateCategory(d.toLowerCase(), activeCategory);
-    });
+    .style('pointer-events','all');
   
-  if(waterUseViz.interactionMode === "hover") {
+  if(waterUseViz.interactionMode === "hover") { 
+    // no mouseout needed since mousing over changes the category
     mouser
       .on('mouseover', function(d){
-        showCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
-      })
-      .on('mouseout', function(d){
-        showCategory(activeCategory, d.toLowerCase(), action = 'mouseout');
+        updateCategory(d.toLowerCase(), activeCategory, action = 'mouseover');
+      }); 
+  } else if (waterUseViz.interactionMode === "tap") {
+    mouser
+      .on('click', function(d){
+        updateCategory(d.toLowerCase(), activeCategory, action = 'click');
       });
   }
   
