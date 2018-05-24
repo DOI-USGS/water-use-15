@@ -201,9 +201,9 @@ h3{
   pointer-events:none;
 }
 
-.extras{
+#extras{
   background:rgb(240,240,240);
-  padding:10px;
+  padding:10px 0;
 }
 
 #data-collection p,
@@ -236,9 +236,10 @@ h3{
   }
   
   .side-by-side,
-  .extras{
+  #extras{
     display:flex;
     flex-direction:row;
+    padding:10px;
   }
   
   .side-by-side-left{
@@ -276,6 +277,10 @@ h3{
 
 /* large screen definition as in main vizlab */
 @media screen and (min-width: 1024px){
+  #extras{
+    width:940px;
+  }
+  
   .viz-text{
     width:960px;
     margin:20px auto 0 auto;
