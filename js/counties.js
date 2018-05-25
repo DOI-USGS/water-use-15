@@ -25,6 +25,7 @@ function loadCountyBounds(state, callback) {
         
         // do the update
         callback(null, countyBoundsUSA);
+        
       });
     } else {
       callback(null, countyBoundsUSA);
@@ -47,6 +48,14 @@ function loadCountyBounds(state, callback) {
       countyBoundsZoom.set('USA', allCountiesGeo);
       
       cacheCountyBounds(state, callback);
+      
+      // make sure the styles are right. this is only important for mobile when loading
+      // into USA view such that the first call to updateCounties happens when zooming in;
+      // otherwise the styles will already be right shortly
+      if(waterUseViz.interactionMode === 'tap') {
+        applyZoomAndStyle(activeView, false);
+      }
+
     });
   } else {
     cacheCountyBounds(state, callback);
