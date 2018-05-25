@@ -235,7 +235,7 @@ publish:
     template: fullpage
     publisher: page
     depends:
-      lib_d3_js: "lib-d3-js"
+      lib_d3_v5_js: "lib-d3-v5-js"
       topojson: "topojson"
       header_css: "lib-header-css"
       footer_css: "lib-footer-css"
@@ -280,7 +280,8 @@ publish:
       thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
+      resources: ["lib_d3_v5_js",
+                  "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
                   "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr",
                   "lazy_loader", "national_pie", "rank_states_utils", "scroll_tracking"]
@@ -485,7 +486,7 @@ publish:
     template: embed
     mimetype: text/html
     depends:
-      lib_d3_js: lib-d3-js
+      lib_d3_v5_js: "lib-d3-v5-js"
       topojson: topojson
       map_css: map_css
       custom_css: custom_css
@@ -513,8 +514,8 @@ publish:
       wu_data_15_sum_json: wu_data_15_sum_json
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
+      resources: ["lib_d3_array_js",
+                  "topojson", "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
                   "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr"]
       embed: ["map_section"]
   -
@@ -541,4 +542,9 @@ publish:
     mimetype: image/png
     title: "Landing Page Thumbnail"
     alttext: "Landing Page Thumbnail"
-
+  -
+    id: lib-d3-v5-js
+    location: js/d3.v5.min.js
+    version: 5.4.0
+    mimetype: text/javascript
+    publisher: resource
