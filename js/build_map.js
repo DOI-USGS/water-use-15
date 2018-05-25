@@ -101,8 +101,7 @@ if(waterUseViz.interactionMode === 'tap') {
 
 d3.json(stateDataFile, function(error, stateBoundsRaw) {
   if (error) throw error;
-
-  	drawMap(stateBoundsRaw);
+  drawMap(stateBoundsRaw);
 });
 
 d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
