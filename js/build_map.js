@@ -102,7 +102,6 @@ if(waterUseViz.interactionMode === 'tap') {
 d3.json(stateDataFile, function(error, stateBoundsRaw) {
   if (error) throw error;
 
-
   	drawMap(stateBoundsRaw);
 });
 
