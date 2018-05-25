@@ -28,6 +28,9 @@ var waterUseViz = {
     buttonBox: null
   },
   stateAbrvs: [], // created in extractNames()
+  stateBoundsRaw: {},
+  stateBoundsUSA: {},
+  countyCentroids: {},
   nationalData: {},
   stateData: {},
   isEmbed: RegExp("embed-water-use-15").test(window.location.pathname)
@@ -35,7 +38,7 @@ var waterUseViz = {
 
 // Globals not yet in waterUseViz
 var activeView, activeCategory, prevCategory;
-var stateBoundsUSA, stateBoundsZoom, countyBoundsUSA, countyCentroids;
+var stateBoundsZoom, countyBoundsUSA;
 var countyBoundsZoom = new Map();
 var categories = ["total", "thermoelectric", "irrigation","publicsupply", "industrial"];
 
@@ -99,32 +102,30 @@ if(waterUseViz.interactionMode === 'tap') {
   stateDataFile = "data/state_boundaries_USA.json";
 }
 
-d3.json(stateDataFile, function(error, stateBoundsRaw) {
-	
-	if (error) throw error;
+d3.json(stateDataFile).then(function(stateBoundsRaw) {
   
-  d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
-	  
-	  if (error) throw error;
+  waterUseViz.stateBoundsRaw = stateBoundsRaw;
+  
+  d3.tsv("data/county_centroids_wu.tsv").then(function(countyCentroids) {
     
-    d3.json("data/wu_data_15_range.json", function(error, waterUseRange) {
+    waterUseViz.countyCentroids = countyCentroids;
+    
+    d3.json("data/wu_data_15_range.json").then(function(waterUseRange) {
 	    
-	    if (error) throw error;
 	    // set up scaling for circles at national level
       waterUseViz.nationalRange = waterUseRange;
       
-      d3.json("data/wu_data_15_sum.json", function(error, waterUseNational) {
+      d3.json("data/wu_data_15_sum.json").then(function(waterUseNational) {
 	      
-	      if (error) throw error;
-        // cache data for dotmap and update legend if we're in national view
+	      // cache data for dotmap and update legend if we're in national view
         waterUseViz.nationalData = waterUseNational;
         
-        d3.json("data/wu_state_data.json", function(error, waterUseState) {
+        d3.json("data/wu_state_data.json").then(function(waterUseState) {
 	        
-	        if (error) throw error;
-          // cache data for dotmap
+	        // cache data for dotmap
           waterUseViz.stateData = waterUseState;
-          fillMap(stateBoundsRaw, countyCentroids);
+          
+          fillMap();
           
         });
       });
@@ -185,7 +186,7 @@ function customizeCaption() {
 }
 
 
-function fillMap(stateBoundsRaw, countyCentroidData) {
+function fillMap() {
 
   // be ready to update the view in case someone resizes the window when zoomed in
   // d3 automatically zooms out when that happens so we need to get zoomed back in
@@ -195,18 +196,17 @@ function fillMap(stateBoundsRaw, countyCentroidData) {
   }); 
 
 	// Immediately convert to geojson so we have that converted data available globally.
-	stateBoundsUSA = topojson.feature(stateBoundsRaw, stateBoundsRaw.objects.states);
-	countyCentroids = countyCentroidData; // had to name arg differently, otherwise error loading boundary data...
+	waterUseViz.stateBoundsUSA = topojson.feature(waterUseViz.stateBoundsRaw, waterUseViz.stateBoundsRaw.objects.states);
   
   // update circle scale with data
   scaleCircles = scaleCircles
     .domain(waterUseViz.nationalRange);
     
   // get state abreviations into waterUseViz.stateAbrvs for later use
-  extractNames(stateBoundsUSA);  
+  extractNames(waterUseViz.stateBoundsUSA);  
   
   // add the main, active map features
-  addStates(map, stateBoundsUSA);
+  addStates(map, waterUseViz.stateBoundsUSA);
   
   if(activeView !== "USA") {
     loadInitialCounties();
@@ -214,14 +214,14 @@ function fillMap(stateBoundsRaw, countyCentroidData) {
   
   // add the circles
   // CIRCLES-AS-CIRCLES
-  /*addCircles(countyCentroids);*/
+  /*addCircles(waterUseViz.countyCentroids);*/
   // CIRCLES-AS-PATHS
-  var circlesPaths = prepareCirclePaths(categories, countyCentroids);
+  var circlesPaths = prepareCirclePaths(categories, waterUseViz.countyCentroids);
   addCircles(circlesPaths);
   updateCircleCategory(activeCategory);
   
   // manipulate dropdowns
-  updateViewSelectorOptions(activeView, stateBoundsUSA);
+  updateViewSelectorOptions(activeView, waterUseViz.stateBoundsUSA);
   addZoomOutButton(activeView);
   
   // update the legend values and text
@@ -266,7 +266,12 @@ function loadInitialCounties() {
     updateView(activeView);
   }
   
-  d3.queue()
-    .defer(loadCountyBounds, activeView)
-    .await(waitForCounties);
+  // DOESN'T WORK
+  var countyPromise = new Promise(function(resolve, reject){
+    resolve(loadCountyBounds(activeView));
+    reject(Error('gah'));
+  });
+  countyPromise.then(function(resolve) {
+    updateView(activeView);
+  });
 }

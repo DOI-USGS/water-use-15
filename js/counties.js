@@ -55,7 +55,7 @@ function loadCountyBounds(state, callback) {
 
 function addDataToCounties(countyBounds) {
   // make countyCentroids easily searchable
-  var countyDataMap = d3.map(countyCentroids, function(d) { return d.GEOID; });
+  var countyDataMap = d3.map(waterUseViz.countyCentroids, function(d) { return d.GEOID; });
   
   // iterate over countyBounds, adding data from countyCentroids to each
   for(var i = 0; i < countyBounds.length; i++) {

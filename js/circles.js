@@ -45,14 +45,14 @@ function prepareCirclePaths(categories, centroidData) {
 function addCircles(circlesPaths) {
 
 
-//function addCircles(countyCentroids) {
+//function addCircles(waterUseViz.countyCentroids) {
   
   // uses globals map
   
   // CIRCLES-AS-CIRCLES
   /*
   map.selectAll('g#wu-circles').selectAll('.wu-circle')
-    .data(countyCentroids)
+    .data(waterUseViz.countyCentroids)
     .enter()
     .append('circle')
     .classed('wu-circle', true)
@@ -120,7 +120,7 @@ function updateCircleCategory(category) {
         // recalculate the new circle path size for this new category
         // updateCircleSize only updates the current category.
         // use i to be first or second chunk
-        return createCirclePath(category, countyCentroids, i);
+        return createCirclePath(category, waterUseViz.countyCentroids, i);
       } 
     })
     //.style("stroke", categoryToColor(category, 0.8))
@@ -159,7 +159,7 @@ function updateCircleSize(category, view) {
         // when zooming in, data attached won't change but values of radius will
         // based on new domain for scaleCircles (applied in createCirclePath)
         // use i to be first or second chunk
-        return createCirclePath(category, countyCentroids, i); 
+        return createCirclePath(category, waterUseViz.countyCentroids, i); 
       }
   });
   
