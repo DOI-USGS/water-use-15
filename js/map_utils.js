@@ -122,7 +122,7 @@ function updateView(newView, fireAnalytics, doTransition) {
   } 
   
   // update the geospatial data for the upcoming resolution
-  if(typeof countyCentroids !== 'undefined' && countyBoundsZoom.size > 0) {
+  if(typeof countyCentroids !== 'undefined') {
     updateCounties(activeView);
   }
   updateStates(activeView);
@@ -169,14 +169,17 @@ function applyZoomAndStyle(newView, doTransition) {
   // setup appropriate circle scaling (zoom.s === 1 for view === 'USA')
   // multiple by zoom because you want the circles to shrink on zoom 
   // so you increase the domain and the same radii value now
-  // corresponds to a smaller circle size
-  var stateZoomRatio = 0.4;
-  var newScaling = [waterUseViz.nationalRange[0]*zoom.s,
-                    waterUseViz.nationalRange[1]*zoom.s*stateZoomRatio];
-  if(scaleCircles.domain() !== newScaling) {
-    // only change circle scale if it's different
-    scaleCircles.domain(newScaling);
-    updateCircleSize(activeCategory, activeView);
+  // corresponds to a smaller circle size. only do this if we already 
+  // know the nationalRange, which is not the case when we first add states
+  if(typeof waterUseViz.nationalRange !== 'undefined') {
+    var stateZoomRatio = 0.4;
+    var newScaling = [waterUseViz.nationalRange[0]*zoom.s,
+                      waterUseViz.nationalRange[1]*zoom.s*stateZoomRatio];
+    if(scaleCircles.domain() !== newScaling) {
+      // only change circle scale if it's different
+      scaleCircles.domain(newScaling);
+      updateCircleSize(activeCategory, activeView);
+    }
   }
 
   // reset counties each time a zoom changes
