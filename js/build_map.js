@@ -100,22 +100,24 @@ if(waterUseViz.interactionMode === 'tap') {
 }
 
 d3.json(stateDataFile, function(error, stateBoundsRaw) {
-	
-	if (error) throw error;
-	drawMap(stateBoundsRaw);
-	
+  if (error) throw error;
+
+  d3.json("data/wu_data_15_range.json", function(error, waterUseRange) {
+    if (error) throw error;
+    // nationalRange gets used in drawMap->addStates->applyZoomAndStyle (this function) and
+    // also in fillMap->scaleCircles-update. We'll trust that this d3.json pair
+    // loads faster than the load of county_centroids_wu/wu_data_15_sum/wu_state_data below
+    waterUseViz.nationalRange = waterUseRange;
+
+  	drawMap(stateBoundsRaw);
+
+  });
 });
 
 d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
   
   if (error) throw error;
   
-  d3.json("data/wu_data_15_range.json", function(error, waterUseRange) {
-    
-    if (error) throw error;
-    // set up scaling for circles at national level
-    waterUseViz.nationalRange = waterUseRange;
-    
     d3.json("data/wu_data_15_sum.json", function(error, waterUseNational) {
       
       if (error) throw error;
@@ -131,7 +133,6 @@ d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
         
       });
     });
-  });
 });
 
 /** Functions **/
@@ -197,9 +198,6 @@ function drawMap(stateBoundsRaw) {
   // add the main, active map features
   addStates(map, stateBoundsUSA);
   
-  // manipulate dropdowns
-  updateViewSelectorOptions(activeView, stateBoundsUSA);
-  addZoomOutButton(activeView);
 }
 
 function fillMap(countyCentroidData) {
@@ -213,6 +211,10 @@ function fillMap(countyCentroidData) {
 
 	countyCentroids = countyCentroidData; // had to name arg differently, otherwise error loading boundary data...
   
+  // manipulate dropdowns - selector options require countyCentroids if starting zoomed in
+  updateViewSelectorOptions(activeView, stateBoundsUSA);
+  addZoomOutButton(activeView);
+
   // update circle scale with data
   scaleCircles = scaleCircles
     .domain(waterUseViz.nationalRange);

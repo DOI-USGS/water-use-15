@@ -122,7 +122,9 @@ function updateView(newView, fireAnalytics, doTransition) {
   } 
   
   // update the geospatial data for the upcoming resolution
-  updateCounties(activeView);
+  if(typeof countyCentroids !== 'undefined' && countyBoundsZoom.size > 0) {
+    updateCounties(activeView);
+  }
   updateStates(activeView);
   
   // ensure we have the zoom parameters (they're in the state zoom data) and apply the zoom
@@ -312,35 +314,35 @@ function updateLegendTextToView() {
       .buttonBox
       .selectAll("#legend-title")
       .text("U.S. Water Withdrawals");
-  
+
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
       .data(waterUseViz.nationalData, function(d) { return d.category; })
       .text(function(d) { return d.fancynums; });
 
-  } else {
-    
+  } else if(typeof waterUseViz.stateData.filter === 'function') {
+
    var state_data = waterUseViz.stateData
       .filter(function(d) { 
         return d.abrv === activeView; 
     });
-    
+
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
       .data(state_data)
       .text(function(d) { return d.STATE_NAME + " Water Withdrawals"; });
-  
+
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
       .data(state_data[0].use, function(d) { return d.category; })
       .text(function(d) { return d.fancynums; });
-      
+
   }
 
   if (toolTipTimer){
-      clearTimeout(toolTipTimer); // stop ga for edge states
-    }
+    clearTimeout(toolTipTimer); // stop ga for edge states
+  }
 }
 
 d3.selection.prototype.moveToFront = function() {  
