@@ -168,8 +168,9 @@ function applyZoomAndStyle(newView, doTransition) {
   // multiple by zoom because you want the circles to shrink on zoom 
   // so you increase the domain and the same radii value now
   // corresponds to a smaller circle size
+  var stateZoomRatio = 0.4;
   var newScaling = [waterUseViz.nationalRange[0]*zoom.s,
-                    waterUseViz.nationalRange[1]*zoom.s];
+                    waterUseViz.nationalRange[1]*zoom.s*stateZoomRatio];
   if(scaleCircles.domain() !== newScaling) {
     // only change circle scale if it's different
     scaleCircles.domain(newScaling);
