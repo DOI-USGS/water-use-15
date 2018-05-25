@@ -119,48 +119,45 @@ function displayCountyBounds(error, activeCountyData) {
       .attr('id', function(d) {
         return d.properties.GEOID;
       })
-      .attr('d', buildPath)
-      .on('click', function(d,i,j) {
-        
-        // clicking a county on mobile has no affect on the 
-        // view unless it's the same county as last time
-        if(waterUseViz.interactionMode === "tap") {
+      .attr('d', buildPath);
+      
+    // mobile mouse events - click only for zoom and highlight
+    if(waterUseViz.interactionMode === "tap") {
+      
+      countyMouser.on('click', function(d,i,j) {
+        // hide on any tap because either we'll zoom out or we'll switch
+        // to highlighting a different county
+        unhighlightCounty();
+        unhighlightCircle();
 
-          // hide on any tap because either we'll zoom out or we'll switch
-          // to highlighting a different county
-          unhighlightCounty();
-          unhighlightCircle();
-
-          // highlight the clicked county if it's a new county, or zoom out
-          // if it's the same county as before
-          var prevCounty = waterUseViz.prevClickCounty;
-          var thisCountyID = d3.select(this).attr("id");
-          if(prevCounty === thisCountyID) {
-            updateLegendTextToView(); 
-            zoomToFromState(d,i,j, d3.select(this));
-          } else {
-            updateLegendText(d.properties, activeCategory);
-            highlightCounty(d3.select(this)); 
-            highlightCircle(d.properties, activeCategory);
-            updateCountySelector(thisCountyID);
-          }
-
-          // set prevClickCounty as global var for next click
-          waterUseViz.prevClickCounty = thisCountyID;
-        } else {
-          // desktop county clicks zoom in and out
+        // highlight the clicked county if it's a new county, or zoom out
+        // if it's the same county as before
+        var prevCounty = waterUseViz.prevClickCounty;
+        var thisCountyID = d3.select(this).attr("id");
+        if(prevCounty === thisCountyID) {
+          updateLegendTextToView(); 
           zoomToFromState(d,i,j, d3.select(this));
+        } else {
+          updateLegendText(d.properties, activeCategory);
+          highlightCounty(d3.select(this)); 
+          highlightCircle(d.properties, activeCategory);
+          updateCountySelector(thisCountyID);
         }
+
+        // set prevClickCounty as global var for next click
+        waterUseViz.prevClickCounty = thisCountyID;
       });
-    
-    if(waterUseViz.interactionMode === "hover") {
+      
+    // desktop mouse events - click to zoom, hover to highlight
+    } else if(waterUseViz.interactionMode === "hover") {
       countyMouser
+        .on('click', function(d,i,j) {
+          zoomToFromState(d,i,j, d3.select(this));
+        })
         .on("mouseover", function(d) {
           highlightCounty(d3.select(this)); 
           highlightCircle(d.properties, activeCategory);
           updateLegendText(d.properties, activeCategory); 
-          // OK to use global var activeCategory which only changes on click 
-          // because people won't be able to hover on tooltips at the same time as hovering buttons
         })
         .on("mouseout", function(d) { 
           unhighlightCounty();
