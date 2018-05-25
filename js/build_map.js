@@ -111,9 +111,8 @@ d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
   d3.json("data/wu_data_15_range.json", function(error, waterUseRange) {
 
     if (error) throw error;
-    // nationalRange gets used in drawMap->addStates->applyZoomAndStyle (this function) and
-    // also in fillMap->scaleCircles-update. We'll trust that this d3.json pair
-    // loads faster than the load of county_centroids_wu/wu_data_15_sum/wu_state_data below
+    // nationalRange gets used in drawMap->addStates->applyZoomAndStyle and
+    // fillMap->scaleCircles-update
     waterUseViz.nationalRange = waterUseRange;
 
     d3.json("data/wu_data_15_sum.json", function(error, waterUseNational) {
