@@ -125,21 +125,26 @@ function displayCountyBounds(error, activeCountyData) {
         // clicking a county on mobile has no affect on the 
         // view unless it's the same county as last time
         if(waterUseViz.interactionMode === "tap") {
-          
+
+          // hide on any tap because either we'll zoom out or we'll switch
+          // to highlighting a different county
+          unhighlightCounty();
+          unhighlightCircle();
+
+          // highlight the clicked county if it's a new county, or zoom out
+          // if it's the same county as before
           var prevCounty = waterUseViz.prevClickCounty;
           var thisCountyID = d3.select(this).attr("id");
           if(prevCounty === thisCountyID) {
-            
-            //only zoom out if you click on the same county 
-            zoomToFromState(d,i,j, d3.select(this));
-            
-            // hide on any zoom bc no county will be selected
-            unhighlightCounty();
-            unhighlightCircle();
             updateLegendTextToView(); 
+            zoomToFromState(d,i,j, d3.select(this));
           } else {
+            updateLegendText(d.properties, activeCategory);
+            highlightCounty(d3.select(this)); 
+            highlightCircle(d.properties, activeCategory);
             updateCountySelector(thisCountyID);
-          }          
+          }
+
           // set prevClickCounty as global var for next click
           waterUseViz.prevClickCounty = thisCountyID;
         } else {
