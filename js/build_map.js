@@ -266,7 +266,12 @@ function loadInitialCounties() {
     updateView(activeView);
   }
   
-  d3.queue()
-    .defer(loadCountyBounds, activeView)
-    .await(waitForCounties);
+  // DOESN'T WORK
+  var countyPromise = new Promise(function(resolve, reject){
+    resolve(loadCountyBounds(activeView));
+    reject(Error('gah'));
+  });
+  countyPromise.then(function(resolve) {
+    updateView(activeView);
+  });
 }
