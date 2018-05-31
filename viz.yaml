@@ -370,8 +370,7 @@ publish:
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: [#"styles", 
-      "placeholder", "static_story_figure", "static_story_figure_mobile"]
+    depends: ["placeholder", "static_story_figure", "static_story_figure_mobile"]
     context:
       placeholder: "placeholder"
       pie_map_plot: "static_story_figure"
