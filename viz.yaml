@@ -32,6 +32,9 @@ info:
     geojsonio:
       repo: CRAN
       version: 0.6.0
+    js:
+      repo: CRAN
+      version: 1.1
     jsonlite:
       repo: CRAN
       version: 1.5
@@ -250,22 +253,7 @@ publish:
       map_section: "map_section"
       wu_story: "wu_story"
       footer: "footer_section"
-      hashes: "url_hashes"
-      projection: "custom_projection"
-      styles: "styles"
-      buttons: buttons
-      resize: resize
-      modernizr: modernizr
-      lazy_loader: lazy_loader
-      map_utils: "map_utils"
-      watermark_utils: "watermark_utils"
-      map_circles: map_circles
-      map_states: map_states
-      map_counties: "map_counties"
-      mobile_ui: "mobile_ui"
-      national_pie: "national_pie"
-      rank_states_utils: "rank_states_utils"
-      scroll_tracking: "scroll_tracking"
+      all_minified: "all_minified"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -280,10 +268,8 @@ publish:
       thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
-                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr",
-                  "lazy_loader", "national_pie", "rank_states_utils", "scroll_tracking"]
+      resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", 
+                  "socialCSS","vizlab-favicon", "map_css", "custom_css", "all_minified"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb_twitter
@@ -294,73 +280,21 @@ publish:
     location: "js/topojson.v1.min.js"
     mimetype: application/javascript
   -
-    id: url_hashes
-    location: "js/url_hashes.js"
+    id: all_minified
+    location: "js/all.min.js"
     mimetype: application/javascript
-  # custom_projection.js must be before build_map.js for it to find the projection function.
-  -
-    id: custom_projection
-    location: "js/custom_projection.js"
-    mimetype: application/javascript
+    publish_args:
+      js_files: [
+        "js/url_hashes.js", "js/custom_projection.js", "js/styles.js", "js/buttons.js",
+        "js/resize.js", "js/map_utils.js", "js/states.js", "js/counties.js", "js/watermark.js", 
+        "js/circles.js", "js/mobile_ui.js", "js/modernizr_custom.js", "js/lazy_loading.js", 
+        "js/national_pie.js", "js/rank_states_utils.js", "js/scroll_tracking.js", "js/build_map_utils.js"
+      ]
+    publisher: combine_minify_js
+    scripts: [scripts/publish/combine_minify_js.R]
   -
     id: build_map
     location: "js/build_map.js"
-    mimetype: application/javascript
-  -
-    id: styles
-    location: "js/styles.js"
-    mimetype: application/javascript
-  -
-    id: map_utils
-    location: "js/map_utils.js"
-    mimetype: application/javascript
-  -
-    id: rank_states_utils
-    location: "js/rank_states_utils.js"
-    mimetype: application/javascript
-  -
-    id: national_pie
-    location: "js/national_pie.js"
-    mimetype: application/javascript
-  -
-    id: resize
-    location: "js/resize.js"
-    mimetype: application/javascript
-  -
-    id: buttons
-    location: "js/buttons.js"
-    mimetype: application/javascript
-  -
-    id: watermark_utils
-    location: "js/watermark.js"
-    mimetype: application/javascript
-  -
-    id: map_circles
-    location: "js/circles.js"
-    mimetype: application/javascript
-  -
-    id: map_states
-    location: "js/states.js"
-    mimetype: application/javascript
-  -
-    id: map_counties
-    location: "js/counties.js"
-    mimetype: application/javascript
-  -
-    id: mobile_ui
-    location: "js/mobile_ui.js"
-    mimetype: application/javascript
-  -
-    id: modernizr
-    location: "js/modernizr_custom.js"
-    mimetype: application/javascript
-  -
-    id: lazy_loader
-    location: "js/lazy_loading.js"
-    mimetype: application/javascript
-  -
-    id: scroll_tracking
-    location: "js/scroll_tracking.js"
     mimetype: application/javascript
   -
     id: map_css
@@ -436,7 +370,8 @@ publish:
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: ["styles", "placeholder", "static_story_figure", "static_story_figure_mobile"]
+    depends: [#"styles", 
+      "placeholder", "static_story_figure", "static_story_figure_mobile"]
     context:
       placeholder: "placeholder"
       pie_map_plot: "static_story_figure"
@@ -489,18 +424,7 @@ publish:
       topojson: topojson
       map_css: map_css
       custom_css: custom_css
-      hashes: url_hashes
-      projection: custom_projection
-      styles: styles
-      buttons: buttons
-      resize: resize
-      map_utils: map_utils
-      watermark_utils: watermark_utils
-      map_circles: map_circles
-      map_states: map_states
-      map_counties: map_counties
-      mobile_ui: mobile_ui
-      modernizr: modernizr
+      all_minified: all_minified
       map_section: map_section
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
@@ -513,9 +437,7 @@ publish:
       wu_data_15_sum_json: wu_data_15_sum_json
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr"]
+      resources: ["lib_d3_js", "topojson", "map_css", "custom_css", "all_minified"]
       embed: ["map_section"]
   -
     id: thumb_facebook
