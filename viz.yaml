@@ -285,7 +285,7 @@ publish:
         "js/url_hashes.js", "js/custom_projection.js", "js/styles.js", "js/buttons.js",
         "js/resize.js", "js/map_utils.js", "js/states.js", "js/counties.js", "js/watermark.js", 
         "js/circles.js", "js/mobile_ui.js", "js/modernizr_custom.js", "js/lazy_loading.js", 
-        "js/national_pie.js", "js/rank_states_utils.js", "js/scroll_tracking.js"
+        "js/national_pie.js", "js/rank_states_utils.js", "js/scroll_tracking.js", "js/build_map_utils.js"
       ]
     publisher: combine_minify_js
     scripts: [scripts/publish/combine_minify_js.R]
