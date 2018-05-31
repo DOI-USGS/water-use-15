@@ -32,6 +32,9 @@ info:
     geojsonio:
       repo: CRAN
       version: 0.6.0
+    js:
+      repo: CRAN
+      version: 1.1
     jsonlite:
       repo: CRAN
       version: 1.5
