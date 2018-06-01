@@ -28,6 +28,8 @@ publish.combine_minify_css <- function(viz) {
   close(file_connection)
   
   # minify css using node r.js
+    # Couldn't get this to work inside of this framework and it only
+    # decreased size by 1KB, so not pursuing any further.
   # cmd <- sprintf('node r.js -o cssIn=%s out=%s', viz[["location"]], viz[["location"]])
   # system(paste('bash', cmd))
   
