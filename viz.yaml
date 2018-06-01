@@ -325,6 +325,14 @@ publish:
     context:
       map_script: map_script
   -
+    id: embed_map
+    template: layout/templates/embed_map.mustache
+    publisher: section
+    depends:
+      map_script: build_map_minified
+    context:
+      map_script: map_script
+  -
     id: static_story_figure
     location: "images/WU_stories_static.jpg"
     mimetype: image/jpg
@@ -420,7 +428,7 @@ publish:
       topojson: topojson
       all_css: all_css
       all_js_minified: all_js_minified
-      map_section: map_section
+      embed_map: embed_map
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -433,7 +441,7 @@ publish:
       wu_state_data_json: wu_state_data_json
     context:
       resources: ["lib_d3_js", "topojson", "all_css", "all_js_minified"]
-      embed: ["map_section"]
+      embed: ["embed_map"]
   -
     id: thumb_facebook
     publisher: thumbnail

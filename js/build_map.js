@@ -59,10 +59,10 @@ readHashes();
 /** Add major svg elements and then set their sizes **/
     
 // Create container
-var container = d3.select('body div.main-svg');
+var container = d3.select('body div#mapSVG');
 
 // Create SVG and map
-var svg = d3.select(".main-svg")
+var svg = d3.select("#mapSVG")
   .append("svg")
   .attr('preserveAspectRatio', 'xMidYMid');
 
