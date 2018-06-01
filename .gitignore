@@ -13,3 +13,5 @@ remake.yaml
 .httr-oauth
 gifs/*.gif
 *.DS_Store
+js/all.min.js
+js/build_map.min.js

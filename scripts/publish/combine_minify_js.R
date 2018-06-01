@@ -1,0 +1,32 @@
+publish.combine_minify_js <- function(viz) {
+  args <- viz[["publish_args"]]
+  
+  # make sure to eliminate this one if it exists already
+  if(file.exists(viz[["location"]])) { 
+    file.remove(viz[["location"]])
+  }
+  
+  # combine
+  file_connection <- file(viz[["location"]])
+  for(fp in args[["js_files"]]) {
+    js_f <- readLines(fp)
+    write(js_f, viz[["location"]], append = TRUE)
+  }
+  close(file_connection)
+  
+  # minify
+  all_js <- readLines(viz[["location"]])
+  minified_js <- js::uglify_optimize(all_js)
+  file_connection_min <- file(viz[["location"]])
+  writeLines(minified_js, file_connection_min)
+  close(file_connection_min)
+  
+  # publish single js file
+  
+  # create viz-like item to use in publish
+  viz_js <- list(location = viz[["location"]], mimetype = "application/javascript")
+  
+  # use publisher to follow typical js publishing steps to get file to target
+  vizlab::publish(viz_js)
+  
+}
