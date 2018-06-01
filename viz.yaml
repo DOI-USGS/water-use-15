@@ -293,9 +293,13 @@ publish:
     publisher: combine_minify_js
     scripts: [scripts/publish/combine_minify_js.R]
   -
-    id: build_map
-    location: "js/build_map.js"
+    id: build_map_minified
+    location: "js/build_map.min.js"
     mimetype: application/javascript
+    publish_args:
+      js_files: ["js/build_map.js"]
+    publisher: combine_minify_js
+    scripts: [scripts/publish/combine_minify_js.R]
   -
     id: map_css
     location: "layout/css/map.css"
@@ -322,7 +326,7 @@ publish:
     template: layout/templates/map_section.mustache
     publisher: section
     depends:
-      map_script: build_map
+      map_script: build_map_minified
     context:
       map_script: map_script
   -
