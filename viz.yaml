@@ -301,8 +301,8 @@ publish:
     publish_args:
       lib_css: ["lib-header-css", "lib-footer-css", "lib-content-css", "lib-social-media-css"]
       custom_css_files: ["layout/css/map.css", "layout/css/custom.css"]
-    publisher: combine_minify_css
-    scripts: [scripts/publish/combine_minify_css.R]
+    publisher: combine_css
+    scripts: [scripts/publish/combine_css.R]
   -
     id: selectArrows
     location: images/selectArrows.svg

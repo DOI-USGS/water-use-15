@@ -1,4 +1,4 @@
-publish.combine_minify_css <- function(viz) {
+publish.combine_css <- function(viz) {
   args <- viz[["publish_args"]]
   
   # make sure to eliminate this one if it exists already
