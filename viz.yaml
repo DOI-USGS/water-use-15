@@ -240,20 +240,15 @@ publish:
     depends:
       lib_d3_js: "lib-d3-js"
       topojson: "topojson"
-      header_css: "lib-header-css"
-      footer_css: "lib-footer-css"
-      content_css: "lib-content-css"
       vizlab-favicon: "lib-vizlab-favicon"
-      map_css: "map_css"
-      custom_css: "custom_css"
+      all_css: "all_css"
       social: "social_section"
-      socialCSS: "lib-social-media-css"
       header: "header_section"
       mobile_map_ui: "mobile_map_ui"
       map_section: "map_section"
       wu_story: "wu_story"
       footer: "footer_section"
-      all_minified: "all_minified"
+      all_js_minified: "all_js_minified"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -268,8 +263,7 @@ publish:
       thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", 
-                  "socialCSS","vizlab-favicon", "map_css", "custom_css", "all_minified"]
+      resources: ["lib_d3_js", "topojson", "vizlab-favicon", "all_css", "all_js_minified"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb_twitter
@@ -280,7 +274,7 @@ publish:
     location: "js/topojson.v1.min.js"
     mimetype: application/javascript
   -
-    id: all_minified
+    id: all_js_minified
     location: "js/all.min.js"
     mimetype: application/javascript
     publish_args:
@@ -301,13 +295,14 @@ publish:
     publisher: combine_minify_js
     scripts: [scripts/publish/combine_minify_js.R]
   -
-    id: map_css
-    location: "layout/css/map.css"
-    mimetype: text/css
-  -
-    id: custom_css
-    location: "layout/css/custom.css"
-    mimetype: text/css
+    id: all_css
+    location: "layout/css/all.css"
+    mimetype: application/javascript
+    publish_args:
+      lib_css: ["lib-header-css", "lib-footer-css", "lib-content-css", "lib-social-media-css"]
+      custom_css_files: ["layout/css/map.css", "layout/css/custom.css"]
+    publisher: combine_css
+    scripts: [scripts/publish/combine_css.R]
   -
     id: selectArrows
     location: images/selectArrows.svg
@@ -324,6 +319,14 @@ publish:
   -
     id: map_section
     template: layout/templates/map_section.mustache
+    publisher: section
+    depends:
+      map_script: build_map_minified
+    context:
+      map_script: map_script
+  -
+    id: embed_map
+    template: layout/templates/embed_map.mustache
     publisher: section
     depends:
       map_script: build_map_minified
@@ -396,7 +399,6 @@ publish:
       logo: lib-vizlab-logo
       usgsLogo: lib-usgs-logo
       github-logo: lib-github-logo
-      css: lib-footer-css
       placeholder: placeholder
       water_use_thumb: "water_use_thumb"
       hurricane_maria_thumb: "hurricane_maria_thumb"
@@ -406,7 +408,6 @@ publish:
       usgsLogo: usgsLogo
       github-url:
       github-logo: github-logo
-      resources: [ "css" ]
       water_use_thumb: "water_use_thumb"
       hurricane_maria_thumb: "hurricane_maria_thumb"
   -
@@ -425,10 +426,9 @@ publish:
     depends:
       lib_d3_js: lib-d3-js
       topojson: topojson
-      map_css: map_css
-      custom_css: custom_css
-      all_minified: all_minified
-      map_section: map_section
+      all_css: all_css
+      all_js_minified: all_js_minified
+      embed_map: embed_map
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -440,8 +440,8 @@ publish:
       wu_data_15_sum_json: wu_data_15_sum_json
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", "map_css", "custom_css", "all_minified"]
-      embed: ["map_section"]
+      resources: ["lib_d3_js", "topojson", "all_css", "all_js_minified"]
+      embed: ["embed_map"]
   -
     id: thumb_facebook
     publisher: thumbnail

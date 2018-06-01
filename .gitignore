@@ -15,3 +15,4 @@ gifs/*.gif
 *.DS_Store
 js/all.min.js
 js/build_map.min.js
+layout/css/all.css
