@@ -254,6 +254,14 @@ function updateCategory(category, prevCategory, action) {
   updateButtonWidths(category);
   updateCircleCategory(category);
   
+  // account for anything that is currently highlighted
+  // and update the text with it
+  var highlightedCounty = d3.select('.highlighted-county');
+  if(!highlightedCounty.empty()) {
+    updateLegendText(highlightedCounty.datum().properties, category); 
+    highlightCircle(highlightedCounty.datum().properties, category);
+  }
+  
   // fire analytics event
   documentCategorySwitch(category, prevCategory, action);
 } 
@@ -285,7 +293,7 @@ function updateLegendText(d, category) {
     .buttonBox
     .selectAll("#legend-title")
     .text(d.COUNTY + ", " + d.STATE_ABBV);
-
+    
   waterUseViz.elements
     .buttonBox
     .selectAll("#" + category  + "-button-text")
