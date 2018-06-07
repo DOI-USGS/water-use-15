@@ -14,12 +14,15 @@ publish.combine_minify_js <- function(viz) {
   }
   close(file_connection)
   
-  # minify
-  all_js <- readLines(viz[["location"]])
-  minified_js <- js::uglify_optimize(all_js)
-  file_connection_min <- file(viz[["location"]])
-  writeLines(minified_js, file_connection_min)
-  close(file_connection_min)
+  # minify removes console.logs, so allow it to be turned off sometimes
+  if(is.null(args[["troubleshoot"]]) || !args[["troubleshoot"]]) {
+    # minify
+    all_js <- readLines(viz[["location"]])
+    minified_js <- js::uglify_optimize(all_js)
+    file_connection_min <- file(viz[["location"]])
+    writeLines(minified_js, file_connection_min)
+    close(file_connection_min)
+  }
   
   # publish single js file
   
@@ -29,4 +32,7 @@ publish.combine_minify_js <- function(viz) {
   # use publisher to follow typical js publishing steps to get file to target
   vizlab::publish(viz_js)
   
+  # delete file in js/ or it will never rebuild in remake when you change the other files
+  #file.remove(viz[["location"]])
+  # ^ can't do that in vizlab right now. Errors on vizmake because it needs to create a file.
 }
