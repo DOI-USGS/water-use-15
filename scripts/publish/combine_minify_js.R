@@ -8,6 +8,20 @@ publish.combine_minify_js <- function(viz) {
   
   # combine
   file_connection <- file(viz[["location"]])
+  
+  # first add vizlab resources
+  for(lib in args[["lib_js"]]) {
+    lib_viz <- as.viz(lib)
+    publish(lib)
+    # vizlab location puts these files in js/d3-modules/
+    # so need to change just to js/
+    lib_fp <- paste0(exportLocation(), "js/", basename(lib_viz[["location"]]))
+    js_f <- readLines(lib_fp)
+    write(js_f, viz[["location"]], append = TRUE)
+    file.remove(lib_fp)
+  }
+  
+  # then add custom js
   for(fp in args[["js_files"]]) {
     js_f <- readLines(fp)
     write(js_f, viz[["location"]], append = TRUE)
