@@ -261,8 +261,8 @@ publish:
       thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["all_css", "all_js_minified", "vizlab-favicon"]
-      sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
+      resources: ["all_js_minified", "all_css", "vizlab-favicon"]
+      sections: ["mobile_map_ui", "map_section", "wu_story", "social"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb_twitter
         facebook: thumb_facebook
