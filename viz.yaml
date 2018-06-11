@@ -238,8 +238,6 @@ publish:
     template: fullpage
     publisher: page
     depends:
-      lib_d3_js: "lib-d3-js"
-      topojson: "topojson"
       vizlab-favicon: "lib-vizlab-favicon"
       all_css: "all_css"
       social: "social_section"
@@ -263,22 +261,20 @@ publish:
       thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", "vizlab-favicon", "all_css", "all_js_minified"]
-      sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
+      resources: ["all_js_minified", "all_css", "vizlab-favicon"]
+      sections: ["mobile_map_ui", "map_section", "wu_story", "social"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb_twitter
         facebook: thumb_facebook
         main: thumb_landing
   -
-    id: topojson
-    location: "js/topojson.v1.min.js"
-    mimetype: application/javascript
-  -
     id: all_js_minified
     location: "js/all.min.js"
     mimetype: application/javascript
     publish_args:
+      lib_js: ["lib-d3-js"]
       js_files: [
+        "js/topojson.v1.min.js",
         "js/url_hashes.js", "js/custom_projection.js", "js/styles.js", "js/buttons.js",
         "js/resize.js", "js/map_utils.js", "js/states.js", "js/counties.js", "js/watermark.js", 
         "js/circles.js", "js/mobile_ui.js", "js/modernizr_custom.js", "js/lazy_loading.js", 
@@ -425,8 +421,6 @@ publish:
     template: embed
     mimetype: text/html
     depends:
-      lib_d3_js: lib-d3-js
-      topojson: topojson
       all_css: all_css
       all_js_minified: all_js_minified
       embed_map: embed_map
@@ -441,7 +435,7 @@ publish:
       wu_data_15_sum_json: wu_data_15_sum_json
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", "all_css", "all_js_minified"]
+      resources: ["all_css", "all_js_minified"]
       embed: ["embed_map"]
   -
     id: thumb_facebook
