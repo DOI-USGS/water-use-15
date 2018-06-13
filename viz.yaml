@@ -1,9 +1,9 @@
 info:
   id: water-use-15
   name: U.S. Water Use
-  date: 2018-01-18
-  publish-date:
-  path: /water-use-15
+  date: 2018-06-19
+  publish-date: 2018-06-19
+  path: water-use-15
   analytics-id: UA-78530187-12
   description: >-
     Data visualization of water use.
