@@ -10,7 +10,11 @@ info:
   keywords:
   audience:
   url: https://owi.usgs.gov/vizlab/water-use-15
-  thumbnail:
+  thumbnail-landing:
+    url: images/thumb_landing.png
+    width: 400
+    height: 400
+    alttext: "Water Use"
   required-packages:
     vizlab:
       repo: github
