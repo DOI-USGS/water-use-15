@@ -80,9 +80,9 @@ state_sp <- function(shift = "landscape"){
   return(states.out)
 }
 
-shift_centroids <- function(centroids, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"){
+shift_centroids <- function(centroids, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs", shift = "landscape"){
     
-  shifts <- get_shifts()
+  shifts <- get_shifts(shift = shift)
   
   centroids <-  sp::spTransform(centroids, CRS(proj.string))
   stuff_to_move <- get_moves()

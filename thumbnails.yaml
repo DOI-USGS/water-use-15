@@ -25,9 +25,9 @@ targets:
       - images/thumb_twitter.png
  
   plot_metadata_landing:
-    command: list(width = I(400), height = I(400), res = I(300),
-                 bg = I("#dce1e4"), stateborder = I(NA),
-                  countyborder = I(NA), countyfill = I("white"))
+    command: list(width = I(400), height = I(400), res = I(300), 
+                  bg = I("grey25"), stateborder = I(NA),
+                  countyborder = I(NA), countyfill = I("black"))
  
   plot_metadata_facebook:
     command: list(width = I(1560), height = I(820), res = I(300), 
@@ -55,7 +55,7 @@ targets:
     command: shift_centroids(county_dots)
     
   us_dots_square:
-    command: shift_centroids(county_dots)  
+    command: shift_centroids(county_dots, shift = I("square"))
   
   images/thumb_landing.png:
     command: plot_national_pies(us_states_square, us_dots_square, plot_metadata_landing, target_name)
