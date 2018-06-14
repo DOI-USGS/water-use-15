@@ -36,8 +36,8 @@ targets:
   
   plot_metadata_twitter:
     command: list(width = I(560), height = I(280), res = I(300), 
-                  bg = I("grey22"), stateborder = I(NA),
-                  countyborder = I(NA), countyfill = I("grey10"))
+                  bg = I("grey25"), stateborder = I(NA),
+                  countyborder = I(NA), countyfill = I("black"))
  
   watermark_file:
     command: c("images/usgs_logo_black.png")

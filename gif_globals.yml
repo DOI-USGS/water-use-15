@@ -8,7 +8,7 @@ sources:
 targets:
   
   plot_metadata:
-    command: c(I(7), I(5), I(300))
+    command: c(I(8), I(4), I(128))
   
   proj_data:
     command: get_proj_sheet(I("http://stateplane.ret3.net/COUNTYSPC.XLS"))
