@@ -34,6 +34,10 @@ get_state_layout <- function(sp, plot_metadata){
                      legend = list(xpct = NA_integer_, ypct = NA_integer_, box_h = 0.055, y_bump = 0.015,
                                    title_pos = 'top', title = names(sp)))
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
+  if (aspect_map < 1.2){
+    plot_metadata[1] <- plot_metadata[1] * 0.75
+    layout_out$figure$width <- plot_metadata[1] 
+  }
   aspect_fig <- plot_metadata[1]/plot_metadata[2]
   
   map_ratio <- aspect_map / aspect_fig
@@ -41,7 +45,7 @@ get_state_layout <- function(sp, plot_metadata){
     x_remain <- 0.69
     x1 <- state_bb[1]
     x2 <- x1 + diff(state_bb[c(1,3)])/x_remain
-    y_remain <- 0.94 # to get it above the watermark
+    y_remain <- 0.92 # to get it above the watermark
     map_span <- diff(state_bb[c(2,4)])/y_remain
     y2 <- state_bb[4]
     y1 <- y2 - map_span
@@ -314,10 +318,10 @@ add_legend <- function(categories, state_totals, frame = rep(1, length(categorie
   }
   if (this_legend$title_pos == 'top'){
     text(x = strt_x+box_w/2, y = strt_y+box_h, labels = simpleCap(this_legend$title), cex = 1.2)
-    text(x = strt_x+box_w/2, y = strt_y+box_h/4, labels = "(water withdrawals, million gallons per day)", cex = 0.7)
+    text(x = strt_x+box_w/2, y = strt_y+box_h/4, labels = "(water withdrawals, million gallons per day)", cex = 0.6)
   } else if (this_legend$title_pos == 'left'){
     text(x = coord_space[1]+plot_width*0.45, y = strt_y-box_h, labels = simpleCap(this_legend$title), cex = 1.4)
-    text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = "(water withdrawals, million gallons per day)", cex = 0.7)
+    text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = "(water withdrawals, million gallons per day)", cex = 0.6)
   } else if (this_legend$title_pos == 'national'){
     text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = simpleCap(this_legend$title), cex = 1.4)
     text(x = strt_x+box_w/2, y = strt_y+box_h/4, labels = "(withdrawals, million gallons per day)", cex = 0.7)
@@ -349,13 +353,13 @@ dot_to_pie <- function(dots){
   categories <- categories()
   
   for (j in seq_len(length(dots))){
-    
+
     dot <- dots[j, ]
     r <- sqrt(dot$total) * scale_const
-    
+
     c.x <- dot@coords[1]
     c.y <- dot@coords[2]
-    
+
     #stole code from water-use-15
     for (cat in categories){
       cat_angle <- dot[[cat]] / dot[['total']]*2*pi
@@ -374,7 +378,7 @@ dot_to_pie <- function(dots){
         plot_slice(c.x, c.y, r = r, angle_from, angle_to, cat)
       }
     }
-    
+
     if (r > 0 & !is.na(r) & cat == tail(categories, 1L) & angle_to < 2*pi + orig_ang){
       plot_slice(c.x, c.y, r = r, angle_to, 2*pi + orig_ang, 'other')
     }
@@ -389,7 +393,7 @@ plot_slice <- function(x,y,r,angle_from, angle_to, cat, col = NULL){
   polygon(c(x, segments$x, x), c(y, segments$y, y), 
           border = NA,
           col = fill_col(col))
-  lines(segments$x, segments$y, lwd=0.4, col = col)
+  #lines(segments$x, segments$y, lwd=0.4, col = col)
 }
 
 add_watermark <- function(watermark_file, layout, ...){
@@ -398,12 +402,11 @@ add_watermark <- function(watermark_file, layout, ...){
   watermark_bump_frac <- 0.01
   coord_space <- par()$usr
   
-  watermark_alpha <- 0.4
+  watermark_grey <- 0.75
   d <- png::readPNG(watermark_file)
   
-  which_image <- d[,,4] != 0 # transparency
-  d[which_image] <- watermark_alpha
-  
+  which_image <- d[,,1:3] != 1 # transparency
+  d[which_image] <- watermark_grey
   coord_width <- coord_space[2]-coord_space[1]
   coord_height <- coord_space[4]-coord_space[3]
   watermark_width <- dim(d)[2]
