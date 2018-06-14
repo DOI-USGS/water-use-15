@@ -14,10 +14,17 @@ to_sp <- function(..., proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y
 }
 
 
-get_shifts <- function(){
-  list(AK = list(scale = 0.47, shift = c(90,-465), rotate = -50),
-       HI = list(scale = 1.5, shift = c(520, -110), rotate = -35),
-       PR = list(scale = 3.5, shift = c(-120, 80), rotate=20))
+get_shifts <- function(shift = 'landscape'){
+  if (shift == 'landscape'){
+    return(list(AK = list(scale = 0.44, shift = c(50,-450), rotate = -50),
+                HI = list(scale = 1.3, shift = c(490, -100), rotate = -35),
+                PR = list(scale = 3.5, shift = c(-110, 90), rotate=20)))
+  } else {
+    return(list(AK = list(scale = 0.6, shift = c(140,-525), rotate = -50),
+         HI = list(scale = 1.8, shift = c(590, -170), rotate = -35),
+         PR = list(scale = 4, shift = c(-200, -40), rotate=20)))
+  }
+  
 }
 
 get_moves <- function(){
@@ -28,7 +35,7 @@ get_moves <- function(){
   )
 }
 
-reproject_census <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"){
+reproject_census <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs", shift = "landscape"){
   
   layer <- strsplit(basename(filename), split = '[.]')[[1]][1]
   states.in <- rgdal::readOGR(dirname(filename), layer) %>% 
@@ -54,9 +61,9 @@ reproject_census <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_
 
 #' create the sp object 
 #'
-state_sp <- function(){
+state_sp <- function(shift = "landscape"){
   
-  shifts <- get_shifts()
+  shifts <- get_shifts(shift = shift)
   
   stuff_to_move <- get_moves()
   

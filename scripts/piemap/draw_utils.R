@@ -8,23 +8,18 @@ make_arc <- function(x0, y0, r, from_angle, to_angle){
 }
 
 
-plot_national_pies <- function(us_states, us_counties, us_dots, metadata, filename, watermark_file = NULL){
+plot_national_pies <- function(us_states, us_dots, metadata, filename, watermark_file = NULL){
   
   if(is.null(metadata$units)) { metadata$units <- "px" }
   
   png(filename, width = metadata$width, height = metadata$height, res=metadata$res, units = metadata$units)
-  par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = metadata$bg) #, xaxs = 'i', yaxs = 'i'
+  par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = metadata$bg) 
   
-  plot(us_states, col = NA, border = metadata$stateborder, lwd = metadata$stateborderwidth)
-  
-  plot(us_counties, col = metadata$countyfill, border = metadata$countyborder, lwd = 0.5, add = TRUE)
-  
-  # don't plot state/terr border if it is a shifted state
-  # plot(us_states[!names(us_states) %in% c('PR','AK','HI')], col = NA, border = metadata$bg, lwd = 0.8, add = TRUE)
+  plot(us_states, col = metadata$countyfill, border = metadata$countyfill, lwd = metadata$height*0.0004)
   
   if(!is.null(watermark_file)) { add_watermark(watermark_file, metadata$watermark_bump_frac) }
   
-  dot_to_pie(us_dots)
+  plot_dot(us_dots)
   
   dev.off()
 }
@@ -40,18 +35,16 @@ cat_title <- function(cat){
 }
 
 cat_col <- function(cat){
-  cols <- c("irrigation" = "#59a14f", "industrial"="#e15759", 
-            "thermoelectric"="#edc948", "publicsupply"="#76b7b2", "other"="#A9A9A9", 
-            "dead"='#dcdcdc', 'text'= '#A9A9A9')
+  cols <- c("total"='#b9edf9CC')#rgb(38, 140, 178, alpha = 200, maxColorValue = 255))
   cols[[cat]]
 }
 
 fill_col <- function(col){
-  paste0(col, 'CC')
+  col#paste0(col, 'CC')
 }
 
 
-dot_to_pie <- function(dots, scale_const = 1200){
+plot_dot <- function(dots, scale_const = 1500){
   
   categories <- categories()
   
@@ -62,25 +55,8 @@ dot_to_pie <- function(dots, scale_const = 1200){
     
     c.x <- dot@coords[1]
     c.y <- dot@coords[2]
-    
-    #stole code from water-use-15
-    for (cat in categories){
-      cat_angle <- dot[[cat]] / dot[['total']]*2*pi
-      if (cat == head(categories, 1L)){
-        # start the first category mirror relative to the top
-        angle_from <- pi/2 - cat_angle/2
-        orig_ang <- angle_from
-      } else {
-        angle_from <- angle_to
-      }
-      angle_to <- angle_from + cat_angle
-      if (!is.na(cat_angle) & cat_angle > 0.01){
-        plot_slice(c.x, c.y, r = r, angle_from, angle_to, cat)
-      }
-    }
-    
-    if (r > 0 & !is.na(r) & cat == tail(categories, 1L) & angle_to < 2*pi + orig_ang){
-      plot_slice(c.x, c.y, r = r, angle_to, 2*pi + orig_ang, 'other')
+    if (r > 0 & !is.na(r)){
+      plot_slice(c.x, c.y, r = r, 0, 2*pi, 'total')
     }
   }
 }
@@ -93,7 +69,6 @@ plot_slice <- function(x,y,r,angle_from, angle_to, cat, col = NULL){
   polygon(c(x, segments$x, x), c(y, segments$y, y), 
           border = NA,
           col = fill_col(col))
-  lines(segments$x, segments$y, lwd=0.4, col = col)
 }
 
 add_watermark <- function(watermark_file, watermark_bump_frac, ...){
