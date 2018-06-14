@@ -6,7 +6,12 @@ info:
   path: water-use-15
   analytics-id: UA-78530187-12
   description: >-
-    Data visualization of water use.
+    Water touches almost every aspect of American life: from food to electricity to 
+    consumer products. Understanding how we use water is crucial for learning how 
+    to be more responsible with water resources. For the first time, the U.S. 
+    Geological Survey is displaying the national compilation of water use data for 
+    every U.S. county. Explore the variety of water use across the U.S. to understand 
+    how we use our current resources.
   keywords:
   audience:
   url: https://owi.usgs.gov/vizlab/water-use-15
