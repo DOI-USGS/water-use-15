@@ -24,10 +24,14 @@ file_extensions:
 targets:
   all: 
     depends: 
-      - gifs/US_water_use.gif.ind
+      - gifs/US_water_use_twitter.gif.ind
+      - gifs/US_water_use_reddit.gif.ind
   
-  plot_metadata:
-    command: c(I(6.5), I(5.2), I(300))
+  plot_metadata_twitter:
+    command: c(I(8), I(4), I(128))
+
+  plot_metadata_reddit:
+    command: c(I(8), I(4), I(320))
   
   proj: 
     command: c(I("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
@@ -49,10 +53,21 @@ targets:
   state_totals:
     command: get_us_totals('cache/wu_data_15_sum.json')
 
-  plot_layout:
-    command: get_national_layout(us_states, plot_metadata)
+  plot_layout_reddit:
+    command: get_national_layout(us_states, plot_metadata_reddit)
+    
+  plot_layout_twitter:
+    command: get_national_layout(us_states, plot_metadata_twitter)
 
-  gifs/US_water_use.gif.ind:
-    command: build_wu_gif(us_states, us_counties, us_county_dots, state_totals, plot_layout, 
+  gifs/US_water_use_twitter.gif.ind:
+    command: build_wu_gif(us_states, us_counties, us_county_dots, state_totals, plot_layout_twitter, 
       'images/usgs_logo_black.png', 
-      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'), pause_delay = I('250'))
+      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'), I('industrial'), pause_delay = I('150'))
+      
+      
+  gifs/US_water_use_reddit.gif.ind:
+    command: build_wu_gif(us_states, us_counties, us_county_dots, state_totals, plot_layout_reddit, 
+      'images/usgs_logo_black.png', 
+      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'), I('industrial'), pause_delay = I('250'))
+      
+    
