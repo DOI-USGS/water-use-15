@@ -50,7 +50,7 @@ var buildPath = d3.geoPath()
 
 // circle scale
 var scaleCircles = d3.scaleSqrt()
-  .range([0, 10]);
+  .range([0, 15]);
   
 /** Get user view preferences **/
 
