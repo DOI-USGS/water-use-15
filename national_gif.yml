@@ -62,7 +62,7 @@ targets:
   gifs/US_water_use_twitter.gif.ind:
     command: build_wu_gif(us_states, us_counties, us_county_dots, state_totals, plot_layout_twitter, 
       'images/usgs_logo_black.png', 
-      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'), I('industrial'), pause_delay = I('250'))
+      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'), I('industrial'), pause_delay = I('150'))
       
       
   gifs/US_water_use_reddit.gif.ind:
