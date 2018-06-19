@@ -41,7 +41,7 @@ function loadCountyBounds(state, callback) {
       if(error) throw error;
       
       // extract the topojson to geojson and add data
-      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.Colorado_HUC4).features;
+      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.Colorado_HUC8).features;
       allCountiesGeoData = addDataToCounties(allCountiesGeo);
       
       // cache in countyBoundsZoom
@@ -64,12 +64,12 @@ function loadCountyBounds(state, callback) {
 
 function addDataToCounties(countyBounds) {
   // make countyCentroids easily searchable
-  var countyDataMap = d3.map(countyCentroids, function(d) { return d.GEOID; });
+  var countyDataMap = d3.map(countyCentroids, function(d) { return d.HUC8; });
   
   // iterate over countyBounds, adding data from countyCentroids to each
   for(var i = 0; i < countyBounds.length; i++) {
     // identify the data row (object) relevant to this county
-    var currentCountyData = countyDataMap.get(countyBounds[i].properties.GEOID);
+    var currentCountyData = countyDataMap.get(countyBounds[i].properties.HUC8);
     
     // set the countyBounds properties equal to this data object.
     // no need to keep the old properties; they were just GEOID (G)
@@ -117,7 +117,7 @@ function displayCountyBounds(error, activeCountyData) {
     // attach data
     var countyBounds = currentCountyBounds
       .data(activeCountyData, function(d) {
-        return d.properties.GEOID;
+        return d.properties.HUC8;
       });
     
     // enter
@@ -126,7 +126,7 @@ function displayCountyBounds(error, activeCountyData) {
       .append("path")
       .classed('county', true) // by default, county bounds not seen
       .attr('id', function(d) {
-        return d.properties.GEOID;
+        return d.properties.HUC8;
       })
       .attr('d', buildPath);
       
