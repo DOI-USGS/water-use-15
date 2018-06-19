@@ -114,7 +114,7 @@ d3.tsv("data/huc8_centroids_wu.tsv", function(error, countyCentroids) {
       // cache data for dotmap and update legend if we're in national view
       waterUseViz.nationalData = waterUseNational;
       
-      d3.json("data/wu_data_state_simplify.json", function(error, waterUseState) {
+      d3.json("data/wu_state_data.json", function(error, waterUseState) {
         
         if (error) throw error;
         // cache data for dotmap

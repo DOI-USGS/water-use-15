@@ -206,6 +206,15 @@ process:
     processor: summarize_wu_data
     scripts: [scripts/process/summarize_wu_data.R] #getting negative 'other'
   -
+    id: wu_data_state_sum
+    location: cache/wu_state_data.json
+    mimetype: application/json
+    depends:
+      rawdata: wu_data_state_simplify
+      state_boundaries: huc4_boundaries_topojson
+    processor: state_wu_data
+    scripts: [scripts/process/state_wu_data.R]
+  -
     id: wu_data_range
     location: cache/wu_data_range.json
     mimetype: application/json
@@ -244,7 +253,7 @@ publish:
       huc8_boundaries: huc8_boundaries_topojson
       huc8_centroids_wu: huc8_centroids_wu_tsv
       wu_data_county: wu_data_county_simplify #HUC8
-      wu_data_state: wu_data_state_simplify #HUC4
+      wu_data_state: wu_data_state_sum #HUC4
       wu_data_national: wu_data_national_sum
       wu_data_range:  wu_data_range
     context:
