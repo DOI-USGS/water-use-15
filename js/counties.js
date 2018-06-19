@@ -16,7 +16,7 @@ function loadCountyBounds(state, callback) {
   if(state === 'USA') {
     // For national view, use the coarse-resolution county boundaries
     if(!countyBoundsUSA) {
-      d3.json('data/county_boundaries_USA.json', function(error, allCountiesTopo) {
+      d3.json('data/huc8_boundaries.json', function(error, allCountiesTopo) {
         if(error) throw error;
       
         // extract the topojson to geojson and add data. cache the data to a global variable, countyBoundsUSA
@@ -33,9 +33,9 @@ function loadCountyBounds(state, callback) {
   } else if(!countyBoundsZoom.has('USA')) {
     var countyJson;
     if(waterUseViz.interactionMode === 'tap') {
-      countyJson = "data/county_boundaries_mobile.json";
+      countyJson = "data/huc8_boundaries.json";
     } else {
-      countyJson = "data/county_boundaries_zoom.json";
+      countyJson = "data/huc8_boundaries.json";
     }
     d3.json(countyJson, function(error, allCountiesTopo) {
       if(error) throw error;
