@@ -41,7 +41,7 @@ var categories = ["total", "thermoelectric", "irrigation","publicsupply", "indus
 
 // Projection
 var projection = albersUsaTerritories()
-  .scale([1200])
+  .scale([2000])
   .translate([waterUseViz.dims.map.width / 2, waterUseViz.dims.map.height / 2]);
   // default is .rotate([96,0]) to center on US (we want this)
     
@@ -97,7 +97,7 @@ d3.json("data/huc4_boundaries.json", function(error, stateBoundsRaw) {
   drawMap(stateBoundsRaw);
 });
 
-d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
+d3.tsv("data/huc8_centroids_wu.tsv", function(error, countyCentroids) {
   
   if (error) throw error;
 

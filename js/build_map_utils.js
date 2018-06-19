@@ -108,25 +108,6 @@ function fillMap(countyCentroidData) {
   countyBoundsUSA = true;
   }
 
-// format data for rankEm
-var  barData = [];
-waterUseViz.stateData.forEach(function(d) {
-  var x = {
-    'abrv': d.abrv,
-    'STATE_NAME': d.STATE_NAME,
-    'open': d.open,
-    'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse,
-    'fancynums': d.use.filter(function(e) {return e.category === 'total';})[0].fancynums
-  };
-  barData.push(x);
-});
-
-// create big pie figure (uses waterUseViz.nationalData)
-if(!waterUseViz.isEmbed) loadPie();
-
-// create rankEm figure  
-if(!waterUseViz.isEmbed) rankEm(barData);
-
 }
 
 function loadInitialCounties() {

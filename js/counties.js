@@ -18,9 +18,9 @@ function loadCountyBounds(state, callback) {
     if(!countyBoundsUSA) {
       d3.json('data/huc8_boundaries.json', function(error, allCountiesTopo) {
         if(error) throw error;
-      
+        console.log(allCountiesTopo);
         // extract the topojson to geojson and add data. cache the data to a global variable, countyBoundsUSA
-        allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
+        allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.Colorado_HUC8).features;
         countyBoundsUSA = addDataToCounties(allCountiesGeo);
         
         // do the update
@@ -41,7 +41,7 @@ function loadCountyBounds(state, callback) {
       if(error) throw error;
       
       // extract the topojson to geojson and add data
-      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
+      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.Colorado_HUC4).features;
       allCountiesGeoData = addDataToCounties(allCountiesGeo);
       
       // cache in countyBoundsZoom

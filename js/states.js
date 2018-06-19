@@ -14,7 +14,7 @@ function updateStateData(newView, callback) {
     } else if(map.select('#state-bounds-highres').empty()) {
       
       d3.json('data/huc4_boundaries.json', function(error, stateBoundsTopo) {
-        stateBoundsZoom = topojson.feature(stateBoundsTopo, stateBoundsTopo.objects.states);
+        stateBoundsZoom = topojson.feature(stateBoundsTopo, stateBoundsTopo.objects.Colorado_HUC4);
         // load the data and create the state boundaries in <use>
         d3.select('defs').append('g').attr('id', 'state-bounds-highres')
           .selectAll('path')

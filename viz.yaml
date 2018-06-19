@@ -148,6 +148,15 @@ fetch:
     fetcher: googledrive
     scripts: scripts/fetch/googledrive.R
   -
+    id: huc8_centroids_topojson
+    location: cache/huc8_centroids.json
+    fetch_args:
+      google_file_id: "1fy3cCqcfzZz32u_ODU7LloEwXwk8DWfi"
+    reader: json
+    mimetype: application/json
+    fetcher: googledrive
+    scripts: scripts/fetch/googledrive.R
+  -
     id: wu_data_county #HUC8
     location: cache/qry_HUC8_WaterUse.txt
     fetch_args:
@@ -167,14 +176,6 @@ fetch:
     mimetype: text/tab-separated-values
     
 process:
-#  -
-#    id: county_centroids_topojson #HUC8 centroids
-#    location: cache/county_centroids_USA.json
-#    reader: json
-#    mimetype: application/json
-#    fetcher: sciencebase
-#    remoteItemId: "5ab154b1e4b081f61ab26420"
-#    remoteFilename: "county_centroids_USA.json"
   -
     id: wu_data_state_simplify
     location: cache/wu_data_state_simplify.json
@@ -212,17 +213,17 @@ process:
       wu_data_yr: wu_data_county_simplify
     processor: find_range_huc
     scripts: [scripts/process/find_range.R]
-#  -
-#    id: county_centroids_wu_tsv
-#    location: cache/county_centroids_wu.tsv
-#    mimetype: text/tab-separated-values
-#    process_args:
-#      layer: centroids
-#    depends:
-#      topo: county_centroids_topojson
-#      wu_data_15_simple: wu_data_15_simple
-#    processor: merge_centroids_wu
-#    scripts: [scripts/process/merge_centroids_wu.R]
+  -
+    id: huc8_centroids_wu_tsv
+    location: cache/huc8_centroids_wu.tsv
+    mimetype: text/tab-separated-values
+    process_args:
+      layer: centroids
+    depends:
+      topo: huc8_centroids_topojson
+      wu_data: wu_data_county_simplify
+    processor: merge_centroids_wu
+    scripts: [scripts/process/merge_centroids_wu.R]
 
 visualize:
 
@@ -241,7 +242,7 @@ publish:
       all_js_minified: "all_js_minified"
       huc4_boundaries: huc4_boundaries_topojson
       huc8_boundaries: huc8_boundaries_topojson
-      #county_centroids_wu: "county_centroids_wu_tsv"
+      huc8_centroids_wu: huc8_centroids_wu_tsv
       wu_data_county: wu_data_county_simplify #HUC8
       wu_data_state: wu_data_state_simplify #HUC4
       wu_data_national: wu_data_national_sum
@@ -260,8 +261,8 @@ publish:
         "js/url_hashes.js", "js/custom_projection.js", "js/styles.js", "js/buttons.js",
         "js/resize.js", "js/map_utils.js", "js/states.js", "js/counties.js", "js/watermark.js", 
         "js/circles.js", "js/mobile_ui.js", "js/modernizr_custom.js", "js/lazy_loading.js", 
-        #"js/national_pie.js", 
-        "js/rank_states_utils.js", "js/scroll_tracking.js", "js/build_map_utils.js"
+        #"js/national_pie.js", "js/rank_states_utils.js", 
+        "js/scroll_tracking.js", "js/build_map_utils.js"
       ]
       troubleshoot: TRUE
     publisher: combine_minify_js
