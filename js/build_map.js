@@ -92,7 +92,7 @@ var tooltipDiv = d3.select("body").append("div")
   .classed("tooltip hidden", true);
 
 // Read data and add to map
-d3.json("data/state_boundaries_USA.json", function(error, stateBoundsRaw) {
+d3.json("data/huc4_boundaries.json", function(error, stateBoundsRaw) {
   if (error) throw error;
   drawMap(stateBoundsRaw);
 });

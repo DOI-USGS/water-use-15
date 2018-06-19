@@ -53,7 +53,7 @@ function customizeCaption() {
 function drawMap(stateBoundsRaw) {
   
   // Immediately convert to geojson so we have that converted data available globally.
-  stateBoundsUSA = topojson.feature(stateBoundsRaw, stateBoundsRaw.objects.states);
+  stateBoundsUSA = topojson.feature(stateBoundsRaw, stateBoundsRaw.objects.Colorado_HUC4);
   
   // get state abreviations into waterUseViz.stateAbrvs for later use
   extractNames(stateBoundsUSA);  

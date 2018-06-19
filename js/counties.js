@@ -89,7 +89,7 @@ function cacheCountyBounds(state, callback) {
   if(!countyBoundsZoom.has(state)) {
     // subset the data and run the processing function
     oneStateCounties = countyBoundsZoom.get('USA').filter(function(d) {
-      return(d.properties.STATE_ABBV === state);
+      return(d.properties.HUC4 === state);
     });
     countyBoundsZoom.set(state, oneStateCounties);
     

@@ -58,8 +58,8 @@ function updateViewSelectorOptions(view, stateBounds) {
   
   //update existing options with data (aka include the one that initially exists)
   viewMenu.selectAll("option")
-    .property("value", function(d) { return d.properties.STATE_ABBV; })
-    .text(function(d) { return d.properties.STATE_NAME; });
+    .property("value", function(d) { return d.properties.HUC4; })
+    .text(function(d) { return d.properties.NAME; });
   
   viewMenu
     .insert("option", ":first-child")
@@ -85,7 +85,7 @@ function updateStateSelector(view) {
         if(i === 0) { 
           return false;
         } else {
-          return d.properties.STATE_ABBV === view; 
+          return d.properties.HUC4 === view; 
         }
       }
     });
@@ -202,19 +202,19 @@ function resetCountySelector() {
 }
 
 //Expand National Pie Mapp mobile text
-window.addEventListener('load', function(event){
-  var expandInteract = document.getElementById('national-static-pie-mobile-interact');
-  var contentToShow = document.getElementById('national-static-pie-mobile-content');
-  expandInteract.onclick = function(){
-    if(contentToShow.style.display === "block"){
-      contentToShow.style.display="none";
-      expandInteract.innerHTML = 'Read More'
-    }else{
-      contentToShow.style.display="block";
-      expandInteract.innerHTML = 'Hide'
-    }
-    
-  };
-});
+//window.addEventListener('load', function(event){
+//  var expandInteract = document.getElementById('national-static-pie-mobile-interact');
+//  var contentToShow = document.getElementById('national-static-pie-mobile-content');
+//  expandInteract.onclick = function(){
+//    if(contentToShow.style.display === "block"){
+//      contentToShow.style.display="none";
+//      expandInteract.innerHTML = 'Read More'
+//    }else{
+//      contentToShow.style.display="block";
+//      expandInteract.innerHTML = 'Hide'
+//    }
+//    
+//  };
+//});
 
 
