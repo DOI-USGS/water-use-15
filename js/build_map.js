@@ -92,14 +92,7 @@ var tooltipDiv = d3.select("body").append("div")
   .classed("tooltip hidden", true);
 
 // Read data and add to map
-var stateDataFile;
-if(waterUseViz.interactionMode === 'tap') {
-  stateDataFile = "data/state_boundaries_mobile.json";
-} else {
-  stateDataFile = "data/state_boundaries_USA.json";
-}
-
-d3.json(stateDataFile, function(error, stateBoundsRaw) {
+d3.json("data/state_boundaries_USA.json", function(error, stateBoundsRaw) {
   if (error) throw error;
   drawMap(stateBoundsRaw);
 });
@@ -108,20 +101,20 @@ d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
   
   if (error) throw error;
 
-  d3.json("data/wu_data_15_range.json", function(error, waterUseRange) {
+  d3.json("data/wu_data_range.json", function(error, waterUseRange) {
 
     if (error) throw error;
     // nationalRange gets used in drawMap->addStates->applyZoomAndStyle and
     // fillMap->scaleCircles-update
     waterUseViz.nationalRange = waterUseRange;
 
-    d3.json("data/wu_data_15_sum.json", function(error, waterUseNational) {
+    d3.json("data/wu_data_national_sum.json", function(error, waterUseNational) {
       
       if (error) throw error;
       // cache data for dotmap and update legend if we're in national view
       waterUseViz.nationalData = waterUseNational;
       
-      d3.json("data/wu_state_data.json", function(error, waterUseState) {
+      d3.json("data/wu_data_state_simplify.json", function(error, waterUseState) {
         
         if (error) throw error;
         // cache data for dotmap

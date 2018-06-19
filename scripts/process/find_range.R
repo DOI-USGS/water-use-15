@@ -12,3 +12,15 @@ process.find_range <- function(viz) {
   jsonlite::write_json(wu_data_15_range, viz[["location"]])
   
 }
+
+process.find_range_huc <- function(viz) {
+  
+  deps <- readDepends(viz)
+  wu_data_yr <- deps[["wu_data_yr"]]
+  
+  water_use_df <- dplyr::select(wu_data_yr, -starts_with("HUC"))
+  wu_data_15_range <- range(water_use_df, na.rm = TRUE)
+  
+  jsonlite::write_json(wu_data_15_range, viz[["location"]])
+  
+}

@@ -41,6 +41,9 @@ info:
     geojsonio:
       repo: CRAN
       version: 0.6.0
+    googledrive:
+      repo: CRAN
+      version: 0.1.1
     js:
       repo: CRAN
       version: 1.1
@@ -112,6 +115,9 @@ parameter:
     github: https://github.com/USGS-VIZLAB/water-use-15
     twitter: https://twitter.com/share?url=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=twitter_button_share%2F&text=The%20USGS%20studies%20water%20use%20in%20every%20county%20of%20the%20U.S.%20to%20manage%20current%20resources%20and%20prepare%20for%20future%20needs.%20Explore%20your%20county%20here&hashtags=water,usgs,wateruse
     facebookLink: http://www.facebook.com/sharer.php?u=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=fb_button_share&quote=The%20U.S.%20Geological%20Survey%20studies%20water%20use%20in%20every%20county%20to%20manage%20current%20resources%20and%20prepare%20for%20future%20needs.%20Explore%20your%20county%20and%20learn%20more%20about%20why%20water%20use%20is%20so%20diverse&hashtag=%23wateruse
+  -
+    id: wu_year
+    year: 2010
 
 fetch:
   -
@@ -124,119 +130,99 @@ fetch:
       spatial_metadata: spatial_metadata
     comment: sets up the basic view window and projection
   - 
-    id: state_boundaries_USA_topojson
-    location: cache/state_boundaries_USA.json
+    id: huc4_boundaries_topojson #HUC4
+    location: cache/huc4_boundaries.json
+    fetch_args:
+      google_file_id: "1hNdy_UGthTEw2v7-cx3VFJlKKRzfX3Gx"
     reader: json
     mimetype: application/json
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "state_boundaries_USA.json"
+    fetcher: googledrive
+    scripts: scripts/fetch/googledrive.R
   -
-    id: state_boundaries_zoom_topojson
-    location: cache/state_boundaries_zoom.json
+    id: huc8_boundaries_topojson #HUC8
+    location: cache/huc8_boundaries.json
+    fetch_args:
+      google_file_id: "1lhu11HUPLVU02OWtw04O72z0x1o1udel"
     reader: json
     mimetype: application/json
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "state_boundaries_zoom.json"
+    fetcher: googledrive
+    scripts: scripts/fetch/googledrive.R
   -
-    id: state_boundaries_mobile_topojson
-    location: cache/state_boundaries_mobile.json
-    reader: json
-    mimetype: application/json
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "state_boundaries_mobile.json"
-  -
-    id: county_boundaries_USA_topojson
-    location: cache/county_boundaries_USA.json
-    reader: json
-    mimetype: application/json
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "county_boundaries_USA.json"
-  -
-    id: county_boundaries_zoom_topojson
-    location: cache/county_boundaries_zoom.json
-    reader: json
-    mimetype: application/json
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "county_boundaries_zoom.json"
-  -
-    id: county_boundaries_mobile_topojson
-    location: cache/county_boundaries_mobile.json
-    reader: json
-    mimetype: application/json
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "county_boundaries_mobile.json"
-  -
-    id: county_centroids_topojson
-    location: cache/county_centroids_USA.json
-    reader: json
-    mimetype: application/json
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "county_centroids_USA.json"
-  -
-    id: wu_data_15
-    location: cache/wu_data_15.xlsx
-    reader: excel
-    fetcher: sciencebase
-    remoteItemId: "5ab154b1e4b081f61ab26420"
-    remoteFilename: "usco2015v2.0_FINAL-dataviz.xlsx"
+    id: wu_data_county #HUC8
+    location: cache/qry_HUC8_WaterUse.txt
+    fetch_args:
+      google_file_id: "1Mnep5RNz140aBmwimpaPUuMpAkZsTEaP"
+    reader: huc_data
+    fetcher: googledrive
+    scripts: [scripts/read/huc_data.R, scripts/fetch/googledrive.R]
+    mimetype: text/tab-separated-values
+  - 
+    id: wu_data_state #HUC4
+    location: cache/qry_HUC4_WaterUse.txt
+    fetch_args:
+      google_file_id: "1MeU5GLG76SbU3eBRLieTpRAkI0DizOk_"
+    reader: huc_data
+    fetcher: googledrive
+    scripts: [scripts/read/huc_data.R, scripts/fetch/googledrive.R]
+    mimetype: text/tab-separated-values
     
 process:
+#  -
+#    id: county_centroids_topojson #HUC8 centroids
+#    location: cache/county_centroids_USA.json
+#    reader: json
+#    mimetype: application/json
+#    fetcher: sciencebase
+#    remoteItemId: "5ab154b1e4b081f61ab26420"
+#    remoteFilename: "county_centroids_USA.json"
   -
-    id: wu_data_15_simple
-    location: cache/wu_data_15_simple.rds
-    reader: rds
+    id: wu_data_state_simplify
+    location: cache/wu_data_state_simplify.json
+    mimetype: application/json
+    reader: json
     depends:
-      rawdata: wu_data_15
-      col_names: wu_type_column_names
-    processor: simplify_wu_data
-    scripts: [scripts/process/simplify_wu_data.R]
+      rawdata: wu_data_state
+      year: wu_year
+    processor: simplify_huc_data
+    scripts: [scripts/process/simplify_huc_data.R]
   -
-    id: wu_data_15_range_json
-    location: cache/wu_data_15_range.json
+    id: wu_data_county_simplify
+    location: cache/wu_data_county_simplify.json
+    mimetype: application/json
+    reader: json
+    depends:
+      rawdata: wu_data_county
+      year: wu_year
+    processor: simplify_huc_data
+    scripts: [scripts/process/simplify_huc_data.R]
+  -
+    id: wu_data_national_sum
+    location: cache/wu_data_national_sum.json
     mimetype: application/json
     depends:
-      wu_data_15_simple: wu_data_15_simple
-      col_names: wu_type_column_names
-    processor: find_range
-    scripts: [scripts/process/find_range.R]
-  -
-    id: wu_data_15_sum_json
-    location: cache/wu_data_15_sum.json
-    mimetype: application/json
-    depends:
-      rawdata: wu_data_15_simple
+      rawdata: wu_data_state_simplify
       col_names: wu_type_column_names
     processor: summarize_wu_data
-    scripts: [scripts/process/summarize_wu_data.R]
+    scripts: [scripts/process/summarize_wu_data.R] #getting negative 'other'
   -
-    id: wu_state_data_json
-    location: cache/wu_state_data.json
+    id: wu_data_range
+    location: cache/wu_data_range.json
     mimetype: application/json
-    process_args:
-      drag_states: ["ID","AZ","MI"]
     depends:
-      rawdata: wu_data_15_simple
-      state_boundaries: state_boundaries_USA_topojson
-    processor: state_wu_data
-    scripts: [scripts/process/state_wu_data.R]
-  -
-    id: county_centroids_wu_tsv
-    location: cache/county_centroids_wu.tsv
-    mimetype: text/tab-separated-values
-    process_args:
-      layer: centroids
-    depends:
-      topo: county_centroids_topojson
-      wu_data_15_simple: wu_data_15_simple
-    processor: merge_centroids_wu
-    scripts: [scripts/process/merge_centroids_wu.R]
+      wu_data_yr: wu_data_county_simplify
+    processor: find_range_huc
+    scripts: [scripts/process/find_range.R]
+#  -
+#    id: county_centroids_wu_tsv
+#    location: cache/county_centroids_wu.tsv
+#    mimetype: text/tab-separated-values
+#    process_args:
+#      layer: centroids
+#    depends:
+#      topo: county_centroids_topojson
+#      wu_data_15_simple: wu_data_15_simple
+#    processor: merge_centroids_wu
+#    scripts: [scripts/process/merge_centroids_wu.R]
 
 visualize:
 
@@ -249,33 +235,20 @@ publish:
     depends:
       vizlab-favicon: "lib-vizlab-favicon"
       all_css: "all_css"
-      social: "social_section"
       header: "header_section"
       mobile_map_ui: "mobile_map_ui"
       map_section: "map_section"
-      wu_story: "wu_story"
-      footer: "footer_section"
       all_js_minified: "all_js_minified"
-      state_boundaries_USA: state_boundaries_USA_topojson
-      state_boundaries_zoom: state_boundaries_zoom_topojson
-      state_boundaries_mobile: state_boundaries_mobile_topojson
-      county_boundaries_USA: county_boundaries_USA_topojson
-      county_boundaries_zoom: county_boundaries_zoom_topojson
-      county_boundaries_mobile: county_boundaries_mobile_topojson
-      county_centroids_wu: "county_centroids_wu_tsv"
-      wu_data_15_range:  "wu_data_15_range_json"
-      wu_data_15_sum_json: wu_data_15_sum_json
-      thumb_facebook: thumb_facebook
-      thumb_twitter: thumb_twitter
-      thumb_landing: thumb_landing
-      wu_state_data_json: wu_state_data_json
+      huc4_boundaries: huc4_boundaries_topojson
+      huc8_boundaries: huc8_boundaries_topojson
+      #county_centroids_wu: "county_centroids_wu_tsv"
+      wu_data_county: wu_data_county_simplify #HUC8
+      wu_data_state: wu_data_state_simplify #HUC4
+      wu_data_national: wu_data_national_sum
+      wu_data_range:  wu_data_range
     context:
       resources: ["all_js_minified", "all_css", "vizlab-favicon"]
-      sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
-      thumbnails: 
-        twitter: thumb_twitter
-        facebook: thumb_facebook
-        main: thumb_landing
+      sections: ["mobile_map_ui", "map_section"] # adding header and footer here, doubled each on the page
   -
     id: all_js_minified
     location: "js/all.min.js"
@@ -289,7 +262,7 @@ publish:
         "js/circles.js", "js/mobile_ui.js", "js/modernizr_custom.js", "js/lazy_loading.js", 
         "js/national_pie.js", "js/rank_states_utils.js", "js/scroll_tracking.js", "js/build_map_utils.js"
       ]
-      troubleshoot: FALSE
+      troubleshoot: TRUE
     publisher: combine_minify_js
     scripts: [scripts/publish/combine_minify_js.R]
   -
@@ -331,65 +304,6 @@ publish:
     context:
       map_script: map_script
   -
-    id: embed_map
-    template: layout/templates/embed_map.mustache
-    publisher: section
-    depends:
-      map_script: build_map_minified
-    context:
-      map_script: map_script
-  -
-    id: static_story_figure
-    location: "images/WU_stories_static.jpg"
-    mimetype: image/jpg
-    export: true
-    title: "A national map with notes about areas of high water use"
-    alttext: >-
-      High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
-    relpath: "images/WU_stories_static.jpg"
-  -
-    id: static_story_figure_mobile
-    location: "images/WU_stories_static_mobile.jpg"
-    mimetype: image/jpg
-    export: true
-    title: "Map of the western U.S. with notes about areas of high water use"
-    alttext:  >-
-      Areas of high water use: Idaho (aquaculture), California (irrigation), Alaska (mining), & big cities (public supply)
-    relpath: "images/WU_stories_mobile_left.jpg"
-  -
-    id: placeholder
-    location: "images/placeholder.gif"
-    mimetype: image/gif
-    title: "A national map with notes about areas of high water use"
-    alttext: >-
-      High water use: IL (steel), Northeast (power), AR & CA (irrigation), Gulf Coast (industry), cities (public), ID & AK (other)
-    relpath: "images/placeholder.gif"
-    data-src: "images/WU_stories_static.jpg"
-    class: "lazy"
-  -
-    id: water_use_thumb
-    location: "images/water_use_thumb.png"
-    mimetype: image/png
-    title: "Water Use Thubnail"
-    alttext: "Water Use Thubnail"
-    relpath: "images/water_use_thumb.png"
-  -
-    id: hurricane_maria_thumb
-    location: "images/hurricane_maria.png"
-    mimetype: image/png
-    title: "Hurricane Maria Thumbnail"
-    alttext: "Hurricane Maria Thumbnail"
-    relpath: "images/hurricane_maria.png"
-  -
-    id: wu_story
-    template: layout/templates/wu_story.mustache
-    depends: ["placeholder", "static_story_figure", "static_story_figure_mobile"]
-    context:
-      placeholder: "placeholder"
-      pie_map_plot: "static_story_figure"
-      mobile_pie_map_plot: "static_story_figure_mobile"
-    publisher: section
-  -
     id: mobile_map_ui
     template: layout/templates/mobileMapUI.mustache
     publisher: section
@@ -397,77 +311,3 @@ publish:
       selectArrows: selectArrows
     context:
       selectArrows: selectArrows
-  -
-    id: footer_section
-    template: layout/templates/footer.mustache
-    publisher: section
-    depends:
-      logo: lib-vizlab-logo
-      usgsLogo: lib-usgs-logo
-      github-logo: lib-github-logo
-      placeholder: placeholder
-      water_use_thumb: "water_use_thumb"
-      hurricane_maria_thumb: "hurricane_maria_thumb"
-    context:
-      placeholder: placeholder
-      logo: logo
-      usgsLogo: usgsLogo
-      github-url:
-      github-logo: github-logo
-      water_use_thumb: "water_use_thumb"
-      hurricane_maria_thumb: "hurricane_maria_thumb"
-  -
-    id: social_section
-    template: vertical-social-media-template
-    publisher: social
-    depends: social-links
-    context:
-      embedLink: embed-water-use-15.html
-  -
-    id: national_water_use
-    name: embed-water-use-15
-    publisher: page
-    template: embed
-    mimetype: text/html
-    depends:
-      all_css: all_css
-      all_js_minified: all_js_minified
-      embed_map: embed_map
-      state_boundaries_USA: state_boundaries_USA_topojson
-      state_boundaries_zoom: state_boundaries_zoom_topojson
-      state_boundaries_mobile: state_boundaries_mobile_topojson
-      county_boundaries_USA: county_boundaries_USA_topojson
-      county_boundaries_zoom: county_boundaries_zoom_topojson
-      county_boundaries_mobile: county_boundaries_mobile_topojson
-      county_centroids_wu: county_centroids_wu_tsv
-      wu_data_15_range:  wu_data_15_range_json
-      wu_data_15_sum_json: wu_data_15_sum_json
-      wu_state_data_json: wu_state_data_json
-    context:
-      resources: ["all_css", "all_js_minified"]
-      embed: ["embed_map"]
-  -
-    id: thumb_facebook
-    publisher: thumbnail
-    location: images/thumb_facebook.png
-    relpath: images/thumb_facebook.png
-    mimetype: image/png
-    title: "Facebook Thumbnail"
-    alttext: "Facebook Thumbnail"
-  -
-    id: thumb_twitter
-    publisher: thumbnail
-    location: images/thumb_twitter.png
-    relpath: images/thumb_twitter.png
-    mimetype: image/png
-    title: "Twitter Thumbnail"
-    alttext: "Twitter Thumbnail"
-  -
-    id: thumb_landing
-    publisher: thumbnail
-    location: images/thumb_landing.png
-    relpath: images/thumb_landing.png
-    mimetype: image/png
-    title: "Landing Page Thumbnail"
-    alttext: "Landing Page Thumbnail"
-
