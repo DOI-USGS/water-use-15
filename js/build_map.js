@@ -42,7 +42,7 @@ var categories = ["total", "thermoelectric", "irrigation","publicsupply", "indus
 // Projection
 var projection = albersUsaTerritories()
   .scale([2000])
-  .translate([waterUseViz.dims.map.width / 2, waterUseViz.dims.map.height / 2]);
+  .translate([waterUseViz.dims.map.width * 0.66, waterUseViz.dims.map.height / 2]);
   // default is .rotate([96,0]) to center on US (we want this)
     
 var buildPath = d3.geoPath()
