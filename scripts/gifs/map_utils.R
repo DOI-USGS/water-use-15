@@ -30,10 +30,17 @@ get_proj <- function(proj_data, state_name){
   return(proj)
 }
 
-get_shifts <- function(){
-  list(AK = list(scale = 0.47, shift = c(90,-465), rotate = -50),
-       HI = list(scale = 1.5, shift = c(520, -110), rotate = -35),
-       PR = list(scale = 3.5, shift = c(-130, 90), rotate=20))
+get_shifts <- function(shift = 'landscape'){
+  if (shift == 'landscape'){
+    return(list(AK = list(scale = 0.43, shift = c(100,-470), rotate = -50),
+                HI = list(scale = 1.3, shift = c(505, -100), rotate = -35),
+                PR = list(scale = 3.5, shift = c(-110, 90), rotate=20)))
+  } else {
+    return(list(AK = list(scale = 0.6, shift = c(140,-525), rotate = -50),
+                HI = list(scale = 1.8, shift = c(590, -170), rotate = -35),
+                PR = list(scale = 4, shift = c(-200, -40), rotate=20)))
+  }
+  
 }
 
 get_moves <- function(){

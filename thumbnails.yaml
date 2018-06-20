@@ -25,22 +25,19 @@ targets:
       - images/thumb_twitter.png
  
   plot_metadata_landing:
-    command: list(width = I(400), height = I(400), res = I(300),
-                  bg = I("#eaedef"), stateborder = I("white"),
-                  countyborder = I(NA), countyfill = I("white"),
-                  stateborderwidth = I(1))
+    command: list(width = I(400), height = I(400), res = I(300), 
+                  bg = I("grey25"), stateborder = I(NA),
+                  countyborder = I(NA), countyfill = I("black"))
  
   plot_metadata_facebook:
     command: list(width = I(1560), height = I(820), res = I(300), 
-                  bg = I("#eaedef"), stateborder = I("#a3a5a7"),
-                  countyborder = I(NA), countyfill = I("white"),
-                  stateborderwidth = I(1.5))
+                  bg = I("grey25"), stateborder = I(NA),
+                  countyborder = I(NA), countyfill = I("black"))
   
   plot_metadata_twitter:
     command: list(width = I(560), height = I(280), res = I(300), 
-                  bg = I("#eaedef"), stateborder = I("white"),
-                  countyborder = I(NA), countyfill = I("white"),
-                  stateborderwidth = I(1))
+                  bg = I("grey25"), stateborder = I(NA),
+                  countyborder = I(NA), countyfill = I("black"))
  
   watermark_file:
     command: c("images/usgs_logo_black.png")
@@ -50,20 +47,21 @@ targets:
     
   us_states:
     command: state_sp()
-  
-  # This county spatial data is from:
-  #     https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
-  us_counties:
-    command: reproject_census('data/cb_2017_us_county_5m.shp')
+    
+  us_states_square:
+    command: state_sp(shift = I("square"))
     
   us_dots:
     command: shift_centroids(county_dots)
+    
+  us_dots_square:
+    command: shift_centroids(county_dots, shift = I("square"))
   
   images/thumb_landing.png:
-    command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_landing, target_name, watermark_file)
+    command: plot_national_pies(us_states_square, us_dots_square, plot_metadata_landing, target_name)
 
   images/thumb_facebook.png:
-    command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_facebook, target_name, watermark_file)
+    command: plot_national_pies(us_states, us_dots, plot_metadata_facebook, target_name)
 
   images/thumb_twitter.png:
-    command: plot_national_pies(us_states, us_counties, us_dots, plot_metadata_twitter, target_name, watermark_file)
+    command: plot_national_pies(us_states, us_dots, plot_metadata_twitter, target_name)

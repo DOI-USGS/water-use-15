@@ -4,21 +4,20 @@ get_national_layout <- function(sp, plot_metadata){
   
   layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
                      map = list(xlim = c(NA_integer_, NA_integer_), ylim = c(NA_integer_, NA_integer_)),
-                     legend = list(xpct = NA_integer_, ypct = NA_integer_, box_h = 0.055, y_bump = 0.015,
+                     legend = list(xpct = NA_integer_, ypct = NA_integer_, y_bump = 0.015, box_w = 0.25,
                                    title_pos = 'top', title = 'U.S. Water Use, 2015'))
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
   aspect_fig <- plot_metadata[1]/plot_metadata[2]
   map_ratio <- aspect_map / aspect_fig
-  y_remain <- 0.74 # 
-  map_span <- diff(state_bb[c(2,4)])/y_remain
-  sp_width <- diff(state_bb[c(1,3)])
-  y2 <- state_bb[4]
-  y1 <- y2 - map_span
-  layout_out$map$ylim <- c(y1, y2)
-  layout_out$map$xlim <- c(state_bb[1]-0.01*sp_width, state_bb[3]+0.01*sp_width)
-  layout_out$legend$xpct <- 0.67 # percentage relative to left for the left edge of the legend
-  layout_out$legend$ypct <- 0.015 # percentage relative to bottom for the bottom of the legend
-  layout_out$legend$box_h <- 0.043
+  x_remain <- 0.87
+  x1 <- state_bb[1]
+  x2 <- x1 + diff(state_bb[c(1,3)])/x_remain
+  layout_out$map$xlim <- c(x1, x2)
+  map_span <- diff(state_bb[c(2,4)])
+  layout_out$map$ylim <- c(state_bb[2]-0.02*map_span, state_bb[4]+0.02*map_span)
+  layout_out$legend$xpct <- 0.74 # percentage relative to left for the left edge of the legend
+  layout_out$legend$ypct <- 0.35 # percentage relative to bottom for the bottom of the legend
+  layout_out$legend$box_h <- 0.055
   layout_out$legend$y_bump <- 0.008
   layout_out$legend$title_pos <- 'national'
   return(layout_out)
@@ -31,9 +30,13 @@ get_state_layout <- function(sp, plot_metadata){
 
   layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
                      map = list(xlim = c(NA_integer_, NA_integer_), ylim = c(NA_integer_, NA_integer_)),
-                     legend = list(xpct = NA_integer_, ypct = NA_integer_, box_h = 0.055, y_bump = 0.015,
+                     legend = list(xpct = NA_integer_, ypct = NA_integer_, box_h = 0.055, y_bump = 0.015, box_w = 0.32,
                                    title_pos = 'top', title = names(sp)))
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
+  if (aspect_map < 1.2){
+    plot_metadata[1] <- plot_metadata[1] * 0.75
+    layout_out$figure$width <- plot_metadata[1] 
+  }
   aspect_fig <- plot_metadata[1]/plot_metadata[2]
   
   map_ratio <- aspect_map / aspect_fig
@@ -41,7 +44,7 @@ get_state_layout <- function(sp, plot_metadata){
     x_remain <- 0.69
     x1 <- state_bb[1]
     x2 <- x1 + diff(state_bb[c(1,3)])/x_remain
-    y_remain <- 0.94 # to get it above the watermark
+    y_remain <- 0.92 # to get it above the watermark
     map_span <- diff(state_bb[c(2,4)])/y_remain
     y2 <- state_bb[4]
     y1 <- y2 - map_span
@@ -288,7 +291,7 @@ add_legend <- function(categories, state_totals, frame = rep(1, length(categorie
   plot_height <- diff(coord_space[c(3,4)])
   strt_x <- coord_space[1]+plot_width*this_legend$xpct
   strt_y <- coord_space[3]+plot_height*this_legend$ypct
-  box_w <- plot_width*0.32
+  box_w <- plot_width*this_legend$box_w
   box_h <- plot_height*this_legend$box_h
   y_bump <- plot_height*this_legend$y_bump
   text_st <- 0
@@ -314,13 +317,13 @@ add_legend <- function(categories, state_totals, frame = rep(1, length(categorie
   }
   if (this_legend$title_pos == 'top'){
     text(x = strt_x+box_w/2, y = strt_y+box_h, labels = simpleCap(this_legend$title), cex = 1.2)
-    text(x = strt_x+box_w/2, y = strt_y+box_h/4, labels = "(water withdrawals, million gallons per day)", cex = 0.7)
+    text(x = strt_x+box_w/2, y = strt_y+box_h/4, labels = "(water withdrawals, million gallons per day)", cex = 0.6)
   } else if (this_legend$title_pos == 'left'){
     text(x = coord_space[1]+plot_width*0.45, y = strt_y-box_h, labels = simpleCap(this_legend$title), cex = 1.4)
-    text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = "(water withdrawals, million gallons per day)", cex = 0.7)
+    text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = "(water withdrawals, million gallons per day)", cex = 0.6)
   } else if (this_legend$title_pos == 'national'){
-    text(x = coord_space[1]+plot_width*0.45, y = strt_y-2*box_h, labels = simpleCap(this_legend$title), cex = 1.4)
-    text(x = strt_x+box_w/2, y = strt_y+box_h/4, labels = "(withdrawals, million gallons per day)", cex = 0.7)
+    text(x = strt_x+box_w/2, y = strt_y+box_h*1.3, labels = simpleCap(this_legend$title), cex = 1)
+    text(x = strt_x+box_w/2, y = strt_y+box_h/3, labels = "(withdrawals, million gallons per day)", cex = 0.7)
   } else {
     stop(this_legend$title_pos, ' not supported')
   }
@@ -349,13 +352,13 @@ dot_to_pie <- function(dots){
   categories <- categories()
   
   for (j in seq_len(length(dots))){
-    
+
     dot <- dots[j, ]
     r <- sqrt(dot$total) * scale_const
-    
+
     c.x <- dot@coords[1]
     c.y <- dot@coords[2]
-    
+
     #stole code from water-use-15
     for (cat in categories){
       cat_angle <- dot[[cat]] / dot[['total']]*2*pi
@@ -374,7 +377,7 @@ dot_to_pie <- function(dots){
         plot_slice(c.x, c.y, r = r, angle_from, angle_to, cat)
       }
     }
-    
+
     if (r > 0 & !is.na(r) & cat == tail(categories, 1L) & angle_to < 2*pi + orig_ang){
       plot_slice(c.x, c.y, r = r, angle_to, 2*pi + orig_ang, 'other')
     }
@@ -389,7 +392,7 @@ plot_slice <- function(x,y,r,angle_from, angle_to, cat, col = NULL){
   polygon(c(x, segments$x, x), c(y, segments$y, y), 
           border = NA,
           col = fill_col(col))
-  lines(segments$x, segments$y, lwd=0.4, col = col)
+  #lines(segments$x, segments$y, lwd=0.4, col = col)
 }
 
 add_watermark <- function(watermark_file, layout, ...){
@@ -398,12 +401,11 @@ add_watermark <- function(watermark_file, layout, ...){
   watermark_bump_frac <- 0.01
   coord_space <- par()$usr
   
-  watermark_alpha <- 0.4
+  watermark_grey <- 0.75
   d <- png::readPNG(watermark_file)
   
-  which_image <- d[,,4] != 0 # transparency
-  d[which_image] <- watermark_alpha
-  
+  which_image <- d[,,1:3] != 1 # transparency
+  d[which_image] <- watermark_grey
   coord_width <- coord_space[2]-coord_space[1]
   coord_height <- coord_space[4]-coord_space[3]
   watermark_width <- dim(d)[2]
@@ -411,11 +413,17 @@ add_watermark <- function(watermark_file, layout, ...){
   
   x1 <- coord_space[1]+coord_width*watermark_bump_frac
   y1 <- coord_space[3]+coord_height*watermark_bump_frac
-  
+  if (layout$legend$title_pos == 'national'){
+    # watermark on the right
+    x2 <- coord_space[2] - coord_width*watermark_frac/watermark_width-coord_width*watermark_bump_frac
+    x1 <- x2 - ncol(d)*img_scale
+  } 
   rasterImage(d, x1, y1, x1+ncol(d)*img_scale, y1+nrow(d)*img_scale)
   
-  if (layout$legend$title_pos == 'left' || layout$legend$title_pos == 'national'){
+  if (layout$legend$title_pos == 'left'){
     text(coord_space[1]+diff(coord_space[c(1,2)])*0.41, y1+coord_height*watermark_bump_frac, 'https://owi.usgs.gov/vizlab/water-use-15/', cex = 0.8, col = 'grey50')
+  } else if (layout$legend$title_pos == 'national'){
+    text(coord_space[1]+diff(coord_space[c(1,2)])*0.46, y1+coord_height*watermark_bump_frac, 'https://owi.usgs.gov/vizlab/water-use-15/', cex = 0.8, col = 'grey50')
   } else{
     text(coord_space[2], y1+coord_height*watermark_bump_frac, 'https://owi.usgs.gov/vizlab/water-use-15/', pos = 2, cex = 0.8, col = 'grey50')
   }

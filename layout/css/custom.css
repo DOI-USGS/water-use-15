@@ -102,9 +102,9 @@
 }
 
 .viz-text ul {
-    padding-left: 20px;
-    min-height: 20px;
-    padding: 15px;
+  padding-left: 20px;
+  min-height: 20px;
+  padding: 15px;
 }
 
 #wu-story{
@@ -113,17 +113,17 @@
   margin-top:20px;
 }
 
-#wu-story .viz-text{
-  padding:0;
-}
-
 #wu-story p{
   padding-top: 10px; 
   padding-bottom: 10px;
 }
 
-#wu-story h2{
-  margin-top:20px;
+h2{
+  font-size:1.17em;
+}
+
+h3{
+  font-size:1em;
 }
 
 .story-one,
@@ -136,20 +136,29 @@
   margin-bottom:40px;
 }
 
+.side-by-side-left{
+  padding:0 40px 0 10px;
+}
+
 #directions {
   padding-left: 20px;
   padding-right: 40px;
 }
 
-#fig-caption p{
+.caption p{
   font-size:0.9em;
   font-style: italic;
-  text-align: left;
-  color: rgb(137,137,137);
+  text-align: center;
+  color: rgb(106,106,106);
+  line-height:1.5em;
+  margin-top:20px;
+  text-decoration:none;
 }
 
+.full-width,
 .key-story-plot{
-  margin:10px 0;
+  margin:10px auto;
+  padding:0 10px;
 }
 
 .key-story-plot img{
@@ -192,7 +201,7 @@
   pointer-events:none;
 }
 
-.extras{
+#extras{
   background:rgb(240,240,240);
   padding:10px;
 }
@@ -227,23 +236,29 @@
   }
   
   .side-by-side,
-  .extras{
+  #extras{
     display:flex;
     flex-direction:row;
+    padding:10px;
   }
   
   .side-by-side-left{
-    width:70%;
+    width: 50%;
   }
   
   .side-by-side-right{
-    width:30%;
-    position:relative;
+    width: 40%;
+    position: relative;
   }
   
-  .pie-caption{
+  .caption p{
+    text-align: left;
+  }
+  
+  #pie-caption{
     position:absolute;
     margin:auto;
+    padding:0 0;
     top:0; bottom:0; left:0; right:0;
     height:80px;
   }
@@ -258,6 +273,24 @@
     flex:1;
   }
   
+}
+
+/* large screen definition as in main vizlab */
+@media screen and (min-width: 1024px){
+  #extras{
+    width:940px;
+  }
+  
+  .viz-text{
+    width:960px;
+    margin:20px auto 0 auto;
+  } 
+  
+  .full-width,
+  .key-story-plot{
+    width:960px;
+    margin:10px auto;
+  }
 }
 
 /* really large desktop screens*/

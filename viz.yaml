@@ -1,22 +1,31 @@
 info:
   id: water-use-15
   name: U.S. Water Use
-  date: 2018-01-18
-  publish-date:
-  path: /water-use-15
+  date: 2018-06-19
+  publish-date: 2018-06-19
+  path: water-use-15
   analytics-id: UA-78530187-12
   description: >-
-    Data visualization of water use.
+    Water touches almost every aspect of American life: from food to electricity to 
+    consumer products. Understanding how we use water is crucial for learning how 
+    to be more responsible with water resources. For the first time, the U.S. 
+    Geological Survey is displaying the national compilation of water use data for 
+    every U.S. county. Explore the variety of water use across the U.S. to understand 
+    how we use our current resources.
   keywords:
   audience:
   url: https://owi.usgs.gov/vizlab/water-use-15
-  thumbnail:
+  thumbnail-landing:
+    url: images/thumb_landing.png
+    width: 400
+    height: 400
+    alttext: "Water Use"
   required-packages:
     vizlab:
       repo: github
-      version: 0.3.5
+      version: 0.3.6
       name: USGS-VIZLAB/vizlab
-      ref: c0889d88e9df47dbb763be2bf335c6de8d7b57fd
+      ref: v0.3.6
     aws.s3:
       repo: CRAN
       version: 0.3.3
@@ -32,6 +41,9 @@ info:
     geojsonio:
       repo: CRAN
       version: 0.6.0
+    js:
+      repo: CRAN
+      version: 1.1
     jsonlite:
       repo: CRAN
       version: 1.5
@@ -98,8 +110,8 @@ parameter:
   - 
     id: social-links
     github: https://github.com/USGS-VIZLAB/water-use-15
-    twitter: https://twitter.com/share?url=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=twitter_button_share
-    facebookLink: http://www.facebook.com/sharer.php?u=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=fb_button_share
+    twitter: https://twitter.com/share?url=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=twitter_button_share%2F&text=The%20USGS%20studies%20water%20use%20in%20every%20county%20of%20the%20U.S.%20to%20manage%20current%20resources%20and%20prepare%20for%20future%20needs.%20Explore%20your%20county%20here&hashtags=water,usgs,wateruse
+    facebookLink: http://www.facebook.com/sharer.php?u=https://owi.usgs.gov/vizlab/water-use-15/?utm_source=fb_button_share&quote=The%20U.S.%20Geological%20Survey%20studies%20water%20use%20in%20every%20county%20to%20manage%20current%20resources%20and%20prepare%20for%20future%20needs.%20Explore%20your%20county%20and%20learn%20more%20about%20why%20water%20use%20is%20so%20diverse&hashtag=%23wateruse
 
 fetch:
   -
@@ -235,37 +247,15 @@ publish:
     template: fullpage
     publisher: page
     depends:
-      lib_d3_js: "lib-d3-js"
-      topojson: "topojson"
-      header_css: "lib-header-css"
-      footer_css: "lib-footer-css"
-      content_css: "lib-content-css"
       vizlab-favicon: "lib-vizlab-favicon"
-      map_css: "map_css"
-      custom_css: "custom_css"
+      all_css: "all_css"
       social: "social_section"
-      socialCSS: "lib-social-media-css"
       header: "header_section"
       mobile_map_ui: "mobile_map_ui"
       map_section: "map_section"
       wu_story: "wu_story"
       footer: "footer_section"
-      hashes: "url_hashes"
-      projection: "custom_projection"
-      styles: "styles"
-      buttons: buttons
-      resize: resize
-      modernizr: modernizr
-      lazy_loader: lazy_loader
-      map_utils: "map_utils"
-      watermark_utils: "watermark_utils"
-      map_circles: map_circles
-      map_states: map_states
-      map_counties: "map_counties"
-      mobile_ui: "mobile_ui"
-      national_pie: "national_pie"
-      rank_states_utils: "rank_states_utils"
-      scroll_tracking: "scroll_tracking"
+      all_js_minified: "all_js_minified"
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -274,101 +264,51 @@ publish:
       county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: "county_centroids_wu_tsv"
       wu_data_15_range:  "wu_data_15_range_json"
+      wu_data_15_sum_json: wu_data_15_sum_json
       thumb_facebook: thumb_facebook
       thumb_twitter: thumb_twitter
       thumb_landing: thumb_landing
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", "header_css", "content_css", "footer_css", "socialCSS","vizlab-favicon",
-                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr",
-                  "lazy_loader", "national_pie", "rank_states_utils", "scroll_tracking"]
+      resources: ["all_js_minified", "all_css", "vizlab-favicon"]
       sections: ["social", "mobile_map_ui", "map_section", "wu_story"] # adding header and footer here, doubled each on the page
       thumbnails: 
         twitter: thumb_twitter
         facebook: thumb_facebook
         main: thumb_landing
   -
-    id: topojson
-    location: "js/topojson.v1.min.js"
+    id: all_js_minified
+    location: "js/all.min.js"
     mimetype: application/javascript
+    publish_args:
+      lib_js: ["lib-d3-js"]
+      js_files: [
+        "js/topojson.v1.min.js",
+        "js/url_hashes.js", "js/custom_projection.js", "js/styles.js", "js/buttons.js",
+        "js/resize.js", "js/map_utils.js", "js/states.js", "js/counties.js", "js/watermark.js", 
+        "js/circles.js", "js/mobile_ui.js", "js/modernizr_custom.js", "js/lazy_loading.js", 
+        "js/national_pie.js", "js/rank_states_utils.js", "js/scroll_tracking.js", "js/build_map_utils.js"
+      ]
+      troubleshoot: FALSE
+    publisher: combine_minify_js
+    scripts: [scripts/publish/combine_minify_js.R]
   -
-    id: url_hashes
-    location: "js/url_hashes.js"
+    id: build_map_minified
+    location: "js/build_map.min.js"
     mimetype: application/javascript
-  # custom_projection.js must be before build_map.js for it to find the projection function.
+    publish_args:
+      js_files: ["js/build_map.js"]
+    publisher: combine_minify_js
+    scripts: [scripts/publish/combine_minify_js.R]
   -
-    id: custom_projection
-    location: "js/custom_projection.js"
+    id: all_css
+    location: "layout/css/all.css"
     mimetype: application/javascript
-  -
-    id: build_map
-    location: "js/build_map.js"
-    mimetype: application/javascript
-  -
-    id: styles
-    location: "js/styles.js"
-    mimetype: application/javascript
-  -
-    id: map_utils
-    location: "js/map_utils.js"
-    mimetype: application/javascript
-  -
-    id: rank_states_utils
-    location: "js/rank_states_utils.js"
-    mimetype: application/javascript
-  -
-    id: national_pie
-    location: "js/national_pie.js"
-    mimetype: application/javascript
-  -
-    id: resize
-    location: "js/resize.js"
-    mimetype: application/javascript
-  -
-    id: buttons
-    location: "js/buttons.js"
-    mimetype: application/javascript
-  -
-    id: watermark_utils
-    location: "js/watermark.js"
-    mimetype: application/javascript
-  -
-    id: map_circles
-    location: "js/circles.js"
-    mimetype: application/javascript
-  -
-    id: map_states
-    location: "js/states.js"
-    mimetype: application/javascript
-  -
-    id: map_counties
-    location: "js/counties.js"
-    mimetype: application/javascript
-  -
-    id: mobile_ui
-    location: "js/mobile_ui.js"
-    mimetype: application/javascript
-  -
-    id: modernizr
-    location: "js/modernizr_custom.js"
-    mimetype: application/javascript
-  -
-    id: lazy_loader
-    location: "js/lazy_loading.js"
-    mimetype: application/javascript
-  -
-    id: scroll_tracking
-    location: "js/scroll_tracking.js"
-    mimetype: application/javascript
-  -
-    id: map_css
-    location: "layout/css/map.css"
-    mimetype: text/css
-  -
-    id: custom_css
-    location: "layout/css/custom.css"
-    mimetype: text/css
+    publish_args:
+      lib_css: ["lib-header-css", "lib-footer-css", "lib-content-css", "lib-social-media-css"]
+      custom_css_files: ["layout/css/map.css", "layout/css/custom.css"]
+    publisher: combine_css
+    scripts: [scripts/publish/combine_css.R]
   -
     id: selectArrows
     location: images/selectArrows.svg
@@ -387,7 +327,15 @@ publish:
     template: layout/templates/map_section.mustache
     publisher: section
     depends:
-      map_script: build_map
+      map_script: build_map_minified
+    context:
+      map_script: map_script
+  -
+    id: embed_map
+    template: layout/templates/embed_map.mustache
+    publisher: section
+    depends:
+      map_script: build_map_minified
     context:
       map_script: map_script
   -
@@ -435,7 +383,7 @@ publish:
   -
     id: wu_story
     template: layout/templates/wu_story.mustache
-    depends: ["styles", "placeholder", "static_story_figure", "static_story_figure_mobile"]
+    depends: ["placeholder", "static_story_figure", "static_story_figure_mobile"]
     context:
       placeholder: "placeholder"
       pie_map_plot: "static_story_figure"
@@ -457,7 +405,6 @@ publish:
       logo: lib-vizlab-logo
       usgsLogo: lib-usgs-logo
       github-logo: lib-github-logo
-      css: lib-footer-css
       placeholder: placeholder
       water_use_thumb: "water_use_thumb"
       hurricane_maria_thumb: "hurricane_maria_thumb"
@@ -467,7 +414,6 @@ publish:
       usgsLogo: usgsLogo
       github-url:
       github-logo: github-logo
-      resources: [ "css" ]
       water_use_thumb: "water_use_thumb"
       hurricane_maria_thumb: "hurricane_maria_thumb"
   -
@@ -484,23 +430,9 @@ publish:
     template: embed
     mimetype: text/html
     depends:
-      lib_d3_js: lib-d3-js
-      topojson: topojson
-      map_css: map_css
-      custom_css: custom_css
-      hashes: url_hashes
-      projection: custom_projection
-      styles: styles
-      buttons: buttons
-      resize: resize
-      map_utils: map_utils
-      watermark_utils: watermark_utils
-      map_circles: map_circles
-      map_states: map_states
-      map_counties: map_counties
-      mobile_ui: mobile_ui
-      modernizr: modernizr
-      map_section: map_section
+      all_css: all_css
+      all_js_minified: all_js_minified
+      embed_map: embed_map
       state_boundaries_USA: state_boundaries_USA_topojson
       state_boundaries_zoom: state_boundaries_zoom_topojson
       state_boundaries_mobile: state_boundaries_mobile_topojson
@@ -509,12 +441,11 @@ publish:
       county_boundaries_mobile: county_boundaries_mobile_topojson
       county_centroids_wu: county_centroids_wu_tsv
       wu_data_15_range:  wu_data_15_range_json
+      wu_data_15_sum_json: wu_data_15_sum_json
       wu_state_data_json: wu_state_data_json
     context:
-      resources: ["lib_d3_js", "topojson", 
-                  "map_css", "custom_css", "hashes", "projection", "styles", "buttons", "resize", "map_utils",
-                  "map_states", "map_counties", "watermark_utils", "map_circles", "mobile_ui", "modernizr"]
-      embed: ["map_section"]
+      resources: ["all_css", "all_js_minified"]
+      embed: ["embed_map"]
   -
     id: thumb_facebook
     publisher: thumbnail

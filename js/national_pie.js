@@ -82,9 +82,9 @@ function loadPie() {
     return text_size;
 	}
 	
-  var width = 525,
-      height = 350,
-      radius = Math.min(width, height) / 3,
+  var width = 360,
+      height = 240,
+      radius = Math.min(width, height) / 2,
       other_cats = ["Domestic", "Livestock", "Aquaculture", "Mining"];
   
   var wu_national_no_total = waterUseViz.nationalData
