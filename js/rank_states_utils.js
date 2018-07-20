@@ -175,8 +175,6 @@ function rankEm(barData) {
   rankSvg.droppedState = function(d){
     rankSvg.isDragged = false;
     var barchoice = d3.select('.chosen-rank-bar');
-    var sessionId = getSessionId();
-    var timestamp = getTimestamp();
     var draggedState = d3.select(this).attr('id').split('-')[0];
     if (barchoice.empty()){
       d3.select(this)
@@ -186,8 +184,8 @@ function rankEm(barData) {
       gtag('event', 'dropped state off bars' , {
           'event_category': 'figure',
           'event_label': draggedState,
-          'sessionId': sessionId,
-          'timestamp': timestamp
+          'sessionId': analytics.sessionId,
+          'timestamp': analytics.getTimestamp()
       });
     } else {
       var stateName = barchoice.attr('id').split('-')[0];
@@ -203,8 +201,8 @@ function rankEm(barData) {
         gtag('event', 'dropped state correctly' , {
           'event_category': 'figure',
           'event_label': draggedState,
-          'sessionId': sessionId,
-          'timestamp': timestamp
+          'sessionId': analytics.sessionId,
+          'timestamp': analytics.getTimestamp()
         });
         // is this the last one? if so, remove the directions    
         if (svgStates.select('#ranked-states-bars').selectAll('rect').filter('*:not(.locked-rank-bar)').empty()){
@@ -219,8 +217,8 @@ function rankEm(barData) {
           gtag('event', 'finished state ranking' , {
           'event_category': 'figure',
           'event_label': draggedState,
-          'sessionId': sessionId,
-          'timestamp': timestamp
+          'sessionId': analytics.sessionId,
+          'timestamp': analytics.getTimestamp()
         });
         }
   
@@ -241,8 +239,8 @@ function rankEm(barData) {
         gtag('event', 'dropped state wrong' , {
           'event_category': 'figure',
           'event_label': draggedState + ' on ' + stateName,
-          'sessionId': sessionId,
-          'timestamp': timestamp
+          'sessionId': analytics.SessionId,
+          'timestamp': analytics.getTimestamp
         });
       }
     }
