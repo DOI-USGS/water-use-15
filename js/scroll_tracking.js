@@ -10,15 +10,12 @@ var scrolledTo = {
 window.onload = function() {
   window.addEventListener('scroll', function (event) {
 	
-    var sessionId = getSessionId();
-    var timestamp = getTimestamp();
-    
     function scrollEventTrigger(id) {
       gtag('event', 'scroll' , {
           'event_category': 'scroll',
           'event_label': 'scrolled to ' + id,
-          'sessionId': sessionId,
-          'timestamp': timestamp
+          'sessionId': analytics.sessionId,
+          'timestamp': analytics.getTimestamp()
       });
     }
     

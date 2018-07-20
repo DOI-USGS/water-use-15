@@ -100,9 +100,6 @@ function zoomToFromState(d, i, j, selection) {
   updateView(newView, fireAnalytics = true);
 }
 
-function getTimestamp() {return new Date().getTime().toString()}
-function getSessionId() {return new Date().getTime() + '.' + Math.random().toString(36).substring(5)}
-
 function updateView(newView, fireAnalytics, doTransition) {
   if(fireAnalytics === undefined) { 
     fireAnalytics = true;
@@ -134,13 +131,11 @@ function updateView(newView, fireAnalytics, doTransition) {
   
   // record the change for analytics. don't need timeout for view change   
   if(fireAnalytics) {
-    var sessionId = getSessionId();
-    var timestamp = getTimestamp();
     gtag('event', 'update view', {
       'event_category': 'figure',
       'event_label': 'newView=' + newView + '; oldView=' + oldView + '; category=' + activeCategory,
-      'sessionId': sessionId,
-      'timestamp': timestamp});
+      'sessionId': analytics.sessionId,
+      'timestamp': analytics.getTimestamp()});
   }    
 }
 
@@ -273,13 +268,11 @@ function documentCategorySwitch(category, prevCategory, action) {
     clearTimeout(updateCategoryTimer);
   }
   updateCategoryTimer = setTimeout(function(){
-    var sessionId = getSessionId();
-    var timestamp = getTimestamp();
     gtag('event', action + ' update category', {
       'event_category': 'figure',
       'event_label': category + '; from='+ prevCategory + '; view=' + activeView,
-      'sessionId': sessionId,
-      'timestamp': timestamp
+      'sessionId': analytics.sessionId,
+      'timestamp': analytics.getTimestamp()
     });
   }, updateCategoryDelay);
 }
@@ -304,13 +297,11 @@ function updateLegendText(d, category) {
   }
   
   toolTipTimer = setTimeout(function(){
-    var sessionId = getSessionId();
-    var timestamp = getTimestamp();
      gtag('event', 'hover', {
           'event_category': 'figure',
            'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView,
-            'sessionId': sessionId,
-            'timestamp': timestamp
+            'sessionId': analytics.sessionId,
+            'timestamp': analytics.getTimestamp()
      });
   }, toolTipDelay);
 }
