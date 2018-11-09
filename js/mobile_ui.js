@@ -58,8 +58,8 @@ function updateViewSelectorOptions(view, stateBounds) {
   
   //update existing options with data (aka include the one that initially exists)
   viewMenu.selectAll("option")
-    .property("value", function(d) { return d.properties.STATE_ABBV; })
-    .text(function(d) { return d.properties.STATE_NAME; });
+    .property("value", function(d) { return d.properties.HUC4; })
+    .text(function(d) { return d.properties.NAME; });
   
   viewMenu
     .insert("option", ":first-child")
@@ -85,7 +85,7 @@ function updateStateSelector(view) {
         if(i === 0) { 
           return false;
         } else {
-          return d.properties.STATE_ABBV === view; 
+          return d.properties.HUC4 === view; 
         }
       }
     });
@@ -101,7 +101,7 @@ function addCountyOptions(selectedView) {
   
   // filter to correct county data then update dropdowns
   var stateCountyData = countyCentroids
-    .filter(function(d) { return d.STATE_ABBV === selectedView; });
+    .filter(function(d) { return d.HUC8.substring(0,3) === selectedView; }); //first 4 nums of HUC8 are HUC4
   updateCountySelectorOptions(stateCountyData);
 }
 
@@ -122,8 +122,8 @@ function updateCountySelectorOptions(countyData) {
           
           if(thisCountyGEOID != "Select County") {
             var thisCountySel = d3.selectAll('.county')
-                  .filter(function(d) { return d.properties.GEOID === thisCountyGEOID; });
-            var thisCountyData = countyData.filter(function(d) { return d.GEOID === thisCountyGEOID; })[0];
+                  .filter(function(d) { return d.properties.HUC8 === thisCountyGEOID; });
+            var thisCountyData = countyData.filter(function(d) { return d.HUC8 === thisCountyGEOID; })[0];
             
             highlightCounty(thisCountySel);
             highlightCircle(thisCountyData, activeCategory);
@@ -135,7 +135,7 @@ function updateCountySelectorOptions(countyData) {
         });
         
   // alphabetize counties
-  countyData.sort(function(a,b) { return d3.ascending(a.COUNTY, b.COUNTY); });
+  countyData.sort(function(a,b) { return d3.ascending(a.NAME, b.NAME); });
   
   // bind data to options in county dropdown menu
   var countyOptions = countyMenu
@@ -154,8 +154,8 @@ function updateCountySelectorOptions(countyData) {
   
   //update existing options with data
   countyMenu.selectAll("option")
-    .property("value", function(d) { return d.GEOID; })
-    .text(function(d) { return d.COUNTY; });
+    .property("value", function(d) { return d.HUC8; })
+    .text(function(d) { return d.NAME; });
   
   countyMenu
     .insert("option", ":first-child")
@@ -185,7 +185,7 @@ function updateCountySelector(countyGeoid) {
         if(i === 0) { // skip over "--Select County--" because d is undefined
           return false;
         } else {
-          return d.GEOID === countyGeoid; 
+          return d.HUC8 === countyGeoid; 
         }
       });
 }
@@ -202,19 +202,20 @@ function resetCountySelector() {
 }
 
 //Expand National Pie Mapp mobile text
-window.addEventListener('load', function(event){
-  var expandInteract = document.getElementById('national-static-pie-mobile-interact');
-  var contentToShow = document.getElementById('national-static-pie-mobile-content');
-  expandInteract.onclick = function(){
-    if(contentToShow.style.display === "block"){
-      contentToShow.style.display="none";
-      expandInteract.innerHTML = 'Read More'
-    }else{
-      contentToShow.style.display="block";
-      expandInteract.innerHTML = 'Hide'
-    }
-    
-  };
-});
+//window.addEventListener('load', function(event){
+//  var expandInteract = document.getElementById('national-static-pie-mobile-interact');
+//  var contentToShow = document.getElementById('national-static-pie-mobile-content');
+//  expandInteract.onclick = function(){
+//    if(contentToShow.style.display === "block"){
+//      contentToShow.style.display="none";
+//      expandInteract.innerHTML = 'Read More'
+//    }else{
+//      contentToShow.style.display="block";
+//      expandInteract.innerHTML = 'Hide'
+//    }
+//    }
+//    
+//  };
+//});
 
 

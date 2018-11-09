@@ -53,7 +53,7 @@ function customizeCaption() {
 function drawMap(stateBoundsRaw) {
   
   // Immediately convert to geojson so we have that converted data available globally.
-  stateBoundsUSA = topojson.feature(stateBoundsRaw, stateBoundsRaw.objects.states);
+  stateBoundsUSA = topojson.feature(stateBoundsRaw, stateBoundsRaw.objects.Colorado_HUC4);
   
   // get state abreviations into waterUseViz.stateAbrvs for later use
   extractNames(stateBoundsUSA);  
@@ -107,25 +107,6 @@ function fillMap(countyCentroidData) {
   // if and when the user zooms out from a state, updateCounties won't try to load the low-res data
   countyBoundsUSA = true;
   }
-
-// format data for rankEm
-var  barData = [];
-waterUseViz.stateData.forEach(function(d) {
-  var x = {
-    'abrv': d.abrv,
-    'STATE_NAME': d.STATE_NAME,
-    'open': d.open,
-    'wu': d.use.filter(function(e) {return e.category === 'total';})[0].wateruse,
-    'fancynums': d.use.filter(function(e) {return e.category === 'total';})[0].fancynums
-  };
-  barData.push(x);
-});
-
-// create big pie figure (uses waterUseViz.nationalData)
-if(!waterUseViz.isEmbed) loadPie();
-
-// create rankEm figure  
-if(!waterUseViz.isEmbed) rankEm(barData);
 
 }
 

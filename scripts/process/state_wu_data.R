@@ -9,10 +9,10 @@ process.state_wu_data <- function(viz) {
 
   state_data <- list()
   i <- 1
-  for(state in unique(wu_df$STATE)){
+  for(state in unique(wu_df$HUC)){
     
     wu_df_state <- wu_df %>%
-      dplyr::filter(STATE == state) %>%
+      dplyr::filter(HUC == state) %>%
       dplyr::summarise(total = sum(total),
                        thermoelectric = sum(thermoelectric),
                        publicsupply = sum(publicsupply),
@@ -26,8 +26,8 @@ process.state_wu_data <- function(viz) {
     wu_df_state$fancynums <- gsub(" ","",wu_df_state$fancynums)
     
     state_data[[i]] <- list(abrv = state,
-                           open = state %in% viz[["process_args"]][["drag_states"]],
-                           STATE_NAME = state_names$STATE_NAME[state_names$STATE_ABBV == state],
+                           # open = state %in% viz[["process_args"]][["drag_states"]],
+                           NAME = state_names$NAME[state_names$HUC4 == state],
                            use = wu_df_state)
     i <- i + 1
 

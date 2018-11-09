@@ -41,8 +41,8 @@ var categories = ["total", "thermoelectric", "irrigation","publicsupply", "indus
 
 // Projection
 var projection = albersUsaTerritories()
-  .scale([1200])
-  .translate([waterUseViz.dims.map.width / 2, waterUseViz.dims.map.height / 2]);
+  .scale([2000])
+  .translate([waterUseViz.dims.map.width * 0.66, waterUseViz.dims.map.height / 2]);
   // default is .rotate([96,0]) to center on US (we want this)
     
 var buildPath = d3.geoPath()
@@ -92,30 +92,23 @@ var tooltipDiv = d3.select("body").append("div")
   .classed("tooltip hidden", true);
 
 // Read data and add to map
-var stateDataFile;
-if(waterUseViz.interactionMode === 'tap') {
-  stateDataFile = "data/state_boundaries_mobile.json";
-} else {
-  stateDataFile = "data/state_boundaries_USA.json";
-}
-
-d3.json(stateDataFile, function(error, stateBoundsRaw) {
+d3.json("data/huc4_boundaries.json", function(error, stateBoundsRaw) {
   if (error) throw error;
   drawMap(stateBoundsRaw);
 });
 
-d3.tsv("data/county_centroids_wu.tsv", function(error, countyCentroids) {
+d3.tsv("data/huc8_centroids_wu.tsv", function(error, countyCentroids) {
   
   if (error) throw error;
 
-  d3.json("data/wu_data_15_range.json", function(error, waterUseRange) {
+  d3.json("data/wu_data_range.json", function(error, waterUseRange) {
 
     if (error) throw error;
     // nationalRange gets used in drawMap->addStates->applyZoomAndStyle and
     // fillMap->scaleCircles-update
     waterUseViz.nationalRange = waterUseRange;
 
-    d3.json("data/wu_data_15_sum.json", function(error, waterUseNational) {
+    d3.json("data/wu_data_national_sum.json", function(error, waterUseNational) {
       
       if (error) throw error;
       // cache data for dotmap and update legend if we're in national view

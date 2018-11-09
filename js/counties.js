@@ -16,11 +16,11 @@ function loadCountyBounds(state, callback) {
   if(state === 'USA') {
     // For national view, use the coarse-resolution county boundaries
     if(!countyBoundsUSA) {
-      d3.json('data/county_boundaries_USA.json', function(error, allCountiesTopo) {
+      d3.json('data/huc8_boundaries.json', function(error, allCountiesTopo) {
         if(error) throw error;
-      
+        console.log(allCountiesTopo);
         // extract the topojson to geojson and add data. cache the data to a global variable, countyBoundsUSA
-        allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
+        allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.Colorado_HUC8).features;
         countyBoundsUSA = addDataToCounties(allCountiesGeo);
         
         // do the update
@@ -33,15 +33,15 @@ function loadCountyBounds(state, callback) {
   } else if(!countyBoundsZoom.has('USA')) {
     var countyJson;
     if(waterUseViz.interactionMode === 'tap') {
-      countyJson = "data/county_boundaries_mobile.json";
+      countyJson = "data/huc8_boundaries.json";
     } else {
-      countyJson = "data/county_boundaries_zoom.json";
+      countyJson = "data/huc8_boundaries.json";
     }
     d3.json(countyJson, function(error, allCountiesTopo) {
       if(error) throw error;
       
       // extract the topojson to geojson and add data
-      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.counties).features;
+      allCountiesGeo = topojson.feature(allCountiesTopo, allCountiesTopo.objects.Colorado_HUC8).features;
       allCountiesGeoData = addDataToCounties(allCountiesGeo);
       
       // cache in countyBoundsZoom
@@ -64,12 +64,12 @@ function loadCountyBounds(state, callback) {
 
 function addDataToCounties(countyBounds) {
   // make countyCentroids easily searchable
-  var countyDataMap = d3.map(countyCentroids, function(d) { return d.GEOID; });
+  var countyDataMap = d3.map(countyCentroids, function(d) { return d.HUC8; });
   
   // iterate over countyBounds, adding data from countyCentroids to each
   for(var i = 0; i < countyBounds.length; i++) {
     // identify the data row (object) relevant to this county
-    var currentCountyData = countyDataMap.get(countyBounds[i].properties.GEOID);
+    var currentCountyData = countyDataMap.get(countyBounds[i].properties.HUC8);
     
     // set the countyBounds properties equal to this data object.
     // no need to keep the old properties; they were just GEOID (G)
@@ -89,7 +89,7 @@ function cacheCountyBounds(state, callback) {
   if(!countyBoundsZoom.has(state)) {
     // subset the data and run the processing function
     oneStateCounties = countyBoundsZoom.get('USA').filter(function(d) {
-      return(d.properties.STATE_ABBV === state);
+      return(d.properties.HUC4 === state);
     });
     countyBoundsZoom.set(state, oneStateCounties);
     
@@ -117,7 +117,7 @@ function displayCountyBounds(error, activeCountyData) {
     // attach data
     var countyBounds = currentCountyBounds
       .data(activeCountyData, function(d) {
-        return d.properties.GEOID;
+        return d.properties.HUC8;
       });
     
     // enter
@@ -126,7 +126,7 @@ function displayCountyBounds(error, activeCountyData) {
       .append("path")
       .classed('county', true) // by default, county bounds not seen
       .attr('id', function(d) {
-        return d.properties.GEOID;
+        return d.properties.HUC8;
       })
       .attr('d', buildPath);
       

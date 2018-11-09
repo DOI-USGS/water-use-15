@@ -5,7 +5,7 @@ var zoom_scale;
 
 function extractNames(stateBounds) {
   stateBounds.features.forEach(function(d) {
-     waterUseViz.stateAbrvs.push(d.properties.STATE_ABBV);
+     waterUseViz.stateAbrvs.push(d.properties.HUC4);
   });
 }
 // Create the state polygons
@@ -21,12 +21,12 @@ function addStates(map, stateBounds) {
   map.select('#state-bounds-lowres')
     .selectAll( 'path' )
     .data(stateBounds.features, function(d) {
-      return d.properties.STATE_ABBV;
+      return d.properties.HUC4;
     })
     .enter()
     .append('path')
     .attr('id', function(d) {
-      return d.properties.STATE_ABBV+'-lowres';
+      return d.properties.HUC4+'-lowres';
     })
     .attr('d', buildPath);
     
@@ -83,7 +83,7 @@ function zoomToFromState(d, i, j, selection) {
   if( clickedView !== 'map-background' && clickedView.length > 2 ) {
     // only do this if the clicked thing is not a state or map background
     // need to extract the state abbreviation from the clicked county
-    clickedView = selection.data()[0].properties.STATE_ABBV;
+    clickedView = selection.data()[0].properties.HUC8.substring(0,4);
   }
   
   // determine the new view
@@ -160,10 +160,10 @@ function applyZoomAndStyle(newView, doTransition) {
   } else {
     // find the state data we want to zoom to
     var stateGeom = stateBoundsZoom.features.filter(function(d) {
-      return d.properties.STATE_ABBV === activeView;
+      return d.properties.HUC4 === activeView;
     })[0];
     // the ZOOM property contains x, y, and s
-    zoom = stateGeom.properties.ZOOM;
+    zoom = 4;//stateGeom.properties.ZOOM;
   }
   
   // setup appropriate circle scaling (zoom.s === 1 for view === 'USA')
@@ -199,7 +199,7 @@ function applyZoomAndStyle(newView, doTransition) {
     
     // select counties in current state
     var statecounties = d3.selectAll('.county')
-      .filter(function(d) { return d.properties.STATE_ABBV === activeView; });
+      .filter(function(d) { return d.properties.HUC4 === activeView; });
     var otherstates = d3.selectAll('.state')
       .filter(function(d) { return d !== activeView; });
     var thisstate = d3.selectAll('.state')
@@ -292,7 +292,7 @@ function updateLegendText(d, category) {
   waterUseViz.elements
     .buttonBox
     .selectAll("#legend-title")
-    .text(d.COUNTY + ", " + d.STATE_ABBV);
+    .text(d.NAME + " (" + d.HUC8 + ")");
     
   waterUseViz.elements
     .buttonBox
@@ -308,7 +308,7 @@ function updateLegendText(d, category) {
     var timestamp = getTimestamp();
      gtag('event', 'hover', {
           'event_category': 'figure',
-           'event_label': d.COUNTY + ", " + d.STATE_ABBV + '; category=' + category + '; view=' + activeView,
+           'event_label': d.HUC8 + ", " + d.HUC4 + '; category=' + category + '; view=' + activeView,
             'sessionId': sessionId,
             'timestamp': timestamp
      });
@@ -337,12 +337,12 @@ function updateLegendTextToView() {
       .filter(function(d) { 
         return d.abrv === activeView; 
     });
-
+    
     waterUseViz.elements
       .buttonBox
       .selectAll("#legend-title")
       .data(state_data)
-      .text(function(d) { return d.STATE_NAME + " Water Withdrawals"; });
+      .text(function(d) { return d.NAME + " Water Withdrawals"; });
 
     waterUseViz.elements.buttonBox
       .selectAll('.category-amount')
