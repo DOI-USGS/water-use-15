@@ -1,0 +1,16 @@
+version: "3"
+services:
+  docker-dev-mode:
+    image: wdwatkins/water-use-15
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8787:8787"
+    volumes:
+      - "/Users/wwatkins/Documents/R/gage-conditions-docker:/home/rstudio/gage-conditions-docker"
+#      - "/Users/wwatkins/Documents/R/water-use-15:/home/rstudio/water-use-15"
+    environment:
+      - ROOT=TRUE
+      - PASSWORD=mypass
+
