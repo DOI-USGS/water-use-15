@@ -1,4 +1,5 @@
-FROM rocker/geospatial:3.5.0
+# tagged version, not latest! 
+FROM rocker/geospatial:3.5.0 
 
 # install node and npm (see https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 RUN sudo apt-get install -y curl &&\
@@ -21,16 +22,22 @@ WORKDIR /home/rstudio/ &&
 ARG build_trigger=change_this_to_rebuild
 RUN Rscript -e 'installed.packages()'
 #Note that version rocker images are already set up to use the MRAN mirror corresponding to the 
-#date of the R version, so package dates are already set
+#date of the R version, so package dates are already set (unless forcing another repo)
 RUN Rscript -e  'devtools::install_github("richfitz/remake")' && \
     Rscript -e  'install.packages("grithub", repos = c(getOption("repos"), "https://owi.usgs.gov/R"))' && \
-    Rscript -e 	'devtools::install_github("USGS-VIZLAB/vizlab@v0.3.7")' && \
-    Rscript -e  'install.packages("dataRetrieval", repos="https://owi.usgs.gov/R")' #viz requires 2.4, CRAN only has 2.3
-#RUN git clone https://github.com/wdwatkins/water-use-15
+    Rscript -e 	'devtools::install_github("USGS-VIZLAB/vizlab@v0.3.7")' 
+    #note that most packages will already be installed as part of the geospatial image	
+RUN    install2.r --error \
+	aws.s3 \
+	aws.signature \
+	sbtools \
+	geojsonio \
+	js\
+	dataRetrieval
+	 		                    
 RUN mkdir water-use-15 
 WORKDIR water-use-15 
-COPY . . 
-RUN Rscript -e 'vizlab::updateVizPackages()' 
-RUN Rscript -e 'vizlab::vizmake()' 
+#COPY . . 
+#RUN Rscript -e 'vizlab::vizmake()' 
 CMD ["bash"]
 
