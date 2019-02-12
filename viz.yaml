@@ -34,7 +34,7 @@ info:
       version: 0.3.5
     dataRetrieval:
       repo: CRAN
-      version: 2.7.4
+      version: 2.7.3
     dplyr:
       repo: CRAN
       version: 0.7.0
