@@ -36,8 +36,6 @@ RUN    install2.r --error \
 	dataRetrieval
 	 		                    
 RUN mkdir water-use-15 
-WORKDIR water-use-15 
-#COPY . . 
-#RUN Rscript -e 'vizlab::vizmake()' 
+WORKDIR water-use-15
 CMD ["bash"]
 

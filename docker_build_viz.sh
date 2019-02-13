@@ -1,7 +1,7 @@
 #!/bin/bash
-#could use a variable for viz name?
-docker start water-use-15
-docker cp ./. water-use-15:/home/rstudio/water-use-15
-docker exec water-use-15 Rscript -e 'vizlab::vizmake()'
-docker cp water-use-15:/home/rstudio/water-use-15/. .
-docker stop water-use-15
+viz_folder_name=water-use-15
+docker start ${viz_folder_name}
+docker cp ./. ${viz_folder_name}:/home/rstudio/${viz_folder_name}
+docker exec ${viz_folder_name} Rscript -e 'vizlab::vizmake()'
+docker cp ${viz_folder_name}:/home/rstudio/${viz_folder_name}/. .
+docker stop ${viz_folder_name}
