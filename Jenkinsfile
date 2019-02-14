@@ -11,7 +11,7 @@ pipeline {
         stage('build_viz') {
             agent {
                 dockerfile {
-                    args '-v ${WORKSPACE}:/home/rstudio/gage-conditions'
+                    args '-v ${WORKSPACE}:/home/rstudio/water-use-15'
                 } 
             }
             steps {
