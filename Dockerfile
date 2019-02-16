@@ -14,8 +14,8 @@ WORKDIR /home/rstudio/
 RUN Rscript -e 'installed.packages()'
 #Note that version rocker images are already set up to use the MRAN mirror corresponding to the 
 #date of the R version, so package dates are already set (unless forcing another repo)
-RUN Rscript -e  'devtools::install_github("richfitz/remake")' && \
-    Rscript -e  'install.packages("grithub", repos = c(getOption("repos"), "https://owi.usgs.gov/R"))' && \
+RUN Rscript -e  'devtools::install_github("richfitz/remake@e29028b")' && \
+    Rscript -e  'devtools::install_github("USGS-R/grithub@0.10.0")' && \
     Rscript -e 	'devtools::install_github("USGS-VIZLAB/vizlab@v0.3.7")' 
     #note that most packages will already be installed as part of the geospatial image	
 RUN    install2.r --error \
