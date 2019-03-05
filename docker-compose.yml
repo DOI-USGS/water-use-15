@@ -1,0 +1,18 @@
+version: "3"
+services:
+  docker-dev-mode:
+    image: water-use-15
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8787:8787"
+    volumes:
+      - water-use-15-data:/home/rstudio/water-use-15
+    environment:
+      - ROOT=TRUE
+      - PASSWORD=mypass
+
+volumes:
+  water-use-15-data:
+
