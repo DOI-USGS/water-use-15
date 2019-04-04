@@ -1,11 +1,18 @@
-get_national_layout <- function(sp, plot_metadata){
+get_national_layout <- function(sp, plot_metadata, view_subset = NULL){
   
-  state_bb <- bbox(sp)
+  if(is.null(view_subset)) {
+    view_sp <- sp
+    title_cfg <- "U.S."
+  } else {
+    view_sp <- subset(sp, STATE_ABBV %in% view_subset)
+    title_cfg <- paste(view_subset, collapse="+")
+  }
+  state_bb <- bbox(view_sp)
   
   layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
                      map = list(xlim = c(NA_integer_, NA_integer_), ylim = c(NA_integer_, NA_integer_)),
                      legend = list(xpct = NA_integer_, ypct = NA_integer_, y_bump = 0.015, box_w = 0.25,
-                                   title_pos = 'top', title = 'U.S. Water Use, 2015'))
+                                   title_pos = 'top', title = sprintf('%s Water Use, 2015', title_cfg)))
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
   aspect_fig <- plot_metadata[1]/plot_metadata[2]
   map_ratio <- aspect_map / aspect_fig
@@ -23,6 +30,11 @@ get_national_layout <- function(sp, plot_metadata){
   return(layout_out)
 }
 
+trick_data <- function(state_totals) {
+  state_totals$state_abrv <- "US"
+  state_totals$state_name <- "U.S."
+  return(state_totals)
+}
 
 get_state_layout <- function(sp, plot_metadata){
   
