@@ -1,0 +1,76 @@
+
+packages:
+  - sp
+  - maps
+  - maptools
+  - rgeos
+  - readr
+  - stringr
+  - dataRetrieval
+  - lubridate
+  - dplyr
+  - mapdata
+  - jsonlite
+  - scipiper
+
+sources:
+  - scripts/gifs/map_utils.R
+  - scripts/gifs/data_utils.R
+  - scripts/gifs/draw_utils.R
+
+file_extensions:
+  - "ind"
+
+targets:
+  all: 
+    depends: 
+      - gifs/US_water_use_twitter.gif.ind
+      - gifs/US_water_use_reddit.gif.ind
+  
+  plot_metadata_twitter:
+    command: c(I(8), I(4), I(128))
+
+  plot_metadata_reddit:
+    command: c(I(8), I(4), I(320))
+  
+  proj: 
+    command: c(I("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
+    
+  us_states:
+    command: shifted_topojson("cache/state_boundaries_mobile.json", proj.string = proj)
+    
+  us_counties:
+    command: shifted_topojson("cache/county_boundaries_mobile.json", proj.string = proj)
+    
+  county_dots:
+    command: get_state_dots('cache/county_centroids_USA.json', 
+      proj.string = proj,
+      'cache/county_centroids_wu.tsv', state_totals = state_totals_countyfix)
+    
+  us_county_dots:
+    command: shift_centroids(county_dots, proj.string = proj)
+
+  state_totals:
+    command: get_state_totals('cache/wu_state_data.json', I(c('Puerto Rico', 'U.S. Virgin Islands')))
+  # get_state_dots needs this to be "US"
+  state_totals_countyfix:
+    command: trick_data(state_totals)
+
+  plot_layout_reddit:
+    command: get_national_layout(us_states, plot_metadata_reddit, I(c("PR", 'VI')))
+    
+  plot_layout_twitter:
+    command: get_national_layout(us_states, plot_metadata_twitter, I(c("PR", 'VI')))
+
+  gifs/PR_water_use_twitter.gif.ind:
+    command: build_wu_gif(us_states, us_counties, us_county_dots, state_totals, plot_layout_twitter, 
+      'images/usgs_logo_black.png', 
+      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'), I('industrial'),
+      pause_delay = I('150'))
+      
+  gifs/PR_water_use_reddit.gif.ind:
+    command: build_wu_gif(us_states, us_counties, us_county_dots, state_totals, plot_layout_reddit, 
+      'images/usgs_logo_black.png', 
+      target_name, frames = I(2), I('pie'), I('thermoelectric'), I('irrigation'), I('publicsupply'), I('industrial'), 
+      pause_delay = I('150'))
+      
