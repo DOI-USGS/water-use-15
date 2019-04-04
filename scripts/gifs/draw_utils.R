@@ -110,11 +110,19 @@ plot_dot_map <- function(state_sp, county_sp, watermark_file, layout){
   if (length(unique(names(state_sp))) > 1){ # is national
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i') 
     plot(state_sp, col = NA, border = NA, lwd = 1.2, xlim = layout$map$xlim, ylim = layout$map$ylim) 
-    plot(county_sp, col = '#eaedef', border = "grey80", lwd=0.2, add = TRUE)
+    
+    if(!is.null(county_sp)) {
+      plot(county_sp, col = '#eaedef', border = "grey80", lwd=0.2, add = TRUE)
+    }
+    
     plot(state_sp, col = NA, border = "grey65", lwd = .6, add = TRUE)
   } else {
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = '#eaedef') #, xaxs = 'i', yaxs = 'i'
-    plot(county_sp, col = "white", border = "grey60", lwd=0.75, xlim = layout$map$xlim, ylim = layout$map$ylim) 
+    
+    if(!is.null(county_sp)) {
+      plot(county_sp, col = "white", border = "grey60", lwd=0.75, xlim = layout$map$xlim, ylim = layout$map$ylim) 
+    }
+    
     plot(state_sp, col = NA, border = "grey50", lwd = 1.2, add = TRUE)
   }
   
@@ -142,7 +150,7 @@ calc_frame_filenames <- function(frames, ...){
   return(filenames)
 }
 
-build_wu_gif <- function(state_sp, county_sp, dots_sp, state_totals, state_layout, watermark_file, ind_file, frames = 10, ..., 
+build_wu_gif <- function(state_sp, county_sp = NULL, dots_sp, state_totals, state_layout, watermark_file, ind_file, frames = 10, ..., 
                          trans_delay = "10", pause_delay = "180"){
   
   frame_filenames <- calc_frame_filenames(frames, ...)
