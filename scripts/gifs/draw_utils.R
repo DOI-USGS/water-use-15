@@ -221,8 +221,11 @@ build_wu_gif <- function(state_sp, county_sp = NULL, dots_sp, state_totals, stat
   
   gif_filename <- as_data_file(ind_file)
   
-  system(paste0("convert -loop 0 -delay 15 ", paste(file.path(temp_dir, frame_filenames), collapse = " "), " ", gif_filename))
-  
+  magick_command <- paste0("convert -loop 0 -delay 15 ", paste(file.path(temp_dir, frame_filenames), collapse = " "), " ", gif_filename)
+  if(Sys.info()[['sysname']] == "Windows") {
+    magick_command <- sprintf('magick %s', magick_command)
+  }
+  system(magick_command)
   system(sprintf('gifsicle -b %s %s --colors 256', gif_filename, gifsicle_out))
   gd_put(remote_ind = ind_file, local_source = gif_filename, config_file = 'gifs/gd_config.yml')
 }
