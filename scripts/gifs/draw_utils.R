@@ -1,18 +1,11 @@
-get_national_layout <- function(sp, plot_metadata, view_subset = NULL){
-  
-  if(is.null(view_subset)) {
-    view_sp <- sp
-    title_cfg <- "U.S."
-  } else {
-    view_sp <- subset(sp, STATE_ABBV %in% view_subset)
-    title_cfg <- paste(view_subset, collapse="+")
-  }
-  state_bb <- bbox(view_sp)
+get_national_layout <- function(sp, plot_metadata){
+
+  state_bb <- bbox(sp)
   
   layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
                      map = list(xlim = c(NA_integer_, NA_integer_), ylim = c(NA_integer_, NA_integer_)),
                      legend = list(xpct = NA_integer_, ypct = NA_integer_, y_bump = 0.015, box_w = 0.25,
-                                   title_pos = 'top', title = sprintf('%s Water Use, 2015', title_cfg)))
+                                   title_pos = 'top', title = 'U.S. Water Use, 2015'))
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
   aspect_fig <- plot_metadata[1]/plot_metadata[2]
   map_ratio <- aspect_map / aspect_fig
@@ -37,13 +30,26 @@ trick_data <- function(state_totals) {
 }
 
 get_state_layout <- function(sp, plot_metadata){
+subset_sp <- function(sp, view_str) {
+  if(!"STATE_ABBV" %in% names(sp@data)) {
+    # county gots does not have STATE_ABBV
+    subset(sp, state == view_str)
+  } else {
+    subset(sp, STATE_ABBV %in% view_str)
+  }
+}
+
   
   state_bb <- bbox(sp)
-
+  state_nm <- names(sp)
+  if("id" %in% state_nm) { 
+    state_nm <- unique(as.character(sp@data$STATE_NAME))
+  }
+  
   layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
                      map = list(xlim = c(NA_integer_, NA_integer_), ylim = c(NA_integer_, NA_integer_)),
                      legend = list(xpct = NA_integer_, ypct = NA_integer_, box_h = 0.055, y_bump = 0.015, box_w = 0.32,
-                                   title_pos = 'top', title = names(sp)))
+                                   title_pos = 'top', title = state_nm))
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
   if (aspect_map < 1.2){
     plot_metadata[1] <- plot_metadata[1] * 0.75
