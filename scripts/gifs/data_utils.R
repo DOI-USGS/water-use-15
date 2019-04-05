@@ -49,66 +49,31 @@ get_us_totals <- function(json_file){
   }
   return(totals_out)
 }
-# get_state_totals <- function(json_file, state_name){
-#   
-#   state_totals <- read_json(json_file)
-#   state_names <- sapply(state_totals, function(x) x$STATE_NAME)
-#   state_i <- which(state_names == state_name)
-#   
-#   if (!length(state_i) == 1){
-#     stop('there is no match or too many matches for state name ', state_name)
-#   }
-#   
-#   totals_out <- data.frame(total = NA_character_, thermoelectric = NA_character_, 
-#                            publicsupply = NA_character_, irrigation = NA_character_, industrial = NA_character_,
-#                            other = NA_character_, state_abrv = NA_character_, state_name = state_name)
-#   totals_numeric <- data.frame(total = NA_integer_, thermoelectric = NA_integer_, 
-#                                publicsupply = NA_integer_, irrigation = NA_integer_, industrial = NA_integer_)
-#   this_state <- state_totals[[state_i]]$use
-#   for (use_i in 1:length(this_state)){
-#     cat_name <- this_state[[use_i]]$category
-#     text_num <- this_state[[use_i]]$fancynums
-#     totals_out[[cat_name]] <- text_num
-#     totals_numeric[[cat_name]] <- this_state[[use_i]]$wateruse
-#   }
-#   other_num <- totals_numeric$total-rowSums(totals_numeric[!names(totals_numeric) %in% "total"])
-#   totals_out$other <- prettyNum(round(other_num, digits = 0), big.mark=",",scientific=FALSE)
-#   totals_out$state_abrv <- state_totals[[state_i]]$abrv
-#   return(totals_out)
-# }
 get_state_totals <- function(json_file, state_name){
-  
+
   state_totals <- read_json(json_file)
   state_names <- sapply(state_totals, function(x) x$STATE_NAME)
-  state_i <- which(state_names %in% state_name)
-  
-  if (length(state_i) < 0){
+  state_i <- which(state_names == state_name)
+
+  if (!length(state_i) == 1){
     stop('there is no match or too many matches for state name ', state_name)
   }
-  state_name_disp <- paste(unlist(lapply(state_totals[state_i], "[[", "abrv")), collapse="-")
-  totals_out <- data.frame(total = NA_character_, thermoelectric = NA_character_, 
+
+  totals_out <- data.frame(total = NA_character_, thermoelectric = NA_character_,
                            publicsupply = NA_character_, irrigation = NA_character_, industrial = NA_character_,
-                           other = NA_character_, state_abrv = NA_character_, state_name = state_name_disp)
-  totals_numeric <- data.frame(total = NA_integer_, thermoelectric = NA_integer_, 
+                           other = NA_character_, state_abrv = NA_character_, state_name = state_name)
+  totals_numeric <- data.frame(total = NA_integer_, thermoelectric = NA_integer_,
                                publicsupply = NA_integer_, irrigation = NA_integer_, industrial = NA_integer_)
-  
-  cats <- c(categories(), "total")
-  for (use_i in 1:length(cats)){
-    cat_name <- cats[use_i]
-    # ignoring fancynums because we need to sum
-    use_sum <- sum(unlist(lapply(state_totals[state_i], function(state) {
-      use_list <- state$use
-      use_list_i <- which(unlist(lapply(use_list, "[[", "category")) == cat_name)
-      use_list[[use_list_i]]$wateruse
-    })))
-    text_num <- format(use_sum, digits = 0, big.mark = ",")
+  this_state <- state_totals[[state_i]]$use
+  for (use_i in 1:length(this_state)){
+    cat_name <- this_state[[use_i]]$category
+    text_num <- this_state[[use_i]]$fancynums
     totals_out[[cat_name]] <- text_num
-    totals_numeric[[cat_name]] <- use_sum
+    totals_numeric[[cat_name]] <- this_state[[use_i]]$wateruse
   }
-  
   other_num <- totals_numeric$total-rowSums(totals_numeric[!names(totals_numeric) %in% "total"])
   totals_out$other <- prettyNum(round(other_num, digits = 0), big.mark=",",scientific=FALSE)
-  totals_out$state_abrv <- state_name_disp
+  totals_out$state_abrv <- state_totals[[state_i]]$abrv
   return(totals_out)
 }
 
