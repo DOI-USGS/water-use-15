@@ -68,22 +68,13 @@ targets:
     command: get_state_totals('cache/wu_state_data.json', state_sub_name)
   state_totals_countyfix:
     command: trick_data(state_totals)
-
-  plot_layout_reddit:
-    command: get_state_layout(us_states_sub, plot_metadata_reddit, state_sub_abbr)
     
   plot_layout_twitter:
     command: get_state_layout(us_states_sub, plot_metadata_twitter)
   
   gifs/PR_water_use_twitter.gif.ind:
-    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots_sub, state_totals, plot_layout_twitter, 
+    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots, state_totals, plot_layout_twitter, 
       'images/usgs_logo_black.png', 
       target_name, frames = I(5), I('pie'), I('thermoelectric'), I('publicsupply'), I('irrigation'), I('industrial'),
-      pause_delay = I('150'))
-      
-  gifs/PR_water_use_reddit.gif.ind:
-    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots_sub, state_totals, plot_layout_reddit, 
-      'images/usgs_logo_black.png', 
-      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('publicsupply'), I('irrigation'), I('industrial'), 
       pause_delay = I('150'))
 
