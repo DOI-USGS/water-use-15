@@ -48,21 +48,22 @@ targets:
       'cache/county_centroids_wu.tsv', state_totals = state_totals_countyfix)
     
   us_county_dots:
-    command: shift_centroids(county_dots, proj.string = proj)
+    command: shift_centroids(county_dots, proj.string = proj, cheat_vi = TRUE)
   
   # Subset the national data to get just the one state
-  # CHANGE THE SCALE FACTOR!!! A version of the PR gif on 4/5/19 used 2000
-  # scripts/gifs/draw_utils.R, find `scale_const <-`
+  # CHANGE THE SCALE FACTOR!!! A version of the USVI gif on 4/5/19 used 3000
+  # scripts/gifs/draw_utils.R, find `scale_const <-` 
   state_sub_name:
-    command: c(I('Puerto Rico'))
+    command: c(I('U.S. Virgin Islands'))
   state_sub_abbr:
-    command: c(I('PR'))
+    command: c(I('VI'))
   us_states_sub:
     command: subset_sp(us_states, state_sub_abbr)
   us_counties_sub:
     command: subset_sp(us_counties, state_sub_abbr)  
-  us_county_dots_sub:
-    command: subset_sp(us_county_dots, state_sub_abbr)  
+  # Don't subset county dots for VI (see info about `cheat_vi` param)
+  #us_county_dots_sub:
+  #  command: subset_sp(us_county_dots, state_sub_abbr)  
 
   state_totals:
     command: get_state_totals('cache/wu_state_data.json', state_sub_name)
@@ -70,19 +71,19 @@ targets:
     command: trick_data(state_totals)
 
   plot_layout_reddit:
-    command: get_state_layout(us_states_sub, plot_metadata_reddit, state_sub_abbr)
+    command: get_state_layout(us_states_sub, plot_metadata_reddit, cheat_vi = TRUE)
     
   plot_layout_twitter:
-    command: get_state_layout(us_states_sub, plot_metadata_twitter)
+    command: get_state_layout(us_states_sub, plot_metadata_twitter, cheat_vi = TRUE)
   
-  gifs/PR_water_use_twitter.gif.ind:
-    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots_sub, state_totals, plot_layout_twitter, 
+  gifs/VI_water_use_twitter.gif.ind:
+    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots, state_totals, plot_layout_twitter, 
       'images/usgs_logo_black.png', 
       target_name, frames = I(5), I('pie'), I('thermoelectric'), I('publicsupply'), I('irrigation'), I('industrial'),
       pause_delay = I('150'))
       
-  gifs/PR_water_use_reddit.gif.ind:
-    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots_sub, state_totals, plot_layout_reddit, 
+  gifs/VI_water_use_reddit.gif.ind:
+    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots, state_totals, plot_layout_reddit, 
       'images/usgs_logo_black.png', 
       target_name, frames = I(5), I('pie'), I('thermoelectric'), I('publicsupply'), I('irrigation'), I('industrial'), 
       pause_delay = I('150'))
