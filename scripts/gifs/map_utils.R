@@ -34,11 +34,13 @@ get_shifts <- function(shift = 'landscape'){
   if (shift == 'landscape'){
     return(list(AK = list(scale = 0.43, shift = c(100,-470), rotate = -50),
                 HI = list(scale = 1.3, shift = c(505, -100), rotate = -35),
-                PR = list(scale = 3.5, shift = c(-110, 90), rotate=20)))
+                PR = list(scale = 3.5, shift = c(-110, 90), rotate=20),
+                VI = list(scale = 3.5, shift = c(-80, 90), rotate=20)))
   } else {
     return(list(AK = list(scale = 0.6, shift = c(140,-525), rotate = -50),
                 HI = list(scale = 1.8, shift = c(590, -170), rotate = -35),
-                PR = list(scale = 4, shift = c(-200, -40), rotate=20)))
+                PR = list(scale = 4, shift = c(-200, -40), rotate=20),
+                PR = list(scale = 4, shift = c(-170, -40), rotate=20)))
   }
   
 }
@@ -47,7 +49,10 @@ get_moves <- function(){
   list(
     AK = to_sp("world", "USA:alaska"),
     HI = to_sp("world", "USA:hawaii"),
-    PR = to_sp("world2Hires", "Puerto Rico")
+    PR = to_sp("world2Hires", "Puerto Rico"),
+    VI = to_sp("world2Hires", c("Virgin Islands:Saint Thomas", 
+                                "Virgin Islands:Saint John", 
+                                "Virgin Islands:Saint Croix"))
   )
 }
 
@@ -57,7 +62,7 @@ shifted_topojson <- function(filename, proj.string = "+proj=laea +lat_0=45 +lon_
   states_proj <- spTransform(states, CRS(proj.string))
   shifts <- get_shifts()
   moves <- get_moves()
-  code.map <- list(AK = "AK", HI = "HI", PR = c("PR","VI"))
+  code.map <- list(AK = "AK", HI = "HI", PR = "PR", VI = "VI")
   shift_abbr <- code.map %>% unlist %>% unname
   states_out <- subset(states_proj, !STATE_ABBV %in% shift_abbr)
   
@@ -80,7 +85,7 @@ state_sp <- function(){
   
   stuff_to_move <- get_moves()
   
-  
+
   states.out <- to_sp('state')
   for(i in names(shifts)){
     shifted <- do.call(shift_sp, c(sp = stuff_to_move[[i]], 
@@ -93,23 +98,36 @@ state_sp <- function(){
   return(states.out)
 }
 
-shift_centroids <- function(centroids, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"){
-    
+shift_centroids <- function(centroids, proj.string = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs", cheat_vi = FALSE){
+  
+  # cheat_vi : need to slightly shift points down to line up with polygons
+  # cheat_vi : return only the VI points. For some reason, when you subset after-the-fact,
+  #   they get all messed up and appear at a completely different location
+  
   shifts <- get_shifts()
-  
-  centroids <-  sp::spTransform(centroids, CRS(proj.string))
+  if(cheat_vi) { shifts$VI$shift[2] <- shifts$VI$shift[2] - 2 }
   stuff_to_move <- get_moves()
+  centroids <-  sp::spTransform(centroids, CRS(proj.string))
   
-  sites.out <- subset(centroids, !state %in% c(names(shifts), 'VI'))
+  code.map <- list(AK = "AK", HI = "HI", PR = "PR", VI = "VI")
+  shift_abbr <- code.map %>% unlist %>% unname
+  sites.out <- subset(centroids, !state %in% shift_abbr)
   
-  for (region in names(shifts)){
-    sites.tmp <- subset(centroids, state %in% region)
+  for (region in names(code.map)){
+    sites.tmp <- subset(centroids, state %in% code.map[[region]])
     
-    sites.tmp <- do.call(shift_sp, c(sp = sites.tmp, ref = stuff_to_move[[region]], 
+    sites.tmp <- do.call(shift_sp, c(sp = sites.tmp, 
+                                     ref = stuff_to_move[[region]],
+                                     proj.string = proj4string(sites.out),
                                      shifts[[region]]))
     sites.out <- rbind(sites.out, sites.tmp)
   }
-  return(sites.out)
+  
+  if(cheat_vi) {
+    return(sites.tmp)
+  } else {
+    return(sites.out)
+  }
 }
 
 

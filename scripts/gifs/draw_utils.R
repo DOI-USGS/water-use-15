@@ -29,7 +29,6 @@ trick_data <- function(state_totals) {
   return(state_totals)
 }
 
-get_state_layout <- function(sp, plot_metadata){
 subset_sp <- function(sp, view_str) {
   if(!"STATE_ABBV" %in% names(sp@data)) {
     # county gots does not have STATE_ABBV
@@ -39,8 +38,14 @@ subset_sp <- function(sp, view_str) {
   }
 }
 
+get_state_layout <- function(sp, plot_metadata, cheat_vi = FALSE){
   
   state_bb <- bbox(sp)
+  if(cheat_vi) {
+    # VI doesn't look very nice with defaults. Needed to buffer the top and bottom
+    state_bb[4] <- state_bb[4] - state_bb[4]*0.05
+    state_bb[2] <- state_bb[2] + state_bb[2]*0.05
+  }
   state_nm <- names(sp)
   if("id" %in% state_nm) { 
     state_nm <- unique(as.character(sp@data$STATE_NAME))
