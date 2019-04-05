@@ -50,19 +50,19 @@ get_us_totals <- function(json_file){
   return(totals_out)
 }
 get_state_totals <- function(json_file, state_name){
-  
+
   state_totals <- read_json(json_file)
   state_names <- sapply(state_totals, function(x) x$STATE_NAME)
   state_i <- which(state_names == state_name)
-  
+
   if (!length(state_i) == 1){
     stop('there is no match or too many matches for state name ', state_name)
   }
-  
-  totals_out <- data.frame(total = NA_character_, thermoelectric = NA_character_, 
+
+  totals_out <- data.frame(total = NA_character_, thermoelectric = NA_character_,
                            publicsupply = NA_character_, irrigation = NA_character_, industrial = NA_character_,
                            other = NA_character_, state_abrv = NA_character_, state_name = state_name)
-  totals_numeric <- data.frame(total = NA_integer_, thermoelectric = NA_integer_, 
+  totals_numeric <- data.frame(total = NA_integer_, thermoelectric = NA_integer_,
                                publicsupply = NA_integer_, irrigation = NA_integer_, industrial = NA_integer_)
   this_state <- state_totals[[state_i]]$use
   for (use_i in 1:length(this_state)){

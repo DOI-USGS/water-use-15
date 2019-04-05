@@ -1,0 +1,81 @@
+
+packages:
+  - sp
+  - maps
+  - maptools
+  - rgeos
+  - readr
+  - stringr
+  - dataRetrieval
+  - lubridate
+  - dplyr
+  - mapdata
+  - jsonlite
+  - scipiper
+
+sources:
+  - scripts/gifs/map_utils.R
+  - scripts/gifs/data_utils.R
+  - scripts/gifs/draw_utils.R
+
+file_extensions:
+  - "ind"
+
+targets:
+  all: 
+    depends: 
+      - gifs/US_water_use_twitter.gif.ind
+      - gifs/US_water_use_reddit.gif.ind
+  
+  plot_metadata_twitter:
+    command: c(I(8), I(4), I(128))
+
+  plot_metadata_reddit:
+    command: c(I(8), I(4), I(320))
+  
+  proj: 
+    command: c(I("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
+    
+  us_states:
+    command: shifted_topojson("cache/state_boundaries_mobile.json", proj.string = proj)
+    
+  us_counties:
+    command: shifted_topojson("cache/county_boundaries_mobile.json", proj.string = proj)
+  
+  county_dots:
+    command: get_state_dots('cache/county_centroids_USA.json', 
+      proj.string = proj,
+      'cache/county_centroids_wu.tsv', state_totals = state_totals_countyfix)
+    
+  us_county_dots:
+    command: shift_centroids(county_dots, proj.string = proj, cheat_vi = TRUE)
+  
+  # Subset the national data to get just the one state
+  # CHANGE THE SCALE FACTOR!!! A version of the USVI gif on 4/5/19 used 3000
+  # scripts/gifs/draw_utils.R, find `scale_const <-` 
+  state_sub_name:
+    command: c(I('U.S. Virgin Islands'))
+  state_sub_abbr:
+    command: c(I('VI'))
+  us_states_sub:
+    command: subset_sp(us_states, state_sub_abbr)
+  us_counties_sub:
+    command: subset_sp(us_counties, state_sub_abbr)  
+  # Don't subset county dots for VI (see info about `cheat_vi` param)
+  #us_county_dots_sub:
+  #  command: subset_sp(us_county_dots, state_sub_abbr)  
+
+  state_totals:
+    command: get_state_totals('cache/wu_state_data.json', state_sub_name)
+  state_totals_countyfix:
+    command: trick_data(state_totals)
+    
+  plot_layout_twitter:
+    command: get_state_layout(us_states_sub, plot_metadata_twitter, cheat_vi = TRUE)
+  
+  gifs/VI_water_use_twitter.gif.ind:
+    command: build_wu_gif(us_states_sub, us_counties_sub, us_county_dots, state_totals, plot_layout_twitter, 
+      'images/usgs_logo_black.png', 
+      target_name, frames = I(5), I('pie'), I('thermoelectric'), I('publicsupply'), I('irrigation'), I('industrial'),
+      pause_delay = I('150'))
+

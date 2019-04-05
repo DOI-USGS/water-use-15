@@ -1,5 +1,5 @@
 get_national_layout <- function(sp, plot_metadata){
-  
+
   state_bb <- bbox(sp)
   
   layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
@@ -23,15 +23,38 @@ get_national_layout <- function(sp, plot_metadata){
   return(layout_out)
 }
 
+trick_data <- function(state_totals) {
+  state_totals$state_abrv <- "US"
+  state_totals$state_name <- "U.S."
+  return(state_totals)
+}
 
-get_state_layout <- function(sp, plot_metadata){
+subset_sp <- function(sp, view_str) {
+  if(!"STATE_ABBV" %in% names(sp@data)) {
+    # county gots does not have STATE_ABBV
+    subset(sp, state == view_str)
+  } else {
+    subset(sp, STATE_ABBV %in% view_str)
+  }
+}
+
+get_state_layout <- function(sp, plot_metadata, cheat_vi = FALSE){
   
   state_bb <- bbox(sp)
-
+  if(cheat_vi) {
+    # VI doesn't look very nice with defaults. Needed to buffer the top and bottom
+    state_bb[4] <- state_bb[4] - state_bb[4]*0.05
+    state_bb[2] <- state_bb[2] + state_bb[2]*0.05
+  }
+  state_nm <- names(sp)
+  if("id" %in% state_nm) { 
+    state_nm <- unique(as.character(sp@data$STATE_NAME))
+  }
+  
   layout_out <- list(figure = list(width = plot_metadata[1], height = plot_metadata[2], res = plot_metadata[3]),
                      map = list(xlim = c(NA_integer_, NA_integer_), ylim = c(NA_integer_, NA_integer_)),
                      legend = list(xpct = NA_integer_, ypct = NA_integer_, box_h = 0.055, y_bump = 0.015, box_w = 0.32,
-                                   title_pos = 'top', title = names(sp)))
+                                   title_pos = 'top', title = state_nm))
   aspect_map <- diff(state_bb[c(1,3)])/diff(state_bb[c(2,4)])
   if (aspect_map < 1.2){
     plot_metadata[1] <- plot_metadata[1] * 0.75
@@ -110,11 +133,19 @@ plot_dot_map <- function(state_sp, county_sp, watermark_file, layout){
   if (length(unique(names(state_sp))) > 1){ # is national
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i') 
     plot(state_sp, col = NA, border = NA, lwd = 1.2, xlim = layout$map$xlim, ylim = layout$map$ylim) 
-    plot(county_sp, col = '#eaedef', border = "grey80", lwd=0.2, add = TRUE)
+    
+    if(!is.null(county_sp)) {
+      plot(county_sp, col = '#eaedef', border = "grey80", lwd=0.2, add = TRUE)
+    }
+    
     plot(state_sp, col = NA, border = "grey65", lwd = .6, add = TRUE)
   } else {
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), bg = '#eaedef') #, xaxs = 'i', yaxs = 'i'
-    plot(county_sp, col = "white", border = "grey60", lwd=0.75, xlim = layout$map$xlim, ylim = layout$map$ylim) 
+    
+    if(!is.null(county_sp)) {
+      plot(county_sp, col = "white", border = "grey60", lwd=0.75, xlim = layout$map$xlim, ylim = layout$map$ylim) 
+    }
+    
     plot(state_sp, col = NA, border = "grey50", lwd = 1.2, add = TRUE)
   }
   
@@ -142,7 +173,7 @@ calc_frame_filenames <- function(frames, ...){
   return(filenames)
 }
 
-build_wu_gif <- function(state_sp, county_sp, dots_sp, state_totals, state_layout, watermark_file, ind_file, frames = 10, ..., 
+build_wu_gif <- function(state_sp, county_sp = NULL, dots_sp, state_totals, state_layout, watermark_file, ind_file, frames = 10, ..., 
                          trans_delay = "10", pause_delay = "180"){
   
   frame_filenames <- calc_frame_filenames(frames, ...)
@@ -201,8 +232,11 @@ build_wu_gif <- function(state_sp, county_sp, dots_sp, state_totals, state_layou
   
   gif_filename <- as_data_file(ind_file)
   
-  system(paste0("convert -loop 0 -delay 15 ", paste(file.path(temp_dir, frame_filenames), collapse = " "), " ", gif_filename))
-  
+  magick_command <- paste0("convert -loop 0 -delay 15 ", paste(file.path(temp_dir, frame_filenames), collapse = " "), " ", gif_filename)
+  if(Sys.info()[['sysname']] == "Windows") {
+    magick_command <- sprintf('magick %s', magick_command)
+  }
+  system(magick_command)
   system(sprintf('gifsicle -b %s %s --colors 256', gif_filename, gifsicle_out))
   gd_put(remote_ind = ind_file, local_source = gif_filename, config_file = 'gifs/gd_config.yml')
 }
