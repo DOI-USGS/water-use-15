@@ -21,9 +21,9 @@ pipeline {
         stage('push to S3') {
             agent any
             steps { 
-                sh 'aws s3 sync ./target/ s3://dev-owi.usgs.gov/vizlab/water-use-15/ --exclude "*.svg" --exclude "*.json"; \
-                    aws s3 sync ./target/ s3://dev-owi.usgs.gov/vizlab/water-use-15/ --exclude "*" --include "*.svg" --content-type "image/svg+xml"; \
-                    aws s3 sync ./target/ s3://dev-owi.usgs.gov/vizlab/water-use-15/ --exclude "*" --include "*.json" --content-type "application/json"'
+                sh 'aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*.svg" --exclude "*.json"; \
+                    aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*" --include "*.svg" --content-type "image/svg+xml"; \
+                    aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*" --include "*.json" --content-type "application/json"'
             }
         }
     }
