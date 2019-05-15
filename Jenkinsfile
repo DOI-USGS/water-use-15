@@ -10,8 +10,8 @@ pipeline {
         }
         stage('build_viz') {
             agent {
-                dockerfile {
-                    args '-v ${WORKSPACE}:/home/rstudio/water-use-15'
+                docker {
+                    image 'code.chs.usgs.gov:5001/wwatkins/water-use-15-docker/water-use-15'
                 } 
             }
             steps {
