@@ -21,9 +21,13 @@ pipeline {
         stage('push to S3') {
             agent any
             steps { 
-                sh 'aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*.svg" --exclude "*.json"; \
-                    aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*" --include "*.svg" --content-type "image/svg+xml"; \
-                    aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*" --include "*.json" --content-type "application/json"'
+               # sh 'aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*.svg" --exclude "*.json"; \
+               #     aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*" --include "*.svg" --content-type "image/svg+xml"; \
+               #     aws s3 sync ./target/ s3://beta-owi.usgs.gov-website/vizlab/water-use-15/ --exclude "*" --include "*.json" --content-type "application/json"'
+		#just test access to prod s3 bucket
+		sh 'touch empty.test; \
+		    aws s3 cp empty.test s3://owi-usgs-gov/empty.test; \
+		    aws s3 rm s3://owi-usgs-gov/empty.test;'
             }
         }
     }
