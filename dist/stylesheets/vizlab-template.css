@@ -257,6 +257,14 @@ footer.footer ul.social svg.fa-svg {
   margin-top: 3rem;
   margin-bottom: 3rem;
 }
+/* Rule separating the page content from the data / references /
+   authorship material, styled like the pre-footer divider */
+#extras::before {
+  content: "";
+  display: block;
+  border-top: 1px solid #d4d8dd;
+  margin-bottom: 2.5rem;
+}
 #extras .end-section {
   max-width: none;
   margin: 0;
