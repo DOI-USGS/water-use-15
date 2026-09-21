@@ -1,0 +1,830 @@
+#header{
+	background:rgb(0,51,102);
+	color:#fff;
+	height:32px;
+	padding:8px  0 0 10px;
+	border-bottom:5px solid rgb(210,210,210);
+	font-family:"Source Sans Pro", sans-serif;
+	}
+	
+#header p {
+  font-size:1.2em;
+  line-height:1.5em;
+}
+
+#header h1{
+	padding-top:0px;
+	font-size:1.2em;
+	font-weight:400;
+	}
+	
+#header img{
+	float:left;
+	margin-right:5px;
+	width:80px;
+	}
+	
+@media screen and (max-width: 768px) {
+  #header h1 {
+    font-size:1em;
+  }
+}
+#footer{
+  background:#414042;
+  min-height:200px;
+  color:#fff;
+  border-top:5px solid rgb(210,210,210);
+  margin-top:20px;
+  font-family:"Source Sans Pro", sans-serif;
+  padding-bottom: 10px;
+}
+	
+#footer a{
+  background:#414042;
+  text-decoration:none;
+}
+	
+#footer a:link{
+  color:#fff;
+}
+
+#footer a:visited{
+  color:#fff;
+}
+
+#footer a:link:hover,
+#footer a:hover{
+  text-decoration:underline;
+}
+
+#footer a:active{
+  color:#fff;
+}
+
+.footerContentAligner{
+  padding:0 10px;
+}
+
+#vizlab-promo{
+  height:30px;
+  margin:15px 0 0 0;
+}
+
+#vizlab-promo a{
+  cursor:pointer;
+}
+
+#vizlab-promo p{
+  font-weight:300;
+  font-size:.75em;
+  margin:0;
+}
+
+#vizlab-promo img{
+  width:20px;
+  max-height:20px;
+  margin-left:5px;
+}
+
+.githublink{
+  display:inline-block;
+  height: 25px;
+}
+
+#github-contact{
+  width:100%;
+  margin:5px 0 15px 0;
+}
+
+#github-contact img{
+  max-height: 25px;
+  width: 25px;
+  margin: 0 10px 0 0;
+  float:left;
+}
+
+#github-contact a{
+  font-weight:300;
+  margin-right:2.5px;
+}
+
+#github-contact p{
+  line-height:25px;
+  margin:0;
+  font-size: .9em;
+}
+
+#github-contact span{
+  margin-right:2.5px;
+}
+
+#github-contact span:nth-child(3){
+  margin-left:5px;
+}
+
+.usgsLogoFooterArea{
+  padding:10px;
+}
+
+#related-items{
+  min-height:20px;
+}
+
+.related-items-title,
+.related-items-caption{
+  font-weight:400;
+}
+
+.related-items-title{
+  margin-bottom:10px;
+  font-size:1.17em;
+}
+
+.related-items-caption h4{
+  font-size:.9em;
+}
+
+#relatedVizzies,
+#relatedBlogs{
+  min-height:40px;
+  margin-bottom:10px;
+}
+
+.related-item{
+  min-height:20px;
+  margin-bottom:20px;
+}
+
+.related-item a{
+  cursor:pointer;
+}
+
+.footerThumbnail{
+  background:#fff;
+  width:100%;
+  margin-bottom:5px;
+  height:180px;
+}
+
+.footerThumbnail img{
+  width:100%;
+  height: 100%;
+}
+
+#relatedVizzies .footerThumbnail img{
+  object-fit: cover;
+}
+
+#relatedBlogs .footerThumbnail img{
+  object-fit: scale-down;
+}
+
+@media screen and (min-width:500px){
+  #related-items{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+  }
+  
+  #relatedVizzies,
+  #relatedBlogs{
+    flex:1;
+  }
+  
+  #relatedVizzies{
+    margin-right:5%;
+  }
+  
+  .related-items-container{
+    display:flex;
+    flex-wrap:wrap;
+  }
+  
+  .related-item{
+    flex: 47.5%;
+    margin-right:10px;
+  }
+  
+  .footerThumbnail{
+    max-width:396px;
+  }
+  
+  #github-contact{
+    margin-top:10px;
+  }
+  
+  #vizlab-promo p,
+  #github-contact p{
+    font-size:1em;
+  }
+  
+  #vizlab-promo img{
+    width:30px;
+  }
+}
+
+@media screen and (min-width:800px){
+  .footerContentAligner{
+    width:760px;
+    margin:0 auto;
+  }
+  
+  .footerThumbnail{
+    height:200px;
+  }
+}
+
+@media screen and (min-width:1200px){
+  .footerContentAligner{
+    width:960px;
+  }
+}
+
+body {
+  font-family: sans-serif;
+}
+
+
+.viz-text a{
+  color:#003366;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.viz-text a:hover{
+  text-decoration:underline;
+}
+
+.viz-text{
+  padding:0 10px;
+  margin-top:20px;
+}
+
+.viz-text h2{
+  margin:0 0 5px 0;
+}
+
+.viz-text p{
+  line-height:1.5em;
+}
+
+
+/*IE SVG Width Fix*/
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){
+    .main-svg svg{
+      width:100%;
+      height:600px;
+    }
+    
+    .secondary-svg{
+      height:400px;
+    }
+
+}
+
+@media screen and (min-width: 1024px){
+  .main-svg,
+  .viz-text{
+    width:960px;
+  }
+  
+  .main-svg{
+    margin:0 auto;
+  }
+  
+  .main-svg h3{
+    margin-top: 10px;
+  }
+  
+  .viz-text{
+    margin:20px auto 0 auto;
+  }
+  
+}
+.socialHolder,
+.verticalSocialHolder{
+  text-align: center;
+  height: 30px;
+  margin: 10px 0;
+}
+
+.socialHolder a,
+.verticalSocialHolder a{
+  display:inline-block;
+  height:30px;
+}
+
+.socialMediaOption{
+    width: 30px;
+    height: 30px;
+    margin: 0 2px 0 2px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    transition: all .5s ease;
+    opacity: 0.85;
+    filter: alpha(opacity=85);
+}
+
+.socialMediaOption:hover{
+  transform: scale(1.2);
+  opacity: 1.0;
+  filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+
+.socialMediaImage{
+  width:25px;
+  height:25px;
+  position:absolute;
+  margin:auto;
+  top:0; bottom:0; right:0; left:0;
+}
+
+.socialMediaImage img{
+  width: 25px;
+}
+
+#github{
+  background:rgb(38,40,47);
+}
+
+#twitter{
+  background:rgb(108,175,224);
+}
+
+#facebook{
+  background:rgb(66,88,149);
+}
+
+#embed{
+  background:rgb(86,130,189);
+}
+
+.spacer{
+  padding:10px;
+}
+
+@media screen and (min-width:600px){
+  .verticalSocialHolder{
+    width:30px;
+    height:100px;
+    position:absolute;
+    right:10px;
+  }
+}
+
+@media screen and (min-width:768px){
+  #header h3{
+    font-size:1.2em;
+    margin:0 0 0 10px;
+    padding:0;
+  }
+}
+
+@media screen and (min-width:1024px){
+  .responsiveGrid{
+    width:770px;
+    margin:10px auto 0 auto;
+    padding:0;
+  }
+}
+
+@media screen and (min-width:1500px){
+  .responsiveGrid{
+    width:810px;
+  }
+}
+
+@media screen and (min-width:2000px){
+  .responsiveGrid{
+    width:1210px;
+    
+  }
+}
+
+
+svg {
+  /* needed to stop IE from letting zoom show circles everywhere */
+  overflow:hidden;
+}
+
+#map-background {
+  fill: transparent;
+}
+
+#rank-states-interactive text{
+  /* on mobile, clicking and holding the state for >1 sec caused fig text
+      to highlight and then when you tried to drag, you just selected more*/
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome and Opera */
+}
+
+.state {
+  fill: transparent;
+  stroke: rgb(147,147,147);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.state-click-off {
+  pointer-events: none;
+}
+
+.state-click-on {
+  fill: white;
+  fill-opacity: 0;
+  pointer-events: fill;
+}
+
+.county {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.show-county-bounds {
+  stroke: #bdbdbd;
+}
+
+/* must be listed before highlighted-county*/
+/* THIS IS WHAT WILL MAKE THE ZOOMED IN STATE EMPHASIZED*/
+.emphasize-county {
+  fill: rgb(230,230,230);
+  stroke: rgb(200,200,200);
+}
+
+.highlighted-county {
+  stroke: rgb(200,200,200);
+  fill: rgb(180,180,180);
+} 
+
+.static-state {
+  fill: rgb(240,240,240);
+  stroke: rgb(190,190,190);
+  stroke-width: 4;
+}
+
+.bar-name {
+  fill: rgb(70,70,70);
+  font-size: 65%;
+}
+
+.rankem-title{
+  fill: rgb(140,140,140);
+  font-size: 150%;
+  font-family: 'Shadows Into Light';
+}
+
+.rankem-explanation{
+  fill: rgb(140,140,140);
+  font-size: 125%;
+  font-family: 'Shadows Into Light';
+  text-anchor: middle;
+}
+
+.open-bar-name {
+  opacity: 0;
+}
+
+.wu-circle {
+  pointer-events: none;
+  stroke-width: 2;
+}
+
+#wu-highlight {
+  opacity: 1;
+}
+
+.draggable-state {
+  /* indicate that the state can be clicked/moved
+      was using grabbing, but that only works in Firefox*/
+  cursor: pointer; 
+}
+
+#rank-state-text,
+#rank-value-text {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#rank-state-text,
+#rank-value-text,
+#rank-units-text {
+	fill: rgb(70,70,70);
+}
+
+.hidden {
+	display: none;
+}
+
+.watermark {
+  fill: #000000;
+  stroke: #717171;
+  stroke-width:0.5;
+  opacity: 0.8;
+}
+*{
+  padding:0;
+  margin:0;
+}
+
+.lazy{
+	opacity:0;
+}
+
+#national-static-pie-mobile-content{
+  display:none;
+}
+
+.readMore{
+  text-align: center;
+  color:#003366;
+  cursor:pointer;
+  
+}
+
+.mobile-UI-Container{
+  display:flex;
+  flex-direction:row;
+}
+
+.drop-downs{
+  flex: 5;
+  padding:0 5px;
+}
+
+.drop-downs select{
+  width:100%;
+  border-radius:0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position:relative;
+  padding:0 5px;
+}
+
+.custom-select{
+  position:relative;
+}
+
+.view-select{
+  height:35px;
+  margin-bottom:3px;
+  font-size:1em;
+}
+
+.county-select{
+  height:25px;
+}
+
+.drop-down-indicator{
+  background:#c6c6c6;
+  width:25px;
+  position:absolute;
+  right:0;
+  top:0;
+  z-index:1000;
+  pointer-events:none;
+  text-align:center;
+}
+
+.drop-down-indicator img{
+  height:14px;
+}
+
+.view-custom-select .drop-down-indicator{
+  height:35px;
+}
+
+.view-custom-select .drop-down-indicator img{
+  margin-top:11px;
+}
+
+.county-custom-select .drop-down-indicator{
+  height:25px;
+}
+
+.county-custom-select .drop-down-indicator img{
+  margin-top:6px;
+}
+
+.drop-downs select,
+.zoom-out-button{
+  background: #f1f1f1;
+  outline:none;
+  border:none;
+  cursor:pointer;
+}
+
+.zoom-out-button-container{
+  flex:1;
+  padding-right:5px;
+}
+
+.zoom-out-button{
+  height:100%;
+  width:100%;
+}
+
+.viz-text ul {
+  padding-left: 20px;
+  min-height: 20px;
+  padding: 15px;
+}
+
+#wu-story{
+  background:#fff;
+  min-height: 100px;
+  margin-top:20px;
+}
+
+#wu-story p{
+  padding-top: 10px; 
+  padding-bottom: 10px;
+}
+
+h2{
+  font-size:1.17em;
+}
+
+h3{
+  font-size:1em;
+}
+
+.story-one,
+.story-two,
+.story-three{
+  margin-top:50px;
+}
+
+.story-three{
+  margin-bottom:40px;
+}
+
+.side-by-side-left{
+  padding:0 40px 0 10px;
+}
+
+#directions {
+  padding-left: 20px;
+  padding-right: 40px;
+}
+
+.caption p{
+  font-size:0.9em;
+  font-style: italic;
+  text-align: center;
+  color: rgb(106,106,106);
+  line-height:1.5em;
+  margin-top:20px;
+  text-decoration:none;
+}
+
+.full-width,
+.key-story-plot{
+  margin:10px auto;
+  padding:0 10px;
+}
+
+.key-story-plot img{
+  width:100%;
+}
+
+.label-text {
+  alignment-baseline: middle;
+  font-family: arial,helvetica,"sans-serif";
+  fill: #393939;
+}
+
+#button-background{
+  fill:white;
+  opacity:0.7;
+  pointer-events:none;
+}
+
+.button rect:hover{
+  opacity:1;
+}
+
+.button rect{		
+  fill:white;			
+}
+
+/* mobile */
+.button text{
+  font-size:2.2em;
+  dominant-baseline:central;
+  pointer-events:none;
+}
+#legend-title{
+  font-size:2em;
+  font-weight:bold;
+  pointer-events:none;
+}
+#legend-subtitle{
+  font-size:1.4em;
+  pointer-events:none;
+}
+
+#extras{
+  background:rgb(240,240,240);
+  padding:10px;
+}
+
+#data-collection p,
+#references p{
+  font-size:.8em;
+}
+
+@media screen and (min-width:600px){
+  
+  #national-static-pie-mobile-container{
+    display:none;
+  }
+  
+  .button text{
+    font-size:1.3em;
+    dominant-baseline:central;
+    pointer-events:none;
+  }
+  #legend-title{
+    font-size:1.3em;
+    font-weight:bold;
+    pointer-events:none;
+  }
+  #legend-subtitle{
+    font-size:1.1em;
+    pointer-events:none;
+  }
+  .mobile-UI-Container{
+    display:none;
+  }
+  
+  .side-by-side,
+  #extras{
+    display:flex;
+    flex-direction:row;
+    padding:10px;
+  }
+  
+  .side-by-side-left{
+    width: 50%;
+  }
+  
+  .side-by-side-right{
+    width: 40%;
+    position: relative;
+  }
+  
+  .caption p{
+    text-align: left;
+  }
+  
+  #pie-caption{
+    position:absolute;
+    margin:auto;
+    padding:0 0;
+    top:0; bottom:0; left:0; right:0;
+    height:80px;
+  }
+  
+  #data-collection{
+    border-right:1px solid #000;
+    margin-right:10px;
+  }
+  
+  #data-collection,
+  #references{
+    flex:1;
+  }
+  
+}
+
+/* large screen definition as in main vizlab */
+@media screen and (min-width: 1024px){
+  #extras{
+    width:940px;
+  }
+  
+  .viz-text{
+    width:960px;
+    margin:20px auto 0 auto;
+  } 
+  
+  .full-width,
+  .key-story-plot{
+    width:960px;
+    margin:10px auto;
+  }
+}
+
+/* really large desktop screens*/
+@media screen and (min-width:1050px){
+  #directions {
+    width: 45%;
+  }
+}
