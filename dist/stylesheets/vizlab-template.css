@@ -212,3 +212,65 @@ footer.footer ul.social svg.fa-svg {
   vertical-align: middle;
   fill: #fff;
 }
+
+/* ============= END-OF-PAGE SECTIONS ============= */
+/* Data Collection / References / USGS Vizlab as stacked, full-width text
+   sections like other Vizlab sites, instead of the original two-column
+   gray box (overrides #extras rules in css/all.css). */
+#extras {
+  display: block;
+  background: none;
+  padding: 0 10px;
+}
+#extras .end-section {
+  max-width: 700px;
+  margin: 0 auto 1.5em;
+  border: none;
+}
+#extras .end-section h3 {
+  margin-top: 1em;
+}
+#data-collection p,
+#references p,
+#authors p {
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+/* ============= TYPOGRAPHY ============= */
+/* Source Sans 3 (successor to Source Sans Pro, the Vizlab default font) for
+   the whole page; bold headings. Overrides body/heading rules in css/all.css
+   and css/main.css. */
+body,
+footer,
+#navbar {
+  font-family: 'Source Sans 3', 'Source Sans Pro', sans-serif;
+}
+h1, h2, h3, h4 {
+  font-weight: 700;
+}
+h2 {
+  font-size: 1.4em;
+}
+h3 {
+  font-size: 1.15em;
+}
+.page-title {
+  font-size: 2.2em;
+  line-height: 1.15;
+  margin: 10px 0 0 0;
+}
+.byline {
+  font-style: italic;
+  color: #555;
+  margin: 4px 0 14px 0;
+}
+@media screen and (max-width: 599px) {
+  .page-title {
+    font-size: 1.7em;
+  }
+  .page-title,
+  .byline {
+    padding: 0 10px;
+  }
+}

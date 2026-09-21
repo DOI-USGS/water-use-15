@@ -138,6 +138,9 @@
   <link href="stylesheets/common.css" rel="stylesheet" type="text/css" media="screen" />
   <link href="stylesheets/custom.css" rel="stylesheet" type="text/css" media="screen" />
   <link href="stylesheets/uswds.min.css" rel="stylesheet" type="text/css" media="screen" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Shadows+Into+Light&display=swap" rel="stylesheet">
   <link href="stylesheets/vizlab-template.css" rel="stylesheet" type="text/css" media="screen" />
   <script src="js/uswds.min.js"></script>
 
@@ -275,7 +278,8 @@
 
 
 <div id=mapSVG class="main-svg">
-  <h3>Water use in the U.S., 2015</h3>
+  <h1 class="page-title">Water use in the U.S., 2015</h1>
+  <p class="byline">U.S. Geological Survey &middot; Published June 19, 2018 &middot; Last updated September 21, 2026</p>
 </div>
 
 <div id="map-caption" class="caption full-width">
@@ -386,26 +390,33 @@
   </div>
 
   <div id="extras" class="full-width viz-text">
-    <div id="data-collection">
+    <div id="data-collection" class="end-section">
       <h3>Data Collection</h3>
 
       <p>
-        Every 5 years since 1950, the USGS has compiled and estimated water-use information in cooperation with State, Federal, and local agencies to document how and where we use water. This information is essential to understand how future water demands will be met, while maintaining adequate water quality and quantities for human and ecosystem needs. The fourteenth report in this series, <a href="https://doi.org/10.3133/cir1441">Estimated use of water in the United States in 2015</a>, was released in June of 2018, along with the <a href="https://doi.org/10.5066/F7TB15V5">county-level data</a> which supports the publication.
+        Every 5 years since 1950, the USGS has compiled and estimated water-use information in cooperation with State, Federal, and local agencies to document how and where we use water. This information is essential to understand how future water demands will be met, while maintaining adequate water quality and quantities for human and ecosystem needs. The fourteenth report in this series, <i>Estimated use of water in the United States in 2015</i>, was released in June of 2018 (Dieter et al., 2018), along with the county-level data that support the publication (Dieter et al., 2017).
       </p>
       <p>
-        <a href="https://www.usgs.gov/water-resources/water-availability-and-use-science-program"> Read about the USGS Water Availability and Use Science Program</a>
+        <a href="https://www.usgs.gov/water-resources/water-availability-and-use-science-program" target="_blank">Read about the USGS Water Availability and Use Science Program</a>
       </p>
     </div>
 
-    <div id="references">
+    <div id="references" class="end-section">
       <h3>References</h3>
 
       <p>
-        Dieter, C.A., Maupin, M.A., Caldwell, R.R., Harris, M.A., Ivahnenko, T.I., Lovelace, J.K., Barber, N.L., and Linsey, K.S., 2018, <i>Estimated use of water in the United States in 2015</i>: U.S. Geological Survey Circular 1441, 65 p., <a href="https://doi.org/10.3133/cir1441">https://doi.org/10.3133/cir1441</a>. [Supersedes USGS Open-File Report 2017-1131.]
+        Dieter, C.A., Linsey, K.S., Caldwell, R.R., Harris, M.A., Ivahnenko, T.I., Lovelace, J.K., Maupin, M.A., and Barber, N.L. (2017). <a href="https://doi.org/10.5066/F7TB15V5" target="_blank">Estimated use of water in the United States county-level data for 2015</a>: U.S. Geological Survey data release. https://doi.org/10.5066/F7TB15V5
       </p>
+      <p>
+        Dieter, C.A., Maupin, M.A., Caldwell, R.R., Harris, M.A., Ivahnenko, T.I., Lovelace, J.K., Barber, N.L., and Linsey, K.S. (2018). <a href="https://doi.org/10.3133/cir1441" target="_blank">Estimated use of water in the United States in 2015</a>: U.S. Geological Survey Circular 1441, 65 p. https://doi.org/10.3133/cir1441
+      </p>
+    </div>
+
+    <div id="authors" class="end-section">
+      <h3>USGS Vizlab</h3>
 
       <p>
-        Dieter, C.A., Linsey, K.S., Caldwell, R.R., Harris, M.A., Ivahnenko, T.I., Lovelace, J.K., Maupin, M.A., and Barber, N.L., 2017, <i>Estimated use of water in the United States county-level data for 2015</i>: U.S. Geological Survey data release, <a href="https://doi.org/10.5066/F7TB15V5">https://doi.org/10.5066/F7TB15V5</a>.
+        This site was created by the <a href="https://water.usgs.gov/vizlab" target="_blank">USGS Vizlab</a>. Lindsay Carr and <a href="https://www.usgs.gov/staff-profiles/alison-appling" target="_blank">Alison Appling</a> led the project with contributions from <a href="https://www.usgs.gov/staff-profiles/laura-decicco" target="_blank">Laura DeCicco</a>, Marty Wernimont, and David Watkins, and Jordan Read.
       </p>
     </div>
   </div>

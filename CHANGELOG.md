@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Replaced Google Tag Manager and legacy USGS analytics with the Vizlab GA4 tag and the federal DAP tag, matching `vue3-template`
 - Replaced the "Related Visualizations" footer block with the Vizlab pre-footer links (See more visualizations / Get the code)
 - Updated the USWDS banner, USGS header, and USGS footer markup and links to match `vue3-template`; upgraded bundled USWDS assets from v2.7 to v3.13
+- Restructured the end of the page into stacked Data Collection, References (alphabetical, name-based citations), and USGS Vizlab authorship sections, matching other Vizlab sites
+- Switched the page font to Source Sans 3, made headings bold, enlarged the page title, and added a byline with the published and last-updated dates
 - Rewrote `README.md` to describe the `dist/` site, how to serve it locally, and how the site was originally built
 - Updated `code.json` and `CONTRIBUTING.md` to point at the `DOI-USGS` GitHub organization and the new site URL, https://water.usgs.gov/vizlab/water-use-15
 - Updated `og:url`, share links, and social media image URLs in `dist/index.html` and `dist/embed-water-use-15.html` for the new site URL and S3 image hosting
