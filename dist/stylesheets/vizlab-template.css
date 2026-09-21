@@ -329,7 +329,11 @@ h1, h2, h3, h4 {
   margin: 0 0 1em 0;
 }
 .page-title {
-  font-size: 2.2em;
+  font-size: 3em;
+  font-weight: 800;
+  color: #00264c; /* USGS blue, matching the header */
+  letter-spacing: -0.01em;
+  line-height: 1.1;
   margin: 2.5rem auto 1.25rem auto;
 }
 .byline {
@@ -339,6 +343,6 @@ h1, h2, h3, h4 {
 }
 @media screen and (max-width: 599px) {
   .page-title {
-    font-size: 1.7em;
+    font-size: 2.1em;
   }
 }
